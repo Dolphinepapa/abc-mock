@@ -551,7 +551,7 @@ const STRATEGY = {
         "14 search terms with bedroom intent generate $3.2K/month traffic at 1.1% CTR, well below the 2.8% category benchmark for the same intent cluster.",
       observations: [
         "5 of these 14 bedroom-intent keywords are live in current campaigns — flagged with rose tint in the Ad architecture panel (top bar → Ad architecture)",
-        "Full list of the 14 keywords and the word-type rules is auditable via 'View audience segmentation logic ↗' under the Scenario segment chip",
+        "Full list of the 14 keywords and the word-type rules is auditable via 'View audience segmentation logic ↗' to the right of the segment chips",
         "Current CTR on those terms: 1.1% (28-day avg). Category benchmark for same intent cluster: 2.8%.",
         "Root-cause hypothesis: hero image and first 3 detail-page photos emphasize living-room / lobby context. No bedroom-context image in the current carousel.",
       ],
@@ -1320,8 +1320,6 @@ function PerformanceStrip() {
   const gaps = p.gapsBySegment[activeSegment] || p.gapsBySegment.all;
   const breakdown = p.segmentBreakdown[activeSegment];
   const activeChip = p.segments.find((s) => s.id === activeSegment);
-  const showClusteringLink =
-    activeSegment === "scenario" || activeSegment === "style";
 
   return (
     <>
@@ -1339,50 +1337,49 @@ function PerformanceStrip() {
         </span>
       </div>
 
-      {/* Segment chips */}
-      <div className="mb-3 flex items-center gap-2 flex-wrap">
-        {p.segments.map((seg) => {
-          const active = activeSegment === seg.id;
-          return (
-            <button
-              type="button"
-              key={seg.id}
-              onClick={() => setActiveSegment(seg.id)}
-              className={`inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-md border transition-colors ${
-                active
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-              }`}
-            >
-              <span>{seg.label}</span>
-              <span
-                className={`font-mono ${
-                  active ? "text-slate-300" : "text-slate-400"
+      {/* Segment chips + audience segmentation entry */}
+      <div className="mb-3 flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
+          {p.segments.map((seg) => {
+            const active = activeSegment === seg.id;
+            return (
+              <button
+                type="button"
+                key={seg.id}
+                onClick={() => setActiveSegment(seg.id)}
+                className={`inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-md border transition-colors ${
+                  active
+                    ? "bg-slate-900 text-white border-slate-900"
+                    : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                 }`}
               >
-                {seg.count}
-              </span>
-            </button>
-          );
-        })}
+                <span>{seg.label}</span>
+                <span
+                  className={`font-mono ${
+                    active ? "text-slate-300" : "text-slate-400"
+                  }`}
+                >
+                  {seg.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          onClick={() => setClusteringOpen(true)}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 rounded-md text-xs font-medium text-slate-700 flex-shrink-0"
+        >
+          <Layers className="w-3.5 h-3.5 text-slate-500" />
+          View audience segmentation logic
+          <ArrowUpRight className="w-3 h-3 text-slate-400" />
+        </button>
       </div>
 
       {/* Active chip's kicker */}
       {activeChip && activeChip.kicker && (
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div className="text-11 text-slate-500 italic">
-            {activeChip.kicker}
-          </div>
-          {showClusteringLink && (
-            <button
-              type="button"
-              onClick={() => setClusteringOpen(true)}
-              className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium flex-shrink-0"
-            >
-              View audience segmentation logic
-              <ArrowUpRight className="w-3 h-3" />
-            </button>
-          )}
+        <div className="mb-3 text-11 text-slate-500 italic">
+          {activeChip.kicker}
         </div>
       )}
 

@@ -551,7 +551,7 @@ const STRATEGY = {
         "14 个卧室意图搜索词每月带来 $3.2K 流量,CTR 仅 1.1%,远低于同意图集群的品类基准 2.8%。",
       observations: [
         "这 14 个卧室意图关键词中有 5 个在当前广告活动中线上 — 在广告架构面板中以玫红色高亮标记(顶栏 → 广告架构)",
-        "完整 14 个关键词清单与词性分类规则可在 Scenario 分段下点击 '查看人群划分逻辑 ↗' 审查",
+        "完整 14 个关键词清单与词性分类规则可点击分段栏右侧的 '查看人群划分逻辑 ↗' 审查",
         "当前这些词的 CTR:1.1%(28 天均值)。同意图集群的品类基准:2.8%。",
         "根因假设:主图与详情页前 3 张图均强调客厅/大厅场景,当前主图轮播中没有卧室场景图。",
       ],
@@ -1320,8 +1320,6 @@ function PerformanceStrip() {
   const gaps = p.gapsBySegment[activeSegment] || p.gapsBySegment.all;
   const breakdown = p.segmentBreakdown[activeSegment];
   const activeChip = p.segments.find((s) => s.id === activeSegment);
-  const showClusteringLink =
-    activeSegment === "scenario" || activeSegment === "style";
 
   return (
     <>
@@ -1339,50 +1337,49 @@ function PerformanceStrip() {
         </span>
       </div>
 
-      {/* Segment chips */}
-      <div className="mb-3 flex items-center gap-2 flex-wrap">
-        {p.segments.map((seg) => {
-          const active = activeSegment === seg.id;
-          return (
-            <button
-              type="button"
-              key={seg.id}
-              onClick={() => setActiveSegment(seg.id)}
-              className={`inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-md border transition-colors ${
-                active
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-              }`}
-            >
-              <span>{seg.label}</span>
-              <span
-                className={`font-mono ${
-                  active ? "text-slate-300" : "text-slate-400"
+      {/* Segment chips + audience segmentation entry */}
+      <div className="mb-3 flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
+          {p.segments.map((seg) => {
+            const active = activeSegment === seg.id;
+            return (
+              <button
+                type="button"
+                key={seg.id}
+                onClick={() => setActiveSegment(seg.id)}
+                className={`inline-flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-md border transition-colors ${
+                  active
+                    ? "bg-slate-900 text-white border-slate-900"
+                    : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                 }`}
               >
-                {seg.count}
-              </span>
-            </button>
-          );
-        })}
+                <span>{seg.label}</span>
+                <span
+                  className={`font-mono ${
+                    active ? "text-slate-300" : "text-slate-400"
+                  }`}
+                >
+                  {seg.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          onClick={() => setClusteringOpen(true)}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 rounded-md text-xs font-medium text-slate-700 flex-shrink-0"
+        >
+          <Layers className="w-3.5 h-3.5 text-slate-500" />
+          查看人群划分逻辑
+          <ArrowUpRight className="w-3 h-3 text-slate-400" />
+        </button>
       </div>
 
       {/* Active chip's kicker */}
       {activeChip && activeChip.kicker && (
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <div className="text-11 text-slate-500 italic">
-            {activeChip.kicker}
-          </div>
-          {showClusteringLink && (
-            <button
-              type="button"
-              onClick={() => setClusteringOpen(true)}
-              className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium flex-shrink-0"
-            >
-              查看人群划分逻辑
-              <ArrowUpRight className="w-3 h-3" />
-            </button>
-          )}
+        <div className="mb-3 text-11 text-slate-500 italic">
+          {activeChip.kicker}
         </div>
       )}
 
