@@ -238,6 +238,105 @@ const THREADS = [
       },
     ],
   },
+  {
+    id: "upload-q4",
+    canvasId: "upload-q4",
+    initiator: "user",
+    initiatorName: "Maya Chen",
+    initiatorRole: "电商副总裁",
+    initials: "MC",
+    initialTimestamp: "May 12, 10:08",
+    lastActivityTimestamp: "May 12, 10:21",
+    unread: false,
+    title: "上传 Q4 复盘 · 提炼方法学",
+    category: "brain-ops",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 12, 10:08",
+        body: "上传了 Q4-2025-Retrospective.pdf。Distill methodology 并更新到 Company Brain。",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 12, 10:14",
+        body: "Parsing 47 页 PDF…… 提取了 138K tokens 文本 + 12 张表 + 4 张图。",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 12, 10:21",
+        body: "提炼出 3 个新模式 + 2 个 playbook 更新。打开画布查看详情。",
+        canvasLink: true,
+      },
+    ],
+  },
+  {
+    id: "connect-walmart",
+    canvasId: "connect-walmart",
+    initiator: "user",
+    initiatorName: "Devon Park",
+    initiatorRole: "高级增长经理",
+    initials: "DP",
+    initialTimestamp: "May 10, 14:18",
+    lastActivityTimestamp: "May 10, 14:42",
+    unread: false,
+    title: "连接 Walmart Connect API · 落地灯账户",
+    category: "brain-ops",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 10, 14:18",
+        body: "为落地灯账户连接 Walmart Connect API。",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 10, 14:21",
+        body: "需要 Walmart admin 授权。已发送授权请求至 maya.chen@abchomegoods.com(账户管理员)。",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 10, 14:30",
+        body: "授权已收到。连接已建立。开始摄入过去 90 天数据 — 预计 12 分钟完成。",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 10, 14:42",
+        body: "摄入完成。8 个表已同步,12,400 条历史事件已索引。打开画布查看现在可访问的能力。",
+        canvasLink: true,
+      },
+    ],
+  },
+  {
+    id: "qa-margins",
+    canvasId: "qa-margins",
+    initiator: "user",
+    initiatorName: "Sara Lin",
+    initiatorRole: "投资组合负责人",
+    initials: "SL",
+    initialTimestamp: "May 13, 10:14",
+    lastActivityTimestamp: "May 13, 10:14",
+    unread: false,
+    title: "对比刮胡刀和牙刷产品线毛利",
+    category: "brain-ops",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 13, 10:14",
+        body: "对比一下刮胡刀和牙刷产品线的毛利。",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 13, 10:14",
+        body: "已查询品牌大脑。打开画布给你答案 + 来源 + 相关模式。",
+        canvasLink: true,
+      },
+    ],
+  },
 ];
 
 /* Strategy canvas */
@@ -2976,6 +3075,219 @@ const COMPANY_BRAIN = {
       threadId: "thread-attach-range",
     },
   ],
+};
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/*  Brain operations · Part 4 data                                            */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+const BRAIN_OPS = {
+  upload: {
+    document: {
+      filename: "Q4-2025-Retrospective.pdf",
+      pages: 47,
+      tokens: "138K",
+      tables: 12,
+      charts: 4,
+      uploadedBy: "Maya Chen",
+      uploadedAt: "May 12, 10:08",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      signalNote: "高信号 · 47 页里 8 页含可沉淀的运营经验",
+    },
+    coverageNote:
+      "公司大脑此前在 razor-blade 绑定购买率提升方向只有 4 个先例,且都没有 12 天促销窗口的具体打法。本次上传补齐这个缺口。",
+    patterns: [
+      {
+        id: "bop-pat-razor-attach",
+        name: "牙刷线 12 天促销窗口 attach 提升 +24%",
+        confidencePct: 74,
+        sources: "pp. 14, 19, 23–25",
+        sensitivity: "Sensitive",
+        sensitivityLabel: "敏感",
+        categories: ["Strategy", "Optimization"],
+        summary: "12 天连续促销窗口下,刀片绑定购买率从基线 47% 提升至 71%。前提:手柄毛利 ≥ 24%。",
+      },
+      {
+        id: "bop-pat-holiday-cr",
+        name: "节日驱动的品类宽匹配 CR 膨胀",
+        confidencePct: 68,
+        sources: "pp. 8–9, 31",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+        categories: ["Optimization"],
+        summary: "节假日窗口里,品类宽匹配关键词的转化率会膨胀 1.6 – 2.4 倍,但 7 天后回落。出价节奏需要相应调整。",
+      },
+      {
+        id: "bop-pat-inv-halo",
+        name: "库存耦合对 BS 光环持续时间的影响",
+        confidencePct: 71,
+        sources: "pp. 36–38, 42",
+        sensitivity: "Sensitive",
+        sensitivityLabel: "敏感",
+        categories: ["Strategy", "Defense"],
+        summary: "拿下 #1 后,如果库存深度不足 18 天,BS 光环窗口会缩到 11 天以内。促销前必须做库存预检。",
+      },
+    ],
+    playbookUpdates: [
+      {
+        id: "bop-pb-bsr",
+        name: "Best-seller capture · #2 → #1",
+        change: "新增阶段考虑 · 促销前先做库存预检",
+      },
+      {
+        id: "bop-pb-peak",
+        name: "Peak season SOV defense",
+        change: "置信度 71% → 78% · 增加 1 个高质量先例",
+      },
+    ],
+    milestones: [
+      "Razor-blade 促销决策现在有 4 个先例可对照",
+      "节日窗口的关键词出价计划可引用 CR 膨胀模式",
+      "Best-seller capture 打法新增库存预检阶段",
+    ],
+  },
+
+  connector: {
+    service: "Walmart Connect API",
+    connectedBy: "Devon Park",
+    connectedAt: "May 10, 14:22",
+    oauthScopeCount: 4,
+    oauthScopes: [
+      "campaigns.read",
+      "ad_groups.read",
+      "performance.read",
+      "search_terms.read",
+    ],
+    syncStatus: "在线 · 最新事件 4 分钟前",
+    sensitivity: "Internal",
+    sensitivityLabel: "内部",
+    coverageGap:
+      "落地灯线在 Walmart 的广告 / 销售 / 搜索词数据,Company Brain 此前没有第一方接入。所有 Walmart 假设都依赖第三方 scrape(精度 ±20%)。",
+    dataScope: {
+      tables: [
+        "campaigns",
+        "ad_groups",
+        "keywords",
+        "daily_performance",
+        "search_terms",
+        "listings",
+        "conversions",
+        "audiences",
+      ],
+      historicalEvents: "12,400",
+      backfillDays: 90,
+      liveSyncInterval: "15 分钟",
+    },
+    implications: [
+      "Amazon ↔ Walmart 跨平台分析(见 全渠道分配 会话)",
+      "Walmart 专属竞品监控",
+      "Ad architecture inspector 增加 Walmart tab(已自动接入)",
+    ],
+    milestones: [
+      "Live sync 每 15 分钟一次 · 7 天内人工核对一次精度",
+      "30 天数据后,自动触发跨平台 attribution 模型重训",
+    ],
+  },
+
+  qa: {
+    question: "对比刮胡刀和牙刷产品线的毛利。",
+    sensitivity: "Confidential",
+    sensitivityLabel: "机密",
+    minClearance: "Sensitive",
+    asker: "Sara Lin",
+    askedAt: "May 13, 10:14",
+    queryLatency: "1.2 秒",
+    answer: {
+      razor: {
+        blended: "38%",
+        breakdown: "刮胡刀 24% · 刀片 64%",
+      },
+      toothbrush: {
+        blended: "42%",
+        breakdown: "手柄 28% · 刀头 58%",
+      },
+      analysisZh:
+        "两条产品线都远超 15% 底线。刮胡刀这边主要靠未来的绑定购买率增长(当前 47%);牙刷因为绑定购买率已经 78%,杠杆主要在单价 / 复购周期。",
+    },
+    sources: [
+      {
+        id: "src-pricing",
+        label: "Pricing-Strategy-2026.xlsx · pp. 12–14",
+        kind: "doc",
+        detail: {
+          methodology: "Sara Lin 维护的产品线毛利定价模型。每季度更新一次。",
+          rows: [
+            ["所属文档", "Pricing-Strategy-2026.xlsx"],
+            ["页码", "pp. 12–14"],
+            ["上传人", "Sara Lin · Apr 28"],
+            ["敏感度", "机密"],
+          ],
+        },
+      },
+      {
+        id: "src-pat-razor",
+        label: "模式 · razor-blade 绑定购买率提升",
+        kind: "pattern",
+        detail: {
+          methodology:
+            "razor-blade 类 SKU,在购买周期窗口内对手柄做 7 天促销,刀片绑定购买率提升 2.4–3.1 pt。",
+          rows: [
+            ["置信度", "72%"],
+            ["来源数", "4"],
+            ["最近应用", "razor-blade 计划 · SKU-A 套装"],
+            ["录入", "May 12"],
+          ],
+        },
+      },
+      {
+        id: "src-pat-toothbrush",
+        label: "模式 · 刀头绑定购买率耐久度",
+        kind: "pattern",
+        detail: {
+          methodology:
+            "牙刷线维持 78% 刀头绑定购买率已 14 个月,因刷头 3 个月一换的物理周期。模式提示:复购周期是绑定购买率耐久度的关键变量。",
+          rows: [
+            ["置信度", "79%"],
+            ["来源数", "6"],
+            ["最近应用", "牙刷 LTV 模型 · razor-blade 计划对照"],
+            ["录入", "Mar 22"],
+          ],
+        },
+      },
+    ],
+    relatedPatterns: [
+      {
+        id: "rel-pat-razor",
+        name: "razor-blade 促销窗口拉动绑定购买率",
+        category: "Strategy",
+        confidencePct: 72,
+        sensitivity: "Sensitive",
+        sensitivityLabel: "敏感",
+        addedAt: "May 12",
+      },
+      {
+        id: "rel-pat-toothbrush",
+        name: "刀头绑定购买率耐久度 · 复购周期驱动",
+        category: "Strategy",
+        confidencePct: 79,
+        sensitivity: "Confidential",
+        sensitivityLabel: "机密",
+        addedAt: "Mar 22",
+      },
+      {
+        id: "rel-pat-margin-floor",
+        name: "毛利下限 15% · 配套产品线定价护栏",
+        category: "Strategy",
+        confidencePct: 83,
+        sensitivity: "Sensitive",
+        sensitivityLabel: "敏感",
+        addedAt: "Feb 14",
+      },
+    ],
+    maskedAnswerNote:
+      "标记:机密。当前权限不足。L6 及以上的 敏感 权限可查看;如需访问请联系管理员。",
+  },
 };
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -8395,7 +8707,12 @@ function TopBar({
 
 function ChatPanel({ activeId, onSelect }) {
   const agentFlagged = THREADS.filter((t) => t.initiator === "agent");
-  const userThreads = THREADS.filter((t) => t.initiator === "user");
+  const userThreads = THREADS.filter(
+    (t) => t.initiator === "user" && t.category !== "brain-ops",
+  );
+  const brainOpsThreads = THREADS.filter(
+    (t) => t.initiator === "user" && t.category === "brain-ops",
+  );
   const newCount = agentFlagged.filter((t) => t.unread).length;
 
   return (
@@ -8454,6 +8771,28 @@ function ChatPanel({ activeId, onSelect }) {
             ))}
           </div>
         </div>
+
+        {brainOpsThreads.length > 0 && (
+          <div>
+            <div className="px-1 mb-2 flex items-center gap-2">
+              <ChevronDown className="w-3 h-3 text-slate-500" />
+              <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                品牌大脑操作
+              </span>
+            </div>
+            <div className="space-y-2">
+              {brainOpsThreads.map((thread) => (
+                <ThreadCard
+                  key={thread.id}
+                  thread={thread}
+                  active={activeId === thread.id}
+                  onSelect={onSelect}
+                  tone="brain-ops"
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="border-t border-slate-200 p-3 bg-slate-50/50 flex-shrink-0">
@@ -8476,8 +8815,9 @@ function ChatPanel({ activeId, onSelect }) {
   );
 }
 
-function ThreadCard({ thread, active, onSelect }) {
+function ThreadCard({ thread, active, onSelect, tone }) {
   const isAgent = thread.initiator === "agent";
+  const isBrainOps = tone === "brain-ops";
   const lastTurn = thread.turns[thread.turns.length - 1];
   const previewBody = lastTurn?.body || "";
 
@@ -8486,7 +8826,9 @@ function ThreadCard({ thread, active, onSelect }) {
       className={`rounded-lg border transition-colors ${
         active
           ? "bg-slate-50 border-slate-300"
-          : "bg-white border-slate-200 hover:border-slate-300"
+          : isBrainOps
+            ? "bg-slate-100/60 border-slate-200 hover:border-slate-300"
+            : "bg-white border-slate-200 hover:border-slate-300"
       } ${isAgent ? "border-l-2 border-l-emerald-500" : ""}`}
     >
       <button
@@ -9501,8 +9843,7 @@ function RecentQueriesList({ queries, activeUser }) {
   );
 }
 
-function CompanyBrainContent() {
-  const [activeUserId, setActiveUserId] = useState(COMPANY_BRAIN.identity.activeUserId);
+function CompanyBrainContent({ activeUserId, onSwitchUser }) {
   const [openActivity, setOpenActivity] = useState(null);
   const [openPattern, setOpenPattern] = useState(null);
   const identity = { ...COMPANY_BRAIN.identity, activeUserId };
@@ -9522,7 +9863,7 @@ function CompanyBrainContent() {
   return (
     <>
       <div className="flex-1 overflow-y-auto">
-        <IdentityCard identity={identity} onSwitchUser={setActiveUserId} />
+        <IdentityCard identity={identity} onSwitchUser={onSwitchUser} />
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
           <BrainStatStrip />
         </div>
@@ -9697,6 +10038,8 @@ function InspectorPanel({
   onClose,
   width,
   onWidthChange,
+  activeUserId,
+  onSwitchUser,
 }) {
   if (!open) return null;
   const tabs = [
@@ -9751,7 +10094,10 @@ function InspectorPanel({
         {tab === "ad-architecture" ? (
           <AdArchitectureContent panelWidth={width} />
         ) : (
-          <CompanyBrainContent />
+          <CompanyBrainContent
+            activeUserId={activeUserId}
+            onSwitchUser={onSwitchUser}
+          />
         )}
       </div>
     </aside>
@@ -9786,6 +10132,629 @@ function PlaceholderCanvas({ kicker, title, part }) {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Brain operations canvases · Part 4                                        */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function UploadCanvas() {
+  const U = BRAIN_OPS.upload;
+  return (
+    <>
+      <CanvasHeader
+        kicker="上传 · 提炼方法学"
+        title={U.document.filename}
+        meta={
+          <>
+            <Pill tone="slate">
+              <FileText className="w-3 h-3" />
+              {U.document.pages} 页
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[U.document.sensitivity] || "slate"}>
+              {U.document.sensitivityLabel}
+            </Pill>
+            <Pill tone="emerald">
+              <Sparkles className="w-3 h-3" />
+              由 {U.document.uploadedBy} 上传
+            </Pill>
+          </>
+        }
+      />
+
+      {/* 1. 现状 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="解析输出 + 文档摘要">
+          1. 现状
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="grid grid-cols-4 gap-4">
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                页数
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.pages}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                提取 tokens
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.tokens}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                表格
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.tables}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                图表
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.charts}
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 text-11 text-slate-500 leading-relaxed">
+            {U.document.signalNote} · 上传时间 {U.document.uploadedAt}
+          </div>
+        </Card>
+      </div>
+
+      {/* 2. 具体问题 — 这次上传补的是什么缺口 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="本次上传补的缺口">
+          2. 具体问题
+        </SectionLabel>
+        <Card className="p-5 bg-slate-50/60">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            公司大脑此前对该领域的覆盖
+          </div>
+          <div className="text-sm text-slate-700 leading-relaxed">
+            {U.coverageNote}
+          </div>
+        </Card>
+      </div>
+
+      {/* 3. 具体建议 — 提炼出的 3 个模式 + 2 个 playbook 更新 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="3 个新模式 · 2 个 playbook 更新">
+          3. 具体建议
+        </SectionLabel>
+
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+          提炼出的 3 个新模式
+        </div>
+        <div className="space-y-2.5">
+          {U.patterns.map((p) => (
+            <div
+              key={p.id}
+              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+            >
+              <div className="text-sm font-medium text-slate-900 leading-snug">
+                {p.name}
+              </div>
+              <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+                {p.categories.map((cat) => (
+                  <Pill key={cat} tone={PATTERN_CATEGORY_TONE[cat] || "slate"}>
+                    {PATTERN_CATEGORY_LABEL[cat]}
+                  </Pill>
+                ))}
+                <span className="text-11 text-slate-600">
+                  置信度{" "}
+                  <span className="font-mono tabular-nums text-slate-900">
+                    {p.confidencePct}%
+                  </span>
+                </span>
+                <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+                  {p.sensitivityLabel}
+                </Pill>
+                <span className="text-11 text-slate-500 font-mono">
+                  {p.sources}
+                </span>
+              </div>
+              <div className="mt-1.5 text-11 text-slate-600 leading-relaxed">
+                {p.summary}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mt-5 mb-2">
+          2 个 playbook 更新
+        </div>
+        <div className="space-y-2">
+          {U.playbookUpdates.map((pb) => (
+            <div
+              key={pb.id}
+              className="flex items-start gap-2 border border-slate-200 rounded-md px-3 py-2 bg-white"
+            >
+              <Workflow className="w-3.5 h-3.5 text-slate-500 mt-0.5 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-medium text-slate-900">
+                  {pb.name}
+                </div>
+                <div className="text-11 text-slate-600 mt-0.5">{pb.change}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. 里程碑 — 写入后能做什么 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="写入大脑后能做什么">
+          4. 里程碑
+        </SectionLabel>
+        <div className="space-y-1.5">
+          {U.milestones.map((m, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{m}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom approval bar */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="text-11 text-slate-500">
+            3 个模式 + 2 个 playbook 更新 · 等待确认后写入
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
+            >
+              <X className="w-3.5 h-3.5" />
+              拒绝
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Clock className="w-3.5 h-3.5" />
+              延后
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              逐项批准
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              全部批准 · 写入公司大脑
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ConnectorCanvas() {
+  const C = BRAIN_OPS.connector;
+  const [scopeOpen, setScopeOpen] = useState(false);
+  return (
+    <>
+      <CanvasHeader
+        kicker="连接数据源"
+        title={C.service}
+        meta={
+          <>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              已建立
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[C.sensitivity] || "slate"}>
+              {C.sensitivityLabel}
+            </Pill>
+          </>
+        }
+      />
+
+      {/* 1. 现状 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="连接状态 · OAuth 范围 · 实时同步">
+          1. 现状
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                服务
+              </div>
+              <div className="text-sm font-medium text-slate-900 mt-1">
+                {C.service}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                连接人
+              </div>
+              <div className="text-sm font-medium text-slate-900 mt-1">
+                {C.connectedBy}
+              </div>
+              <div className="text-11 text-slate-500 font-mono mt-0.5">
+                {C.connectedAt}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                OAuth 范围
+              </div>
+              <div className="text-sm font-medium text-slate-900 mt-1">
+                {C.oauthScopeCount} 项权限
+              </div>
+              <button
+                type="button"
+                onClick={() => setScopeOpen(true)}
+                className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 mt-0.5"
+              >
+                查看 OAuth 范围
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                同步状态
+              </div>
+              <div className="text-sm font-medium text-emerald-700 mt-1">
+                {C.syncStatus}
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* 2. 具体问题 — 之前缺什么 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="连接前公司大脑缺什么">
+          2. 具体问题
+        </SectionLabel>
+        <Card className="p-5 bg-slate-50/60">
+          <div className="text-sm text-slate-700 leading-relaxed">
+            {C.coverageGap}
+          </div>
+        </Card>
+      </div>
+
+      {/* 3. 具体建议 — 现在能做什么 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="新增数据范围 · 新增可用场景">
+          3. 具体建议
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            数据范围
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                已同步表
+              </div>
+              <div className="mt-1 text-sm font-mono text-slate-900">
+                {C.dataScope.tables.length} 个
+              </div>
+              <div className="text-11 text-slate-600 mt-1 leading-relaxed">
+                {C.dataScope.tables.join("、")}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div>
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  历史事件已索引
+                </div>
+                <div className="mt-0.5 text-sm font-mono text-slate-900">
+                  {C.dataScope.historicalEvents}
+                </div>
+              </div>
+              <div>
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  回填窗口
+                </div>
+                <div className="mt-0.5 text-sm font-mono text-slate-900">
+                  {C.dataScope.backfillDays} 天 · 已完成
+                </div>
+              </div>
+              <div>
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  Live sync 间隔
+                </div>
+                <div className="mt-0.5 text-sm font-mono text-slate-900">
+                  {C.dataScope.liveSyncInterval}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mt-5 mb-2">
+          新增可用场景
+        </div>
+        <div className="space-y-1.5">
+          {C.implications.map((line, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{line}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. 里程碑 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="后续节奏">
+          4. 里程碑
+        </SectionLabel>
+        <div className="space-y-1.5">
+          {C.milestones.map((m, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{m}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom — informational, close-only */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="text-11 text-slate-500">
+            连接已生效 · 由 Devon Park 在 {C.connectedAt} 建立
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setScopeOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              查看 OAuth 范围
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              已生效 · 关闭
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <InspectionDrawer
+        open={scopeOpen}
+        onClose={() => setScopeOpen(false)}
+        title={`${C.service} · OAuth 范围`}
+        methodologyDescription={`已授权 ${C.oauthScopeCount} 项只读权限。所有权限均限于读取,Agent 无法在 Walmart 端做修改 — 任何修改类操作需返回 Walmart 端授权。`}
+        tableHeaders={["权限", "说明"]}
+        tableRows={[
+          ["campaigns.read", "读取广告活动列表与配置"],
+          ["ad_groups.read", "读取广告组结构与状态"],
+          ["performance.read", "读取每日 / 每小时表现数据"],
+          ["search_terms.read", "读取搜索词报告"],
+        ]}
+        columnWidths={["40%", "60%"]}
+      />
+    </>
+  );
+}
+
+function QASource({ source, onOpen }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(source)}
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 text-11 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-md bg-white text-slate-700"
+    >
+      {source.kind === "doc" ? (
+        <FileText className="w-3 h-3 text-slate-500" />
+      ) : (
+        <Brain className="w-3 h-3 text-slate-500" />
+      )}
+      <span>{source.label}</span>
+      <ArrowUpRight className="w-3 h-3 text-slate-400" />
+    </button>
+  );
+}
+
+function QACanvas({ activeClearance }) {
+  const Q = BRAIN_OPS.qa;
+  const [openSource, setOpenSource] = useState(null);
+  const visible = canView(activeClearance, Q.minClearance || Q.sensitivity);
+  return (
+    <>
+      <CanvasHeader
+        kicker="问答 · 公司大脑"
+        title={Q.question}
+        meta={
+          <>
+            <Pill tone={SENSITIVITY_TONE[Q.sensitivity] || "slate"}>
+              {Q.sensitivityLabel}
+            </Pill>
+            <Pill tone="slate">
+              <Brain className="w-3 h-3" />
+              查询用时 {Q.queryLatency}
+            </Pill>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-6 pb-6">
+        <Card className="p-5">
+          <div className="text-11 text-slate-500">
+            {Q.asker} 在 {Q.askedAt} 询问 · 已查询品牌大脑
+          </div>
+
+          {visible ? (
+            <>
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="border border-slate-200 rounded-md p-4 bg-slate-50/40">
+                  <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+                    刮胡刀产品线
+                  </div>
+                  <div className="mt-1.5 flex items-baseline gap-2">
+                    <span className="text-2xl font-mono font-semibold text-slate-900">
+                      {Q.answer.razor.blended}
+                    </span>
+                    <MetricTerm definition={METRIC_DEFINITIONS.blendedMargin}>
+                      <span className="text-11 text-slate-500">综合毛利</span>
+                    </MetricTerm>
+                  </div>
+                  <div className="text-11 text-slate-600 mt-1">
+                    {Q.answer.razor.breakdown}
+                  </div>
+                </div>
+                <div className="border border-slate-200 rounded-md p-4 bg-slate-50/40">
+                  <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+                    牙刷产品线
+                  </div>
+                  <div className="mt-1.5 flex items-baseline gap-2">
+                    <span className="text-2xl font-mono font-semibold text-slate-900">
+                      {Q.answer.toothbrush.blended}
+                    </span>
+                    <MetricTerm definition={METRIC_DEFINITIONS.blendedMargin}>
+                      <span className="text-11 text-slate-500">综合毛利</span>
+                    </MetricTerm>
+                  </div>
+                  <div className="text-11 text-slate-600 mt-1">
+                    {Q.answer.toothbrush.breakdown}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 text-sm text-slate-700 leading-relaxed">
+                {Q.answer.analysisZh}
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-100">
+                <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+                  来源
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Q.sources.map((s) => (
+                    <QASource key={s.id} source={s} onOpen={setOpenSource} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-100">
+                <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+                  相关模式
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Q.relatedPatterns.map((p) => (
+                    <div
+                      key={p.id}
+                      className="border border-slate-200 rounded-md p-2.5 bg-white"
+                    >
+                      <div className="text-11 font-medium text-slate-900 leading-snug">
+                        {p.name}
+                      </div>
+                      <div className="mt-1.5 flex items-center gap-1.5 flex-wrap">
+                        <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+                          {PATTERN_CATEGORY_LABEL[p.category]}
+                        </Pill>
+                        <span className="text-10 text-slate-600">
+                          <span className="font-mono tabular-nums">
+                            {p.confidencePct}%
+                          </span>
+                        </span>
+                      </div>
+                      <div className="mt-1 text-10 text-slate-500">
+                        录入 {p.addedAt}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <span className="text-11 text-slate-500">这个回答有用吗?</span>
+                    <button
+                      type="button"
+                      className="p-1.5 border border-slate-200 rounded-md hover:bg-slate-50"
+                      title="有用"
+                    >
+                      <Check className="w-3.5 h-3.5 text-slate-600" />
+                    </button>
+                    <button
+                      type="button"
+                      className="p-1.5 border border-slate-200 rounded-md hover:bg-slate-50"
+                      title="无用"
+                    >
+                      <X className="w-3.5 h-3.5 text-slate-600" />
+                    </button>
+                  </div>
+                  <div className="relative flex-1 min-w-[200px] max-w-md">
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="追问……"
+                      className="w-full pl-3 pr-14 py-2 text-11 bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
+                    />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                      <Lock className="w-2.5 h-2.5 text-slate-400" />
+                      <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
+                        锁定
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="mt-4 border border-rose-200 bg-rose-50/60 rounded-md p-5">
+              <div className="flex items-start gap-2.5">
+                <Lock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
+                    回答已被遮蔽
+                  </div>
+                  <div className="text-sm text-rose-900 leading-relaxed">
+                    {Q.maskedAnswerNote}
+                  </div>
+                  <div className="text-11 text-rose-700 mt-2">
+                    问题本身已被记录;来源 + 相关模式同样不可见。
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </Card>
+      </div>
+
+      <InspectionDrawer
+        open={!!openSource}
+        onClose={() => setOpenSource(null)}
+        title={openSource?.label}
+        methodologyDescription={openSource?.detail.methodology}
+        tableHeaders={["字段", "取值"]}
+        tableRows={openSource?.detail.rows || []}
+        columnWidths={["40%", "60%"]}
+      />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -9794,6 +10763,12 @@ export default function App({ locale, setLocale }) {
   const [inspectorOpen, setInspectorOpen] = useState(false);
   const [inspectorTab, setInspectorTab] = useState("ad-architecture");
   const [inspectorWidth, setInspectorWidth] = useState(480);
+  const [activeUserId, setActiveUserId] = useState(
+    COMPANY_BRAIN.identity.activeUserId,
+  );
+  const activeUser =
+    COMPANY_BRAIN.identity.users.find((u) => u.id === activeUserId) ||
+    COMPANY_BRAIN.identity.users[0];
 
   function toggleInspectorTab(tab) {
     if (!inspectorOpen) {
@@ -9832,6 +10807,12 @@ export default function App({ locale, setLocale }) {
         return <RazorBladeCanvas />;
       case "launch-cr":
         return <LaunchCRCanvas />;
+      case "upload-q4":
+        return <UploadCanvas />;
+      case "connect-walmart":
+        return <ConnectorCanvas />;
+      case "qa-margins":
+        return <QACanvas activeClearance={activeUser.clearance} />;
       default:
         return null;
     }
@@ -9881,6 +10862,8 @@ export default function App({ locale, setLocale }) {
           onClose={() => setInspectorOpen(false)}
           width={inspectorWidth}
           onWidthChange={setInspectorWidth}
+          activeUserId={activeUserId}
+          onSwitchUser={setActiveUserId}
         />
       </div>
     </div>

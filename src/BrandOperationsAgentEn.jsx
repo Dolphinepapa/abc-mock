@@ -238,6 +238,105 @@ const THREADS = [
       },
     ],
   },
+  {
+    id: "upload-q4",
+    canvasId: "upload-q4",
+    initiator: "user",
+    initiatorName: "Maya Chen",
+    initiatorRole: "VP, eCommerce",
+    initials: "MC",
+    initialTimestamp: "May 12, 10:08",
+    lastActivityTimestamp: "May 12, 10:21",
+    unread: false,
+    title: "Upload Q4 retrospective · distill methodology",
+    category: "brain-ops",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 12, 10:08",
+        body: "Uploaded Q4-2025-Retrospective.pdf. Distill methodology and update the brain.",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 12, 10:14",
+        body: "Parsing 47-page PDF… extracted 138K tokens of text + 12 tables + 4 charts.",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 12, 10:21",
+        body: "Distilled 3 new patterns and updated 2 playbooks. Opening canvas with details.",
+        canvasLink: true,
+      },
+    ],
+  },
+  {
+    id: "connect-walmart",
+    canvasId: "connect-walmart",
+    initiator: "user",
+    initiatorName: "Devon Park",
+    initiatorRole: "Sr. Growth Manager",
+    initials: "DP",
+    initialTimestamp: "May 10, 14:18",
+    lastActivityTimestamp: "May 10, 14:42",
+    unread: false,
+    title: "Connect Walmart Connect API · Floor Lamps account",
+    category: "brain-ops",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 10, 14:18",
+        body: "Connect Walmart Connect API for our Floor Lamps account.",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 10, 14:21",
+        body: "Need OAuth authorization from a Walmart admin. Sending auth request to maya.chen@abchomegoods.com (account admin).",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 10, 14:30",
+        body: "Authorization received. Connection established. Ingesting last 90 days of data — should complete in ~12 minutes.",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 10, 14:42",
+        body: "Ingestion complete. 8 tables synced, 12,400 historical events indexed. Ready for analysis. Opening canvas with what's now accessible.",
+        canvasLink: true,
+      },
+    ],
+  },
+  {
+    id: "qa-margins",
+    canvasId: "qa-margins",
+    initiator: "user",
+    initiatorName: "Sara Lin",
+    initiatorRole: "Portfolio Lead",
+    initials: "SL",
+    initialTimestamp: "May 13, 10:14",
+    lastActivityTimestamp: "May 13, 10:14",
+    unread: false,
+    title: "Compare razor and toothbrush product line margins",
+    category: "brain-ops",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 13, 10:14",
+        body: "Compare razor and toothbrush product line margins.",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 13, 10:14",
+        body: "Queried Company Brain. Opening canvas with the answer + sources + related patterns.",
+        canvasLink: true,
+      },
+    ],
+  },
 ];
 
 /* Strategy canvas */
@@ -2924,6 +3023,210 @@ const COMPANY_BRAIN = {
       threadId: "thread-attach-range",
     },
   ],
+};
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/*  Brain operations · Part 4 data                                            */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+const BRAIN_OPS = {
+  upload: {
+    document: {
+      filename: "Q4-2025-Retrospective.pdf",
+      pages: 47,
+      tokens: "138K",
+      tables: 12,
+      charts: 4,
+      uploadedBy: "Maya Chen",
+      uploadedAt: "May 12, 10:08",
+      sensitivity: "Sensitive",
+      signalNote: "High signal — 8 of 47 pages contain operational learnings",
+    },
+    coverageNote:
+      "Brain had 4 prior cases on razor-blade attach lift, none with 12-day promo window specifics. This doc fills that gap.",
+    patterns: [
+      {
+        id: "bop-pat-razor-attach",
+        name: "Razor-blade attach lift via 12-day promo window",
+        confidencePct: 74,
+        sources: "pp. 14, 19, 23–25",
+        sensitivity: "Sensitive",
+        categories: ["Strategy", "Optimization"],
+        summary: "In a 12-day continuous promo window, blade attach climbs from 47% baseline to 71%. Prerequisite: handle margin ≥ 24%.",
+      },
+      {
+        id: "bop-pat-holiday-cr",
+        name: "Holiday-driven CR inflation on category-broad keywords",
+        confidencePct: 68,
+        sources: "pp. 8–9, 31",
+        sensitivity: "Internal",
+        categories: ["Optimization"],
+        summary: "During holiday windows, category-broad keyword CR inflates 1.6–2.4x but reverts within 7 days. Bid cadence needs to track this.",
+      },
+      {
+        id: "bop-pat-inv-halo",
+        name: "Inventory-coupling effect on best-seller halo duration",
+        confidencePct: 71,
+        sources: "pp. 36–38, 42",
+        sensitivity: "Sensitive",
+        categories: ["Strategy", "Defense"],
+        summary: "After capturing #1, if inventory depth is below 18 days the BS halo window shrinks to under 11 days. Inventory pre-check before promo is required.",
+      },
+    ],
+    playbookUpdates: [
+      {
+        id: "bop-pb-bsr",
+        name: "Best-seller capture · #2 → #1",
+        change: "Added phase consideration · inventory check before promo",
+      },
+      {
+        id: "bop-pb-peak",
+        name: "Peak season SOV defense",
+        change: "Confidence 71% → 78% · added 1 high-quality precedent",
+      },
+    ],
+    milestones: [
+      "Razor-blade promo decisions now have a 4-case precedent baseline",
+      "Holiday-window keyword bid plans can reference the CR-inflation pattern",
+      "Best-seller capture playbook now includes inventory pre-check",
+    ],
+  },
+
+  connector: {
+    service: "Walmart Connect API",
+    connectedBy: "Devon Park",
+    connectedAt: "May 10, 14:22",
+    oauthScopeCount: 4,
+    oauthScopes: [
+      "campaigns.read",
+      "ad_groups.read",
+      "performance.read",
+      "search_terms.read",
+    ],
+    syncStatus: "Live · last event 4 min ago",
+    sensitivity: "Internal",
+    coverageGap:
+      "Before this connection, Company Brain had no first-party Walmart data for the Floor Lamps line. All Walmart-side assumptions relied on third-party scrapes (~±20% precision).",
+    dataScope: {
+      tables: [
+        "campaigns",
+        "ad_groups",
+        "keywords",
+        "daily_performance",
+        "search_terms",
+        "listings",
+        "conversions",
+        "audiences",
+      ],
+      historicalEvents: "12,400",
+      backfillDays: 90,
+      liveSyncInterval: "15 min",
+    },
+    implications: [
+      "Cross-platform Amazon ↔ Walmart analysis (see Omnichannel conversation)",
+      "Walmart-specific competitive monitoring",
+      "Walmart appears in Ad architecture inspector (auto-wired)",
+    ],
+    milestones: [
+      "Live sync every 15 min · spot-check accuracy after 7 days",
+      "After 30 days, auto-retrigger cross-platform attribution model",
+    ],
+  },
+
+  qa: {
+    question: "Compare razor and toothbrush product line margins.",
+    sensitivity: "Confidential",
+    minClearance: "Sensitive",
+    asker: "Sara Lin",
+    askedAt: "May 13, 10:14",
+    queryLatency: "1.2s",
+    answer: {
+      razor: {
+        blended: "38%",
+        breakdown: "razor 24% · blade 64%",
+      },
+      toothbrush: {
+        blended: "42%",
+        breakdown: "handle 28% · heads 58%",
+      },
+      analysisEn:
+        "Both well above the 15% floor. Razor has more headroom in blade pricing (current attach rate 47% leaves room to grow); toothbrush has the higher attach rate baseline (78%) — different leverage profiles.",
+    },
+    sources: [
+      {
+        id: "src-pricing",
+        label: "Pricing-Strategy-2026.xlsx · pp. 12–14",
+        kind: "doc",
+        detail: {
+          methodology: "Margin pricing model maintained by Sara Lin. Refreshed quarterly.",
+          rows: [
+            ["Source doc", "Pricing-Strategy-2026.xlsx"],
+            ["Pages", "pp. 12–14"],
+            ["Uploaded by", "Sara Lin · Apr 28"],
+            ["Sensitivity", "Confidential"],
+          ],
+        },
+      },
+      {
+        id: "src-pat-razor",
+        label: "Pattern · Razor-blade attach lift",
+        kind: "pattern",
+        detail: {
+          methodology:
+            "For razor-blade SKUs, a 7-day handle promo within the repurchase window lifts blade attach by 2.4–3.1 pt.",
+          rows: [
+            ["Confidence", "72%"],
+            ["Source count", "4"],
+            ["Most recent use", "Razor-blade plan · SKU-A bundle"],
+            ["Recorded", "May 12"],
+          ],
+        },
+      },
+      {
+        id: "src-pat-toothbrush",
+        label: "Pattern · Toothbrush-head attach durability",
+        kind: "pattern",
+        detail: {
+          methodology:
+            "Toothbrush line has sustained 78% head attach for 14 months, driven by the physical 3-month replacement cycle. Pattern note: repurchase cadence is the key variable behind attach durability.",
+          rows: [
+            ["Confidence", "79%"],
+            ["Source count", "6"],
+            ["Most recent use", "Toothbrush LTV model · razor-blade comparison"],
+            ["Recorded", "Mar 22"],
+          ],
+        },
+      },
+    ],
+    relatedPatterns: [
+      {
+        id: "rel-pat-razor",
+        name: "Razor-blade attach lift via promo window",
+        category: "Strategy",
+        confidencePct: 72,
+        sensitivity: "Sensitive",
+        addedAt: "May 12",
+      },
+      {
+        id: "rel-pat-toothbrush",
+        name: "Toothbrush-head attach durability · driven by repurchase cycle",
+        category: "Strategy",
+        confidencePct: 79,
+        sensitivity: "Confidential",
+        addedAt: "Mar 22",
+      },
+      {
+        id: "rel-pat-margin-floor",
+        name: "Margin floor 15% · companion line pricing guardrail",
+        category: "Strategy",
+        confidencePct: 83,
+        sensitivity: "Sensitive",
+        addedAt: "Feb 14",
+      },
+    ],
+    maskedAnswerNote:
+      "Tagged: Confidential. Restricted at your clearance. Available to L6+ at Sensitive clearance or higher. Contact admin for access.",
+  },
 };
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -8358,7 +8661,12 @@ function TopBar({
 
 function ChatPanel({ activeId, onSelect }) {
   const agentFlagged = THREADS.filter((t) => t.initiator === "agent");
-  const userThreads = THREADS.filter((t) => t.initiator === "user");
+  const userThreads = THREADS.filter(
+    (t) => t.initiator === "user" && t.category !== "brain-ops",
+  );
+  const brainOpsThreads = THREADS.filter(
+    (t) => t.initiator === "user" && t.category === "brain-ops",
+  );
   const newCount = agentFlagged.filter((t) => t.unread).length;
 
   return (
@@ -8417,6 +8725,28 @@ function ChatPanel({ activeId, onSelect }) {
             ))}
           </div>
         </div>
+
+        {brainOpsThreads.length > 0 && (
+          <div>
+            <div className="px-1 mb-2 flex items-center gap-2">
+              <ChevronDown className="w-3 h-3 text-slate-500" />
+              <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Brain operations
+              </span>
+            </div>
+            <div className="space-y-2">
+              {brainOpsThreads.map((thread) => (
+                <ThreadCard
+                  key={thread.id}
+                  thread={thread}
+                  active={activeId === thread.id}
+                  onSelect={onSelect}
+                  tone="brain-ops"
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="border-t border-slate-200 p-3 bg-slate-50/50 flex-shrink-0">
@@ -8439,8 +8769,9 @@ function ChatPanel({ activeId, onSelect }) {
   );
 }
 
-function ThreadCard({ thread, active, onSelect }) {
+function ThreadCard({ thread, active, onSelect, tone }) {
   const isAgent = thread.initiator === "agent";
+  const isBrainOps = tone === "brain-ops";
   const lastTurn = thread.turns[thread.turns.length - 1];
   const previewBody = lastTurn?.body || "";
 
@@ -8449,7 +8780,9 @@ function ThreadCard({ thread, active, onSelect }) {
       className={`rounded-lg border transition-colors ${
         active
           ? "bg-slate-50 border-slate-300"
-          : "bg-white border-slate-200 hover:border-slate-300"
+          : isBrainOps
+            ? "bg-slate-100/60 border-slate-200 hover:border-slate-300"
+            : "bg-white border-slate-200 hover:border-slate-300"
       } ${isAgent ? "border-l-2 border-l-emerald-500" : ""}`}
     >
       <button
@@ -9462,8 +9795,7 @@ function RecentQueriesList({ queries, activeUser }) {
   );
 }
 
-function CompanyBrainContent() {
-  const [activeUserId, setActiveUserId] = useState(COMPANY_BRAIN.identity.activeUserId);
+function CompanyBrainContent({ activeUserId, onSwitchUser }) {
   const [openActivity, setOpenActivity] = useState(null);
   const [openPattern, setOpenPattern] = useState(null);
   const identity = { ...COMPANY_BRAIN.identity, activeUserId };
@@ -9483,7 +9815,7 @@ function CompanyBrainContent() {
   return (
     <>
       <div className="flex-1 overflow-y-auto">
-        <IdentityCard identity={identity} onSwitchUser={setActiveUserId} />
+        <IdentityCard identity={identity} onSwitchUser={onSwitchUser} />
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
           <BrainStatStrip />
         </div>
@@ -9658,6 +9990,8 @@ function InspectorPanel({
   onClose,
   width,
   onWidthChange,
+  activeUserId,
+  onSwitchUser,
 }) {
   if (!open) return null;
   const tabs = [
@@ -9712,7 +10046,10 @@ function InspectorPanel({
         {tab === "ad-architecture" ? (
           <AdArchitectureContent panelWidth={width} />
         ) : (
-          <CompanyBrainContent />
+          <CompanyBrainContent
+            activeUserId={activeUserId}
+            onSwitchUser={onSwitchUser}
+          />
         )}
       </div>
     </aside>
@@ -9746,6 +10083,629 @@ function PlaceholderCanvas({ kicker, title, part }) {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Brain operations canvases · Part 4                                        */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function UploadCanvas() {
+  const U = BRAIN_OPS.upload;
+  return (
+    <>
+      <CanvasHeader
+        kicker="Upload · distill methodology"
+        title={U.document.filename}
+        meta={
+          <>
+            <Pill tone="slate">
+              <FileText className="w-3 h-3" />
+              {U.document.pages} pages
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[U.document.sensitivity] || "slate"}>
+              {U.document.sensitivity}
+            </Pill>
+            <Pill tone="emerald">
+              <Sparkles className="w-3 h-3" />
+              Uploaded by {U.document.uploadedBy}
+            </Pill>
+          </>
+        }
+      />
+
+      {/* 1. Current state */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="Parsing output · document summary">
+          1. Current state
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="grid grid-cols-4 gap-4">
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Pages
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.pages}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Tokens extracted
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.tokens}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Tables
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.tables}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Charts
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+                {U.document.charts}
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 text-11 text-slate-500 leading-relaxed">
+            {U.document.signalNote} · uploaded {U.document.uploadedAt}
+          </div>
+        </Card>
+      </div>
+
+      {/* 2. Specific problem — what gap this upload fills */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="What gap this upload fills">
+          2. Specific problem
+        </SectionLabel>
+        <Card className="p-5 bg-slate-50/60">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            Brain coverage before this upload
+          </div>
+          <div className="text-sm text-slate-700 leading-relaxed">
+            {U.coverageNote}
+          </div>
+        </Card>
+      </div>
+
+      {/* 3. Recommendation — 3 patterns + 2 playbook updates */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="3 new patterns · 2 playbook updates">
+          3. Recommendation
+        </SectionLabel>
+
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+          3 patterns extracted
+        </div>
+        <div className="space-y-2.5">
+          {U.patterns.map((p) => (
+            <div
+              key={p.id}
+              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+            >
+              <div className="text-sm font-medium text-slate-900 leading-snug">
+                {p.name}
+              </div>
+              <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+                {p.categories.map((cat) => (
+                  <Pill key={cat} tone={PATTERN_CATEGORY_TONE[cat] || "slate"}>
+                    {cat}
+                  </Pill>
+                ))}
+                <span className="text-11 text-slate-600">
+                  Confidence{" "}
+                  <span className="font-mono tabular-nums text-slate-900">
+                    {p.confidencePct}%
+                  </span>
+                </span>
+                <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+                  {p.sensitivity}
+                </Pill>
+                <span className="text-11 text-slate-500 font-mono">
+                  {p.sources}
+                </span>
+              </div>
+              <div className="mt-1.5 text-11 text-slate-600 leading-relaxed">
+                {p.summary}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mt-5 mb-2">
+          2 playbook updates
+        </div>
+        <div className="space-y-2">
+          {U.playbookUpdates.map((pb) => (
+            <div
+              key={pb.id}
+              className="flex items-start gap-2 border border-slate-200 rounded-md px-3 py-2 bg-white"
+            >
+              <Workflow className="w-3.5 h-3.5 text-slate-500 mt-0.5 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-medium text-slate-900">
+                  {pb.name}
+                </div>
+                <div className="text-11 text-slate-600 mt-0.5">{pb.change}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Milestones — what becomes possible after write */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="What's possible once written to brain">
+          4. Milestones
+        </SectionLabel>
+        <div className="space-y-1.5">
+          {U.milestones.map((m, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{m}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom approval bar */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="text-11 text-slate-500">
+            3 patterns + 2 playbook updates · pending confirmation to write
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
+            >
+              <X className="w-3.5 h-3.5" />
+              Reject
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Clock className="w-3.5 h-3.5" />
+              Defer
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              Selective approve
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              Approve all · write to brain
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ConnectorCanvas() {
+  const C = BRAIN_OPS.connector;
+  const [scopeOpen, setScopeOpen] = useState(false);
+  return (
+    <>
+      <CanvasHeader
+        kicker="Connect data source"
+        title={C.service}
+        meta={
+          <>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              Established
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[C.sensitivity] || "slate"}>
+              {C.sensitivity}
+            </Pill>
+          </>
+        }
+      />
+
+      {/* 1. Current state */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="Connection status · OAuth scope · live sync">
+          1. Current state
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Service
+              </div>
+              <div className="text-sm font-medium text-slate-900 mt-1">
+                {C.service}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Connected by
+              </div>
+              <div className="text-sm font-medium text-slate-900 mt-1">
+                {C.connectedBy}
+              </div>
+              <div className="text-11 text-slate-500 font-mono mt-0.5">
+                {C.connectedAt}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                OAuth scope
+              </div>
+              <div className="text-sm font-medium text-slate-900 mt-1">
+                {C.oauthScopeCount} permissions granted
+              </div>
+              <button
+                type="button"
+                onClick={() => setScopeOpen(true)}
+                className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 mt-0.5"
+              >
+                View OAuth scope
+                <ArrowUpRight className="w-3 h-3" />
+              </button>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Sync status
+              </div>
+              <div className="text-sm font-medium text-emerald-700 mt-1">
+                {C.syncStatus}
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* 2. Specific problem — coverage gap */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="What was missing before this connection">
+          2. Specific problem
+        </SectionLabel>
+        <Card className="p-5 bg-slate-50/60">
+          <div className="text-sm text-slate-700 leading-relaxed">
+            {C.coverageGap}
+          </div>
+        </Card>
+      </div>
+
+      {/* 3. Recommendation — what's now possible */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="Data scope · newly possible">
+          3. Recommendation
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            Data scope
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Tables synced
+              </div>
+              <div className="mt-1 text-sm font-mono text-slate-900">
+                {C.dataScope.tables.length}
+              </div>
+              <div className="text-11 text-slate-600 mt-1 leading-relaxed">
+                {C.dataScope.tables.join(", ")}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div>
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  Historical events indexed
+                </div>
+                <div className="mt-0.5 text-sm font-mono text-slate-900">
+                  {C.dataScope.historicalEvents}
+                </div>
+              </div>
+              <div>
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  Backfill window
+                </div>
+                <div className="mt-0.5 text-sm font-mono text-slate-900">
+                  {C.dataScope.backfillDays} days · complete
+                </div>
+              </div>
+              <div>
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  Live sync interval
+                </div>
+                <div className="mt-0.5 text-sm font-mono text-slate-900">
+                  {C.dataScope.liveSyncInterval}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mt-5 mb-2">
+          Newly possible
+        </div>
+        <div className="space-y-1.5">
+          {C.implications.map((line, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{line}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Milestones */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="Forward cadence">
+          4. Milestones
+        </SectionLabel>
+        <div className="space-y-1.5">
+          {C.milestones.map((m, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{m}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom — informational, close-only */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="text-11 text-slate-500">
+            Connection active · established by Devon Park at {C.connectedAt}
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setScopeOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              View OAuth scope
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              Active · close
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <InspectionDrawer
+        open={scopeOpen}
+        onClose={() => setScopeOpen(false)}
+        title={`${C.service} · OAuth scope`}
+        methodologyDescription={`${C.oauthScopeCount} read-only permissions granted. All scopes are read; the agent cannot make changes on the Walmart side — any write operation requires going back to Walmart for re-authorization.`}
+        tableHeaders={["Permission", "Description"]}
+        tableRows={[
+          ["campaigns.read", "Read campaigns list and configuration"],
+          ["ad_groups.read", "Read ad group structure and status"],
+          ["performance.read", "Read daily / hourly performance data"],
+          ["search_terms.read", "Read search-term reports"],
+        ]}
+        columnWidths={["40%", "60%"]}
+      />
+    </>
+  );
+}
+
+function QASource({ source, onOpen }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(source)}
+      className="inline-flex items-center gap-1.5 px-2.5 py-1 text-11 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-md bg-white text-slate-700"
+    >
+      {source.kind === "doc" ? (
+        <FileText className="w-3 h-3 text-slate-500" />
+      ) : (
+        <Brain className="w-3 h-3 text-slate-500" />
+      )}
+      <span>{source.label}</span>
+      <ArrowUpRight className="w-3 h-3 text-slate-400" />
+    </button>
+  );
+}
+
+function QACanvas({ activeClearance }) {
+  const Q = BRAIN_OPS.qa;
+  const [openSource, setOpenSource] = useState(null);
+  const visible = canView(activeClearance, Q.minClearance || Q.sensitivity);
+  return (
+    <>
+      <CanvasHeader
+        kicker="Q&A · Company Brain"
+        title={Q.question}
+        meta={
+          <>
+            <Pill tone={SENSITIVITY_TONE[Q.sensitivity] || "slate"}>
+              {Q.sensitivity}
+            </Pill>
+            <Pill tone="slate">
+              <Brain className="w-3 h-3" />
+              Queried in {Q.queryLatency}
+            </Pill>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-6 pb-6">
+        <Card className="p-5">
+          <div className="text-11 text-slate-500">
+            Asked by {Q.asker} · {Q.askedAt} · queried Company Brain
+          </div>
+
+          {visible ? (
+            <>
+              <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="border border-slate-200 rounded-md p-4 bg-slate-50/40">
+                  <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+                    Razor line
+                  </div>
+                  <div className="mt-1.5 flex items-baseline gap-2">
+                    <span className="text-2xl font-mono font-semibold text-slate-900">
+                      {Q.answer.razor.blended}
+                    </span>
+                    <MetricTerm definition={METRIC_DEFINITIONS.blendedMargin}>
+                      <span className="text-11 text-slate-500">blended margin</span>
+                    </MetricTerm>
+                  </div>
+                  <div className="text-11 text-slate-600 mt-1">
+                    {Q.answer.razor.breakdown}
+                  </div>
+                </div>
+                <div className="border border-slate-200 rounded-md p-4 bg-slate-50/40">
+                  <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+                    Toothbrush line
+                  </div>
+                  <div className="mt-1.5 flex items-baseline gap-2">
+                    <span className="text-2xl font-mono font-semibold text-slate-900">
+                      {Q.answer.toothbrush.blended}
+                    </span>
+                    <MetricTerm definition={METRIC_DEFINITIONS.blendedMargin}>
+                      <span className="text-11 text-slate-500">blended margin</span>
+                    </MetricTerm>
+                  </div>
+                  <div className="text-11 text-slate-600 mt-1">
+                    {Q.answer.toothbrush.breakdown}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 text-sm text-slate-700 leading-relaxed">
+                {Q.answer.analysisEn}
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-100">
+                <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+                  Sources
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {Q.sources.map((s) => (
+                    <QASource key={s.id} source={s} onOpen={setOpenSource} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-100">
+                <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+                  Related patterns
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {Q.relatedPatterns.map((p) => (
+                    <div
+                      key={p.id}
+                      className="border border-slate-200 rounded-md p-2.5 bg-white"
+                    >
+                      <div className="text-11 font-medium text-slate-900 leading-snug">
+                        {p.name}
+                      </div>
+                      <div className="mt-1.5 flex items-center gap-1.5 flex-wrap">
+                        <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+                          {p.category}
+                        </Pill>
+                        <span className="text-10 text-slate-600">
+                          <span className="font-mono tabular-nums">
+                            {p.confidencePct}%
+                          </span>
+                        </span>
+                      </div>
+                      <div className="mt-1 text-10 text-slate-500">
+                        Recorded {p.addedAt}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <span className="text-11 text-slate-500">Was this answer helpful?</span>
+                    <button
+                      type="button"
+                      className="p-1.5 border border-slate-200 rounded-md hover:bg-slate-50"
+                      title="Helpful"
+                    >
+                      <Check className="w-3.5 h-3.5 text-slate-600" />
+                    </button>
+                    <button
+                      type="button"
+                      className="p-1.5 border border-slate-200 rounded-md hover:bg-slate-50"
+                      title="Not helpful"
+                    >
+                      <X className="w-3.5 h-3.5 text-slate-600" />
+                    </button>
+                  </div>
+                  <div className="relative flex-1 min-w-[200px] max-w-md">
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="Reply…"
+                      className="w-full pl-3 pr-14 py-2 text-11 bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
+                    />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                      <Lock className="w-2.5 h-2.5 text-slate-400" />
+                      <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
+                        Locked
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="mt-4 border border-rose-200 bg-rose-50/60 rounded-md p-5">
+              <div className="flex items-start gap-2.5">
+                <Lock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
+                    Answer masked
+                  </div>
+                  <div className="text-sm text-rose-900 leading-relaxed">
+                    {Q.maskedAnswerNote}
+                  </div>
+                  <div className="text-11 text-rose-700 mt-2">
+                    The question itself is logged; sources and related patterns are also restricted.
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </Card>
+      </div>
+
+      <InspectionDrawer
+        open={!!openSource}
+        onClose={() => setOpenSource(null)}
+        title={openSource?.label}
+        methodologyDescription={openSource?.detail.methodology}
+        tableHeaders={["Field", "Value"]}
+        tableRows={openSource?.detail.rows || []}
+        columnWidths={["40%", "60%"]}
+      />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -9754,6 +10714,12 @@ export default function App({ locale, setLocale }) {
   const [inspectorOpen, setInspectorOpen] = useState(false);
   const [inspectorTab, setInspectorTab] = useState("ad-architecture");
   const [inspectorWidth, setInspectorWidth] = useState(480);
+  const [activeUserId, setActiveUserId] = useState(
+    COMPANY_BRAIN.identity.activeUserId,
+  );
+  const activeUser =
+    COMPANY_BRAIN.identity.users.find((u) => u.id === activeUserId) ||
+    COMPANY_BRAIN.identity.users[0];
 
   function toggleInspectorTab(tab) {
     if (!inspectorOpen) {
@@ -9792,6 +10758,12 @@ export default function App({ locale, setLocale }) {
         return <RazorBladeCanvas />;
       case "launch-cr":
         return <LaunchCRCanvas />;
+      case "upload-q4":
+        return <UploadCanvas />;
+      case "connect-walmart":
+        return <ConnectorCanvas />;
+      case "qa-margins":
+        return <QACanvas activeClearance={activeUser.clearance} />;
       default:
         return null;
     }
@@ -9841,6 +10813,8 @@ export default function App({ locale, setLocale }) {
           onClose={() => setInspectorOpen(false)}
           width={inspectorWidth}
           onWidthChange={setInspectorWidth}
+          activeUserId={activeUserId}
+          onSwitchUser={setActiveUserId}
         />
       </div>
     </div>
