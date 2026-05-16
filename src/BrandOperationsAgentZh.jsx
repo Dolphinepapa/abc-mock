@@ -1010,6 +1010,312 @@ const OMNICHANNEL = {
   },
 };
 
+/* Razor-and-blade pricing canvas — Henry's 刮胡刀产品线 */
+const RAZOR_BLADE = {
+  sku: "Henry's · 刮胡刀产品线",
+  initiator: "Sara Lin",
+  confirmedOn: "May 13",
+  economics: {
+    razor: {
+      price: "$39.99",
+      cogs: "$30.39",
+      contributionMarginValue: "$9.60",
+      contributionMarginPct: "24.0%",
+      monthlyUnits: "3,820",
+    },
+    blade: {
+      price: "$19.99",
+      priceNote: "4 件装",
+      cogs: "$7.20",
+      contributionMarginValue: "$12.79",
+      contributionMarginPct: "64.0%",
+      monthlyUnits: "4,180",
+    },
+    attachRatePct: "47%",
+    attachRateWindow: "3 个月窗口 · Amazon Brand Analytics 重复购买行为",
+    repeatRate: "2.3 次 / 客户",
+    repeatRateWindow: "12 个月窗口 · 刀头购买者",
+    ltv: "$23.43",
+    ltvFormula: "LTV = $9.60 + 0.47 × $12.79 × 2.3 = $23.43",
+    productLineBlendedMarginPct: "38.1%",
+    productLineBlendedMarginNote: "远高于 15% 下限 · 23.1pp 余量",
+    marginFloorPct: "15%",
+  },
+  competitors: [
+    {
+      name: "Competitor A",
+      razorPrice: "$34.99",
+      bladePrice: "$18.49",
+      bladePriceNote: "4 件装",
+      estAttachRatePct: "62%",
+      estLtv: "$31.84",
+      source: "Helium10 + Jungle Scout · 90 天均值",
+      priceDeltaNote: "我方刮胡刀高 14.3%",
+    },
+    {
+      name: "Competitor B",
+      razorPrice: "$29.99",
+      bladePrice: "$16.99",
+      bladePriceNote: "4 件装",
+      estAttachRatePct: "58%",
+      estLtv: "$27.42",
+      source: "Helium10 + Jungle Scout · 90 天均值",
+      priceDeltaNote: "我方刮胡刀高 33.3%",
+    },
+  ],
+  diagnosis: {
+    headline: "刮胡刀定价似乎在压制捆绑购买率,进而压制 LTV",
+    body:
+      "我方刮胡刀价格比 Competitor A 高 14.3%,估算捆绑购买率低 15pp,估算 LTV 低约 26%。三者的关系一致指向刮胡刀定价是上游约束:",
+    hypothesis:
+      "刮胡刀定价正在压制捆绑购买率,进而压制 LTV。降低刮胡刀价格带来的 LTV 提升应当超过刮胡刀单位毛利损失 — 但必须通过实验验证。",
+  },
+  headroom: {
+    currentPct: 38.1,
+    floorPct: 15,
+    headroomPct: 23.1,
+    priceFloorIfDrop: "$25.49",
+    narrative:
+      "当前 blended margin 38.1%,约束下限 15%,余量 23.1pp。刮胡刀售价理论上可降至约 $25.49(单位毛利损失 $4.90,假设销量与捆绑率响应到位),同时产品线毛利 ≥ 15%。空间存在;但能否回本是 Phase 2 要回答的问题。",
+  },
+  precedent: {
+    sku: "牙刷 · SKU-TB-22",
+    period: "Q2 2025",
+    summary:
+      "牙刷产品线(牙刷主体 + 替换刷头)曾做过类似 razor-and-blade 定价测试:主体降价 18%。净结果 · 产品线 90 天 cohort revenue +24.3%,blended margin 全程保持在 18% 下限以上。",
+    outcome: "90 天队列收入 +24.3%",
+    method:
+      "Amazon Manage Your Experiments · 牙刷 ASIN 价格 A/B 测试;替换刷头 ASIN 不变;结果以 90 天获客队列收入衡量。",
+    caveat:
+      "牙刷捆绑购买率估算约 78%,远高于刮胡刀的 47%。LTV 数学根本不同 — 直接照搬降价幅度为时过早,必须通过 A/B 测试验证后再外推。",
+  },
+  experiments: [
+    {
+      id: "razor-price-drop",
+      title: "实验 A · 刮胡刀降价 12.5%",
+      treatmentLabel: "$39.99 → $34.99",
+      treatmentDetail:
+        "刮胡刀售价降至与 Competitor A 持平。刀头价格与广告架构保持不变;仅刮胡刀挂牌价变动。",
+      hypothesis:
+        "在与 Competitor A 持平的价格下,刮胡刀销量 ≥ +20% 且捆绑购买率不下降甚至上升,从而 90 天获客队列收入上升,覆盖刮胡刀单位毛利的下降。",
+      testMethod: "Amazon Manage Your Experiments · 刮胡刀 ASIN 价格 A/B 测试",
+      sampleSize: "每组 ~12,400 刮胡刀买家 · 3 周爬坡",
+      duration: "3 周",
+      successMetric:
+        "每个获客 90 天 cohort revenue ≥ +15% vs 对照组 · 捆绑购买率衰减不超过 3pp",
+      marginCheck: {
+        passes: true,
+        detail:
+          "$34.99 全量场景下产品线毛利计算为 31.4% — 仍高于 15% 下限 16.4pp。",
+      },
+      scenarios: [
+        {
+          label: "最优情景",
+          tone: "emerald",
+          summary: "队列收入 +22% · 捆绑率升至 51%",
+          nextMove:
+            "全产品线锁定新刮胡刀定价;广告预算向刮胡刀获客转移(Phase 3 详述)。",
+        },
+        {
+          label: "基准情景",
+          tone: "slate",
+          summary: "队列收入 +14% · 捆绑率维持 47%",
+          nextMove:
+            "新定价保留 60 天观察;期满前不宣布为永久。",
+        },
+        {
+          label: "最差情景",
+          tone: "rose",
+          summary: "队列收入 +3% · 捆绑率降至 44%",
+          nextMove:
+            "回退价格;假设失败 — 定价不是捆绑率的约束。",
+        },
+      ],
+      confidence: 72,
+      confidenceLabel: "12 次历史价格测试 · 捆绑率响应方差较大",
+    },
+    {
+      id: "razor-bundle",
+      title: "实验 B · 套装上架 · 刮胡刀 + 3 刀头 · $59.99",
+      treatmentLabel: "新套装 ASIN · $59.99",
+      treatmentDetail:
+        "在刮胡刀主 ASIN 旁上架套装 ASIN:1 把刮胡刀 + 3 个刀头, $59.99。套装 COGS = $30.39 + $5.40 = $35.79 → 单位毛利 $24.20 / 40.3%。",
+      hypothesis:
+        "套装结构性地把捆绑购买率锁定为 100%,套装买家的单位 LTV 在扣除对单独刮胡刀销量的蚕食后,仍高于单独刮胡刀的平均 LTV($23.43)。",
+      testMethod: "新套装 ASIN 与刮胡刀主 ASIN 并列上架 · 自然 + 付费流量",
+      sampleSize: "套装 vs 单独刮胡刀 LTV 对比 · 预估 ~6,800 套装买家",
+      duration: "4 周",
+      successMetric: "套装 LTV ÷ 单独刮胡刀 LTV ≥ 1.25× · 套装销量 ≥ 刮胡刀单量的 18%",
+      marginCheck: {
+        passes: true,
+        detail:
+          "套装单位毛利 $24.20 / 40.3%。含套装的全场景下产品线毛利约 22.4% — 高于下限 7.4pp。",
+      },
+      scenarios: [
+        {
+          label: "最优情景",
+          tone: "emerald",
+          summary: "套装 LTV 比 1.84× · 28% 刮胡刀需求迁移至套装",
+          nextMove:
+            "将套装提升为主推 SKU;围绕套装 ASIN 重构广告架构(Phase 3 详述)。",
+        },
+        {
+          label: "基准情景",
+          tone: "slate",
+          summary: "套装 LTV 比 1.32× · 19% 销售结构迁移",
+          nextMove:
+            "保留两个 listing;允许套装自然增长,同时维护单独刮胡刀的入口。",
+        },
+        {
+          label: "最差情景",
+          tone: "rose",
+          summary: "套装 LTV 比 1.08× · 套装买家主要来自单独刮胡刀的蚕食",
+          nextMove:
+            "下架套装;LTV 增量假设失败 — 套装结构未产生增量价值。",
+        },
+      ],
+      confidence: 69,
+      confidenceLabel: "8 次历史套装发布 · 蚕食率预估测前难以准确",
+    },
+    {
+      id: "blade-sns",
+      title: "实验 C · 刀头 Subscribe-and-Save · 叠加 +10% 折扣",
+      treatmentLabel: "刀头 $19.99 + SnS 10% off(实际 $17.99)",
+      treatmentDetail:
+        "将刀头 ASIN 加入 SnS 促销活动,在 5% SnS 基础折扣上叠加 10% 额外折扣 — 实际售价降至 $17.99。刮胡刀价格不变。",
+      hypothesis:
+        "SnS 折扣叠加增强订阅锚定,通过降低订阅放弃率,使 90 天刀头复购率提升 ≥ 20%。",
+      testMethod: "14 天 SnS 注册活动 · 保留组追踪至 90 天窗口",
+      sampleSize: "处理组 ~9,200 刀头买家 · 对照组 9,200",
+      duration: "6 周(2 周爬坡 + 4 周观察)",
+      successMetric: "90 天刀头复购率 ≥ +20% · 刮胡刀 LTV 不下降",
+      marginCheck: {
+        passes: true,
+        detail:
+          "刀头单位毛利由 $12.79 降至 $10.79(64% → 54%)。产品线毛利计算为 28.3% — 高于下限 13.3pp。",
+      },
+      scenarios: [
+        {
+          label: "最优情景",
+          tone: "emerald",
+          summary: "复购率 +27% · LTV 升至 $25.91",
+          nextMove:
+            "将叠加 SnS 设为刀头默认促销;减少刀头 ASIN 的单次购买广告投入。",
+        },
+        {
+          label: "基准情景",
+          tone: "slate",
+          summary: "复购率 +14% · LTV 升至 $24.42",
+          nextMove:
+            "仅在旺季(Q2 / Q4)保留 SnS 叠加;每年重审。",
+        },
+        {
+          label: "最差情景",
+          tone: "rose",
+          summary: "复购率 +4% · 订阅者在首次补货后流失率与历史持平",
+          nextMove:
+            "撤销叠加;SnS 锚定不是有效杠杆 — 改为调研补货摩擦。",
+        },
+      ],
+      confidence: 74,
+      confidenceLabel: "11 次历史 SnS 叠加测试 · 复购率响应是 3 个测试中最可靠的",
+    },
+  ],
+  phase3DecisionTree: [
+    {
+      condition: "若实验 A 成功 · 队列收入 ≥ +15%",
+      action:
+        "全产品线锁定新刮胡刀定价。将刮胡刀广告预算向获客关键词重新分配;减少刀头侧重的获客花费。",
+      riskCallout: null,
+    },
+    {
+      condition: "若实验 B 成功 · 套装 LTV 比 ≥ 1.25×",
+      action:
+        "将套装 ASIN 提升为主推 SKU。围绕套装重构 SP / SB 广告架构;保留单独刮胡刀作为次要入口。",
+      riskCallout: null,
+    },
+    {
+      condition: "若多个实验同时成功",
+      action:
+        "需要产品线层面重新优化。套装 + 降价存在非线性相互作用 — 不能将结果简单叠加。",
+      riskCallout:
+        "蚕食风险:降价后的刮胡刀与套装同时存在会争夺同一类买家。在扩大任一变更前,基于联合处理数据重做销售结构建模。",
+    },
+    {
+      condition: "若 A / B / C 都未成功",
+      action:
+        "重新审视上游假设。定价不是约束。改为调研产品兼容性 / 刀头锁定机制、搜索可见性、或购后补货摩擦。",
+      riskCallout:
+        "失败阶段同样产生信息:每个实验隔离了不同杠杆 — A 测价格、B 测套装结构、C 测订阅。每个 null 结果都是一条已学约束。",
+    },
+  ],
+  competitorDataSources: {
+    methodology:
+      "竞品价格每日从 Helium10 产品 feed 抓取。捆绑购买率与 LTV 估算来自公开 Amazon Brand Analytics Top-of-Funnel 数据 · Jungle Scout BSR 轨迹推断 · 公开 review 量反推(每单评论率基线 1.4%)。",
+    tableHeaders: ["字段", "Competitor A", "Competitor B", "数据来源"],
+    columnWidths: ["28%", "22%", "22%", "28%"],
+    tableRows: [
+      ["刮胡刀挂牌价(当前)", "$34.99", "$29.99", "Helium10 每日价格 feed"],
+      ["刮胡刀挂牌价(90 天均值)", "$34.99", "$30.49", "Helium10 每日价格 feed"],
+      ["刀头 4 件装挂牌价", "$18.49", "$16.99", "Helium10 每日价格 feed"],
+      ["估算月度刮胡刀销量", "5,840", "7,210", "Jungle Scout BSR-销量模型"],
+      ["估算 12 个月评论量", "2,847", "3,612", "公开 Amazon 评论数"],
+      ["提及刀头复购的评论数", "1,766(62%)", "2,094(58%)", "Helium10 评论文本爬取 · 捆绑率代理"],
+      ["估算捆绑购买率", "62%", "58%", "评论 / 单 + 复购提及反推"],
+      ["估算 LTV", "$31.84", "$27.42", "我方 LTV 公式 · 用他们的经济结构代入"],
+    ],
+    definitionsList: [
+      {
+        term: "评论 / 单捆绑率代理",
+        definition:
+          "公开评论中提及刀头复购或订阅注册的占比。在我方过往牙刷与刮胡刀 SKU 中与实际捆绑购买率高度相关(14 个历史案例 r² = 0.71)。非完美 · 已知是下限。",
+      },
+      {
+        term: "Jungle Scout BSR-销量模型",
+        definition:
+          "销售排名 → 销量的换算每季度校准一次,以我方在共有品类的 BSR-销量数据为基准。月度销量估算置信区间 ±14%。",
+      },
+      {
+        term: "Helium10 价格 feed",
+        definition:
+          "直接从 Amazon 商品详情页爬取的每日挂牌价。被追踪 ASIN 的捕获率 99.4%。促销标记的字段已剥离。",
+      },
+    ],
+  },
+  precedentDataSources: {
+    methodology:
+      "牙刷定价测试数据来自 Company Brain 的 Q2 2025 案例。90 天队列收入提升由 Amazon Manage Your Experiments 处理-对照报表与我方内部 LTV 账目导出。注意 · 捆绑率差异意味着结果只能在方向上 — 而非数值上 — 迁移。",
+    tableHeaders: ["指标", "测试前", "测试中", "测试后(90 天)"],
+    columnWidths: ["32%", "22%", "22%", "24%"],
+    tableRows: [
+      ["牙刷主体挂牌价", "$54.99", "$44.99", "$44.99(维持)"],
+      ["替换刷头挂牌价", "$22.49", "$22.49", "$22.49"],
+      ["估算捆绑购买率", "76.4%", "78.2%", "78.6%"],
+      ["牙刷主体月销量", "1,840", "2,610", "2,540"],
+      ["队列收入指数(归一)", "100", "118.1", "124.3"],
+      ["Blended margin", "42.3%", "21.6%", "23.8%"],
+      ["当时的下限", "18.0%", "18.0%", "18.0%"],
+    ],
+    definitionsList: [
+      {
+        term: "队列收入",
+        definition:
+          "在测试窗口内获取的客户群体在随后 90 天内产生的总收入。基期为测试前基线归一为 100。",
+      },
+      {
+        term: "为何只能方向迁移、不能数值迁移",
+        definition:
+          "牙刷捆绑率约 78%,比刮胡刀的 47% 高 31pp。刮胡刀降价的 LTV 提升幅度关键依赖于捆绑率移动幅度 — 牙刷案例无法预测幅度,只能说明方向上可能。",
+      },
+    ],
+  },
+  approval: {
+    primaryLabel: "批准 Phase 1 + 2(自动激活 Phase 3 审核)",
+    summary:
+      "批准后将并行运行 3 个 Phase 2 实验,所有实验结束后自动呈现 Phase 3 供审核。",
+  },
+};
+
 /* Peak season canvas */
 const PEAK = {
   trafficForecast: [
@@ -4123,6 +4429,770 @@ function OmnichannelCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Razor + blade pricing canvas — Henry's                                    */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function PhaseSection({ index, title, kicker, disabled, badge, children }) {
+  return (
+    <section
+      className={`rounded-lg border ${
+        disabled
+          ? "border-slate-200 bg-slate-100"
+          : "border-slate-200 bg-white"
+      } overflow-hidden`}
+    >
+      <div
+        className={`px-5 py-4 border-b ${
+          disabled ? "border-slate-200" : "border-slate-200"
+        } flex items-start justify-between gap-3`}
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className={`w-8 h-8 rounded-md flex items-center justify-center text-sm font-mono font-semibold flex-shrink-0 ${
+              disabled
+                ? "bg-slate-200 text-slate-500"
+                : "bg-slate-900 text-white"
+            }`}
+          >
+            {index}
+          </div>
+          <div>
+            {kicker && (
+              <div
+                className={`text-11 uppercase tracking-wider font-semibold mb-1 ${
+                  disabled ? "text-slate-500" : "text-emerald-700"
+                }`}
+              >
+                {kicker}
+              </div>
+            )}
+            <div
+              className={`text-base font-semibold tracking-tight ${
+                disabled ? "text-slate-600" : "text-slate-900"
+              }`}
+            >
+              {title}
+            </div>
+          </div>
+        </div>
+        {badge && (
+          <div className="pt-1 flex-shrink-0">
+            {badge}
+          </div>
+        )}
+      </div>
+      <div
+        className={`px-5 py-5 ${
+          disabled ? "opacity-60" : ""
+        }`}
+        style={disabled ? { cursor: "not-allowed" } : undefined}
+      >
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function EconomicsCard({ label, price, priceNote, cogs, contributionValue, contributionPct, units }) {
+  return (
+    <Card className="p-4">
+      <div className="text-11 uppercase tracking-wider text-emerald-700 font-semibold mb-2">
+        {label}
+      </div>
+      <div className="space-y-2 text-sm">
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">售价</span>
+          <span className="font-mono text-slate-900 font-semibold">
+            {price}
+            {priceNote && (
+              <span className="ml-1.5 text-11 text-slate-400 font-normal">
+                {priceNote}
+              </span>
+            )}
+          </span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">COGS</span>
+          <span className="font-mono text-slate-700">{cogs}</span>
+        </div>
+        <div className="border-t border-slate-100 pt-2 flex items-baseline justify-between">
+          <span className="text-slate-700">
+            <MetricTerm definition={METRIC_DEFINITIONS.contributionMargin}>
+              贡献毛利
+            </MetricTerm>
+          </span>
+          <span className="font-mono text-emerald-700 font-semibold">
+            {contributionValue}
+            <span className="ml-1.5 text-slate-500 font-normal">
+              / {contributionPct}
+            </span>
+          </span>
+        </div>
+        <div className="flex items-baseline justify-between pt-1">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            月销量 · 最近 30 天
+          </span>
+          <span className="font-mono text-slate-700 text-xs">{units}</span>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function CompetitorBaselineCard({ competitor }) {
+  return (
+    <Card className="p-4">
+      <div className="flex items-baseline justify-between mb-2">
+        <div className="text-11 uppercase tracking-wider text-slate-600 font-semibold">
+          {competitor.name}
+        </div>
+        <Pill tone="rose">{competitor.priceDeltaNote}</Pill>
+      </div>
+      <div className="space-y-1.5 text-xs">
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">刮胡刀价格</span>
+          <span className="font-mono text-slate-900">{competitor.razorPrice}</span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">刀头价格</span>
+          <span className="font-mono text-slate-900">
+            {competitor.bladePrice}
+            <span className="ml-1.5 text-10 text-slate-400 font-normal">
+              {competitor.bladePriceNote}
+            </span>
+          </span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">
+            估算{" "}
+            <MetricTerm definition={METRIC_DEFINITIONS.attachRate}>
+              捆绑购买率
+            </MetricTerm>
+          </span>
+          <span className="font-mono text-slate-900">{competitor.estAttachRatePct}</span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">
+            估算{" "}
+            <MetricTerm definition={METRIC_DEFINITIONS.ltv}>LTV</MetricTerm>
+          </span>
+          <span className="font-mono text-emerald-700 font-semibold">{competitor.estLtv}</span>
+        </div>
+      </div>
+      <div className="mt-3 pt-2.5 border-t border-slate-100 text-10 text-slate-500 leading-relaxed">
+        {competitor.source}
+      </div>
+    </Card>
+  );
+}
+
+function HeadroomBar({ currentPct, floorPct, priceFloorIfDrop }) {
+  const max = 100;
+  const floorLeft = (floorPct / max) * 100;
+  const currentLeft = (currentPct / max) * 100;
+  return (
+    <div className="space-y-3">
+      <div className="relative" style={{ height: "56px" }}>
+        <div className="absolute inset-x-0 top-7 h-3 rounded-full overflow-hidden bg-slate-100 flex">
+          <div
+            className="bg-rose-200 h-full"
+            style={{ width: `${floorLeft}%` }}
+          />
+          <div
+            className="bg-emerald-500 h-full"
+            style={{ width: `${currentLeft - floorLeft}%` }}
+          />
+          <div
+            className="bg-slate-200 h-full"
+            style={{ width: `${100 - currentLeft}%` }}
+          />
+        </div>
+        <div
+          className="absolute top-0 flex flex-col items-center"
+          style={{ left: `${floorLeft}%`, transform: "translateX(-50%)" }}
+        >
+          <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold whitespace-nowrap">
+            下限 {floorPct}%
+          </div>
+          <div className="w-px h-7 bg-rose-700 mt-0.5" />
+        </div>
+        <div
+          className="absolute top-0 flex flex-col items-center"
+          style={{ left: `${currentLeft}%`, transform: "translateX(-50%)" }}
+        >
+          <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold whitespace-nowrap">
+            当前 {currentPct}%
+          </div>
+          <div className="w-px h-7 bg-emerald-700 mt-0.5" />
+        </div>
+        <div className="absolute left-0 bottom-0 text-10 text-slate-400 font-mono">0%</div>
+        <div className="absolute right-0 bottom-0 text-10 text-slate-400 font-mono">100%</div>
+      </div>
+      <div className="grid grid-cols-3 gap-3 text-xs">
+        <div className="bg-rose-50 border border-rose-200 rounded-md px-3 py-2">
+          <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+            0% — {floorPct}%
+          </div>
+          <div className="text-slate-700 mt-0.5">下限以下 · 禁区</div>
+        </div>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-md px-3 py-2">
+          <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
+            {floorPct}% — {currentPct}%
+          </div>
+          <div className="text-slate-700 mt-0.5">可用余量 · 可用于增长投入</div>
+        </div>
+        <div className="bg-slate-50 border border-slate-200 rounded-md px-3 py-2">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold">
+            {currentPct}% — 100%
+          </div>
+          <div className="text-slate-600 mt-0.5">未触达 · 不在本议题范围</div>
+        </div>
+      </div>
+      <div className="text-11 text-slate-500 leading-relaxed">
+        刮胡刀挂牌价理论上可降至约{" "}
+        <span className="font-mono text-slate-900">{priceFloorIfDrop}</span>{" "}
+        触及产品线 blended margin 下限(假设销量与捆绑购买率响应到位)。
+      </div>
+    </div>
+  );
+}
+
+function ExperimentCard({ experiment, index }) {
+  const scenarioTone = {
+    emerald: "border-emerald-200 bg-emerald-50/40",
+    slate: "border-slate-200 bg-white",
+    rose: "border-rose-200 bg-rose-50/40",
+  };
+  const scenarioLabelTone = {
+    emerald: "text-emerald-700",
+    slate: "text-slate-600",
+    rose: "text-rose-700",
+  };
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-3 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-7 h-7 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">实验 {index}</Pill>
+            <span className="text-11 text-slate-500">Agent 可执行 · Phase 2</span>
+          </div>
+          <div className="text-sm font-semibold text-slate-900">
+            {experiment.title}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/40">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            处理
+          </span>
+          <Pill tone="dark">{experiment.treatmentLabel}</Pill>
+        </div>
+        <div className="text-xs text-slate-700 mt-1.5 leading-relaxed">
+          {experiment.treatmentDetail}
+        </div>
+      </div>
+
+      <div className="px-5 py-3 grid grid-cols-12 gap-x-4 gap-y-3 text-xs border-b border-slate-100">
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            假设
+          </div>
+          <div className="text-slate-700 leading-relaxed">{experiment.hypothesis}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            测试方法
+          </div>
+          <div className="text-slate-700 leading-relaxed">{experiment.testMethod}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            样本规模
+          </div>
+          <div className="text-slate-700 font-mono">{experiment.sampleSize}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            周期
+          </div>
+          <div className="text-slate-700 font-mono">{experiment.duration}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            成功指标
+          </div>
+          <div className="text-slate-700 leading-relaxed">{experiment.successMetric}</div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 border-b border-slate-100">
+        <div className="flex items-start gap-2">
+          <div className="mt-0.5 w-5 h-5 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center flex-shrink-0">
+            <Check className="w-3 h-3 text-emerald-700" />
+          </div>
+          <div className="flex-1">
+            <div className="text-11 uppercase tracking-wider text-emerald-700 font-semibold">
+              毛利检查通过
+            </div>
+            <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
+              {experiment.marginCheck.detail}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 border-b border-slate-100">
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+          情景结果 · 下一步动作
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {experiment.scenarios.map((s, i) => (
+            <div
+              key={i}
+              className={`rounded-md border px-3 py-2.5 ${scenarioTone[s.tone]}`}
+            >
+              <div
+                className={`text-10 uppercase tracking-wider font-semibold ${scenarioLabelTone[s.tone]}`}
+              >
+                {s.label}
+              </div>
+              <div className="text-xs text-slate-900 font-medium mt-1 leading-snug">
+                {s.summary}
+              </div>
+              <div className="mt-2 pt-2 border-t border-slate-200 text-11 text-slate-600 leading-relaxed">
+                <span className="text-slate-500 font-medium">下一步 · </span>
+                {s.nextMove}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-5 py-2 bg-slate-50/40 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          置信度{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {experiment.confidence}%
+          </span>{" "}
+          · {experiment.confidenceLabel}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 px-2 py-1 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded font-medium"
+          >
+            <X className="w-3 h-3" />
+            拒绝
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-2 py-1 rounded bg-white"
+          >
+            <Edit3 className="w-3 h-3" />
+            修改
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded"
+          >
+            <Check className="w-3 h-3" />
+            批准实验
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function DecisionTreeBranch({ branch, index }) {
+  return (
+    <div className="border border-slate-300 rounded-md bg-white">
+      <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40 flex items-start gap-3">
+        <div className="w-6 h-6 rounded-md bg-slate-300 text-slate-600 flex items-center justify-center text-xs font-mono font-semibold flex-shrink-0">
+          {index}
+        </div>
+        <div className="flex-1">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-semibold mb-0.5">
+            条件
+          </div>
+          <div className="text-sm font-medium text-slate-700">{branch.condition}</div>
+        </div>
+      </div>
+      <div className="px-4 py-3 flex items-start gap-2">
+        <ArrowRight className="w-3.5 h-3.5 text-slate-400 mt-0.5 flex-shrink-0" />
+        <div className="flex-1">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-semibold mb-0.5">
+            动作
+          </div>
+          <div className="text-xs text-slate-700 leading-relaxed">{branch.action}</div>
+        </div>
+      </div>
+      {branch.riskCallout && (
+        <div className="px-4 py-2.5 border-t border-rose-100 bg-rose-50/40 flex items-start gap-2">
+          <AlertCircle className="w-3.5 h-3.5 text-rose-700 mt-0.5 flex-shrink-0" />
+          <div className="text-11 text-rose-900 leading-relaxed">
+            <span className="uppercase tracking-wider text-rose-700 font-semibold">
+              风险 ·{" "}
+            </span>
+            {branch.riskCallout}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RazorBladeCanvas() {
+  const R = RAZOR_BLADE;
+  const [competitorSourcesOpen, setCompetitorSourcesOpen] = useState(false);
+  const [precedentSourcesOpen, setPrecedentSourcesOpen] = useState(false);
+  return (
+    <>
+      <CanvasHeader
+        kicker="刮胡刀 + 刀头 · Henry's"
+        title={R.sku}
+        meta={
+          <>
+            <Pill tone="slate">
+              <Calendar className="w-3 h-3" />
+              May · 本月
+            </Pill>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              {R.initiator} 于 {R.confirmedOn} 提出
+            </Pill>
+            <Pill tone="slate">
+              <Workflow className="w-3 h-3" />
+              Phase 1 + 2 · Phase 3 待激活
+            </Pill>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-6 space-y-5">
+        {/* PHASE 1 */}
+        <PhaseSection
+          index="1"
+          kicker="Phase 1 · 基线诊断"
+          title="产品线当前所在位置"
+          badge={
+            <Pill tone="emerald">
+              <Check className="w-3 h-3" />
+              诊断
+            </Pill>
+          }
+        >
+          <div className="space-y-5">
+            {/* Section A: Economics */}
+            <div>
+              <SectionLabel kicker="我方经济结构 · 最近 30 天">
+                A 节 · 刮胡刀 + 刀头单位经济
+              </SectionLabel>
+              <div className="grid grid-cols-2 gap-3">
+                <EconomicsCard
+                  label="刮胡刀"
+                  price={R.economics.razor.price}
+                  cogs={R.economics.razor.cogs}
+                  contributionValue={R.economics.razor.contributionMarginValue}
+                  contributionPct={R.economics.razor.contributionMarginPct}
+                  units={R.economics.razor.monthlyUnits}
+                />
+                <EconomicsCard
+                  label="刀头"
+                  price={R.economics.blade.price}
+                  priceNote={R.economics.blade.priceNote}
+                  cogs={R.economics.blade.cogs}
+                  contributionValue={R.economics.blade.contributionMarginValue}
+                  contributionPct={R.economics.blade.contributionMarginPct}
+                  units={R.economics.blade.monthlyUnits}
+                />
+              </div>
+              <Card className="mt-3 p-4">
+                <div className="grid grid-cols-2 gap-y-2.5 gap-x-6 text-sm">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      <MetricTerm definition={METRIC_DEFINITIONS.attachRate}>
+                        捆绑购买率
+                      </MetricTerm>
+                      <span className="text-11 text-slate-500 ml-1.5">
+                        · {R.economics.attachRateWindow}
+                      </span>
+                    </span>
+                    <span className="font-mono text-slate-900 font-semibold">
+                      {R.economics.attachRatePct}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      12 个月复购率
+                      <span className="text-11 text-slate-500 ml-1.5">
+                        · 刀头购买者
+                      </span>
+                    </span>
+                    <span className="font-mono text-slate-900 font-semibold">
+                      {R.economics.repeatRate}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      <MetricTerm definition={`${METRIC_DEFINITIONS.ltv} 公式 · ${R.economics.ltvFormula}。`}>
+                        LTV
+                      </MetricTerm>
+                      <span className="text-11 text-slate-500 ml-1.5">
+                        · 每位获客刮胡刀买家
+                      </span>
+                    </span>
+                    <span className="font-mono text-emerald-700 font-semibold">
+                      {R.economics.ltv}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      产品线{" "}
+                      <MetricTerm definition={METRIC_DEFINITIONS.blendedMargin}>
+                        blended margin
+                      </MetricTerm>
+                    </span>
+                    <span className="font-mono text-emerald-700 font-semibold">
+                      {R.economics.productLineBlendedMarginPct}
+                      <span className="ml-2 text-11 text-emerald-700 font-normal">
+                        远高于 {R.economics.marginFloorPct} 下限
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Section B: Competitor baselines */}
+            <div>
+              <SectionLabel kicker="价格爬取 + Amazon Brand Analytics 推断">
+                B 节 · 竞品基线
+              </SectionLabel>
+              <div className="grid grid-cols-2 gap-3">
+                {R.competitors.map((c, i) => (
+                  <CompetitorBaselineCard key={i} competitor={c} />
+                ))}
+              </div>
+              <div className="mt-3 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setCompetitorSourcesOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 rounded-md text-xs font-medium text-slate-700"
+                >
+                  <Layers className="w-3.5 h-3.5 text-slate-500" />
+                  查看竞品数据来源
+                  <ArrowUpRight className="w-3 h-3 text-slate-400" />
+                </button>
+              </div>
+            </div>
+
+            {/* Diagnosis callout */}
+            <div className="bg-slate-900 text-white rounded-md px-5 py-4">
+              <div className="flex items-start gap-3">
+                <div className="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1.5">
+                    诊断
+                  </div>
+                  <div className="text-sm font-semibold text-white mb-1.5 leading-snug">
+                    {R.diagnosis.headline}
+                  </div>
+                  <div className="text-xs text-slate-300 leading-relaxed">
+                    {R.diagnosis.body}
+                  </div>
+                  <div className="text-xs text-white font-semibold mt-2 leading-relaxed">
+                    {R.diagnosis.hypothesis}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section C: Headroom */}
+            <div>
+              <SectionLabel kicker="毛利下限 15%">
+                C 节 · 余量计算
+              </SectionLabel>
+              <Card className="p-5">
+                <HeadroomBar
+                  currentPct={R.headroom.currentPct}
+                  floorPct={R.headroom.floorPct}
+                  priceFloorIfDrop={R.headroom.priceFloorIfDrop}
+                />
+                <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-700 leading-relaxed">
+                  {R.headroom.narrative}
+                </div>
+              </Card>
+            </div>
+          </div>
+        </PhaseSection>
+
+        {/* PHASE 2 */}
+        <PhaseSection
+          index="2"
+          kicker="Phase 2 · 定价实验"
+          title="3 个并行测试 · A / B / C"
+          badge={
+            <Pill tone="emerald">
+              <Sparkles className="w-3 h-3" />
+              Agent 可执行
+            </Pill>
+          }
+        >
+          <div className="space-y-4">
+            {/* Reference precedent */}
+            <div>
+              <SectionLabel>参考案例 · Company Brain</SectionLabel>
+              <div className="bg-slate-900 text-white rounded-md px-5 py-4">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2">
+                  <Brain className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="text-xs font-medium">{R.precedent.sku}</div>
+                  <span className="text-11 text-slate-500">·</span>
+                  <span className="text-11 text-slate-400 font-mono">
+                    {R.precedent.period}
+                  </span>
+                  <span className="text-11 text-slate-500">·</span>
+                  <span className="text-11 text-emerald-400 font-medium">
+                    {R.precedent.outcome}
+                  </span>
+                </div>
+                <div className="text-xs text-slate-200 leading-relaxed mb-2">
+                  {R.precedent.summary}
+                </div>
+                <div className="text-11 text-slate-400 leading-relaxed">
+                  方法 · {R.precedent.method}
+                </div>
+                <div className="mt-3 pt-3 border-t border-slate-700">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="w-3.5 h-3.5 text-rose-300 mt-0.5 flex-shrink-0" />
+                    <div className="text-11 text-rose-200 leading-relaxed">
+                      <span className="uppercase tracking-wider text-rose-300 font-semibold">
+                        告诫 ·{" "}
+                      </span>
+                      {R.precedent.caveat}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3 experiment cards */}
+            <div className="space-y-3">
+              {R.experiments.map((e, i) => (
+                <ExperimentCard
+                  key={e.id}
+                  experiment={e}
+                  index={String.fromCharCode(65 + i)}
+                />
+              ))}
+            </div>
+          </div>
+        </PhaseSection>
+
+        {/* PHASE 3 — disabled */}
+        <PhaseSection
+          index="3"
+          kicker="Phase 3 · Phase 2 测试结束后激活"
+          title="条件下一步 · 决策树"
+          disabled
+          badge={
+            <Pill tone="amber">
+              <Clock className="w-3 h-3" />
+              待 Phase 2 结果
+            </Pill>
+          }
+        >
+          <div className="grid grid-cols-2 gap-3">
+            {R.phase3DecisionTree.map((b, i) => (
+              <DecisionTreeBranch key={i} branch={b} index={i + 1} />
+            ))}
+          </div>
+        </PhaseSection>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom action bar */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              批准范围
+            </div>
+            <div className="text-xs text-slate-700 leading-relaxed max-w-2xl">
+              {R.approval.summary}
+            </div>
+            <button
+              type="button"
+              onClick={() => setPrecedentSourcesOpen(true)}
+              className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900"
+            >
+              <FileText className="w-3.5 h-3.5 text-slate-500" />
+              查看参考案例数据来源
+              <ArrowUpRight className="w-3 h-3 text-slate-400" />
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
+            >
+              <X className="w-3.5 h-3.5" />
+              拒绝
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              修改
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              {R.approval.primaryLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <InspectionDrawer
+        open={competitorSourcesOpen}
+        onClose={() => setCompetitorSourcesOpen(false)}
+        title="竞品数据来源 · 刮胡刀 + 刀头定价"
+        methodologyDescription={R.competitorDataSources.methodology}
+        tableHeaders={R.competitorDataSources.tableHeaders}
+        tableRows={R.competitorDataSources.tableRows}
+        columnWidths={R.competitorDataSources.columnWidths}
+        definitionsList={R.competitorDataSources.definitionsList}
+        definitionsLabel="来源告诫"
+      />
+
+      <InspectionDrawer
+        open={precedentSourcesOpen}
+        onClose={() => setPrecedentSourcesOpen(false)}
+        title="参考案例数据来源 · 牙刷 Q2 2025"
+        methodologyDescription={R.precedentDataSources.methodology}
+        tableHeaders={R.precedentDataSources.tableHeaders}
+        tableRows={R.precedentDataSources.tableRows}
+        columnWidths={R.precedentDataSources.columnWidths}
+        definitionsList={R.precedentDataSources.definitionsList}
+        definitionsLabel="来源告诫"
+      />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  Chat panel + top bar + company brain drawer                               */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -4691,13 +5761,7 @@ export default function App({ locale, setLocale }) {
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
-        return (
-          <PlaceholderCanvas
-            kicker="刮胡刀 + 刀头 · Henry's"
-            title="产品线 blended margin ≥ 15% · 销售最大化"
-            part="Part 3"
-          />
-        );
+        return <RazorBladeCanvas />;
       case "launch-cr":
         return (
           <PlaceholderCanvas

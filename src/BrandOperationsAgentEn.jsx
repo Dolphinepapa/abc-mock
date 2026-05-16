@@ -1020,6 +1020,312 @@ const OMNICHANNEL = {
   },
 };
 
+/* Razor-and-blade pricing canvas — Henry's razor product line */
+const RAZOR_BLADE = {
+  sku: "Henry's · razor product line",
+  initiator: "Sara Lin",
+  confirmedOn: "May 13",
+  economics: {
+    razor: {
+      price: "$39.99",
+      cogs: "$30.39",
+      contributionMarginValue: "$9.60",
+      contributionMarginPct: "24.0%",
+      monthlyUnits: "3,820",
+    },
+    blade: {
+      price: "$19.99",
+      priceNote: "4-pack",
+      cogs: "$7.20",
+      contributionMarginValue: "$12.79",
+      contributionMarginPct: "64.0%",
+      monthlyUnits: "4,180",
+    },
+    attachRatePct: "47%",
+    attachRateWindow: "3-month window · Amazon Brand Analytics Repeat Purchase Behavior",
+    repeatRate: "2.3 purchases / customer",
+    repeatRateWindow: "12-month window · blade buyers",
+    ltv: "$23.43",
+    ltvFormula: "LTV = $9.60 + 0.47 × $12.79 × 2.3 = $23.43",
+    productLineBlendedMarginPct: "38.1%",
+    productLineBlendedMarginNote: "Well above 15% floor · 23.1pp headroom",
+    marginFloorPct: "15%",
+  },
+  competitors: [
+    {
+      name: "Competitor A",
+      razorPrice: "$34.99",
+      bladePrice: "$18.49",
+      bladePriceNote: "4-pack",
+      estAttachRatePct: "62%",
+      estLtv: "$31.84",
+      source: "Helium10 + Jungle Scout · 90-day average",
+      priceDeltaNote: "Our razor is 14.3% higher",
+    },
+    {
+      name: "Competitor B",
+      razorPrice: "$29.99",
+      bladePrice: "$16.99",
+      bladePriceNote: "4-pack",
+      estAttachRatePct: "58%",
+      estLtv: "$27.42",
+      source: "Helium10 + Jungle Scout · 90-day average",
+      priceDeltaNote: "Our razor is 33.3% higher",
+    },
+  ],
+  diagnosis: {
+    headline: "Razor pricing appears to suppress attach rate, which suppresses LTV",
+    body:
+      "Our razor price runs 14.3% above Competitor A. Our estimated attach rate sits 15pp below A's. Our estimated LTV is ~26% lower than A's. The shape is consistent with razor pricing acting as the upstream constraint:",
+    hypothesis:
+      "Razor pricing is suppressing attach rate, which in turn suppresses LTV. Lowering razor price should lift LTV more than it costs in razor margin — but it must be tested.",
+  },
+  headroom: {
+    currentPct: 38.1,
+    floorPct: 15,
+    headroomPct: 23.1,
+    priceFloorIfDrop: "$25.49",
+    narrative:
+      "Current blended margin is 38.1%; the constraint floor is 15%. That's 23.1pp of headroom — razor sale price could fall to ~$25.49 (a $4.90 unit loss on the razor, assuming volume and attach-rate response materialize) while keeping product-line margin ≥ 15%. The room exists; whether using it pays back is the Phase 2 question.",
+  },
+  precedent: {
+    sku: "Toothbrush · SKU-TB-22",
+    period: "Q2 2025",
+    summary:
+      "Toothbrush product line (toothbrush + replacement heads) ran a comparable razor-and-blade pricing test: toothbrush body price cut 18%. Net outcome: product-line 90-day cohort revenue +24.3%, blended margin held above the 18% floor throughout.",
+    outcome: "Cohort revenue +24.3% over 90 days",
+    method:
+      "Amazon Manage Your Experiments price test on the toothbrush ASIN; replacement-head ASIN held constant; outcome measured as 90-day acquired-customer cohort revenue.",
+    caveat:
+      "Toothbrush attach rate is estimated at 78%, well above the razor's 47%. The LTV math is materially different — copying the price cut directly would be premature. Validation through A/B test is required before generalizing.",
+  },
+  experiments: [
+    {
+      id: "razor-price-drop",
+      title: "Experiment A · Cut razor price 12.5%",
+      treatmentLabel: "$39.99 → $34.99",
+      treatmentDetail:
+        "Razor sale price drops to within $0.00 of Competitor A. Blade price and ad architecture held constant; only the razor list price moves.",
+      hypothesis:
+        "At parity with Competitor A, razor unit sales rise ≥ 20% with attach rate unchanged or rising, so 90-day cohort revenue per acquired customer goes up despite the lower per-razor margin.",
+      testMethod: "Amazon Manage Your Experiments · price A/B test on razor ASIN",
+      sampleSize: "~12,400 razor buyers per arm · 3-week ramp",
+      duration: "3 weeks",
+      successMetric:
+        "90-day cohort revenue per acquired customer ≥ +15% vs control · attach rate not degraded by more than 3pp",
+      marginCheck: {
+        passes: true,
+        detail:
+          "At $34.99 all-volume scenario, product-line margin computes to 31.4% — still 16.4pp above the 15% floor.",
+      },
+      scenarios: [
+        {
+          label: "Best case",
+          tone: "emerald",
+          summary: "Cohort revenue +22% · attach rate lifts to 51%",
+          nextMove:
+            "Lock in the new razor price portfolio-wide; shift ad budget toward razor acquisition (Phase 3 detail).",
+        },
+        {
+          label: "Base case",
+          tone: "slate",
+          summary: "Cohort revenue +14% · attach rate flat at 47%",
+          nextMove:
+            "Roll out the price cut on a 60-day hold; re-evaluate before declaring permanent.",
+        },
+        {
+          label: "Worst case",
+          tone: "rose",
+          summary: "Cohort revenue +3% · attach rate slips to 44%",
+          nextMove:
+            "Revert price; the hypothesis fails — pricing was not the binding constraint on attach rate.",
+        },
+      ],
+      confidence: 72,
+      confidenceLabel: "12 prior price-test cohorts · attach-rate response has wide variance",
+    },
+    {
+      id: "razor-bundle",
+      title: "Experiment B · Bundle launch · razor + 3 blades · $59.99",
+      treatmentLabel: "New bundle ASIN · $59.99",
+      treatmentDetail:
+        "List a new bundle ASIN alongside the main razor ASIN: 1 razor + 3 blade cartridges at $59.99. Bundle COGS works out to $30.39 + $5.40 = $35.79 → unit margin $24.20 / 40.3%.",
+      hypothesis:
+        "Bundle structurally locks attach rate to 100%, so bundle-buyer unit LTV exceeds the average single-razor LTV ($23.43) even after accounting for cannibalization of standalone razor sales.",
+      testMethod: "New bundle ASIN listed alongside main razor ASIN · organic + paid traffic",
+      sampleSize: "Bundle vs single-razor LTV comparison · ~6,800 bundle buyers projected",
+      duration: "4 weeks",
+      successMetric: "Bundle LTV ÷ single-razor LTV ≥ 1.25× · bundle volume ≥ 18% of razor unit sales",
+      marginCheck: {
+        passes: true,
+        detail:
+          "Bundle unit margin $24.20 / 40.3%. Bundle-included scenario lifts product-line margin to ~22.4% — 7.4pp above floor.",
+      },
+      scenarios: [
+        {
+          label: "Best case",
+          tone: "emerald",
+          summary: "Bundle LTV ratio 1.84× · 28% of razor demand shifts to bundle",
+          nextMove:
+            "Promote bundle to hero SKU; restructure ad architecture around the bundle ASIN (Phase 3 detail).",
+        },
+        {
+          label: "Base case",
+          tone: "slate",
+          summary: "Bundle LTV ratio 1.32× · 19% mix shift",
+          nextMove:
+            "Keep both listings live; let bundle grow organically while preserving single-razor entry point.",
+        },
+        {
+          label: "Worst case",
+          tone: "rose",
+          summary: "Bundle LTV ratio 1.08× · majority of bundle buyers are cannibalized single-razor purchases",
+          nextMove:
+            "Delist bundle; the LTV uplift hypothesis fails — bundle structure does not produce incremental value.",
+        },
+      ],
+      confidence: 69,
+      confidenceLabel: "8 prior bundle launches · cannibalization rate hard to forecast pre-test",
+    },
+    {
+      id: "blade-sns",
+      title: "Experiment C · Blade Subscribe-and-Save · stack +10% off",
+      treatmentLabel: "Blade $19.99 + SnS 10% off (effective $17.99)",
+      treatmentDetail:
+        "Enroll blade ASIN in a SnS promotion campaign with the 10% additional discount stacked on the standing 5% SnS base — effective sale price drops to $17.99. Razor price unchanged.",
+      hypothesis:
+        "Stacking the SnS discount raises subscription anchoring, lifting 90-day blade repeat rate by ≥ 20% via reduced subscription abandonment.",
+      testMethod: "14-day SnS enrollment campaign · holdout cohort tracked through 90-day window",
+      sampleSize: "~9,200 blade buyers in treatment · 9,200 in control",
+      duration: "6 weeks (2-week ramp + 4-week observation)",
+      successMetric: "90-day blade repeat rate ≥ +20% · razor LTV not degraded",
+      marginCheck: {
+        passes: true,
+        detail:
+          "Blade unit margin drops $12.79 → $10.79 (64% → 54%). Product-line margin computes to 28.3% — 13.3pp above floor.",
+      },
+      scenarios: [
+        {
+          label: "Best case",
+          tone: "emerald",
+          summary: "Repeat rate +27% · LTV lifts to $25.91",
+          nextMove:
+            "Make stacked SnS the default blade promotion; reduce one-time-purchase ad spend on blade ASIN.",
+        },
+        {
+          label: "Base case",
+          tone: "slate",
+          summary: "Repeat rate +14% · LTV lifts to $24.42",
+          nextMove:
+            "Keep SnS stack live during peak quarters only (Q2 / Q4); revisit annually.",
+        },
+        {
+          label: "Worst case",
+          tone: "rose",
+          summary: "Repeat rate +4% · subscribers churn at ~prior rate after first refill",
+          nextMove:
+            "Unwind the stack; SnS anchoring is not the lever — investigate replenishment friction instead.",
+        },
+      ],
+      confidence: 74,
+      confidenceLabel: "11 prior SnS stack tests · repeat-rate effect is the most reliable of the three",
+    },
+  ],
+  phase3DecisionTree: [
+    {
+      condition: "If Experiment A succeeds · cohort revenue ≥ +15%",
+      action:
+        "Lock in the new razor price portfolio-wide. Reallocate razor ad budget toward acquisition keywords; reduce blade-focused acquisition spend.",
+      riskCallout: null,
+    },
+    {
+      condition: "If Experiment B succeeds · bundle LTV ratio ≥ 1.25×",
+      action:
+        "Promote the bundle ASIN to hero SKU. Restructure SP / SB ad architecture around the bundle; keep single razor as a secondary entry point.",
+      riskCallout: null,
+    },
+    {
+      condition: "If multiple experiments succeed simultaneously",
+      action:
+        "Portfolio-level re-optimization required. Bundle + price cut interact non-linearly — cannot stack outcomes additively.",
+      riskCallout:
+        "Cannibalization risk: a price-cut razor next to a bundle competes for the same buyer. Re-run mix modeling on combined treatment data before scaling either change.",
+    },
+    {
+      condition: "If none of A / B / C succeed",
+      action:
+        "Reconsider the upstream hypothesis. Pricing was not the binding constraint. Investigate product-compatibility / blade-lock-in mechanism, search-visibility, or post-purchase replenishment friction.",
+      riskCallout:
+        "A failed phase still produces information: each test isolates a different lever — A on price, B on bundle structure, C on subscription. Treat each null result as a learned constraint.",
+    },
+  ],
+  competitorDataSources: {
+    methodology:
+      "Competitor pricing snapshots pulled daily from Helium10 product feeds. Estimated attach rate and LTV derived from public Amazon Brand Analytics Top-of-Funnel data, Jungle Scout BSR trajectory inference, and review-volume back-solving (reviews-per-unit-sold benchmark of 1.4%).",
+    tableHeaders: ["Field", "Competitor A", "Competitor B", "Source"],
+    columnWidths: ["28%", "22%", "22%", "28%"],
+    tableRows: [
+      ["Razor list price (current)", "$34.99", "$29.99", "Helium10 daily price feed"],
+      ["Razor list price (90-day avg)", "$34.99", "$30.49", "Helium10 daily price feed"],
+      ["Blade 4-pack list price", "$18.49", "$16.99", "Helium10 daily price feed"],
+      ["Estimated monthly razor units", "5,840", "7,210", "Jungle Scout BSR-to-units model"],
+      ["Estimated 12-month review volume", "2,847", "3,612", "Public Amazon review counts"],
+      ["Reviews mentioning blade attach", "1,766 (62%)", "2,094 (58%)", "Helium10 review-text scrape · attach-rate proxy"],
+      ["Estimated attach rate", "62%", "58%", "Reviews-per-unit + repeat-mention back-solve"],
+      ["Estimated LTV", "$31.84", "$27.42", "Our LTV formula · their economics"],
+    ],
+    definitionsList: [
+      {
+        term: "Reviews-per-unit attach proxy",
+        definition:
+          "Share of public reviews that mention re-purchase of the blade or subscription enrollment. Strongly correlated with attach rate in our prior toothbrush and razor SKUs (r² = 0.71 across 14 prior cases). Not perfect — a known lower bound.",
+      },
+      {
+        term: "Jungle Scout BSR-to-units model",
+        definition:
+          "Sales rank → units conversion is calibrated quarterly against our own BSR-to-units data on shared categories. Confidence interval ±14% on monthly unit estimates.",
+      },
+      {
+        term: "Helium10 price feed",
+        definition:
+          "Daily list-price scrape directly from Amazon product detail pages. 99.4% capture rate on tracked ASINs. Promotion-stripped where flagged.",
+      },
+    ],
+  },
+  precedentDataSources: {
+    methodology:
+      "Toothbrush price-test data was a Q2 2025 case from Company Brain. The 90-day cohort revenue lift is derived from Amazon Manage Your Experiments treatment-vs-control reporting + our internal LTV ledger. Caveat: attach-rate gap means the outcome is directionally — not numerically — transferable.",
+    tableHeaders: ["Metric", "Pre-test", "During test", "Post-test (90-day)"],
+    columnWidths: ["32%", "22%", "22%", "24%"],
+    tableRows: [
+      ["Toothbrush list price", "$54.99", "$44.99", "$44.99 (held)"],
+      ["Replacement head list price", "$22.49", "$22.49", "$22.49"],
+      ["Estimated attach rate", "76.4%", "78.2%", "78.6%"],
+      ["Toothbrush monthly units", "1,840", "2,610", "2,540"],
+      ["Cohort revenue index (rebased)", "100", "118.1", "124.3"],
+      ["Blended margin", "42.3%", "21.6%", "23.8%"],
+      ["Margin floor at the time", "18.0%", "18.0%", "18.0%"],
+    ],
+    definitionsList: [
+      {
+        term: "Cohort revenue",
+        definition:
+          "Total revenue from a defined customer group acquired in the treatment window, measured over the following 90 days. Index rebased to 100 at pre-test baseline.",
+      },
+      {
+        term: "Why the case is directionally — not numerically — transferable",
+        definition:
+          "Toothbrush attach rate of ~78% is 31pp higher than the razor's 47%. The LTV uplift from a razor price cut depends critically on how much attach rate moves — the toothbrush case can't predict the magnitude, only that the direction is plausible.",
+      },
+    ],
+  },
+  approval: {
+    primaryLabel: "Approve Phase 1 + 2 (auto-activate Phase 3 review)",
+    summary:
+      "Approving runs the 3 Phase 2 experiments concurrently and surfaces Phase 3 for review once all three tests conclude.",
+  },
+};
+
 /* Peak season canvas */
 const PEAK = {
   trafficForecast: [
@@ -4142,6 +4448,778 @@ function OmnichannelCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Razor + blade pricing canvas — Henry's                                    */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function PhaseSection({ index, title, kicker, disabled, badge, children }) {
+  return (
+    <section
+      className={`rounded-lg border ${
+        disabled
+          ? "border-slate-200 bg-slate-100"
+          : "border-slate-200 bg-white"
+      } overflow-hidden`}
+    >
+      <div
+        className={`px-5 py-4 border-b ${
+          disabled ? "border-slate-200" : "border-slate-200"
+        } flex items-start justify-between gap-3`}
+      >
+        <div className="flex items-start gap-3">
+          <div
+            className={`w-8 h-8 rounded-md flex items-center justify-center text-sm font-mono font-semibold flex-shrink-0 ${
+              disabled
+                ? "bg-slate-200 text-slate-500"
+                : "bg-slate-900 text-white"
+            }`}
+          >
+            {index}
+          </div>
+          <div>
+            {kicker && (
+              <div
+                className={`text-11 uppercase tracking-wider font-semibold mb-1 ${
+                  disabled ? "text-slate-500" : "text-emerald-700"
+                }`}
+              >
+                {kicker}
+              </div>
+            )}
+            <div
+              className={`text-base font-semibold tracking-tight ${
+                disabled ? "text-slate-600" : "text-slate-900"
+              }`}
+            >
+              {title}
+            </div>
+          </div>
+        </div>
+        {badge && (
+          <div className="pt-1 flex-shrink-0">
+            {badge}
+          </div>
+        )}
+      </div>
+      <div
+        className={`px-5 py-5 ${
+          disabled ? "opacity-60" : ""
+        }`}
+        style={disabled ? { cursor: "not-allowed" } : undefined}
+      >
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function EconomicsCard({ label, price, priceNote, cogs, contributionValue, contributionPct, units }) {
+  return (
+    <Card className="p-4">
+      <div className="text-11 uppercase tracking-wider text-emerald-700 font-semibold mb-2">
+        {label}
+      </div>
+      <div className="space-y-2 text-sm">
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">Sale price</span>
+          <span className="font-mono text-slate-900 font-semibold">
+            {price}
+            {priceNote && (
+              <span className="ml-1.5 text-11 text-slate-400 font-normal">
+                {priceNote}
+              </span>
+            )}
+          </span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">COGS</span>
+          <span className="font-mono text-slate-700">{cogs}</span>
+        </div>
+        <div className="border-t border-slate-100 pt-2 flex items-baseline justify-between">
+          <span className="text-slate-700">
+            <MetricTerm definition={METRIC_DEFINITIONS.contributionMargin}>
+              Contribution margin
+            </MetricTerm>
+          </span>
+          <span className="font-mono text-emerald-700 font-semibold">
+            {contributionValue}
+            <span className="ml-1.5 text-slate-500 font-normal">
+              / {contributionPct}
+            </span>
+          </span>
+        </div>
+        <div className="flex items-baseline justify-between pt-1">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            Monthly units · last 30d
+          </span>
+          <span className="font-mono text-slate-700 text-xs">{units}</span>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function CompetitorBaselineCard({ competitor }) {
+  return (
+    <Card className="p-4">
+      <div className="flex items-baseline justify-between mb-2">
+        <div className="text-11 uppercase tracking-wider text-slate-600 font-semibold">
+          {competitor.name}
+        </div>
+        <Pill tone="rose">{competitor.priceDeltaNote}</Pill>
+      </div>
+      <div className="space-y-1.5 text-xs">
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">Razor price</span>
+          <span className="font-mono text-slate-900">{competitor.razorPrice}</span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">Blade price</span>
+          <span className="font-mono text-slate-900">
+            {competitor.bladePrice}
+            <span className="ml-1.5 text-10 text-slate-400 font-normal">
+              {competitor.bladePriceNote}
+            </span>
+          </span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">
+            Est.{" "}
+            <MetricTerm definition={METRIC_DEFINITIONS.attachRate}>
+              attach rate
+            </MetricTerm>
+          </span>
+          <span className="font-mono text-slate-900">{competitor.estAttachRatePct}</span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span className="text-slate-500">
+            Est.{" "}
+            <MetricTerm definition={METRIC_DEFINITIONS.ltv}>LTV</MetricTerm>
+          </span>
+          <span className="font-mono text-emerald-700 font-semibold">{competitor.estLtv}</span>
+        </div>
+      </div>
+      <div className="mt-3 pt-2.5 border-t border-slate-100 text-10 text-slate-500 leading-relaxed">
+        {competitor.source}
+      </div>
+    </Card>
+  );
+}
+
+function HeadroomBar({ currentPct, floorPct, priceFloorIfDrop }) {
+  // 0% to 100% bar
+  // 0% - floorPct: rose (below floor — forbidden)
+  // floorPct - currentPct: emerald (achieved margin above floor)
+  // currentPct - 100%: slate (untapped)
+  const max = 100;
+  const floorLeft = (floorPct / max) * 100;
+  const currentLeft = (currentPct / max) * 100;
+  return (
+    <div className="space-y-3">
+      <div className="relative" style={{ height: "56px" }}>
+        {/* The bar */}
+        <div className="absolute inset-x-0 top-7 h-3 rounded-full overflow-hidden bg-slate-100 flex">
+          <div
+            className="bg-rose-200 h-full"
+            style={{ width: `${floorLeft}%` }}
+          />
+          <div
+            className="bg-emerald-500 h-full"
+            style={{ width: `${currentLeft - floorLeft}%` }}
+          />
+          <div
+            className="bg-slate-200 h-full"
+            style={{ width: `${100 - currentLeft}%` }}
+          />
+        </div>
+        {/* Floor marker */}
+        <div
+          className="absolute top-0 flex flex-col items-center"
+          style={{ left: `${floorLeft}%`, transform: "translateX(-50%)" }}
+        >
+          <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold whitespace-nowrap">
+            Floor {floorPct}%
+          </div>
+          <div className="w-px h-7 bg-rose-700 mt-0.5" />
+        </div>
+        {/* Current marker */}
+        <div
+          className="absolute top-0 flex flex-col items-center"
+          style={{ left: `${currentLeft}%`, transform: "translateX(-50%)" }}
+        >
+          <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold whitespace-nowrap">
+            Current {currentPct}%
+          </div>
+          <div className="w-px h-7 bg-emerald-700 mt-0.5" />
+        </div>
+        {/* End labels */}
+        <div className="absolute left-0 bottom-0 text-10 text-slate-400 font-mono">0%</div>
+        <div className="absolute right-0 bottom-0 text-10 text-slate-400 font-mono">100%</div>
+      </div>
+      <div className="grid grid-cols-3 gap-3 text-xs">
+        <div className="bg-rose-50 border border-rose-200 rounded-md px-3 py-2">
+          <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+            0% — {floorPct}%
+          </div>
+          <div className="text-slate-700 mt-0.5">Below floor · forbidden zone</div>
+        </div>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-md px-3 py-2">
+          <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
+            {floorPct}% — {currentPct}%
+          </div>
+          <div className="text-slate-700 mt-0.5">Headroom available · spendable for growth</div>
+        </div>
+        <div className="bg-slate-50 border border-slate-200 rounded-md px-3 py-2">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold">
+            {currentPct}% — 100%
+          </div>
+          <div className="text-slate-600 mt-0.5">Untapped · not in scope</div>
+        </div>
+      </div>
+      <div className="text-11 text-slate-500 leading-relaxed">
+        Razor list price could fall to about{" "}
+        <span className="font-mono text-slate-900">{priceFloorIfDrop}</span>{" "}
+        before product-line blended margin would touch the floor (assuming volume and attach-rate response materialize).
+      </div>
+    </div>
+  );
+}
+
+function ExperimentCard({ experiment, index }) {
+  const scenarioTone = {
+    emerald: "border-emerald-200 bg-emerald-50/40",
+    slate: "border-slate-200 bg-white",
+    rose: "border-rose-200 bg-rose-50/40",
+  };
+  const scenarioLabelTone = {
+    emerald: "text-emerald-700",
+    slate: "text-slate-600",
+    rose: "text-rose-700",
+  };
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-3 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-7 h-7 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">Experiment {index}</Pill>
+            <span className="text-11 text-slate-500">Agent-executable · Phase 2</span>
+          </div>
+          <div className="text-sm font-semibold text-slate-900">
+            {experiment.title}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/40">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            Treatment
+          </span>
+          <Pill tone="dark">{experiment.treatmentLabel}</Pill>
+        </div>
+        <div className="text-xs text-slate-700 mt-1.5 leading-relaxed">
+          {experiment.treatmentDetail}
+        </div>
+      </div>
+
+      <div className="px-5 py-3 grid grid-cols-12 gap-x-4 gap-y-3 text-xs border-b border-slate-100">
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Hypothesis
+          </div>
+          <div className="text-slate-700 leading-relaxed">{experiment.hypothesis}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Test method
+          </div>
+          <div className="text-slate-700 leading-relaxed">{experiment.testMethod}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Sample size
+          </div>
+          <div className="text-slate-700 font-mono">{experiment.sampleSize}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Duration
+          </div>
+          <div className="text-slate-700 font-mono">{experiment.duration}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Success metric
+          </div>
+          <div className="text-slate-700 leading-relaxed">{experiment.successMetric}</div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 border-b border-slate-100">
+        <div className="flex items-start gap-2">
+          <div className="mt-0.5 w-5 h-5 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center flex-shrink-0">
+            <Check className="w-3 h-3 text-emerald-700" />
+          </div>
+          <div className="flex-1">
+            <div className="text-11 uppercase tracking-wider text-emerald-700 font-semibold">
+              Margin check passes
+            </div>
+            <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
+              {experiment.marginCheck.detail}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 border-b border-slate-100">
+        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+          Outcome scenarios · what we do next
+        </div>
+        <div className="grid grid-cols-3 gap-3">
+          {experiment.scenarios.map((s, i) => (
+            <div
+              key={i}
+              className={`rounded-md border px-3 py-2.5 ${scenarioTone[s.tone]}`}
+            >
+              <div
+                className={`text-10 uppercase tracking-wider font-semibold ${scenarioLabelTone[s.tone]}`}
+              >
+                {s.label}
+              </div>
+              <div className="text-xs text-slate-900 font-medium mt-1 leading-snug">
+                {s.summary}
+              </div>
+              <div className="mt-2 pt-2 border-t border-slate-200 text-11 text-slate-600 leading-relaxed">
+                <span className="text-slate-500 font-medium">Next move · </span>
+                {s.nextMove}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-5 py-2 bg-slate-50/40 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          Confidence{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {experiment.confidence}%
+          </span>{" "}
+          · {experiment.confidenceLabel}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 px-2 py-1 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded font-medium"
+          >
+            <X className="w-3 h-3" />
+            Decline
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-2 py-1 rounded bg-white"
+          >
+            <Edit3 className="w-3 h-3" />
+            Modify
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded"
+          >
+            <Check className="w-3 h-3" />
+            Approve experiment
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function DecisionTreeBranch({ branch, index }) {
+  return (
+    <div className="border border-slate-300 rounded-md bg-white">
+      <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40 flex items-start gap-3">
+        <div className="w-6 h-6 rounded-md bg-slate-300 text-slate-600 flex items-center justify-center text-xs font-mono font-semibold flex-shrink-0">
+          {index}
+        </div>
+        <div className="flex-1">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-semibold mb-0.5">
+            Condition
+          </div>
+          <div className="text-sm font-medium text-slate-700">{branch.condition}</div>
+        </div>
+      </div>
+      <div className="px-4 py-3 flex items-start gap-2">
+        <ArrowRight className="w-3.5 h-3.5 text-slate-400 mt-0.5 flex-shrink-0" />
+        <div className="flex-1">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-semibold mb-0.5">
+            Action
+          </div>
+          <div className="text-xs text-slate-700 leading-relaxed">{branch.action}</div>
+        </div>
+      </div>
+      {branch.riskCallout && (
+        <div className="px-4 py-2.5 border-t border-rose-100 bg-rose-50/40 flex items-start gap-2">
+          <AlertCircle className="w-3.5 h-3.5 text-rose-700 mt-0.5 flex-shrink-0" />
+          <div className="text-11 text-rose-900 leading-relaxed">
+            <span className="uppercase tracking-wider text-rose-700 font-semibold">
+              Risk ·{" "}
+            </span>
+            {branch.riskCallout}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RazorBladeCanvas() {
+  const R = RAZOR_BLADE;
+  const [competitorSourcesOpen, setCompetitorSourcesOpen] = useState(false);
+  const [precedentSourcesOpen, setPrecedentSourcesOpen] = useState(false);
+  return (
+    <>
+      <CanvasHeader
+        kicker="Razor + blade · Henry's"
+        title={R.sku}
+        meta={
+          <>
+            <Pill tone="slate">
+              <Calendar className="w-3 h-3" />
+              May · current month
+            </Pill>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              Raised by {R.initiator} on {R.confirmedOn}
+            </Pill>
+            <Pill tone="slate">
+              <Workflow className="w-3 h-3" />
+              Phase 1 + 2 · Phase 3 pending
+            </Pill>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-6 space-y-5">
+        {/* PHASE 1 */}
+        <PhaseSection
+          index="1"
+          kicker="Phase 1 · Baseline diagnosis"
+          title="Where the product line sits today"
+          badge={
+            <Pill tone="emerald">
+              <Check className="w-3 h-3" />
+              Diagnostic
+            </Pill>
+          }
+        >
+          <div className="space-y-5">
+            {/* Section A: Economics */}
+            <div>
+              <SectionLabel kicker="Our economics · last 30 days">
+                Section A · Razor + blade unit economics
+              </SectionLabel>
+              <div className="grid grid-cols-2 gap-3">
+                <EconomicsCard
+                  label="Razor"
+                  price={R.economics.razor.price}
+                  cogs={R.economics.razor.cogs}
+                  contributionValue={R.economics.razor.contributionMarginValue}
+                  contributionPct={R.economics.razor.contributionMarginPct}
+                  units={R.economics.razor.monthlyUnits}
+                />
+                <EconomicsCard
+                  label="Blade"
+                  price={R.economics.blade.price}
+                  priceNote={R.economics.blade.priceNote}
+                  cogs={R.economics.blade.cogs}
+                  contributionValue={R.economics.blade.contributionMarginValue}
+                  contributionPct={R.economics.blade.contributionMarginPct}
+                  units={R.economics.blade.monthlyUnits}
+                />
+              </div>
+              <Card className="mt-3 p-4">
+                <div className="grid grid-cols-2 gap-y-2.5 gap-x-6 text-sm">
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      <MetricTerm definition={METRIC_DEFINITIONS.attachRate}>
+                        Attach rate
+                      </MetricTerm>
+                      <span className="text-11 text-slate-500 ml-1.5">
+                        · {R.economics.attachRateWindow}
+                      </span>
+                    </span>
+                    <span className="font-mono text-slate-900 font-semibold">
+                      {R.economics.attachRatePct}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      12-month repeat rate
+                      <span className="text-11 text-slate-500 ml-1.5">
+                        · blade buyers
+                      </span>
+                    </span>
+                    <span className="font-mono text-slate-900 font-semibold">
+                      {R.economics.repeatRate}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      <MetricTerm definition={`${METRIC_DEFINITIONS.ltv} Formula for this product line: ${R.economics.ltvFormula}.`}>
+                        LTV
+                      </MetricTerm>
+                      <span className="text-11 text-slate-500 ml-1.5">
+                        · per acquired razor buyer
+                      </span>
+                    </span>
+                    <span className="font-mono text-emerald-700 font-semibold">
+                      {R.economics.ltv}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-slate-700">
+                      Product line{" "}
+                      <MetricTerm definition={METRIC_DEFINITIONS.blendedMargin}>
+                        blended margin
+                      </MetricTerm>
+                    </span>
+                    <span className="font-mono text-emerald-700 font-semibold">
+                      {R.economics.productLineBlendedMarginPct}
+                      <span className="ml-2 text-11 text-emerald-700 font-normal">
+                        well above {R.economics.marginFloorPct} floor
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Section B: Competitor baselines */}
+            <div>
+              <SectionLabel kicker="Scraped pricing + Amazon Brand Analytics inference">
+                Section B · Competitor baselines
+              </SectionLabel>
+              <div className="grid grid-cols-2 gap-3">
+                {R.competitors.map((c, i) => (
+                  <CompetitorBaselineCard key={i} competitor={c} />
+                ))}
+              </div>
+              <div className="mt-3 flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => setCompetitorSourcesOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 rounded-md text-xs font-medium text-slate-700"
+                >
+                  <Layers className="w-3.5 h-3.5 text-slate-500" />
+                  View competitor data sources
+                  <ArrowUpRight className="w-3 h-3 text-slate-400" />
+                </button>
+              </div>
+            </div>
+
+            {/* Diagnosis callout */}
+            <div className="bg-slate-900 text-white rounded-md px-5 py-4">
+              <div className="flex items-start gap-3">
+                <div className="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1.5">
+                    Diagnosis
+                  </div>
+                  <div className="text-sm font-semibold text-white mb-1.5 leading-snug">
+                    {R.diagnosis.headline}
+                  </div>
+                  <div className="text-xs text-slate-300 leading-relaxed">
+                    {R.diagnosis.body}
+                  </div>
+                  <div className="text-xs text-white font-semibold mt-2 leading-relaxed">
+                    {R.diagnosis.hypothesis}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section C: Headroom */}
+            <div>
+              <SectionLabel kicker="Margin floor at 15%">
+                Section C · Headroom calculation
+              </SectionLabel>
+              <Card className="p-5">
+                <HeadroomBar
+                  currentPct={R.headroom.currentPct}
+                  floorPct={R.headroom.floorPct}
+                  priceFloorIfDrop={R.headroom.priceFloorIfDrop}
+                />
+                <div className="mt-4 pt-4 border-t border-slate-100 text-xs text-slate-700 leading-relaxed">
+                  {R.headroom.narrative}
+                </div>
+              </Card>
+            </div>
+          </div>
+        </PhaseSection>
+
+        {/* PHASE 2 */}
+        <PhaseSection
+          index="2"
+          kicker="Phase 2 · Pricing experiments"
+          title="Three concurrent tests · A / B / C"
+          badge={
+            <Pill tone="emerald">
+              <Sparkles className="w-3 h-3" />
+              Agent-executable
+            </Pill>
+          }
+        >
+          <div className="space-y-4">
+            {/* Reference precedent */}
+            <div>
+              <SectionLabel>Reference precedent · Company Brain</SectionLabel>
+              <div className="bg-slate-900 text-white rounded-md px-5 py-4">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2">
+                  <Brain className="w-3.5 h-3.5 text-emerald-400" />
+                  <div className="text-xs font-medium">{R.precedent.sku}</div>
+                  <span className="text-11 text-slate-500">·</span>
+                  <span className="text-11 text-slate-400 font-mono">
+                    {R.precedent.period}
+                  </span>
+                  <span className="text-11 text-slate-500">·</span>
+                  <span className="text-11 text-emerald-400 font-medium">
+                    {R.precedent.outcome}
+                  </span>
+                </div>
+                <div className="text-xs text-slate-200 leading-relaxed mb-2">
+                  {R.precedent.summary}
+                </div>
+                <div className="text-11 text-slate-400 leading-relaxed">
+                  Method · {R.precedent.method}
+                </div>
+                <div className="mt-3 pt-3 border-t border-slate-700">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="w-3.5 h-3.5 text-rose-300 mt-0.5 flex-shrink-0" />
+                    <div className="text-11 text-rose-200 leading-relaxed">
+                      <span className="uppercase tracking-wider text-rose-300 font-semibold">
+                        Caveat ·{" "}
+                      </span>
+                      {R.precedent.caveat}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3 experiment cards */}
+            <div className="space-y-3">
+              {R.experiments.map((e, i) => (
+                <ExperimentCard
+                  key={e.id}
+                  experiment={e}
+                  index={String.fromCharCode(65 + i)}
+                />
+              ))}
+            </div>
+          </div>
+        </PhaseSection>
+
+        {/* PHASE 3 — disabled */}
+        <PhaseSection
+          index="3"
+          kicker="Phase 3 · Activated after Phase 2 test conclusion"
+          title="Conditional next step · decision tree"
+          disabled
+          badge={
+            <Pill tone="amber">
+              <Clock className="w-3 h-3" />
+              Pending Phase 2 results
+            </Pill>
+          }
+        >
+          <div className="grid grid-cols-2 gap-3">
+            {R.phase3DecisionTree.map((b, i) => (
+              <DecisionTreeBranch key={i} branch={b} index={i + 1} />
+            ))}
+          </div>
+        </PhaseSection>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom action bar */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Approve scope
+            </div>
+            <div className="text-xs text-slate-700 leading-relaxed max-w-2xl">
+              {R.approval.summary}
+            </div>
+            <button
+              type="button"
+              onClick={() => setPrecedentSourcesOpen(true)}
+              className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900"
+            >
+              <FileText className="w-3.5 h-3.5 text-slate-500" />
+              View precedent data sources
+              <ArrowUpRight className="w-3 h-3 text-slate-400" />
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
+            >
+              <X className="w-3.5 h-3.5" />
+              Decline
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              Modify
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              {R.approval.primaryLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <InspectionDrawer
+        open={competitorSourcesOpen}
+        onClose={() => setCompetitorSourcesOpen(false)}
+        title="Competitor data sources · razor + blade pricing"
+        methodologyDescription={R.competitorDataSources.methodology}
+        tableHeaders={R.competitorDataSources.tableHeaders}
+        tableRows={R.competitorDataSources.tableRows}
+        columnWidths={R.competitorDataSources.columnWidths}
+        definitionsList={R.competitorDataSources.definitionsList}
+        definitionsLabel="Source caveats"
+      />
+
+      <InspectionDrawer
+        open={precedentSourcesOpen}
+        onClose={() => setPrecedentSourcesOpen(false)}
+        title="Precedent data sources · toothbrush Q2 2025"
+        methodologyDescription={R.precedentDataSources.methodology}
+        tableHeaders={R.precedentDataSources.tableHeaders}
+        tableRows={R.precedentDataSources.tableRows}
+        columnWidths={R.precedentDataSources.columnWidths}
+        definitionsList={R.precedentDataSources.definitionsList}
+        definitionsLabel="Source caveats"
+      />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  Chat panel + top bar + company brain drawer                               */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -4711,13 +5789,7 @@ export default function App({ locale, setLocale }) {
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
-        return (
-          <PlaceholderCanvas
-            kicker="Razor + blade · Henry's"
-            title="Maximize sales · keep blended margin ≥ 15%"
-            part="Part 3"
-          />
-        );
+        return <RazorBladeCanvas />;
       case "launch-cr":
         return (
           <PlaceholderCanvas
