@@ -16,6 +16,7 @@ import {
   AlertCircle,
   CircleDot,
   ArrowRight,
+  ArrowUpRight,
   FileText,
   BarChart3,
   Settings,
@@ -548,6 +549,7 @@ const STRATEGY = {
         "14 search terms with bedroom intent generate $3.2K/month traffic at 1.1% CTR, well below the 2.8% category benchmark for the same intent cluster.",
       observations: [
         "5 of these 14 bedroom-intent keywords are live in current campaigns — flagged with rose tint in the Ad architecture panel (top bar → Ad architecture)",
+        "Full list of the 14 keywords and the cluster rules is auditable via 'View clustering logic ↗' under the Scenario segment chip",
         "Current CTR on those terms: 1.1% (28-day avg). Category benchmark for same intent cluster: 2.8%.",
         "Root-cause hypothesis: hero image and first 3 detail-page photos emphasize living-room / lobby context. No bedroom-context image in the current carousel.",
       ],
@@ -665,6 +667,49 @@ const STRATEGY = {
     accuracy: 81,
     accuracyLabel: "similar #2 → #1 captures",
   },
+};
+
+/* Floor Lamp search-term clustering — backs the "View clustering logic" InspectionDrawer */
+const FLOOR_LAMP_CLUSTERING = {
+  methodology:
+    "Amazon search terms are clustered by user-intent semantics + use-case keywords / style descriptors. Each term lands in exactly one cluster (longest matching rule wins when multiple rules apply).",
+  tableHeaders: ["Search term", "Cluster", "Monthly impressions", "Monthly clicks", "CR"],
+  rows: [
+    ["floor lamp for bedroom",          "Bedroom",          "18.4K", 184,  "6.4%"],
+    ["bedside floor lamp",              "Bedroom",          "12.2K", 122,  "5.9%"],
+    ["bedroom reading lamp",            "Bedroom",          "8.8K",  105,  "7.4%"],
+    ["modern floor lamp for living room","Living room",     "22.4K", 382,  "8.6%"],
+    ["tall floor lamp living room",     "Living room",      "16.8K", 258,  "8.1%"],
+    ["arc lamp living room",            "Living room",      "11.4K", 189,  "8.4%"],
+    ["kids room floor lamp",            "Kid room",         "4.8K",  52,   "7.4%"],
+    ["nursery floor lamp",              "Kid room",         "3.6K",  44,   "8.1%"],
+    ["child-safe floor lamp",           "Kid room",         "2.2K",  28,   "7.8%"],
+    ["study floor lamp",                "Study / office",   "5.4K",  72,   "8.0%"],
+    ["office floor lamp",               "Study / office",   "4.1K",  58,   "8.4%"],
+    ["desk reading floor lamp",         "Study / office",   "2.8K",  38,   "7.9%"],
+    ["modern floor lamp",               "Modern",           "84.2K", 2021, "10.1%"],
+    ["contemporary floor lamp",         "Modern",           "32.4K", 712,  "9.4%"],
+    ["minimalist floor lamp",           "Modern",           "62.4K", 1622, "9.8%"],
+    ["mid-century floor lamp",          "Mid-century",      "44.8K", 985,  "8.6%"],
+    ["mid-century modern lamp",         "Mid-century",      "21.2K", 424,  "8.4%"],
+    ["retro 60s floor lamp",            "Mid-century",      "12.8K", 244,  "8.0%"],
+    ["industrial floor lamp",           "Industrial",       "38.2K", 764,  "8.1%"],
+    ["loft floor lamp",                 "Industrial",       "14.4K", 274,  "7.8%"],
+    ["pipe floor lamp",                 "Industrial",       "9.6K",  192,  "8.0%"],
+    ["vintage floor lamp",              "Vintage",          "16.8K", 268,  "7.4%"],
+    ["antique brass floor lamp",        "Vintage",          "11.2K", 168,  "7.0%"],
+    ["old fashioned floor lamp",        "Vintage",          "8.4K",  134,  "7.6%"],
+  ],
+  rules: [
+    { term: "Bedroom",        definition: "Terms containing bedroom / bedside / nightstand / nursery" },
+    { term: "Living room",    definition: "Terms containing living / sofa / family room / lounge" },
+    { term: "Kid room",       definition: "Terms containing kid / child / baby / nursery" },
+    { term: "Study / office", definition: "Terms containing study / office / desk / reading" },
+    { term: "Modern",         definition: "Terms containing modern / contemporary / minimalist / sleek" },
+    { term: "Mid-century",    definition: "Terms containing mid-century / retro / 60s / atomic" },
+    { term: "Industrial",     definition: "Terms containing industrial / loft / pipe / metal" },
+    { term: "Vintage",        definition: "Terms containing vintage / antique / brass / old fashioned" },
+  ],
 };
 
 /* Peak season canvas */
@@ -875,6 +920,21 @@ function SectionLabel({ children, kicker }) {
   );
 }
 
+/* Wraps known jargon metric labels with MetricTerm; passes through plain text otherwise */
+function wrapMetric(label) {
+  const map = {
+    TACoS: METRIC_DEFINITIONS.tacos,
+    ACoS: METRIC_DEFINITIONS.acos,
+    CTR: METRIC_DEFINITIONS.ctr,
+    CR: METRIC_DEFINITIONS.cr,
+    SOV: METRIC_DEFINITIONS.sov,
+    LTV: METRIC_DEFINITIONS.ltv,
+  };
+  const def = map[label];
+  if (def) return <MetricTerm definition={def}>{label}</MetricTerm>;
+  return label;
+}
+
 function Card({ children, className = "" }) {
   return (
     <div
@@ -1033,7 +1093,7 @@ function GapCard({ gap }) {
             {gap.kicker}
           </div>
           <div className="text-sm font-medium text-slate-900 mt-0.5">
-            {gap.label}
+            {wrapMetric(gap.label)}
           </div>
         </div>
         {gap.widest && (
@@ -1119,10 +1179,10 @@ function SegmentBreakdownTable({ rows }) {
               Avg ad position
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              CTR
+              {wrapMetric("CTR")}
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              CR
+              {wrapMetric("CR")}
             </th>
           </tr>
         </thead>
@@ -1234,9 +1294,12 @@ function SegmentBreakdownTable({ rows }) {
 function PerformanceStrip() {
   const p = STRATEGY.performance;
   const [activeSegment, setActiveSegment] = useState("all");
+  const [clusteringOpen, setClusteringOpen] = useState(false);
   const gaps = p.gapsBySegment[activeSegment] || p.gapsBySegment.all;
   const breakdown = p.segmentBreakdown[activeSegment];
   const activeChip = p.segments.find((s) => s.id === activeSegment);
+  const showClusteringLink =
+    activeSegment === "scenario" || activeSegment === "style";
 
   return (
     <>
@@ -1249,7 +1312,7 @@ function PerformanceStrip() {
           <span className="font-mono text-slate-700">
             ${(p.salesLast30d / 1000).toFixed(0)}K/mo
           </span>{" "}
-          · blended TACoS{" "}
+          · blended {wrapMetric("TACoS")}{" "}
           <span className="font-mono text-slate-700">{p.tacos}%</span>
         </span>
       </div>
@@ -1284,8 +1347,20 @@ function PerformanceStrip() {
 
       {/* Active chip's kicker */}
       {activeChip && activeChip.kicker && (
-        <div className="mb-3 text-11 text-slate-500 italic">
-          {activeChip.kicker}
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="text-11 text-slate-500 italic">
+            {activeChip.kicker}
+          </div>
+          {showClusteringLink && (
+            <button
+              type="button"
+              onClick={() => setClusteringOpen(true)}
+              className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium flex-shrink-0"
+            >
+              View clustering logic
+              <ArrowUpRight className="w-3 h-3" />
+            </button>
+          )}
         </div>
       )}
 
@@ -1305,6 +1380,17 @@ function PerformanceStrip() {
           <SegmentBreakdownTable rows={breakdown} />
         </div>
       )}
+
+      <InspectionDrawer
+        open={clusteringOpen}
+        onClose={() => setClusteringOpen(false)}
+        title="Floor Lamp search-term clustering"
+        methodologyDescription={FLOOR_LAMP_CLUSTERING.methodology}
+        tableHeaders={FLOOR_LAMP_CLUSTERING.tableHeaders}
+        tableRows={FLOOR_LAMP_CLUSTERING.rows}
+        definitionsList={FLOOR_LAMP_CLUSTERING.rules}
+        definitionsLabel="Cluster rules"
+      />
     </>
   );
 }
@@ -1385,10 +1471,10 @@ function AdGroupRow({ adGroup, expanded, onToggle }) {
                       Clicks
                     </th>
                     <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 px-3">
-                      CTR
+                      {wrapMetric("CTR")}
                     </th>
                     <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 pl-3">
-                      CR
+                      {wrapMetric("CR")}
                     </th>
                   </tr>
                 </thead>
@@ -1486,7 +1572,7 @@ function AdArchitectureTable() {
                   h.align === "left" ? "text-left" : "text-right"
                 } text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3`}
               >
-                {h.label}
+                {wrapMetric(h.label)}
               </th>
             ))}
           </tr>
@@ -1719,7 +1805,7 @@ function ExecutableInsightCard({ insight }) {
                 Phase
               </th>
               <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
-                Exp. TACoS
+                Exp. {wrapMetric("TACoS")}
               </th>
               <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
                 Exp. sales/mo
@@ -1769,7 +1855,7 @@ function ExecutableInsightCard({ insight }) {
         </div>
         <div>
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Final TACoS
+            Final {wrapMetric("TACoS")}
           </div>
           <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
             {insight.plan.summary.finalTacos}%
@@ -3268,7 +3354,7 @@ function AdArchitectureDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              TACoS
+              {wrapMetric("TACoS")}
             </div>
             <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
               {s.tacos}%

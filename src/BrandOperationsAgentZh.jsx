@@ -16,6 +16,7 @@ import {
   AlertCircle,
   CircleDot,
   ArrowRight,
+  ArrowUpRight,
   FileText,
   BarChart3,
   Settings,
@@ -548,6 +549,7 @@ const STRATEGY = {
         "14 个卧室意图搜索词每月带来 $3.2K 流量,CTR 仅 1.1%,远低于同意图集群的品类基准 2.8%。",
       observations: [
         "这 14 个卧室意图关键词中有 5 个在当前广告活动中线上 — 在广告架构面板中以玫红色高亮标记(顶栏 → 广告架构)",
+        "完整 14 个关键词清单与聚类规则可在 Scenario 分段下点击 '查看聚类逻辑 ↗' 审查",
         "当前这些词的 CTR:1.1%(28 天均值)。同意图集群的品类基准:2.8%。",
         "根因假设:主图与详情页前 3 张图均强调客厅/大厅场景,当前主图轮播中没有卧室场景图。",
       ],
@@ -665,6 +667,49 @@ const STRATEGY = {
     accuracy: 81,
     accuracyLabel: "同类 #2 → #1 争取案例",
   },
+};
+
+/* Floor Lamp search-term clustering — backs the "查看聚类逻辑" InspectionDrawer */
+const FLOOR_LAMP_CLUSTERING = {
+  methodology:
+    "Amazon 搜索词按用户意图语义 + 使用场景词 / 风格描述词进行聚类。每个搜索词归入恰好一个聚类(若同时命中多条规则,以匹配长度最长的为准)。",
+  tableHeaders: ["搜索词", "聚类", "月曝光", "月点击", "CR"],
+  rows: [
+    ["floor lamp for bedroom",          "卧室",        "18.4K", 184,  "6.4%"],
+    ["bedside floor lamp",              "卧室",        "12.2K", 122,  "5.9%"],
+    ["bedroom reading lamp",            "卧室",        "8.8K",  105,  "7.4%"],
+    ["modern floor lamp for living room","客厅",       "22.4K", 382,  "8.6%"],
+    ["tall floor lamp living room",     "客厅",        "16.8K", 258,  "8.1%"],
+    ["arc lamp living room",            "客厅",        "11.4K", 189,  "8.4%"],
+    ["kids room floor lamp",            "儿童房",      "4.8K",  52,   "7.4%"],
+    ["nursery floor lamp",              "儿童房",      "3.6K",  44,   "8.1%"],
+    ["child-safe floor lamp",           "儿童房",      "2.2K",  28,   "7.8%"],
+    ["study floor lamp",                "书房 / 办公", "5.4K",  72,   "8.0%"],
+    ["office floor lamp",               "书房 / 办公", "4.1K",  58,   "8.4%"],
+    ["desk reading floor lamp",         "书房 / 办公", "2.8K",  38,   "7.9%"],
+    ["modern floor lamp",               "现代",        "84.2K", 2021, "10.1%"],
+    ["contemporary floor lamp",         "现代",        "32.4K", 712,  "9.4%"],
+    ["minimalist floor lamp",           "现代",        "62.4K", 1622, "9.8%"],
+    ["mid-century floor lamp",          "中世纪",      "44.8K", 985,  "8.6%"],
+    ["mid-century modern lamp",         "中世纪",      "21.2K", 424,  "8.4%"],
+    ["retro 60s floor lamp",            "中世纪",      "12.8K", 244,  "8.0%"],
+    ["industrial floor lamp",           "工业",        "38.2K", 764,  "8.1%"],
+    ["loft floor lamp",                 "工业",        "14.4K", 274,  "7.8%"],
+    ["pipe floor lamp",                 "工业",        "9.6K",  192,  "8.0%"],
+    ["vintage floor lamp",              "复古",        "16.8K", 268,  "7.4%"],
+    ["antique brass floor lamp",        "复古",        "11.2K", 168,  "7.0%"],
+    ["old fashioned floor lamp",        "复古",        "8.4K",  134,  "7.6%"],
+  ],
+  rules: [
+    { term: "卧室",        definition: "搜索词包含 bedroom / bedside / nightstand / nursery 等" },
+    { term: "客厅",        definition: "搜索词包含 living / sofa / family room / lounge 等" },
+    { term: "儿童房",      definition: "搜索词包含 kid / child / baby / nursery 等" },
+    { term: "书房 / 办公", definition: "搜索词包含 study / office / desk / reading 等" },
+    { term: "现代",        definition: "搜索词包含 modern / contemporary / minimalist / sleek 等" },
+    { term: "中世纪",      definition: "搜索词包含 mid-century / retro / 60s / atomic 等" },
+    { term: "工业",        definition: "搜索词包含 industrial / loft / pipe / metal 等" },
+    { term: "复古",        definition: "搜索词包含 vintage / antique / brass / old fashioned 等" },
+  ],
 };
 
 /* Peak season canvas */
@@ -875,6 +920,21 @@ function SectionLabel({ children, kicker }) {
   );
 }
 
+/* Wraps known jargon metric labels with MetricTerm; passes through plain text otherwise */
+function wrapMetric(label) {
+  const map = {
+    TACoS: METRIC_DEFINITIONS.tacos,
+    ACoS: METRIC_DEFINITIONS.acos,
+    CTR: METRIC_DEFINITIONS.ctr,
+    CR: METRIC_DEFINITIONS.cr,
+    SOV: METRIC_DEFINITIONS.sov,
+    LTV: METRIC_DEFINITIONS.ltv,
+  };
+  const def = map[label];
+  if (def) return <MetricTerm definition={def}>{label}</MetricTerm>;
+  return label;
+}
+
 function Card({ children, className = "" }) {
   return (
     <div
@@ -1033,7 +1093,7 @@ function GapCard({ gap }) {
             {gap.kicker}
           </div>
           <div className="text-sm font-medium text-slate-900 mt-0.5">
-            {gap.label}
+            {wrapMetric(gap.label)}
           </div>
         </div>
         {gap.widest && (
@@ -1119,10 +1179,10 @@ function SegmentBreakdownTable({ rows }) {
               平均广告位
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              CTR
+              {wrapMetric("CTR")}
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              CR
+              {wrapMetric("CR")}
             </th>
           </tr>
         </thead>
@@ -1234,9 +1294,12 @@ function SegmentBreakdownTable({ rows }) {
 function PerformanceStrip() {
   const p = STRATEGY.performance;
   const [activeSegment, setActiveSegment] = useState("all");
+  const [clusteringOpen, setClusteringOpen] = useState(false);
   const gaps = p.gapsBySegment[activeSegment] || p.gapsBySegment.all;
   const breakdown = p.segmentBreakdown[activeSegment];
   const activeChip = p.segments.find((s) => s.id === activeSegment);
+  const showClusteringLink =
+    activeSegment === "scenario" || activeSegment === "style";
 
   return (
     <>
@@ -1249,7 +1312,7 @@ function PerformanceStrip() {
           <span className="font-mono text-slate-700">
             ${(p.salesLast30d / 1000).toFixed(0)}K / 月
           </span>{" "}
-          · 综合 TACoS{" "}
+          · 综合 {wrapMetric("TACoS")}{" "}
           <span className="font-mono text-slate-700">{p.tacos}%</span>
         </span>
       </div>
@@ -1284,8 +1347,20 @@ function PerformanceStrip() {
 
       {/* Active chip's kicker */}
       {activeChip && activeChip.kicker && (
-        <div className="mb-3 text-11 text-slate-500 italic">
-          {activeChip.kicker}
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="text-11 text-slate-500 italic">
+            {activeChip.kicker}
+          </div>
+          {showClusteringLink && (
+            <button
+              type="button"
+              onClick={() => setClusteringOpen(true)}
+              className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium flex-shrink-0"
+            >
+              查看聚类逻辑
+              <ArrowUpRight className="w-3 h-3" />
+            </button>
+          )}
         </div>
       )}
 
@@ -1305,6 +1380,17 @@ function PerformanceStrip() {
           <SegmentBreakdownTable rows={breakdown} />
         </div>
       )}
+
+      <InspectionDrawer
+        open={clusteringOpen}
+        onClose={() => setClusteringOpen(false)}
+        title="搜索词聚类逻辑 · 落地灯"
+        methodologyDescription={FLOOR_LAMP_CLUSTERING.methodology}
+        tableHeaders={FLOOR_LAMP_CLUSTERING.tableHeaders}
+        tableRows={FLOOR_LAMP_CLUSTERING.rows}
+        definitionsList={FLOOR_LAMP_CLUSTERING.rules}
+        definitionsLabel="聚类规则"
+      />
     </>
   );
 }
@@ -1385,10 +1471,10 @@ function AdGroupRow({ adGroup, expanded, onToggle }) {
                       点击
                     </th>
                     <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 px-3">
-                      CTR
+                      {wrapMetric("CTR")}
                     </th>
                     <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 pl-3">
-                      CR
+                      {wrapMetric("CR")}
                     </th>
                   </tr>
                 </thead>
@@ -1486,7 +1572,7 @@ function AdArchitectureTable() {
                   h.align === "left" ? "text-left" : "text-right"
                 } text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3`}
               >
-                {h.label}
+                {wrapMetric(h.label)}
               </th>
             ))}
           </tr>
@@ -1719,7 +1805,7 @@ function ExecutableInsightCard({ insight }) {
                 阶段
               </th>
               <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
-                预期 TACoS
+                预期 {wrapMetric("TACoS")}
               </th>
               <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
                 预期月销售额
@@ -1769,7 +1855,7 @@ function ExecutableInsightCard({ insight }) {
         </div>
         <div>
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            最终 TACoS
+            最终 {wrapMetric("TACoS")}
           </div>
           <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
             {insight.plan.summary.finalTacos}%
@@ -3264,7 +3350,7 @@ function AdArchitectureDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              TACoS
+              {wrapMetric("TACoS")}
             </div>
             <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
               {s.tacos}%
