@@ -751,27 +751,24 @@ const OMNICHANNEL = {
     allocation: [
       {
         channel: "Walmart",
-        amount: 32000,
+        incremental: 36000,
+        combined: 54000,
         tag: "Steep · marginal ROAS est 4.2x",
         color: "emerald",
       },
       {
         channel: "TikTok",
-        amount: 28000,
-        tag: "Validation · testing incremental value",
+        incremental: 36000,
+        combined: 36000,
+        tag: "Validation · testing downstream lift",
         color: "blue",
       },
       {
         channel: "Amazon",
-        amount: 24000,
-        tag: "Saturation 78% · still has headroom",
+        incremental: 28000,
+        combined: 63000,
+        tag: "Brand-ad lever · CPC decline expected",
         color: "slate",
-      },
-      {
-        channel: "Reserve",
-        amount: 16000,
-        tag: "Allocate after week-4 review",
-        color: "muted",
       },
     ],
   },
@@ -821,61 +818,66 @@ const OMNICHANNEL = {
       },
     ],
     insight: {
-      id: "amazon-rank-capture",
+      id: "amazon-brand-ads",
       type: "executable",
-      title: "Adapt the SKU-117 BSR-capture playbook to power bank SKU-PB-A",
+      title: "Sustained brand-ad investment → CPC decline",
       summary:
-        "Bed frame SKU-117 went BSR #12 → BSR #3 in Q4 2025 using SB-layer expansion + a 14-day promo over 7 weeks. SKU-PB-A matches on lifecycle stage and category intensity but is more price-sensitive — confidence revised from the original 81% down to 73%.",
+        "With prices locked across platforms, promotion and discount aren't available levers. Among the remaining 'ad efficiency + ad structure' levers, sustained brand-ad scale-up has the most reliable ROAS profile — historical CPC declines 14-22% within 4-6 weeks while building durable branded-keyword SOV.",
       reference: {
-        sku: "Bed frame · SKU-117",
-        period: "2025 Q4",
-        outcome: "BSR #12 → #3 in 7 weeks",
+        sku: "Toothbrush brand-ad sustained investment case",
+        period: "2024 Q3",
+        outcome: "+$118K branded-keyword conversion over 12 weeks",
         method:
-          "TACoS lifted from 19% → 31% over 4 weeks + a Sponsored Brand layer on the top 12 hero category keywords + a 14-day 15% coupon. BS badge boosted organic clicks +34%, absorbing ad pullback in weeks 6–8.",
+          "Toothbrush line sustained Sponsored Brands investment for 6 weeks; branded-keyword CPC dropped $0.84 → $0.68 (-19%), and ACoS declined 12.4% → 9.6%. Cumulative branded-keyword conversion lift over 12 weeks: +$118K.",
+        caveat:
+          "Bed frame SKU-117 #2 → #1 playbook depends on a 14-day 12%-off coupon. With prices locked across platforms here, that lever isn't available. Switching to the 'sustained brand-ad scale-up → CPC decline' pattern.",
       },
       plan: {
         phases: [
           {
-            label: "Weeks 1–4 · Aggressive lift · SB layer · 14-day promo",
+            label: "Phase 1 · W1-4 · Brand-ad scale-up",
             actions: [
-              "Amazon monthly spend $35K → $42.16K (+20.5%)",
-              "Add SB headline layer on top 10 hero category keywords",
-              "Launch 14-day 12% coupon",
+              "Amazon monthly spend $35K → $63K (brand-ad +$22K, SP/SD +$6K)",
+              "Brand-ad spend $5K/mo → $25K/mo (5x scale-up)",
+              "Top 12 brand keywords + long-tail brand variants · concentrate on slots 1-3",
+              "Note: ACoS will rise temporarily as brand ads scale — this is expected",
             ],
-            tacos: 28.4,
-            sales: 62,
+            tacos: 22.8,
+            sales: 52,
           },
           {
-            label: "Weeks 5–8 · Hold architecture · BS badge absorbs organic",
+            label: "Phase 2 · W5-8 · CPC decline phase",
             actions: [
-              "Hold the week-4 ad architecture through the capture window",
-              "BS badge projected to lift organic clicks +22% to +36%",
+              "Hold brand-ad investment level · no further increase needed",
+              "Company Brain case: average CPC drops 14-22% after 4-6 weeks",
+              "Note: branded-keyword SOV builds in this phase · brand search volume projected +35-50%",
             ],
-            tacos: 24.6,
-            sales: 78,
+            tacos: 19.4,
+            sales: 61,
           },
           {
-            label: "Weeks 9–12 · Taper · organic + badge carry the line",
+            label: "Phase 3 · W9-12 · Steady state",
             actions: [
-              "Amazon monthly spend $42.16K → $32K (−24%)",
-              "Organic + BS badge projected to offset ad pullback",
+              "Brand-ad spend stabilizes at $20K/mo (slightly below Phase 1 peak)",
+              "Long-term brand-ad occupancy → competitor cost rises → long-tail spillover gains",
+              "Note: BSR ≤ 5 target may not land in Phase 3; likely Phase 4 (post-12-week)",
             ],
-            tacos: 18.2,
-            sales: 84,
+            tacos: 16.8,
+            sales: 68,
           },
         ],
         summary: {
-          cumulativeSalesLift: 96,
-          finalTacos: 18.2,
-          captureWindow: "Weeks 6–8",
+          cumulativeSalesLift: 54,
+          finalTacos: 16.8,
+          captureWindow: "Phase 4 (post-12-week)",
         },
       },
-      confidence: 73,
+      confidence: 76,
       confidenceLabel:
-        "8 prior BSR captures · 6 used this playbook · 8pp confidence cut for price-sensitive category",
+        "12 prior brand-ad scale-up cases · avg CPC drop 18.4%",
     },
-    recommendedIncremental: 24000,
-    combinedAfter: 59000,
+    recommendedIncremental: 28000,
+    combinedAfter: 63000,
   },
 
   walmart: {
@@ -910,7 +912,7 @@ const OMNICHANNEL = {
         id: "wm-sb-expansion",
         title: "Sponsored Brand expansion",
         summary:
-          "Walmart SB CPC runs ~42% below Amazon for the same slot, yet SB is only 8% of Walmart ad spend today — an underused lever.",
+          "Walmart SB CPC runs ~42% below Amazon for the same slot, yet SB is only 8% of Walmart ad spend today — an underused lever. Reference: Company Brain shows sustained brand-ad investment leads to an average CPC decline of 14-22% after 4-6 weeks (same case referenced in the Amazon block). Walmart's current brand-ad CPC is already 42% below Amazon's, and the base spend is small — marginal CPC decline should be more pronounced.",
         treatment:
           "Walmart SB monthly budget $1.4K → $3.0K. Expand coverage onto 8 brand keywords + 4 hero category keywords.",
         sampleSize: "Walmart monthly SB impression sample (no explicit arms)",
@@ -937,8 +939,8 @@ const OMNICHANNEL = {
           "Historical PDP placement scale-ups · high-ROAS starting points hold up",
       },
     ],
-    recommendedIncremental: 32000,
-    combinedAfter: 50000,
+    recommendedIncremental: 36000,
+    combinedAfter: 54000,
   },
 
   tiktok: {
@@ -975,23 +977,23 @@ const OMNICHANNEL = {
       id: "tiktok-geo-holdout",
       title: "Geographic holdout test · validating TikTok's incremental lift",
       summary:
-        "Run TikTok in 5 test DMAs for 8 weeks while withholding in 5 matched control DMAs, then compare downstream Amazon + Walmart sales between the two groups to isolate TikTok's true causal contribution.",
+        "Run TikTok in 7 test DMAs for 8 weeks while withholding in 7 matched control DMAs, then compare downstream Amazon + Walmart sales between the two groups to isolate TikTok's true causal contribution. Sample expanded from 5+5 to 7+7 to improve statistical power on minimum detectable lift.",
       hypothesis:
         "TikTok activation lifts downstream Amazon + Walmart sales for the power bank (≥ $0.80 in downstream sales per $1 of TikTok spend).",
       treatment:
-        "5 test DMAs (matched on baseline Amazon + Walmart sales) receive TikTok video ads with Cost Cap CPA $14; 5 matched control DMAs receive no TikTok activity.",
+        "7 test DMAs (matched on baseline Amazon + Walmart sales) receive TikTok video ads with Cost Cap CPA $14; 7 matched control DMAs receive no TikTok activity.",
       sampleSize:
-        "5 test DMAs + 5 control DMAs · matched within ±8% on baseline sales",
+        "7 test DMAs + 7 control DMAs · matched within ±8% on baseline sales · improves statistical power on minimum detectable lift",
       duration: "8 weeks",
-      budget: "$12K test budget · ~$1.5K / week · split evenly across 5 DMAs",
+      budget: "$36K test budget · ~$4.5K / week · split evenly across 7 DMAs",
       successMetric:
-        "Incremental Amazon + Walmart sales in test DMAs ÷ TikTok spend ≥ $0.80. If yes → scale to national rollout. If no → reallocate to Amazon SP.",
+        "Incremental Amazon + Walmart sales in test DMAs ÷ TikTok spend ≥ $0.80. If yes → scale to national rollout. If no → reallocate to Walmart brand ads.",
       confidence: 67,
       confidenceLabel:
         "4 prior DMA holdout tests · incremental ratio has wide variance",
     },
-    recommendedIncremental: 28000,
-    combinedAfter: 28000,
+    recommendedIncremental: 36000,
+    combinedAfter: 36000,
   },
 
   crossChannel: {
@@ -999,20 +1001,18 @@ const OMNICHANNEL = {
     currentTotal: 53000,
     combinedTotal: 153000,
     totalSummary:
-      "Incremental allocation: Walmart +$32K · TikTok +$28K · Amazon +$24K · Reserve +$16K = +$100K · Combined monthly spend grows from $53K to $153K",
-    reserveExplanation:
-      "$16K reserve not locked to any channel — week-4 reallocation based on TikTok holdout early signal + Amazon SB-layer CTR response.",
+      "Incremental allocation: Walmart +$36K · TikTok +$36K · Amazon +$28K · No reserve, fully deployed = $100K · Combined monthly spend grows from $53K to $153K",
     reviewCadence:
-      "Re-balance at week 4 based on TikTok holdout signal direction — scale nationally or redirect to Amazon.",
+      "Week 4 review · primary signal is TikTok holdout direction. If lift is materially below expectations, weeks 5-8 may redirect remaining TikTok budget into Walmart brand-ad scale-up.",
     reasoning: {
       chain: [
-        "The customer has $100K of incremental budget on top of existing spend. The allocation logic isn't proportional to current spend (Amazon $35K · Walmart $18K · TikTok $0 = $53K) — it follows each channel's marginal-return curve and strategic role.",
-        "Amazon today is the largest channel but near saturation (78% keyword coverage, SOV stable inside category) — marginal returns diminish. +$24K is sized just to fund SB-layer + 14-day promo to close the CTR gap; larger amounts wouldn't produce linear returns.",
-        "Walmart is the smallest channel today but has the most structural headroom: CPC 42% below Amazon, SB share only 8% of Walmart ad spend, PDP placement ROAS 38% higher than other slots but underspent — the steepest marginal curve. +$32K fully funds 3 independent experiments.",
-        "TikTok is a validation investment. Users don't come to TikTok to buy a power bank — they get seeded there and convert on Amazon / Walmart. That means in-period ROAS will look poor; real value sits in downstream incrementality.",
-        "First give it +$28K for an 8-week geographic holdout (5 test DMAs vs 5 control DMAs) to verify ≥ $0.80 downstream Amazon + Walmart revenue per TikTok dollar. Pass → scale nationally; fail → redirect to Amazon SP.",
-        "Reserve +$16K is unallocated until week 4 — if Amazon CTR hasn't moved in 14 days, part shifts to Walmart SB; if TikTok early signal is weak, part returns to Amazon SP.",
-        "Walmart +$32K + TikTok +$28K + Amazon +$24K + Reserve +$16K = $100K incremental. Each channel has its own approval entry. Combined monthly spend lands at $153K (if reserve is fully deployed); revisit at Q3 budget review.",
+        "The customer has $100K of incremental budget and wants it fully deployed. The three channels aren't split proportionally — they're ranked by marginal return and strategic fit:",
+        "Walmart is the smallest channel today but has the steepest marginal curve — CPC 42% below Amazon, brand-ad share only 8%, structural headroom to scale. +$36K funds three concrete moves: comparison-hero creative test, brand-ad expansion, and PDP placement scale-up.",
+        "TikTok is a 0 → 1 validation investment. +$36K runs a 7-DMA holdout test (8 weeks) to verify downstream lift on Amazon + Walmart. If validation passes, Q3 decides whether to scale broadly.",
+        "Amazon is the largest channel today and near saturation. +$28K doesn't follow the bed-frame playbook (incompatible under the price lock) — it follows the 'sustained brand-ad scale-up → CPC decline' pattern instead. The BSR ≤ 5 target may not land within 12 weeks, but the branded-keyword SOV and ad-efficiency gains are durable long-term assets.",
+        "Week 4 review: the primary signal is TikTok holdout direction. If lift is materially below expectations, weeks 5-8 may redirect remaining TikTok budget into Walmart brand-ad scale-up.",
+        "Price lock is the underlying framing — any plan that depends on promotion or discount is excluded. All three channel plans rely on traffic efficiency + ad structure improvements only.",
+        "Walmart +$36K + TikTok +$36K + Amazon +$28K = $100K incremental, no reserve. Combined monthly spend lands at $153K; revisit at Q3 budget review.",
       ],
       accuracy: 71,
       accuracyLabel: "multi-channel budget allocations · post-quarter retention",
@@ -1481,6 +1481,10 @@ const COMPANY_BRAIN = {
   playbooks: 19,
   capturedPatterns: 142,
   recentEntries: [
+    {
+      name: "Pattern · Sustained brand-ad investment → CPC decline",
+      added: "Confidence 76% · 12 brand-ad scale-up cases · avg CPC drop 18.4% · Internal",
+    },
     { name: "Best-seller capture · SB-layer pattern", added: "May 2 · from SKU-prior-1 outcome" },
     { name: "Peak-season SOV defense · scaling SKUs", added: "Apr 28 · from 2025 Q4 retrospective" },
     { name: "Funnel bottleneck · CTR resolution playbook", added: "Apr 21 · from SKU-B outcome" },
@@ -3646,7 +3650,8 @@ function BudgetEnvelopeStrip({ budget }) {
   const cur = budget.current;
   const inc = budget.incremental;
   const alloc = budget.allocation;
-  const pct = (n) => ((n / inc) * 100).toFixed(1);
+  const combinedTotal = alloc.reduce((sum, a) => sum + a.combined, 0);
+  const pct = (n) => ((n / combinedTotal) * 100).toFixed(1);
   const barColor = {
     emerald: "bg-emerald-500",
     blue: "bg-blue-500",
@@ -3696,7 +3701,7 @@ function BudgetEnvelopeStrip({ budget }) {
       {/* Dashed divider */}
       <div className="border-t border-dashed border-slate-700 my-4" />
 
-      {/* Bottom layer: incremental allocation */}
+      {/* Bottom layer: combined monthly distribution */}
       <div className="flex items-baseline gap-2 mb-3 flex-wrap">
         <DollarSign className="w-4 h-4 text-emerald-400 self-center" />
         <span className="text-11 uppercase tracking-wider text-emerald-400 font-medium">
@@ -3706,7 +3711,7 @@ function BudgetEnvelopeStrip({ budget }) {
           ${inc.toLocaleString()}
         </span>
         <span className="text-11 text-slate-400">
-          · Proposed allocation (by marginal return)
+          · New combined monthly distribution
         </span>
       </div>
       <div className="flex h-2 rounded-full overflow-hidden bg-slate-800 mb-3">
@@ -3714,12 +3719,12 @@ function BudgetEnvelopeStrip({ budget }) {
           <div
             key={i}
             className={barColor[a.color]}
-            style={{ width: `${pct(a.amount)}%` }}
-            title={`${a.channel} +$${a.amount.toLocaleString()}`}
+            style={{ width: `${pct(a.combined)}%` }}
+            title={`${a.channel} $${a.combined.toLocaleString()}`}
           />
         ))}
       </div>
-      <div className="grid grid-cols-4 gap-3 text-11">
+      <div className="grid grid-cols-3 gap-3 text-11">
         {alloc.map((a, i) => (
           <div key={i} className="flex items-start gap-2">
             <div
@@ -3732,10 +3737,10 @@ function BudgetEnvelopeStrip({ budget }) {
                 {a.channel}
               </div>
               <div className="font-mono text-white font-semibold mt-0.5">
-                +${a.amount.toLocaleString()}
+                ${a.combined.toLocaleString()}
               </div>
               <div className="text-10 text-slate-400 mt-0.5 leading-snug">
-                {a.tag}
+                +${a.incremental.toLocaleString()} · {a.tag}
               </div>
             </div>
           </div>
@@ -3888,13 +3893,14 @@ function AmazonInsightCard({ insight }) {
           <div className="text-xs text-slate-300 leading-relaxed">
             {insight.reference.method}
           </div>
-          <div className="mt-2.5 pt-2.5 border-t border-slate-700">
-            <div className="inline-flex items-center gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-0.5 rounded">
-              <AlertCircle className="w-3 h-3" />
-              Power bank is more price-sensitive than bed frame — confidence
-              revised from 81% down to 73%
+          {insight.reference.caveat && (
+            <div className="mt-2.5 pt-2.5 border-t border-slate-700">
+              <div className="flex items-start gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-1 rounded leading-relaxed">
+                <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                <span>{insight.reference.caveat}</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -4282,6 +4288,19 @@ function OmnichannelCanvas() {
       />
 
       <div className="px-6 pt-5">
+        <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
+          <div className="flex items-start gap-2.5">
+            <Lock className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-11 uppercase tracking-wider text-amber-800 font-semibold mb-1">
+                Constraint · Price locked across platforms
+              </div>
+              <div className="text-sm text-amber-900 leading-relaxed">
+                Amazon / Walmart / TikTok prices are unified — promotion / discount isn't available as a lever. All plans must rely on traffic efficiency + ad structure improvements.
+              </div>
+            </div>
+          </div>
+        </div>
         <BudgetEnvelopeStrip budget={O.budget} />
       </div>
 
@@ -4300,7 +4319,7 @@ function OmnichannelCanvas() {
           }
           statusEntries={amazonStatus}
           recommendedIncremental={O.amazon.recommendedIncremental}
-          recommendedDelta={`was $35K · combined $${(O.amazon.combinedAfter / 1000).toFixed(0)}K`}
+          recommendedDelta={`was $35K · combined $${(O.amazon.combinedAfter / 1000).toFixed(0)}K · +$28K brand ads`}
           approveLabel="Approve Amazon plan"
         >
           <div>
@@ -4314,7 +4333,7 @@ function OmnichannelCanvas() {
             </div>
           </div>
           <div>
-            <SectionLabel kicker="Adapted from bed frame SKU-117">
+            <SectionLabel kicker="Sustained brand-ad scale-up → CPC decline">
               Amazon execution plan
             </SectionLabel>
             <AmazonInsightCard insight={O.amazon.insight} />
@@ -4377,7 +4396,7 @@ function OmnichannelCanvas() {
           }
           statusEntries={tiktokStatus}
           recommendedIncremental={O.tiktok.recommendedIncremental}
-          recommendedDelta="from zero · test budget · 8-week holdout window"
+          recommendedDelta="from zero · 7-DMA holdout · 8-week window"
           approveLabel="Approve TikTok test"
         >
           <Card className="p-4">
@@ -4412,29 +4431,19 @@ function OmnichannelCanvas() {
       </div>
 
       <div className="px-6 pt-6">
-        <SectionLabel kicker="+$100K incremental · combined $153K monthly">
+        <SectionLabel kicker="+$100K incremental · fully deployed · combined $153K monthly">
           Cross-channel summary
         </SectionLabel>
         <Card className="p-5">
           <div className="text-sm font-mono text-slate-900 mb-3">
             {O.crossChannel.totalSummary}
           </div>
-          <div className="grid grid-cols-2 gap-4 text-xs">
-            <div>
-              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
-                Reserve explanation
-              </div>
-              <div className="text-slate-700 leading-relaxed">
-                {O.crossChannel.reserveExplanation}
-              </div>
+          <div className="text-xs">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Review cadence
             </div>
-            <div>
-              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
-                Review cadence
-              </div>
-              <div className="text-slate-700 leading-relaxed">
-                {O.crossChannel.reviewCadence}
-              </div>
+            <div className="text-slate-700 leading-relaxed">
+              {O.crossChannel.reviewCadence}
             </div>
           </div>
         </Card>

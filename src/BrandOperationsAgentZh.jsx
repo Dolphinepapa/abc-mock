@@ -751,27 +751,24 @@ const OMNICHANNEL = {
     allocation: [
       {
         channel: "Walmart",
-        amount: 32000,
+        incremental: 36000,
+        combined: 54000,
         tag: "陡峭段 · 边际 ROAS 估 4.2x",
         color: "emerald",
       },
       {
         channel: "TikTok",
-        amount: 28000,
-        tag: "验证段 · 测增量价值",
+        incremental: 36000,
+        combined: 36000,
+        tag: "验证段 · 测下游 lift",
         color: "blue",
       },
       {
         channel: "Amazon",
-        amount: 24000,
-        tag: "饱和度 78% · 仍有空间",
+        incremental: 28000,
+        combined: 63000,
+        tag: "品牌广告杠杆 · CPC 下行预期",
         color: "slate",
-      },
-      {
-        channel: "储备",
-        amount: 16000,
-        tag: "4 周复盘后分配",
-        color: "muted",
       },
     ],
   },
@@ -821,60 +818,65 @@ const OMNICHANNEL = {
       },
     ],
     insight: {
-      id: "amazon-rank-capture",
+      id: "amazon-brand-ads",
       type: "executable",
-      title: "套用床架 SKU-117 的 #2 → #1 打法到移动充电宝 SKU-PB-A",
+      title: "持续投放品牌广告 → CPC 下行",
       summary:
-        "床架 SKU-117 在 2025 Q4 用 SB 叠加层 + 14 天促销将 BSR 由 #12 推至 #3,7 周完成。移动充电宝 SKU-PB-A 在生命周期阶段与品类竞争烈度上匹配,但价格敏感度更高 — 信心由原打法的 81% 下调至 73%。",
+        "价格全渠道锁定下,无法用促销 / 降价拉量。在「广告效率 + 广告结构」可用杠杆中,品牌广告持续扩量是 ROAS 最稳的一项 — 历史 4-6 周内可拉低品牌词 CPC 14-22%,长期建立品牌词 SOV。",
       reference: {
-        sku: "床架 · SKU-117",
-        period: "2025 Q4",
-        outcome: "7 周内 BSR #12 → #3",
+        sku: "牙刷品牌广告持续投放案例",
+        period: "2024 Q3",
+        outcome: "12 周累计品牌词转化 +$118K",
         method:
-          "4 周内 TACoS 临时由 19% 升至 31% + 在前 12 个核心关键词上叠加 SB 头条广告 + 14 天 15% 折扣促销。BS 标签上线后带动自然点击 +34%,抵消第 6–8 周广告下调。",
+          "牙刷产品线持续投放品牌广告 (Sponsored Brands) 6 周后,品牌词 CPC 由 $0.84 降至 $0.68 (-19%),同期 ACoS 由 12.4% 降至 9.6%。12 周累计品牌词转化贡献 +$118K。",
+        caveat:
+          "床架 SKU-117 #2 → #1 打法依赖 14 天 12% 折扣券。本 case 因价格全渠道锁定,该打法不适用。改用「品牌广告持续扩量 → CPC 下行」pattern。",
       },
       plan: {
         phases: [
           {
-            label: "1–4 周 · 激进扩量 · SB 叠加层 · 14 天促销",
+            label: "Phase 1 · W1-4 · 品牌广告扩量阶段",
             actions: [
-              "Amazon 月预算 $35K → $42.16K(+20.5%)",
-              "前 10 个核心品类关键词叠加 SB 头条广告层",
-              "上线 14 天 12% 折扣券",
+              "Amazon 月预算 $35K → $63K(品牌广告增量 +$22K,SP/SD 增量 +$6K)",
+              "品牌广告投入 $5K/月 → $25K/月(5x 扩量)",
+              "前 12 个品牌词 + 长尾品牌变体,广告位 1-3 重点占位",
+              "注:此阶段 ACoS 会因品牌广告快速扩量而暂时升高,正常",
             ],
-            tacos: 28.4,
-            sales: 62,
+            tacos: 22.8,
+            sales: 52,
           },
           {
-            label: "5–8 周 · 架构维持 · BS 标签承接自然流量",
+            label: "Phase 2 · W5-8 · CPC 下行阶段",
             actions: [
-              "争取窗口期保持第 4 周架构",
-              "BS 标签预计带动自然点击 +22% 至 +36%",
+              "维持品牌广告投入水平,无需追加",
+              "公司大脑案例:持续 4-6 周后 CPC 平均下降 14-22%",
+              "注:品牌词 SOV 应在此阶段建立,品牌搜索量预计 +35-50%",
             ],
-            tacos: 24.6,
-            sales: 78,
+            tacos: 19.4,
+            sales: 61,
           },
           {
-            label: "9–12 周 · 预算回调 · 自然 + 标签接管",
+            label: "Phase 3 · W9-12 · 稳态运营",
             actions: [
-              "Amazon 月预算 $42.16K → $32K(−24%)",
-              "自然 + BS 标签预计跑赢广告下调",
+              "品牌广告稳定在 $20K/月(略低于 Phase 1 峰值)",
+              "长期品牌广告占位 → 品类竞品成本上升 → 长尾溢出收益",
+              "注:BSR 目标 ≤ 5 不强求 Phase 3 即达成,可能 Phase 4(12 周外)实现",
             ],
-            tacos: 18.2,
-            sales: 84,
+            tacos: 16.8,
+            sales: 68,
           },
         ],
         summary: {
-          cumulativeSalesLift: 96,
-          finalTacos: 18.2,
-          captureWindow: "第 6–8 周",
+          cumulativeSalesLift: 54,
+          finalTacos: 16.8,
+          captureWindow: "Phase 4(12 周外)",
         },
       },
-      confidence: 73,
-      confidenceLabel: "8 个过往 BSR 争取案例 · 其中 6 个用此类打法 · 价格敏感品类下调 8pp",
+      confidence: 76,
+      confidenceLabel: "12 个过往品牌广告扩量案例 · CPC 平均下降 18.4%",
     },
-    recommendedIncremental: 24000,
-    combinedAfter: 59000,
+    recommendedIncremental: 28000,
+    combinedAfter: 63000,
   },
 
   walmart: {
@@ -907,7 +909,7 @@ const OMNICHANNEL = {
         id: "wm-sb-expansion",
         title: "Sponsored Brand 扩量",
         summary:
-          "Walmart SB CPC 较 Amazon 同位置低 ~42%,但 SB 仅占 Walmart 广告花费 8% — 杠杆未充分利用。",
+          "Walmart SB CPC 较 Amazon 同位置低 ~42%,但 SB 仅占 Walmart 广告花费 8% — 杠杆未充分利用。Reference: 公司大脑显示品牌广告持续投放 4-6 周后 CPC 平均下降 14-22%(见 Amazon block 同一 Company Brain 案例)。Walmart 当前品牌广告 CPC 水平较 Amazon 低 42%,且基础投入小,边际下行空间预期更明显。",
         treatment: "Walmart SB 月预算 $1.4K → $3.0K,扩量前 8 个品牌词与 4 个核心品类词。",
         sampleSize: "Walmart 月度 SB 曝光样本(无显式分组)",
         duration: "4 周观察",
@@ -930,8 +932,8 @@ const OMNICHANNEL = {
         confidenceLabel: "类似 PDP placement 扩量历史 · 高 ROAS 起点更稳",
       },
     ],
-    recommendedIncremental: 32000,
-    combinedAfter: 50000,
+    recommendedIncremental: 36000,
+    combinedAfter: 54000,
   },
 
   tiktok: {
@@ -968,21 +970,21 @@ const OMNICHANNEL = {
       id: "tiktok-geo-holdout",
       title: "地区对照测试 · 验证 TikTok 增量",
       summary:
-        "在 5 个测试 DMA 投 TikTok 8 周,5 个匹配对照 DMA 不投,对比两组下游 Amazon + Walmart 销售差异 — 隔离 TikTok 的真实因果贡献。",
+        "在 7 个测试 DMA 投 TikTok 8 周,7 个匹配对照 DMA 不投,对比两组下游 Amazon + Walmart 销售差异 — 隔离 TikTok 的真实因果贡献。样本由 5 + 5 扩至 7 + 7,目的是提高 minimum detectable lift 的统计能力。",
       hypothesis:
         "TikTok 投放能为充电宝带来下游 Amazon + Walmart 销售增量(每 $1 TikTok 花费带来 ≥ $0.80 的 Amazon + Walmart 销售增量)。",
       treatment:
-        "5 个测试 DMA(基线 Amazon + Walmart 销售匹配后选定)投 TikTok 视频广告,Cost Cap CPA $14;5 个对照 DMA 维持原状。",
-      sampleSize: "5 测试 DMA + 5 对照 DMA · 基线销售 ±8% 内匹配",
+        "7 个测试 DMA(基线 Amazon + Walmart 销售匹配后选定)投 TikTok 视频广告,Cost Cap CPA $14;7 个对照 DMA 维持原状。",
+      sampleSize: "7 测试 DMA + 7 对照 DMA · 基线销售 ±8% 内匹配 · 提高 minimum detectable lift 统计能力",
       duration: "8 周",
-      budget: "$12K 测试预算 · 平均每周 $1.5K · 5 个 DMA 均分",
+      budget: "$36K 测试预算 · 平均每周 $4.5K · 7 个 DMA 均分",
       successMetric:
-        "测试 DMA Amazon + Walmart 销售增量 ÷ TikTok 花费 ≥ $0.80。若达标 → 扩至全国;若不达标 → 重分配至 Amazon SP。",
+        "测试 DMA Amazon + Walmart 销售增量 ÷ TikTok 花费 ≥ $0.80。若达标 → 扩至全国;若不达标 → 重分配至 Walmart 品牌广告。",
       confidence: 67,
       confidenceLabel: "4 个过往 DMA 对照测试 · 增量比率方差较大",
     },
-    recommendedIncremental: 28000,
-    combinedAfter: 28000,
+    recommendedIncremental: 36000,
+    combinedAfter: 36000,
   },
 
   crossChannel: {
@@ -990,19 +992,18 @@ const OMNICHANNEL = {
     currentTotal: 53000,
     combinedTotal: 153000,
     totalSummary:
-      "增量分配:Walmart +$32K · TikTok +$28K · Amazon +$24K · 储备 +$16K = +$100K · 合并后月度总投入由 $53K 升至 $153K",
-    reserveExplanation:
-      "$16K 储备不锁定到平台 — 第 4 周末根据 TikTok holdout 早期信号 + Amazon SB 层 CTR 反应决定流向。",
-    reviewCadence: "第 4 周末复盘 · 依据 TikTok holdout 信号方向决定全国扩量 / 回流 Amazon。",
+      "增量分配:Walmart +$36K · TikTok +$36K · Amazon +$28K · 储备 $0 · 全部投出 = $100K · 合并后月度总投入由 $53K 升至 $153K",
+    reviewCadence:
+      "Week 4 复盘 · 重点看 TikTok holdout 早期信号方向。如 lift 显著低于预期,Week 5-8 可考虑把 TikTok 剩余预算挪到 Walmart 加码品牌广告。",
     reasoning: {
       chain: [
-        "客户多出 $100K 增量预算。分配的核心逻辑不是按现状比例切分(Amazon $35K · Walmart $18K · TikTok $0 = $53K),而是看每个平台的边际回报曲线 + 战略价值。",
-        "Amazon 现状最大但接近饱和(关键词覆盖率 78%、品类内 SOV 已稳定),增量回报递减 — 给 +$24K 主要用于 SB 叠加层 + 14 天促销补 CTR 缺口,无法在更大量级带来线性回报。",
-        "Walmart 现状最小,但结构性空间最大:CPC 较 Amazon 低 42%、品牌广告占比仅 8%、PDP placement ROAS 较其他位置高 38% 但被低估 — 边际最陡,给 +$32K 全部用于 3 项独立实验。",
-        "TikTok 是验证投资。用户不是「到 TikTok 买充电宝」,而是「在 TikTok 被种草后去 Amazon / Walmart 买」 — 这意味着 in-period ROAS 会很难看,真实价值在下游 incrementality。",
-        "先给 +$28K 做 8 周地区对照测试(5 测试 DMA vs 5 对照 DMA),验证每 $1 TikTok 花费能否换 ≥ $0.80 的下游 Amazon + Walmart 销售增量。验证通过 → 全国扩量;不通过 → 回流 Amazon SP。",
-        "储备 +$16K 不锁定到平台,第 4 周末再分配 — Amazon CTR 14 天内未提升 → 部分转入 Walmart SB 加码;TikTok 早期信号弱 → 部分退回 Amazon SP。",
-        "Walmart +$32K + TikTok +$28K + Amazon +$24K + 储备 +$16K = $100K 增量。各平台独立批准入口。合并后月度总投入 $153K(若储备全用),Q3 预算审议前可调整。",
+        "客户多出 $100K 增量预算,要求全部投出。三个 channel 的 allocation 不按比例切,按边际回报和战略适配度排:",
+        "Walmart 现状最小但边际最陡 — CPC 较 Amazon 低 42%,品牌广告占比仅 8%,有结构性扩量空间。+$36K 主要投入对比图测试 + 品牌广告扩量 + 商品页面广告扩量三个具体动作。",
+        "TikTok 是 0 → 1 验证投资。+$36K 跑 7 DMA holdout test(8 周),验证下游 Amazon + Walmart lift。如果验证通过,Q3 再决定是否全量扩。",
+        "Amazon 现状最大、接近饱和。+$28K 不走 Bed Frame 打法(价格锁定下不兼容),改走「品牌广告持续扩量 → CPC 下行」pattern。12 周内不一定完成 BSR ≤ 5 目标,但建立的品牌词 SOV 和广告效率改善是长期资产。",
+        "Week 4 复盘:重点看 TikTok holdout 早期信号方向。如 lift 显著低于预期,Week 5-8 可考虑把 TikTok 剩余预算挪到 Walmart 加码品牌广告。",
+        "价格锁定约束是底层 framing — 任何依赖促销 / 降价的方案都被排除。三个 channel 的方案全部基于「流量效率 + 广告结构」改进。",
+        "Walmart +$36K + TikTok +$36K + Amazon +$28K = $100K 增量,无储备。合并后月度总投入 $153K,Q3 预算审议前可调整。",
       ],
       accuracy: 71,
       accuracyLabel: "多平台预算分配 · 季度复盘后保留率",
@@ -1471,6 +1472,10 @@ const COMPANY_BRAIN = {
   playbooks: 19,
   capturedPatterns: 142,
   recentEntries: [
+    {
+      name: "Pattern · 品牌广告持续投放 → CPC 下行",
+      added: "Confidence 76% · 12 brand-ad scale-up 案例 · 平均 CPC 降幅 18.4% · Internal",
+    },
     { name: "争取 BS · SB 叠加层模式", added: "May 2 · 来自 SKU-prior-1 的结果" },
     { name: "旺季 SOV 防御 · 增长期 SKU", added: "Apr 28 · 来自 2025 Q4 复盘" },
     { name: "漏斗瓶颈 · CTR 解决方案打法", added: "Apr 21 · 来自 SKU-B 的结果" },
@@ -3632,7 +3637,8 @@ function BudgetEnvelopeStrip({ budget }) {
   const cur = budget.current;
   const inc = budget.incremental;
   const alloc = budget.allocation;
-  const pct = (n) => ((n / inc) * 100).toFixed(1);
+  const combinedTotal = alloc.reduce((sum, a) => sum + a.combined, 0);
+  const pct = (n) => ((n / combinedTotal) * 100).toFixed(1);
   const barColor = {
     emerald: "bg-emerald-500",
     blue: "bg-blue-500",
@@ -3682,7 +3688,7 @@ function BudgetEnvelopeStrip({ budget }) {
       {/* Dashed divider */}
       <div className="border-t border-dashed border-slate-700 my-4" />
 
-      {/* Bottom layer: incremental allocation */}
+      {/* Bottom layer: combined monthly distribution */}
       <div className="flex items-baseline gap-2 mb-3 flex-wrap">
         <DollarSign className="w-4 h-4 text-emerald-400 self-center" />
         <span className="text-11 uppercase tracking-wider text-emerald-400 font-medium">
@@ -3692,7 +3698,7 @@ function BudgetEnvelopeStrip({ budget }) {
           ${inc.toLocaleString()}
         </span>
         <span className="text-11 text-slate-400">
-          · 推荐分配(按边际回报)
+          · 合并后本月新分布
         </span>
       </div>
       <div className="flex h-2 rounded-full overflow-hidden bg-slate-800 mb-3">
@@ -3700,12 +3706,12 @@ function BudgetEnvelopeStrip({ budget }) {
           <div
             key={i}
             className={barColor[a.color]}
-            style={{ width: `${pct(a.amount)}%` }}
-            title={`${a.channel} +$${a.amount.toLocaleString()}`}
+            style={{ width: `${pct(a.combined)}%` }}
+            title={`${a.channel} $${a.combined.toLocaleString()}`}
           />
         ))}
       </div>
-      <div className="grid grid-cols-4 gap-3 text-11">
+      <div className="grid grid-cols-3 gap-3 text-11">
         {alloc.map((a, i) => (
           <div key={i} className="flex items-start gap-2">
             <div
@@ -3718,10 +3724,10 @@ function BudgetEnvelopeStrip({ budget }) {
                 {a.channel}
               </div>
               <div className="font-mono text-white font-semibold mt-0.5">
-                +${a.amount.toLocaleString()}
+                ${a.combined.toLocaleString()}
               </div>
               <div className="text-10 text-slate-400 mt-0.5 leading-snug">
-                {a.tag}
+                +${a.incremental.toLocaleString()} · {a.tag}
               </div>
             </div>
           </div>
@@ -3872,12 +3878,14 @@ function AmazonInsightCard({ insight }) {
           <div className="text-xs text-slate-300 leading-relaxed">
             {insight.reference.method}
           </div>
-          <div className="mt-2.5 pt-2.5 border-t border-slate-700">
-            <div className="inline-flex items-center gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-0.5 rounded">
-              <AlertCircle className="w-3 h-3" />
-              移动充电宝价格敏感度更高 — 信心由原 81% 下调至 73%
+          {insight.reference.caveat && (
+            <div className="mt-2.5 pt-2.5 border-t border-slate-700">
+              <div className="flex items-start gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-1 rounded leading-relaxed">
+                <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+                <span>{insight.reference.caveat}</span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -4268,6 +4276,19 @@ function OmnichannelCanvas() {
       />
 
       <div className="px-6 pt-5">
+        <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
+          <div className="flex items-start gap-2.5">
+            <Lock className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-11 uppercase tracking-wider text-amber-800 font-semibold mb-1">
+                约束 · 价格全渠道锁定
+              </div>
+              <div className="text-sm text-amber-900 leading-relaxed">
+                Amazon / Walmart / TikTok 售价统一,促销 / 降价不能作为杠杆。所有方案必须依靠 流量效率 + 广告结构 改进。
+              </div>
+            </div>
+          </div>
+        </div>
         <BudgetEnvelopeStrip budget={O.budget} />
       </div>
 
@@ -4286,7 +4307,7 @@ function OmnichannelCanvas() {
           }
           statusEntries={amazonStatus}
           recommendedIncremental={O.amazon.recommendedIncremental}
-          recommendedDelta={`现状 $35K → 共 $${(O.amazon.combinedAfter / 1000).toFixed(0)}K`}
+          recommendedDelta={`现状 $35K → 共 $${(O.amazon.combinedAfter / 1000).toFixed(0)}K · +$28K 品牌广告`}
           approveLabel="批准 Amazon 方案"
         >
           <div>
@@ -4300,7 +4321,7 @@ function OmnichannelCanvas() {
             </div>
           </div>
           <div>
-            <SectionLabel kicker="参考床架 SKU-117 打法">
+            <SectionLabel kicker="品牌广告持续扩量 → CPC 下行">
               Amazon 执行方案
             </SectionLabel>
             <AmazonInsightCard insight={O.amazon.insight} />
@@ -4363,7 +4384,7 @@ function OmnichannelCanvas() {
           }
           statusEntries={tiktokStatus}
           recommendedIncremental={O.tiktok.recommendedIncremental}
-          recommendedDelta="从 0 启动 · 测试预算 · 8 周 holdout 窗口"
+          recommendedDelta="从 0 启动 · 7 DMA holdout · 8 周窗口"
           approveLabel="批准 TikTok 测试"
         >
           <Card className="p-4">
@@ -4393,29 +4414,19 @@ function OmnichannelCanvas() {
       </div>
 
       <div className="px-6 pt-6">
-        <SectionLabel kicker="+$100K 增量 · 合并后总月度 $153K">
+        <SectionLabel kicker="+$100K 增量 · 全部投入 · 合并后月度 $153K">
           跨渠道汇总
         </SectionLabel>
         <Card className="p-5">
           <div className="text-sm font-mono text-slate-900 mb-3">
             {O.crossChannel.totalSummary}
           </div>
-          <div className="grid grid-cols-2 gap-4 text-xs">
-            <div>
-              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
-                储备说明
-              </div>
-              <div className="text-slate-700 leading-relaxed">
-                {O.crossChannel.reserveExplanation}
-              </div>
+          <div className="text-xs">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              复盘节奏
             </div>
-            <div>
-              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
-                复盘节奏
-              </div>
-              <div className="text-slate-700 leading-relaxed">
-                {O.crossChannel.reviewCadence}
-              </div>
+            <div className="text-slate-700 leading-relaxed">
+              {O.crossChannel.reviewCadence}
             </div>
           </div>
         </Card>
