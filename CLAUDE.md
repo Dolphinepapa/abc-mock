@@ -50,6 +50,27 @@ The agent talks like an experienced operator, not a strategy consultant.
 - **Numbers**: never round. Use 37.4% not 25%, $1.04M not $1M, 94 keywords not 100. Exception: user-stated budgets/goals stay round.
 - **Date**: today is May 15, 2026. Q2 2026 is current.
 - **Jargon**: wrap operational terms in `<MetricTerm definition>...</MetricTerm>`. Definitions in `METRIC_DEFINITIONS` map. Common: TACoS, ACoS, LTV, blended margin, attach rate, contribution margin, SOV, CTR, CR, cohort revenue, incrementality, geographic holdout test, cost cap bidding.
+- ### Jargon — Chinese vs English
+When the UI is in Chinese, operational terms should be in Chinese unless the
+term is a widely-used English acronym in the Chinese Amazon-ops industry
+(TACoS, ACoS, BSR, ROAS, CTR, CR, SKU, ASIN, SP, SB, SD, DSP, AMC — keep
+these in English).
+Terms that have natural Chinese equivalents must be translated:
+- Cohort revenue → 队列收入
+- Blended margin → 产品线综合毛利率
+- Attach rate → 绑定购买率
+- LTV → 客户终身价值
+- Contribution margin → 贡献毛利
+- SOV → 曝光份额
+- Incrementality → 增量效果
+Test: would a Chinese ops director say this term in a meeting? If yes,
+keep English. If they'd say it in Chinese, translate.
+
+### Section titles
+
+Don't use "A 节 / B 节 / Section X" formatting. Use a natural short
+Chinese phrase that describes the content ("先看自己", "对照竞品",
+"看下数据") in operator voice.
 
 ## Color palette — strict
 
