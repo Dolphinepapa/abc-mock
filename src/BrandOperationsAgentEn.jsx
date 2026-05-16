@@ -2780,7 +2780,10 @@ function TopBar({ onOpenBrain, onOpenAdArch, locale, setLocale }) {
         <div className="flex items-center gap-2 ml-1 text-11 text-slate-600">
           <span className="text-slate-400">Yesterday (PDT)</span>
           <span className="text-slate-300">·</span>
-          <span className="font-mono font-medium text-slate-900">$28,420</span>
+          <span>
+            Sales{" "}
+            <span className="font-mono font-medium text-slate-900">$58,420</span>
+          </span>
           <span className="text-slate-300">·</span>
           <span>
             TACoS{" "}
