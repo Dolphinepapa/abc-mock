@@ -62,23 +62,23 @@ import InspectionDrawer from "./InspectionDrawer.jsx";
 
 const METRIC_DEFINITIONS = {
   attachRate:
-    "主产品购买者中,在指定窗口期内购买配套产品的比例(基于 Amazon Brand Analytics 重复购买行为计算)。",
-  ltv: "Lifetime Value · 单个客户在与品牌的生命周期内预期产生的总贡献毛利。",
-  blendedMargin: "整个产品线各产品毛利的加权平均值。",
+    "主产品购买者中,在指定窗口期内购买配套产品的比例(基于 Amazon Brand Analytics 重复购买行为计算)。国际通用术语:attach rate。",
+  ltv: "单个客户在与品牌的生命周期内预期产生的总贡献毛利。国际通用术语:LTV (Lifetime Value)。",
+  blendedMargin: "整个产品线各产品毛利的加权平均值。国际通用术语:blended margin。",
   tacos:
     "Total Advertising Cost of Sales · 广告花费 ÷ 总销售额(自然 + 广告归因)。",
   acos: "Advertising Cost of Sales · 广告花费 ÷ 仅广告归因销售额。",
   contributionMargin:
-    "销售价减去所有变动成本(COGS、履约、可归因单位广告花费)。",
-  sov: "Share of Voice · 品牌在指定关键词簇上的曝光份额。",
+    "销售价减去所有变动成本(COGS、履约、可归因单位广告花费)。国际通用术语:contribution margin。",
+  sov: "品牌在指定关键词簇上的曝光份额。国际通用术语:SOV (Share of Voice)。",
   cohortRevenue:
-    "指定客户群体(例如 5 月获取的客户)在指定时间窗口内产生的收入。",
+    "指定客户群体(例如 5 月获取的客户)在指定时间窗口内产生的收入。国际通用术语:cohort revenue。",
   costCapBidding:
-    "TikTok 竞价策略 · 设定目标单次转化成本,平台尽量靠近此目标(不保证达成;未达成不退费)。",
+    "TikTok 竞价策略 · 设定目标单次转化成本,平台尽量靠近此目标(不保证达成;未达成不退费)。国际通用术语:cost cap bidding。",
   incrementality:
-    "渠道对收入的因果贡献 — 即不投放该渠道时无法实现的收入。通过地区对照测试衡量。",
+    "渠道对收入的因果贡献 — 即不投放该渠道时无法实现的收入。通过地区对照测试衡量。国际通用术语:incrementality。",
   geographicHoldoutTest:
-    "在一组地区投放广告、在匹配的对照地区不投放,通过对比销售差异分离真实因果影响。",
+    "在一组地区投放广告、在匹配的对照地区不投放,通过对比销售差异分离真实因果影响。国际通用术语:geographic holdout test。",
   ctr: "Click-through Rate · 点击率 · 点击 ÷ 曝光。",
   cr: "Conversion Rate · 转化率 · 订单 ÷ 点击。",
   roas: "Return on Ad Spend · 广告投资回报 · 广告归因销售额 ÷ 广告花费。ROAS 与 ACoS 互为倒数(ROAS = 1 / ACoS)。",
@@ -194,7 +194,7 @@ const THREADS = [
         speaker: "user",
         timestamp: "May 13, 10:08",
         body:
-          "Henry's 刮胡刀产品线 — 刀头 3 个月换一次。需要保持产品线 blended margin ≥ 15% 的同时把整体销售额最大化。该如何测试和制定定价 + 营销策略?",
+          "Henry's 刮胡刀产品线 — 刀头 3 个月换一次。需要保持产品线综合毛利率 ≥ 15% 的同时把整体销售额最大化。该如何测试和制定定价 + 营销策略?",
         canvasLink: false,
       },
       {
@@ -956,7 +956,7 @@ const OMNICHANNEL = {
       status: "未启动",
     },
     explainer:
-      "TikTok 用户不是来直接买充电宝的 — TikTok 的价值在于通过场景化内容(露营 / 出差 / 演唱会等)扩大品类需求,下游被 Amazon / Walmart 收割。所以 TikTok 的 ROAS 不应只看当下 (in-period),要看是否带来下游 Amazon + Walmart 销售增量(即 incrementality)。",
+      "TikTok 用户不是来直接买充电宝的 — TikTok 的价值在于通过场景化内容(露营 / 出差 / 演唱会等)扩大品类需求,下游被 Amazon / Walmart 收割。所以 TikTok 的 ROAS 不应只看当下 (in-period),要看是否带来下游 Amazon + Walmart 销售增量(即增量效果)。",
     biddingMechanisms: [
       {
         name: "Cost Cap bidding",
@@ -1087,13 +1087,13 @@ const RAZOR_BLADE = {
     headroomPct: 23.1,
     priceFloorIfDrop: "$25.49",
     narrative:
-      "当前 blended margin 38.1%,约束下限 15%,余量 23.1pp。刮胡刀售价理论上可降至约 $25.49(单位毛利损失 $4.90,假设销量与捆绑率响应到位),同时产品线毛利 ≥ 15%。空间存在;但能否回本是 Phase 2 要回答的问题。",
+      "当前产品线综合毛利率 38.1%,约束下限 15%,余量 23.1pp。刮胡刀售价理论上可降至约 $25.49(单位毛利损失 $4.90,假设销量与捆绑率响应到位),同时产品线毛利 ≥ 15%。空间存在;但能否回本是 Phase 2 要回答的问题。",
   },
   precedent: {
     sku: "牙刷 · SKU-TB-22",
     period: "Q2 2025",
     summary:
-      "牙刷产品线(牙刷主体 + 替换刷头)曾做过类似 razor-and-blade 定价测试:主体降价 18%。净结果 · 产品线 90 天 cohort revenue +24.3%,blended margin 全程保持在 18% 下限以上。",
+      "牙刷产品线(牙刷主体 + 替换刷头)曾做过类似 razor-and-blade 定价测试:主体降价 18%。净结果 · 产品线 90 天队列收入 +24.3%,产品线综合毛利率全程保持在 18% 下限以上。",
     outcome: "90 天队列收入 +24.3%",
     method:
       "Amazon Manage Your Experiments · 牙刷 ASIN 价格 A/B 测试;替换刷头 ASIN 不变;结果以 90 天获客队列收入衡量。",
@@ -1113,7 +1113,7 @@ const RAZOR_BLADE = {
       sampleSize: "每组 ~12,400 刮胡刀买家 · 3 周爬坡",
       duration: "3 周",
       successMetric:
-        "每个获客 90 天 cohort revenue ≥ +15% vs 对照组 · 捆绑购买率衰减不超过 3pp",
+        "每个获客 90 天队列收入 ≥ +15% vs 对照组 · 捆绑购买率衰减不超过 3pp",
       marginCheck: {
         passes: true,
         detail:
@@ -1304,7 +1304,7 @@ const RAZOR_BLADE = {
       ["估算捆绑购买率", "76.4%", "78.2%", "78.6%"],
       ["牙刷主体月销量", "1,840", "2,610", "2,540"],
       ["队列收入指数(归一)", "100", "118.1", "124.3"],
-      ["Blended margin", "42.3%", "21.6%", "23.8%"],
+      ["产品线综合毛利率", "42.3%", "21.6%", "23.8%"],
       ["当时的下限", "18.0%", "18.0%", "18.0%"],
     ],
     definitionsList: [
@@ -2220,9 +2220,16 @@ function wrapMetric(label) {
     ACoS: METRIC_DEFINITIONS.acos,
     CTR: METRIC_DEFINITIONS.ctr,
     CR: METRIC_DEFINITIONS.cr,
-    SOV: METRIC_DEFINITIONS.sov,
-    LTV: METRIC_DEFINITIONS.ltv,
     ROAS: METRIC_DEFINITIONS.roas,
+    曝光份额: METRIC_DEFINITIONS.sov,
+    客户终身价值: METRIC_DEFINITIONS.ltv,
+    队列收入: METRIC_DEFINITIONS.cohortRevenue,
+    产品线综合毛利率: METRIC_DEFINITIONS.blendedMargin,
+    绑定购买率: METRIC_DEFINITIONS.attachRate,
+    贡献毛利: METRIC_DEFINITIONS.contributionMargin,
+    增量效果: METRIC_DEFINITIONS.incrementality,
+    分地区对照测试: METRIC_DEFINITIONS.geographicHoldoutTest,
+    成本上限竞价: METRIC_DEFINITIONS.costCapBidding,
     月曝光: METRIC_DEFINITIONS.impressions,
     转化率: METRIC_DEFINITIONS.cr,
   };
@@ -4870,7 +4877,7 @@ function TikTokInsightCard({ insight }) {
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
             处理方式 ·{" "}
             <MetricTerm definition={METRIC_DEFINITIONS.geographicHoldoutTest}>
-              Geographic holdout test
+              分地区对照测试
             </MetricTerm>
           </div>
           <div className="text-slate-700 leading-relaxed">
@@ -5095,7 +5102,7 @@ function OmnichannelCanvas() {
               TikTok 用户不是来直接买充电宝的 — TikTok 的价值在于通过场景化内容(露营 / 出差 / 演唱会等)扩大品类需求,下游被 Amazon / Walmart 收割。所以 TikTok 的{" "}
               {wrapMetric("ROAS")} 不应只看当下 (in-period),要看是否带来下游 Amazon + Walmart 销售增量(即{" "}
               <MetricTerm definition={METRIC_DEFINITIONS.incrementality}>
-                incrementality
+                增量效果
               </MetricTerm>
               )。
             </div>
@@ -5277,7 +5284,7 @@ function CompetitorBaselineCard({ competitor }) {
           <span className="text-slate-500">
             估算{" "}
             <MetricTerm definition={METRIC_DEFINITIONS.attachRate}>
-              捆绑购买率
+              绑定购买率
             </MetricTerm>
           </span>
           <span className="font-mono text-slate-900">{competitor.estAttachRatePct}</span>
@@ -5285,7 +5292,7 @@ function CompetitorBaselineCard({ competitor }) {
         <div className="flex items-baseline justify-between">
           <span className="text-slate-500">
             估算{" "}
-            <MetricTerm definition={METRIC_DEFINITIONS.ltv}>LTV</MetricTerm>
+            <MetricTerm definition={METRIC_DEFINITIONS.ltv}>客户终身价值</MetricTerm>
           </span>
           <span className="font-mono text-emerald-700 font-semibold">{competitor.estLtv}</span>
         </div>
@@ -5362,7 +5369,7 @@ function HeadroomBar({ currentPct, floorPct, priceFloorIfDrop }) {
       <div className="text-11 text-slate-500 leading-relaxed">
         刮胡刀挂牌价理论上可降至约{" "}
         <span className="font-mono text-slate-900">{priceFloorIfDrop}</span>{" "}
-        触及产品线 blended margin 下限(假设销量与捆绑购买率响应到位)。
+        触及产品线综合毛利率下限(假设销量与捆绑购买率响应到位)。
       </div>
     </div>
   );
@@ -5602,7 +5609,7 @@ function RazorBladeCanvas() {
             {/* Section A: Economics */}
             <div>
               <SectionLabel kicker="我方经济结构 · 最近 30 天">
-                A 节 · 刮胡刀 + 刀头单位经济
+                先看自己
               </SectionLabel>
               <div className="grid grid-cols-2 gap-3">
                 <EconomicsCard
@@ -5628,7 +5635,7 @@ function RazorBladeCanvas() {
                   <div className="flex items-baseline justify-between">
                     <span className="text-slate-700">
                       <MetricTerm definition={METRIC_DEFINITIONS.attachRate}>
-                        捆绑购买率
+                        绑定购买率
                       </MetricTerm>
                       <span className="text-11 text-slate-500 ml-1.5">
                         · {R.economics.attachRateWindow}
@@ -5652,7 +5659,7 @@ function RazorBladeCanvas() {
                   <div className="flex items-baseline justify-between">
                     <span className="text-slate-700">
                       <MetricTerm definition={`${METRIC_DEFINITIONS.ltv} 公式 · ${R.economics.ltvFormula}。`}>
-                        LTV
+                        客户终身价值
                       </MetricTerm>
                       <span className="text-11 text-slate-500 ml-1.5">
                         · 每位获客刮胡刀买家
@@ -5666,7 +5673,7 @@ function RazorBladeCanvas() {
                     <span className="text-slate-700">
                       产品线{" "}
                       <MetricTerm definition={METRIC_DEFINITIONS.blendedMargin}>
-                        blended margin
+                        产品线综合毛利率
                       </MetricTerm>
                     </span>
                     <span className="font-mono text-emerald-700 font-semibold">
@@ -5683,7 +5690,7 @@ function RazorBladeCanvas() {
             {/* Section B: Competitor baselines */}
             <div>
               <SectionLabel kicker="价格爬取 + Amazon Brand Analytics 推断">
-                B 节 · 竞品基线
+                看下竞品
               </SectionLabel>
               <div className="grid grid-cols-2 gap-3">
                 {R.competitors.map((c, i) => (
@@ -5729,7 +5736,7 @@ function RazorBladeCanvas() {
             {/* Section C: Headroom */}
             <div>
               <SectionLabel kicker="毛利下限 15%">
-                C 节 · 余量计算
+                还有多少空间
               </SectionLabel>
               <Card className="p-5">
                 <HeadroomBar
