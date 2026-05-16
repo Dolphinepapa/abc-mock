@@ -108,6 +108,9 @@ const THREADS = [
       },
       {
         speaker: "user",
+        name: "Devon Park",
+        initials: "DP",
+        role: "Sr. Growth Manager",
         timestamp: "just now",
         body: "What's the recommended response?",
         canvasLink: false,
@@ -6618,6 +6621,8 @@ function ThreadCard({ thread, active, onSelect }) {
 
 function ThreadTurn({ turn, thread }) {
   const isAgent = turn.speaker === "agent";
+  const userInitials = turn.initials || thread.initials || "U";
+  const userName = turn.name || thread.initiatorName;
   return (
     <div className="flex items-start gap-2">
       {isAgent ? (
@@ -6626,13 +6631,13 @@ function ThreadTurn({ turn, thread }) {
         </div>
       ) : (
         <div className="w-5 h-5 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-10 font-semibold text-slate-700 flex-shrink-0">
-          {thread.initials || "U"}
+          {userInitials}
         </div>
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
           <span className="text-11 font-medium text-slate-900">
-            {isAgent ? "Agent" : thread.initiatorName}
+            {isAgent ? "Agent" : userName}
           </span>
           <span className="text-10 text-slate-400 font-mono">
             {turn.timestamp}
