@@ -45,10 +45,35 @@ import {
   Area,
   ReferenceLine,
 } from "recharts";
+import MetricTerm from "./MetricTerm.jsx";
+import InspectionDrawer from "./InspectionDrawer.jsx";
 
 /* ────────────────────────────────────────────────────────────────────────── */
 /*  Mock data                                                                 */
 /* ────────────────────────────────────────────────────────────────────────── */
+
+const METRIC_DEFINITIONS = {
+  attachRate:
+    "主产品购买者中,在指定窗口期内购买配套产品的比例(基于 Amazon Brand Analytics 重复购买行为计算)。",
+  ltv: "Lifetime Value · 单个客户在与品牌的生命周期内预期产生的总贡献毛利。",
+  blendedMargin: "整个产品线各产品毛利的加权平均值。",
+  tacos:
+    "Total Advertising Cost of Sales · 广告花费 ÷ 总销售额(自然 + 广告归因)。",
+  acos: "Advertising Cost of Sales · 广告花费 ÷ 仅广告归因销售额。",
+  contributionMargin:
+    "销售价减去所有变动成本(COGS、履约、可归因单位广告花费)。",
+  sov: "Share of Voice · 品牌在指定关键词簇上的曝光份额。",
+  cohortRevenue:
+    "指定客户群体(例如 5 月获取的客户)在指定时间窗口内产生的收入。",
+  costCapBidding:
+    "TikTok 竞价策略 · 设定目标单次转化成本,平台尽量靠近此目标(不保证达成;未达成不退费)。",
+  incrementality:
+    "渠道对收入的因果贡献 — 即不投放该渠道时无法实现的收入。通过地区对照测试衡量。",
+  geographicHoldoutTest:
+    "在一组地区投放广告、在匹配的对照地区不投放,通过对比销售差异分离真实因果影响。",
+  ctr: "Click-through Rate · 点击率 · 点击 ÷ 曝光。",
+  cr: "Conversion Rate · 转化率 · 订单 ÷ 点击。",
+};
 
 const CHAT_MESSAGES = [
   {
