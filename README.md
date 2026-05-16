@@ -2,6 +2,8 @@
 
 High-fidelity UI mock for the XNURTA Brand Operations Agent canvas. Single-page React app built with Vite + Tailwind. Intended for stakeholder review (PRFAQ Appendix A9).
 
+**Live:** https://abc-mock.vercel.app — deploys automatically on push to `main`.
+
 ## Quick start (local)
 
 ```bash
