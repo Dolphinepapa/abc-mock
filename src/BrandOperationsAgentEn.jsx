@@ -2046,15 +2046,131 @@ const COMPANY_BRAIN = {
   decisionClasses: 47,
   playbooks: 19,
   capturedPatterns: 142,
-  recentEntries: [
+
+  identity: {
+    activeUserId: "maya",
+    users: [
+      {
+        id: "maya",
+        name: "Maya Chen",
+        initials: "MC",
+        role: "VP, eCommerce",
+        level: "L7",
+        clearance: "Sensitive",
+        clearanceLabel: "Sensitive",
+      },
+      {
+        id: "devon",
+        name: "Devon Park",
+        initials: "DP",
+        role: "Sr. Growth Manager",
+        level: "L6",
+        clearance: "Internal",
+        clearanceLabel: "Internal",
+      },
+      {
+        id: "analyst",
+        name: "(Demo) Analyst",
+        initials: "DA",
+        role: "Analyst",
+        level: "L4",
+        clearance: "Public",
+        clearanceLabel: "Public",
+      },
+    ],
+  },
+
+  recentActivity: [
     {
-      name: "Pattern · Sustained brand-ad investment → CPC decline",
-      added: "Confidence 76% · 12 brand-ad scale-up cases · avg CPC drop 18.4% · Internal",
+      id: "act-pattern-cpc",
+      kind: "pattern_strengthened",
+      title: "Pattern · Sustained brand-ad investment → CPC decline",
+      summary: "12 brand-ad scale-up cases · avg CPC drop 18.4%",
+      addedAt: "May 14, 14:22",
+      sensitivity: "Internal",
+      detail: {
+        sourceCount: 12,
+        confidencePct: 76,
+        sourceNote: "Source cases: SKU-117 Q3 2024, SKU-toothbrush Q2 2025, SKU-A Q1 2026, plus 9 more scale-up windows.",
+        appliedIn: ["Omnichannel Amazon plan", "Omnichannel Walmart SB expansion"],
+        definition: "When brand-ad spend sustains for 8+ weeks at 2x baseline, CPC trends down as relevance-driven impressions replace bid-driven ones.",
+      },
     },
-    { name: "Best-seller capture · SB-layer pattern", added: "May 2 · from SKU-prior-1 outcome" },
-    { name: "Peak-season SOV defense · scaling SKUs", added: "Apr 28 · from 2025 Q4 retrospective" },
-    { name: "Funnel bottleneck · CTR resolution playbook", added: "Apr 21 · from SKU-B outcome" },
-    { name: "Launch ramp curve · price band $120–180", added: "Apr 14 · from SKU-prior-5 outcome" },
+    {
+      id: "act-extract-q4",
+      kind: "extraction",
+      title: "Q4-2025-Retrospective.pdf — extracted 3 new patterns",
+      summary: "Razor-blade methodology, peak-season SOV defense, and dayparting-on-saturation patterns distilled",
+      addedAt: "May 12, 09:47",
+      sensitivity: "Sensitive",
+      detail: {
+        sourceCount: 1,
+        confidencePct: 72,
+        sourceNote: "Source: Q4-2025-Retrospective.pdf · 38 pages · uploaded by Maya Chen.",
+        appliedIn: ["Razor-blade plan · SKU-A bundle", "Peak SOV defense playbook"],
+        definition: "Three discrete patterns extracted, each backed by at least 4 prior SKU outcomes within the doc.",
+      },
+    },
+    {
+      id: "act-ingest-walmart",
+      kind: "ingestion",
+      title: "Walmart Connect API · ingested 90d historical",
+      summary: "12,400 events · campaign, keyword, and SB-creative performance through May 9",
+      addedAt: "May 10, 03:12",
+      sensitivity: "Internal",
+      detail: {
+        sourceCount: 12400,
+        confidencePct: 81,
+        sourceNote: "Source: Walmart Connect OAuth scope read-only · backfill window Feb 9 — May 9, 2026.",
+        appliedIn: ["Omnichannel Walmart SB expansion", "Walmart bid-pacing baseline"],
+        definition: "12,400 events normalized to the same schema as Amazon Ads data, joined on ASIN / GTIN where available.",
+      },
+    },
+    {
+      id: "act-revoke-dayparting",
+      kind: "revocation",
+      title: "Decision class revoked · dayparting on saturated impression share",
+      summary: "Maya revoked agent autonomy here; impression-share gain was 0.4 pt last 4 weeks, not worth the noise",
+      addedAt: "May 8, 16:08",
+      sensitivity: "Sensitive",
+      detail: {
+        sourceCount: 4,
+        confidencePct: 68,
+        sourceNote: "Revoked by Maya Chen after Q1 2026 review. Class was active 11 weeks; net IS lift 0.4 pt.",
+        appliedIn: ["SKU-A (active before revoke)", "SKU-117 (active before revoke)"],
+        definition: "Agent will require explicit approval for dayparting changes on SKUs at >85% impression share going forward.",
+      },
+    },
+    {
+      id: "act-flag-q4-diverge",
+      kind: "flagged",
+      title: "Pattern flagged for revalidation · Q4 actuals diverged 14%",
+      summary: "Launch ramp curve underdelivered vs forecast; cluster needs fresh evidence before reuse",
+      addedAt: "May 5, 11:30",
+      sensitivity: "Confidential",
+      detail: {
+        sourceCount: 3,
+        confidencePct: 62,
+        sourceNote: "Q4 2025 actuals across 3 launch SKUs showed avg 14% gap vs pattern prediction (range 9–21%).",
+        appliedIn: ["Currently paused — no active references"],
+        definition: "Pattern stays in the brain but is gated: agent will flag the divergence whenever this pattern would be cited.",
+      },
+    },
+    {
+      id: "act-ingest-bsr",
+      kind: "extraction",
+      title: "Walmart competitor BSR scrape · 4 weeks ingested",
+      summary: "Top-50 best-sellers in Lighting, Bedroom Furniture, Bath captured at daily granularity",
+      addedAt: "May 3, 22:55",
+      sensitivity: "Internal",
+      detail: {
+        sourceCount: 4200,
+        confidencePct: 74,
+        sourceNote: "Scrape window Apr 6 — May 3, 2026. 4,200 daily rank snapshots across 3 subcategories.",
+        appliedIn: ["Defense case · BSR slippage detection", "Razor-blade plan competitor map"],
+        definition: "Daily BSR snapshots stored as time series; agent now monitors rank delta thresholds (≥3 positions/week) for alerts.",
+      },
+    },
   ],
 };
 
@@ -7781,60 +7897,291 @@ function AdArchitectureContent({ panelWidth }) {
   );
 }
 
+const SENSITIVITY_TONE = {
+  Public: "slate",
+  Internal: "blue",
+  Sensitive: "emerald",
+  Confidential: "rose",
+};
+
+const CLEARANCE_TONE = {
+  Public: "slate",
+  Internal: "blue",
+  Sensitive: "emerald",
+  Confidential: "rose",
+};
+
+function BrainSection({ id, title, count, defaultOpen = false, children }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <section id={id} className="border-b border-slate-200">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center gap-2 px-4 py-3 hover:bg-slate-50 text-left"
+      >
+        <ChevronRight
+          className={`w-4 h-4 text-slate-500 transition-transform ${open ? "rotate-90" : ""}`}
+        />
+        <span className="text-sm font-semibold text-slate-900">{title}</span>
+        {typeof count === "number" && (
+          <span className="ml-auto inline-flex items-center justify-center min-w-[24px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-11 font-mono tabular-nums">
+            {count}
+          </span>
+        )}
+      </button>
+      {open && (
+        <div className="border-t border-slate-200 px-4 pb-4 pt-3">
+          {children}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function IdentityCard({ identity, onSwitchUser }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const active = identity.users.find((u) => u.id === identity.activeUserId) || identity.users[0];
+  return (
+    <div className="px-4 py-4 border-b border-slate-200 bg-white">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-700 font-semibold text-sm flex items-center justify-center flex-shrink-0">
+          {active.initials}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-semibold text-slate-900">{active.name}</div>
+          <div className="text-11 text-slate-600 mt-0.5">
+            {active.role} · {active.level}
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Clearance
+            </span>
+            <Pill tone={CLEARANCE_TONE[active.clearance] || "slate"}>
+              {active.clearanceLabel || active.clearance}
+            </Pill>
+          </div>
+          <div className="mt-3 relative">
+            <button
+              type="button"
+              onClick={() => setDropdownOpen((v) => !v)}
+              className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
+            >
+              Switch demo user
+              <ChevronDown className="w-3 h-3" />
+            </button>
+            {dropdownOpen && (
+              <div className="absolute left-0 top-full mt-1 w-64 bg-white border border-slate-200 rounded-md shadow-lg z-20">
+                {identity.users.map((u) => {
+                  const isActive = u.id === active.id;
+                  return (
+                    <button
+                      key={u.id}
+                      type="button"
+                      onClick={() => {
+                        onSwitchUser(u.id);
+                        setDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-slate-50 border-b border-slate-100 last:border-b-0 ${
+                        isActive ? "bg-slate-50" : ""
+                      }`}
+                    >
+                      <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-semibold text-11 flex items-center justify-center flex-shrink-0">
+                        {u.initials}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium text-slate-900">
+                          {u.name}
+                        </div>
+                        <div className="text-10 text-slate-500">
+                          {u.level} · {u.clearanceLabel || u.clearance}
+                        </div>
+                      </div>
+                      {isActive && <Check className="w-3.5 h-3.5 text-emerald-600" />}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BrainStatStrip() {
+  return (
+    <div className="grid grid-cols-3 gap-3">
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          Decision classes
+        </div>
+        <div className="text-xl font-mono tabular-nums font-semibold text-slate-900 mt-1">
+          {COMPANY_BRAIN.decisionClasses}
+        </div>
+      </div>
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          Playbooks
+        </div>
+        <div className="text-xl font-mono tabular-nums font-semibold text-slate-900 mt-1">
+          {COMPANY_BRAIN.playbooks}
+        </div>
+      </div>
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          Captured patterns
+        </div>
+        <div className="text-xl font-mono tabular-nums font-semibold text-slate-900 mt-1">
+          {COMPANY_BRAIN.capturedPatterns}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityIcon({ kind }) {
+  if (kind === "extraction") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+        <FileText className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  if (kind === "ingestion") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+        <Activity className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  if (kind === "revocation") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-slate-700 text-white flex items-center justify-center flex-shrink-0">
+        <X className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  if (kind === "flagged") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
+        <AlertCircle className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  return (
+    <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+      <Brain className="w-3.5 h-3.5" />
+    </div>
+  );
+}
+
+function RecentActivityList({ entries, onSelect }) {
+  const wrapSummary = (text) => {
+    const tokens = ["CPC", "ROAS", "TACoS", "CTR", "CR", "SOV", "LTV", "ACoS"];
+    const pattern = new RegExp(`\\b(${tokens.join("|")})\\b`, "g");
+    const parts = text.split(pattern);
+    return parts.map((part, i) =>
+      tokens.includes(part) ? (
+        <span key={i}>{wrapMetric(part)}</span>
+      ) : (
+        <span key={i}>{part}</span>
+      ),
+    );
+  };
+  return (
+    <div className="space-y-2">
+      {entries.map((e) => (
+        <button
+          key={e.id}
+          type="button"
+          onClick={() => onSelect(e)}
+          className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 flex items-start gap-3"
+        >
+          <ActivityIcon kind={e.kind} />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium text-slate-900 leading-snug">
+              {e.title}
+            </div>
+            <div className="text-11 text-slate-600 mt-1 leading-relaxed">
+              {wrapSummary(e.summary)}
+            </div>
+            <div className="mt-1.5 flex items-center gap-2">
+              <Pill tone={SENSITIVITY_TONE[e.sensitivity] || "slate"}>
+                {e.sensitivity}
+              </Pill>
+              <span className="text-10 text-slate-500 font-mono tabular-nums">
+                {e.addedAt}
+              </span>
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0 mt-1" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function CompanyBrainContent() {
+  const [activeUserId, setActiveUserId] = useState(COMPANY_BRAIN.identity.activeUserId);
+  const [openActivity, setOpenActivity] = useState(null);
+  const identity = { ...COMPANY_BRAIN.identity, activeUserId };
+
+  const drawerRows = openActivity
+    ? [
+        ["Source count", String(openActivity.detail.sourceCount)],
+        ["Confidence", `${openActivity.detail.confidencePct}%`],
+        ["Applied in", openActivity.detail.appliedIn.join(", ")],
+        ["Sensitivity", openActivity.sensitivity],
+        ["Recorded", openActivity.addedAt],
+      ]
+    : [];
+
   return (
     <>
-      <div className="px-5 py-4 border-b border-slate-200 flex-shrink-0">
-        <div className="text-xs text-slate-600 leading-relaxed">
-          ABC Home Goods's accumulated operations methodology. Every
-          approved decision, captured pattern, and prior playbook is owned by
-          the brand and portable.
+      <div className="flex-1 overflow-y-auto">
+        <IdentityCard identity={identity} onSwitchUser={setActiveUserId} />
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
+          <BrainStatStrip />
         </div>
+        <BrainSection
+          id="recent-activity"
+          title="Recent activity"
+          count={COMPANY_BRAIN.recentActivity.length}
+          defaultOpen={true}
+        >
+          <RecentActivityList
+            entries={COMPANY_BRAIN.recentActivity}
+            onSelect={setOpenActivity}
+          />
+        </BrainSection>
       </div>
 
-      <div className="px-5 py-4 border-b border-slate-200 grid grid-cols-3 gap-3 flex-shrink-0">
-        <div>
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            Decision classes
-          </div>
-          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-            {COMPANY_BRAIN.decisionClasses}
-          </div>
-        </div>
-        <div>
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            Playbooks
-          </div>
-          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-            {COMPANY_BRAIN.playbooks}
-          </div>
-        </div>
-        <div>
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            Captured patterns
-          </div>
-          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-            {COMPANY_BRAIN.capturedPatterns}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto px-5 py-4">
-        <SectionLabel>Recent entries</SectionLabel>
-        <div className="space-y-2">
-          {COMPANY_BRAIN.recentEntries.map((e, i) => (
-            <div
-              key={i}
-              className="border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 cursor-pointer"
-            >
-              <div className="text-sm font-medium text-slate-900">
-                {e.name}
-              </div>
-              <div className="text-xs text-slate-500 mt-0.5">{e.added}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <InspectionDrawer
+        open={!!openActivity}
+        onClose={() => setOpenActivity(null)}
+        title={openActivity?.title}
+        methodologyDescription={
+          openActivity
+            ? `${openActivity.summary}. ${openActivity.detail.sourceNote}`
+            : undefined
+        }
+        tableHeaders={["Field", "Value"]}
+        tableRows={drawerRows}
+        columnWidths={["40%", "60%"]}
+        definitionsList={
+          openActivity
+            ? [
+                {
+                  term: "What this entry means",
+                  definition: openActivity.detail.definition,
+                },
+              ]
+            : undefined
+        }
+        definitionsLabel="Detail"
+      />
     </>
   );
 }

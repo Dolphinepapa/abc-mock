@@ -2033,15 +2033,137 @@ const COMPANY_BRAIN = {
   decisionClasses: 47,
   playbooks: 19,
   capturedPatterns: 142,
-  recentEntries: [
+
+  identity: {
+    activeUserId: "maya",
+    users: [
+      {
+        id: "maya",
+        name: "Maya Chen",
+        initials: "MC",
+        role: "电商副总裁",
+        level: "L7",
+        clearance: "Sensitive",
+        clearanceLabel: "敏感",
+      },
+      {
+        id: "devon",
+        name: "Devon Park",
+        initials: "DP",
+        role: "高级增长经理",
+        level: "L6",
+        clearance: "Internal",
+        clearanceLabel: "内部",
+      },
+      {
+        id: "analyst",
+        name: "(Demo) Analyst",
+        initials: "DA",
+        role: "分析师",
+        level: "L4",
+        clearance: "Public",
+        clearanceLabel: "公开",
+      },
+    ],
+  },
+
+  recentActivity: [
     {
-      name: "Pattern · 品牌广告持续投放 → CPC 下行",
-      added: "Confidence 76% · 12 brand-ad scale-up 案例 · 平均 CPC 降幅 18.4% · Internal",
+      id: "act-pattern-cpc",
+      kind: "pattern_strengthened",
+      title: "Pattern · 品牌广告持续投放 → CPC 下行",
+      summary: "12 个 brand-ad scale-up 案例 · 平均 CPC 降幅 18.4%",
+      addedAt: "May 14, 14:22",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      detail: {
+        sourceCount: 12,
+        confidencePct: 76,
+        sourceNote: "源案例:SKU-117 2024 Q3、SKU-toothbrush 2025 Q2、SKU-A 2026 Q1,另含 9 个 scale-up 窗口。",
+        appliedIn: ["全渠道 Amazon 计划", "全渠道 Walmart SB 扩量"],
+        definition: "品牌广告在 2 倍基线水平持续投放 8 周以上时,CPC 随相关性驱动的曝光替代竞价驱动的曝光而下行。",
+      },
     },
-    { name: "争取 BS · SB 叠加层模式", added: "May 2 · 来自 SKU-prior-1 的结果" },
-    { name: "旺季 SOV 防御 · 增长期 SKU", added: "Apr 28 · 来自 2025 Q4 复盘" },
-    { name: "漏斗瓶颈 · CTR 解决方案打法", added: "Apr 21 · 来自 SKU-B 的结果" },
-    { name: "上线爬坡曲线 · 价格带 $120–180", added: "Apr 14 · 来自 SKU-prior-5 的结果" },
+    {
+      id: "act-extract-q4",
+      kind: "extraction",
+      title: "Q4-2025-Retrospective.pdf 提炼出 3 个新模式",
+      summary: "razor-blade 方法、旺季 SOV 防御、饱和 IS 的 dayparting 三个模式被沉淀",
+      addedAt: "May 12, 09:47",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      detail: {
+        sourceCount: 1,
+        confidencePct: 72,
+        sourceNote: "来源:Q4-2025-Retrospective.pdf · 38 页 · 由 Maya Chen 上传。",
+        appliedIn: ["razor-blade 计划 · SKU-A 套装", "旺季 SOV 防御打法"],
+        definition: "三个模式各自由文档内 4 个以上历史 SKU 结果支撑。",
+      },
+    },
+    {
+      id: "act-ingest-walmart",
+      kind: "ingestion",
+      title: "Walmart Connect API ingested 90d historical · 12,400 events",
+      summary: "12,400 个事件 · 截至 5 月 9 日的 campaign、关键词、SB 创意表现",
+      addedAt: "May 10, 03:12",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      detail: {
+        sourceCount: 12400,
+        confidencePct: 81,
+        sourceNote: "来源:Walmart Connect OAuth 只读权限 · 回填窗口 2026/2/9 — 2026/5/9。",
+        appliedIn: ["全渠道 Walmart SB 扩量", "Walmart 出价节奏基线"],
+        definition: "12,400 个事件已规范化到与 Amazon Ads 数据相同的 schema,可用的部分按 ASIN / GTIN 进行 join。",
+      },
+    },
+    {
+      id: "act-revoke-dayparting",
+      kind: "revocation",
+      title: "决策类别已撤回 · 饱和曝光份额上的 dayparting",
+      summary: "Maya 撤回了 agent 的自主权限;过去 4 周曝光份额仅提升 0.4 pt,信号收益太小",
+      addedAt: "May 8, 16:08",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      detail: {
+        sourceCount: 4,
+        confidencePct: 68,
+        sourceNote: "Maya Chen 在 2026 Q1 复盘后撤回。该类别活跃 11 周,IS 净提升 0.4 pt。",
+        appliedIn: ["SKU-A(撤回前活跃)", "SKU-117(撤回前活跃)"],
+        definition: "对曝光份额 >85% 的 SKU 的 dayparting 调整,agent 今后需要明确批准。",
+      },
+    },
+    {
+      id: "act-flag-q4-diverge",
+      kind: "flagged",
+      title: "模式被标记需重新验证 · Q4 实际偏离 14%",
+      summary: "上线爬坡曲线低于预测;簇内需要新证据后才能复用",
+      addedAt: "May 5, 11:30",
+      sensitivity: "Confidential",
+      sensitivityLabel: "机密",
+      detail: {
+        sourceCount: 3,
+        confidencePct: 62,
+        sourceNote: "2025 Q4 三个新品 SKU 实际表现较模式预测平均偏离 14%(范围 9–21%)。",
+        appliedIn: ["暂停中 — 当前无活跃引用"],
+        definition: "模式保留在 brain 中但已被门控:agent 每次引用该模式时会同时标出偏离。",
+      },
+    },
+    {
+      id: "act-ingest-bsr",
+      kind: "extraction",
+      title: "Walmart competitor BSR scrape · 4 weeks ingested",
+      summary: "Lighting、Bedroom Furniture、Bath 三个类目 Top-50 按日抓取",
+      addedAt: "May 3, 22:55",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      detail: {
+        sourceCount: 4200,
+        confidencePct: 74,
+        sourceNote: "抓取窗口 2026/4/6 — 2026/5/3。3 个子类目共 4,200 条日排名快照。",
+        appliedIn: ["防御案例 · BSR 滑落检测", "razor-blade 计划竞品图谱"],
+        definition: "日级 BSR 快照按时间序列存储;agent 现已监控排名变化阈值(每周 ≥3 位)用于告警。",
+      },
+    },
   ],
 };
 
@@ -7746,58 +7868,291 @@ function AdArchitectureContent({ panelWidth }) {
   );
 }
 
+const SENSITIVITY_TONE = {
+  Public: "slate",
+  Internal: "blue",
+  Sensitive: "emerald",
+  Confidential: "rose",
+};
+
+const CLEARANCE_TONE = {
+  Public: "slate",
+  Internal: "blue",
+  Sensitive: "emerald",
+  Confidential: "rose",
+};
+
+function BrainSection({ id, title, count, defaultOpen = false, children }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <section id={id} className="border-b border-slate-200">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center gap-2 px-4 py-3 hover:bg-slate-50 text-left"
+      >
+        <ChevronRight
+          className={`w-4 h-4 text-slate-500 transition-transform ${open ? "rotate-90" : ""}`}
+        />
+        <span className="text-sm font-semibold text-slate-900">{title}</span>
+        {typeof count === "number" && (
+          <span className="ml-auto inline-flex items-center justify-center min-w-[24px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-11 font-mono tabular-nums">
+            {count}
+          </span>
+        )}
+      </button>
+      {open && (
+        <div className="border-t border-slate-200 px-4 pb-4 pt-3">
+          {children}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function IdentityCard({ identity, onSwitchUser }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const active = identity.users.find((u) => u.id === identity.activeUserId) || identity.users[0];
+  return (
+    <div className="px-4 py-4 border-b border-slate-200 bg-white">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-700 font-semibold text-sm flex items-center justify-center flex-shrink-0">
+          {active.initials}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-semibold text-slate-900">{active.name}</div>
+          <div className="text-11 text-slate-600 mt-0.5">
+            {active.role} · {active.level}
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              权限
+            </span>
+            <Pill tone={CLEARANCE_TONE[active.clearance] || "slate"}>
+              {active.clearanceLabel || active.clearance}
+            </Pill>
+          </div>
+          <div className="mt-3 relative">
+            <button
+              type="button"
+              onClick={() => setDropdownOpen((v) => !v)}
+              className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
+            >
+              切换演示用户
+              <ChevronDown className="w-3 h-3" />
+            </button>
+            {dropdownOpen && (
+              <div className="absolute left-0 top-full mt-1 w-64 bg-white border border-slate-200 rounded-md shadow-lg z-20">
+                {identity.users.map((u) => {
+                  const isActive = u.id === active.id;
+                  return (
+                    <button
+                      key={u.id}
+                      type="button"
+                      onClick={() => {
+                        onSwitchUser(u.id);
+                        setDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-slate-50 border-b border-slate-100 last:border-b-0 ${
+                        isActive ? "bg-slate-50" : ""
+                      }`}
+                    >
+                      <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 font-semibold text-11 flex items-center justify-center flex-shrink-0">
+                        {u.initials}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium text-slate-900">
+                          {u.name}
+                        </div>
+                        <div className="text-10 text-slate-500">
+                          {u.level} · {u.clearanceLabel || u.clearance}
+                        </div>
+                      </div>
+                      {isActive && <Check className="w-3.5 h-3.5 text-emerald-600" />}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BrainStatStrip() {
+  return (
+    <div className="grid grid-cols-3 gap-3">
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          决策类别
+        </div>
+        <div className="text-xl font-mono tabular-nums font-semibold text-slate-900 mt-1">
+          {COMPANY_BRAIN.decisionClasses}
+        </div>
+      </div>
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          打法库
+        </div>
+        <div className="text-xl font-mono tabular-nums font-semibold text-slate-900 mt-1">
+          {COMPANY_BRAIN.playbooks}
+        </div>
+      </div>
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          已捕获模式
+        </div>
+        <div className="text-xl font-mono tabular-nums font-semibold text-slate-900 mt-1">
+          {COMPANY_BRAIN.capturedPatterns}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ActivityIcon({ kind }) {
+  if (kind === "extraction") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+        <FileText className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  if (kind === "ingestion") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+        <Activity className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  if (kind === "revocation") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-slate-700 text-white flex items-center justify-center flex-shrink-0">
+        <X className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  if (kind === "flagged") {
+    return (
+      <div className="w-7 h-7 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
+        <AlertCircle className="w-3.5 h-3.5" />
+      </div>
+    );
+  }
+  return (
+    <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+      <Brain className="w-3.5 h-3.5" />
+    </div>
+  );
+}
+
+function RecentActivityList({ entries, onSelect }) {
+  const wrapSummary = (text) => {
+    const tokens = ["CPC", "ROAS", "TACoS", "CTR", "CR", "SOV", "LTV", "ACoS"];
+    const pattern = new RegExp(`\\b(${tokens.join("|")})\\b`, "g");
+    const parts = text.split(pattern);
+    return parts.map((part, i) =>
+      tokens.includes(part) ? (
+        <span key={i}>{wrapMetric(part)}</span>
+      ) : (
+        <span key={i}>{part}</span>
+      ),
+    );
+  };
+  return (
+    <div className="space-y-2">
+      {entries.map((e) => (
+        <button
+          key={e.id}
+          type="button"
+          onClick={() => onSelect(e)}
+          className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 flex items-start gap-3"
+        >
+          <ActivityIcon kind={e.kind} />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium text-slate-900 leading-snug">
+              {e.title}
+            </div>
+            <div className="text-11 text-slate-600 mt-1 leading-relaxed">
+              {wrapSummary(e.summary)}
+            </div>
+            <div className="mt-1.5 flex items-center gap-2">
+              <Pill tone={SENSITIVITY_TONE[e.sensitivity] || "slate"}>
+                {e.sensitivityLabel || e.sensitivity}
+              </Pill>
+              <span className="text-10 text-slate-500 font-mono tabular-nums">
+                {e.addedAt}
+              </span>
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0 mt-1" />
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function CompanyBrainContent() {
+  const [activeUserId, setActiveUserId] = useState(COMPANY_BRAIN.identity.activeUserId);
+  const [openActivity, setOpenActivity] = useState(null);
+  const identity = { ...COMPANY_BRAIN.identity, activeUserId };
+
+  const drawerRows = openActivity
+    ? [
+        ["源数量", String(openActivity.detail.sourceCount)],
+        ["置信度", `${openActivity.detail.confidencePct}%`],
+        ["已应用于", openActivity.detail.appliedIn.join("、")],
+        ["敏感度", openActivity.sensitivityLabel || openActivity.sensitivity],
+        ["记录时间", openActivity.addedAt],
+      ]
+    : [];
+
   return (
     <>
-      <div className="px-5 py-4 border-b border-slate-200 flex-shrink-0">
-        <div className="text-xs text-slate-600 leading-relaxed">
-          ABC Home Goods 沉淀的运营方法论。所有已批准的决策、已捕获的模式、过往打法均归品牌所有,可随时迁移。
+      <div className="flex-1 overflow-y-auto">
+        <IdentityCard identity={identity} onSwitchUser={setActiveUserId} />
+        <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
+          <BrainStatStrip />
         </div>
+        <BrainSection
+          id="recent-activity"
+          title="近期动态"
+          count={COMPANY_BRAIN.recentActivity.length}
+          defaultOpen={true}
+        >
+          <RecentActivityList
+            entries={COMPANY_BRAIN.recentActivity}
+            onSelect={setOpenActivity}
+          />
+        </BrainSection>
       </div>
 
-      <div className="px-5 py-4 border-b border-slate-200 grid grid-cols-3 gap-3 flex-shrink-0">
-        <div>
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            决策类别
-          </div>
-          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-            {COMPANY_BRAIN.decisionClasses}
-          </div>
-        </div>
-        <div>
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            打法库
-          </div>
-          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-            {COMPANY_BRAIN.playbooks}
-          </div>
-        </div>
-        <div>
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            已捕获模式
-          </div>
-          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-            {COMPANY_BRAIN.capturedPatterns}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1 overflow-y-auto px-5 py-4">
-        <SectionLabel>最新条目</SectionLabel>
-        <div className="space-y-2">
-          {COMPANY_BRAIN.recentEntries.map((e, i) => (
-            <div
-              key={i}
-              className="border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 cursor-pointer"
-            >
-              <div className="text-sm font-medium text-slate-900">
-                {e.name}
-              </div>
-              <div className="text-xs text-slate-500 mt-0.5">{e.added}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <InspectionDrawer
+        open={!!openActivity}
+        onClose={() => setOpenActivity(null)}
+        title={openActivity?.title}
+        methodologyDescription={
+          openActivity
+            ? `${openActivity.summary}。${openActivity.detail.sourceNote}`
+            : undefined
+        }
+        tableHeaders={["字段", "取值"]}
+        tableRows={drawerRows}
+        columnWidths={["40%", "60%"]}
+        definitionsList={
+          openActivity
+            ? [
+                {
+                  term: "这条记录的含义",
+                  definition: openActivity.detail.definition,
+                },
+              ]
+            : undefined
+        }
+        definitionsLabel="详情"
+      />
     </>
   );
 }
