@@ -30,6 +30,13 @@ import {
   ListTree,
   Calendar,
   DollarSign,
+  Image as ImageIcon,
+  Type,
+  LayoutTemplate,
+  List as ListIcon,
+  Truck,
+  Star,
+  Users,
 } from "lucide-react";
 import {
   LineChart,
@@ -1323,6 +1330,313 @@ const RAZOR_BLADE = {
     primaryLabel: "Approve Phase 1 + 2 (auto-activate Phase 3 review)",
     summary:
       "Approving runs the 3 Phase 2 experiments concurrently and surfaces Phase 3 for review once all three tests conclude.",
+  },
+};
+
+/* Launch CR diagnosis canvas — tire inflator (pickup truck market) */
+const LAUNCH_CR = {
+  sku: "SKU-TI-A · tire inflator (pickup)",
+  initiator: "Jamal Hassan",
+  confirmedOn: "May 15",
+  constraint:
+    "Listing changes — main image, title, A+, bullets — are executed by the brand creative team. I surface the gap, design the tests, monitor the results.",
+  clusters: [
+    {
+      id: "pickup",
+      name: "Pickup truck",
+      cr: "2.0%",
+      benchmark: "8.4%",
+      gapPp: "−6.4pp",
+      status: "flagged",
+      impressions: "28,420",
+      clicks: "442",
+      conversions: "9",
+      exampleTerms: "tire inflator for F-150 · pickup tire pump · truck tire inflator 12V",
+    },
+    {
+      id: "generic",
+      name: "Generic portable",
+      cr: "6.7%",
+      benchmark: "7.2%",
+      gapPp: "−0.5pp",
+      status: "ok",
+      impressions: "41,680",
+      clicks: "938",
+      conversions: "63",
+      exampleTerms: "portable tire inflator · cordless air pump · 12V tire inflator",
+    },
+    {
+      id: "rv",
+      name: "RV / off-road",
+      cr: "5.4%",
+      benchmark: "6.1%",
+      gapPp: "−0.7pp",
+      status: "ok",
+      impressions: "13,240",
+      clicks: "264",
+      conversions: "14",
+      exampleTerms: "rv tire inflator · off road air compressor · jeep tire pump",
+    },
+  ],
+  pickupDeepDive: {
+    impressions: "28,420",
+    clicks: "442",
+    conversions: "9",
+    ctr: "1.56%",
+    ctrBenchmark: "2.1%",
+    estLostRevenue: "$980 / month",
+    estLostRevenueNote:
+      "If pickup-cluster CR closed to the 8.4% benchmark, monthly conversions on this traffic would lift from 9 to ~37. At $34.99 ASP that's ≈ $980 / month left on the table — and the gap compounds as we scale paid traffic into the cluster.",
+    organicRankAvg: "#14",
+    organicRankBest: "#3",
+    adPositionAvg: "slot 4",
+    adPositionBest: "slot 1",
+    audienceProfile:
+      "Pickup-truck buyers · predominantly male 28-55 · ~38% commercial / fleet use · strong preference for heavy-duty signaling · brand-defensibility sensitive — they read titles and main images as proof the product was built for trucks, not as a generic accessory that happens to fit.",
+  },
+  competitors: [
+    {
+      name: "Competitor A",
+      type: "competitor",
+      mainImageNote:
+        "Black F-150 front-three-quarter shot · inflator deployed on a 35\" truck tire. Reads instantly as 'built for trucks.'",
+      mainImageHighlights: ["F-150 in frame", "deployed on truck tire", "outdoor lifestyle"],
+      title:
+        "Heavy Duty Tire Inflator for Truck & SUV · 160 PSI · Digital Auto-Stop · 12V DC",
+      titleHighlights: ["Heavy Duty", "for Truck & SUV", "160 PSI"],
+      bulletPoints: [
+        "Inflates a stock F-150 tire from 20 to 35 PSI in 4 min 20 sec",
+        "Brass cylinder rated for 160 PSI sustained · 50% above the category average",
+        "Auto-stop at target PSI · works on truck, SUV, and trailer tires",
+        "12V DC plug · 11-foot reach cord covers all 4 truck tires from one outlet",
+        "Includes Schrader, Presta, and ball-needle adapters",
+      ],
+      bulletHighlights: ["F-150", "Heavy Duty", "truck"],
+      aplusFirstModule:
+        "Truck vs. car tire pressure & sidewall comparison chart · explains why a standard pump bogs down on 35\" tires.",
+      reviewsRating: "4.6",
+      reviewsCount: "8,420",
+      truckMentionCount: "2,140 (25.4%)",
+      price: "$54.99",
+      priceNote: "Premium · +24% vs ours",
+    },
+    {
+      name: "Competitor B",
+      type: "competitor",
+      mainImageNote:
+        "Dual-tire side view on a lifted Silverado · accessory laid out on the tailgate. Outdoor / utility context is unmistakable.",
+      mainImageHighlights: ["Silverado context", "tailgate scene", "rugged staging"],
+      title:
+        "Truck Tire Inflator · 12V Air Compressor for Pickup & Off-Road · 150 PSI Heavy Duty",
+      titleHighlights: ["Truck", "Pickup & Off-Road", "Heavy Duty"],
+      bulletPoints: [
+        "Built for pickup trucks, SUVs, and off-road rigs — handles 33-37\" tires",
+        "150 PSI rated brass piston · 3x duty cycle of plastic-piston units",
+        "Inflates a 33\" Silverado tire 18 → 35 PSI in 5 min 10 sec",
+        "10-foot power cord + 24-inch hose · reaches all 4 corners of a full-size truck",
+        "12-month replacement warranty · TPMS-safe pressure sensor",
+      ],
+      bulletHighlights: ["pickup", "33-37\" tires", "Silverado"],
+      aplusFirstModule:
+        "Use-case grid: 33\" pickup tire / 18\" SUV tire / 32\" off-road tire — each with measured inflation times.",
+      reviewsRating: "4.4",
+      reviewsCount: "5,640",
+      truckMentionCount: "1,310 (23.2%)",
+      price: "$48.99",
+      priceNote: "Mid-tier · +10% vs ours",
+    },
+    {
+      name: "Us · SKU-TI-A",
+      type: "self",
+      mainImageNote:
+        "White-background product-only shot · pump alone, no vehicle, no scene. Reads as a generic accessory — pickup buyers can't tell it was built for them.",
+      mainImageHighlights: [],
+      title:
+        "Portable Tire Inflator · 12V Cordless Air Pump · Digital Display · 150 PSI",
+      titleHighlights: [],
+      bulletPoints: [
+        "Cordless rechargeable battery · 4 inflations on a single charge",
+        "150 PSI max pressure · digital display with auto-stop",
+        "Compact size fits in any glove box or trunk",
+        "Includes nozzle adapters for tires, balls, and pool floats",
+        "USB-C charging · LED flashlight built in",
+      ],
+      bulletHighlights: [],
+      aplusFirstModule:
+        "Product feature carousel — battery life, digital display, USB-C charging. Nothing pickup-specific.",
+      reviewsRating: "4.3",
+      reviewsCount: "486",
+      truckMentionCount: "18 (3.7%)",
+      price: "$44.49",
+      priceNote: "Reference · our list price",
+    },
+  ],
+  agentDiagnosis: {
+    summary:
+      "Our listing isn't giving pickup buyers the three signals they scan for. The main image has no truck. The title doesn't say 'for pickups.' The A+ doesn't show truck-tire performance numbers. Stack those three together and a pickup buyer takes one look and decides this isn't for them — even though it physically works fine.",
+    signals: [
+      {
+        label: "Visual context",
+        gap: "No truck in main image · generic white-background product shot",
+      },
+      {
+        label: "Title targeting",
+        gap: "No 'truck' / 'pickup' / 'heavy duty' in first 30 characters",
+      },
+      {
+        label: "A+ proof",
+        gap: "No truck-tire performance data · no F-150 / Silverado / Ram reference",
+      },
+    ],
+  },
+  hypotheses: [
+    {
+      id: "h1",
+      label: "H1",
+      priority: "P0",
+      title: "Main image rework · add pickup scene",
+      treatment:
+        "Shoot a new main image: black F-150 with the inflator deployed on the front-driver tire. Keep the current title and A+ unchanged.",
+      variableControl:
+        "Image-only change. Title, bullets, and A+ stay current — keeps the read clean.",
+      sampleSize: "8,400 pickup-cluster impressions per arm · sized for 5pp lift detection",
+      duration: "14 days",
+      successMetric: "Pickup-cluster CR ≥ 4.5%",
+      expectedImpact:
+        "Biggest single lift — main image is the first thing a pickup buyer sees on search results.",
+      type: "image",
+      typeLabel: "Main image",
+      confidence: 78,
+      confidenceLabel:
+        "9 prior main-image swaps in vehicle-accessory category · scene-context lifts CR 3-7pp on the target cluster",
+    },
+    {
+      id: "h2",
+      label: "H2",
+      priority: "P0",
+      title: "Title rewrite · 'Heavy Duty for Truck/SUV' in first 30 chars",
+      treatment:
+        "Move 'Heavy Duty for Truck/SUV' into the leading position of the title. Keep the rest of the title unchanged.",
+      variableControl:
+        "Title-only change. Main image, A+, and bullets all hold still during this test.",
+      sampleSize: "Listing-level · organic + paid traffic on the pickup cluster",
+      duration: "21 days",
+      successMetric: "Joint pickup-cluster CTR + CR lift",
+      expectedImpact:
+        "Title drives both organic match relevance and click decisions on the SERP — affects CTR and CR in series.",
+      type: "title",
+      typeLabel: "Title",
+      confidence: 74,
+      confidenceLabel:
+        "12 prior title-rewrite tests · keyword-in-first-30-chars lifts category match relevance reliably",
+    },
+    {
+      id: "h3",
+      label: "H3",
+      priority: "P1",
+      title: "A+ module · F-150 inflation hero data",
+      treatment:
+        "Add a new A+ first module: 'Inflates an F-150 stock tire from 20 to 35 PSI in 4 min 30 sec' — large numbers, supporting product shot.",
+      variableControl:
+        "A+ only. Image and title from earlier tests stay frozen during this window.",
+      sampleSize: "Detail-page traffic from pickup cluster · listing-level read",
+      duration: "21 days",
+      successMetric: "Pickup-cluster CR lift + detail-page bounce-rate drop",
+      expectedImpact:
+        "Closes the proof gap once a pickup buyer clicks in — addresses the 'will this actually work on my truck' question.",
+      type: "aplus",
+      typeLabel: "A+ content",
+      confidence: 68,
+      confidenceLabel:
+        "7 prior A+ first-module rewrites · effect on CR is smaller than image/title but consistently positive",
+    },
+    {
+      id: "h4",
+      label: "H4",
+      priority: "P1",
+      title: "Bullet reorder · pickup proof to position 1",
+      treatment:
+        "Move the 'inflates a 33\" pickup tire in under 5 min' bullet to position 1. Push the cordless-battery bullet down to position 4.",
+      variableControl:
+        "Bullets only. Everything else above stays in its by-then-current state.",
+      sampleSize: "Detail-page traffic on the pickup cluster",
+      duration: "21 days",
+      successMetric: "Pickup-cluster CR lift on detail-page-converted traffic",
+      expectedImpact:
+        "Smallest lift on its own — but cheap to ship and stacks with the three above. Useful as a clean closer.",
+      type: "bullets",
+      typeLabel: "Bullets",
+      confidence: 65,
+      confidenceLabel:
+        "11 prior bullet-reorder tests · isolated lift is real but modest (≤ 1pp on cluster CR)",
+    },
+  ],
+  schedule: [
+    { hypothesisId: "h1", label: "H1 · Main image", startWeek: 1, endWeek: 2, type: "image" },
+    { hypothesisId: "h2", label: "H2 · Title", startWeek: 1, endWeek: 3, type: "title" },
+    { hypothesisId: "h3", label: "H3 · A+ module", startWeek: 3, endWeek: 5, type: "aplus" },
+    { hypothesisId: "h4", label: "H4 · Bullets", startWeek: 6, endWeek: 8, type: "bullets" },
+  ],
+  scheduleLogic: [
+    "H1 + H2 run in parallel · main image hits SERP click decisions, title hits organic match — they don't contaminate each other.",
+    "H3 starts after H1 closes · both touch detail-page CR. Running them at the same time would mix the signals.",
+    "H4 starts after H3 closes · bullets and A+ are both read on the detail page. Keep the variables separated to keep the read clean.",
+  ],
+  scheduleTradeoff:
+    "8 weeks total · 4 tests · 1 parallel pair · 2 sequential dependencies. The trade-off is total time vs. variable cleanness — running everything in parallel would finish in 3 weeks but the CR signal would be uninterpretable.",
+  clusteringInspection: {
+    methodology:
+      "Pickup-cluster terms include 'pickup,' 'truck,' or any major truck model (F-150, Silverado, Ram, Tacoma, Sierra, Tundra, Frontier). RV / off-road cluster requires 'rv,' 'off-road,' 'jeep,' or 'overland' tokens. Everything else lands in the generic-portable cluster. Rows sorted by 30-day search volume.",
+    tableHeaders: ["Search term", "Cluster", "30-day impressions", "Cluster CR"],
+    columnWidths: ["44%", "20%", "18%", "18%"],
+    tableRows: [
+      ["portable tire inflator",              "Generic portable",  "12.8K", "6.7%"],
+      ["12v tire inflator",                   "Generic portable",  "9.4K",  "6.7%"],
+      ["cordless tire inflator",              "Generic portable",  "7.6K",  "6.7%"],
+      ["tire inflator for car",               "Generic portable",  "6.2K",  "6.7%"],
+      ["air compressor for tires",            "Generic portable",  "5.8K",  "6.7%"],
+      ["tire inflator with gauge",            "Generic portable",  "4.2K",  "6.7%"],
+      ["mini tire inflator",                  "Generic portable",  "3.4K",  "6.7%"],
+      ["tire inflator for f-150",             "Pickup truck",      "4.8K",  "2.0%"],
+      ["truck tire inflator 12v",             "Pickup truck",      "4.2K",  "2.0%"],
+      ["pickup tire pump",                    "Pickup truck",      "3.6K",  "2.0%"],
+      ["tire inflator silverado",             "Pickup truck",      "3.2K",  "2.0%"],
+      ["heavy duty tire inflator truck",      "Pickup truck",      "2.8K",  "2.0%"],
+      ["ram 1500 tire inflator",              "Pickup truck",      "2.4K",  "2.0%"],
+      ["tacoma tire inflator",                "Pickup truck",      "2.1K",  "2.0%"],
+      ["tundra tire pump",                    "Pickup truck",      "1.8K",  "2.0%"],
+      ["sierra tire inflator",                "Pickup truck",      "1.6K",  "2.0%"],
+      ["pickup truck air pump",               "Pickup truck",      "1.4K",  "2.0%"],
+      ["tire inflator for frontier",          "Pickup truck",      "0.9K",  "2.0%"],
+      ["rv tire inflator",                    "RV / off-road",     "4.6K",  "5.4%"],
+      ["jeep tire pump",                      "RV / off-road",     "3.2K",  "5.4%"],
+      ["off road air compressor",             "RV / off-road",     "2.4K",  "5.4%"],
+      ["overland tire inflator",              "RV / off-road",     "1.6K",  "5.4%"],
+      ["jeep wrangler tire pump",             "RV / off-road",     "0.9K",  "5.4%"],
+      ["off road tire inflator portable",     "RV / off-road",     "0.6K",  "5.4%"],
+    ],
+    rules: [
+      {
+        term: "Pickup truck cluster",
+        definition:
+          "Terms containing 'pickup,' 'truck,' or any major pickup model name (F-150, Silverado, Ram, Tacoma, Sierra, Tundra, Frontier). Strongest commercial / heavy-duty intent in the category.",
+      },
+      {
+        term: "RV / off-road cluster",
+        definition:
+          "Terms containing 'rv,' 'off-road,' 'jeep,' 'wrangler,' or 'overland.' Adjacent to pickup but distinct — these buyers want clearance, larger tires, and trail-use signaling.",
+      },
+      {
+        term: "Generic portable cluster",
+        definition:
+          "Everything else — terms that describe the product class without a vehicle anchor. Buyers here are mostly passenger-car owners; this is the category baseline.",
+      },
+    ],
+  },
+  approval: {
+    primaryLabel: "Approve test plan",
+    summary:
+      "Approving briefs the brand creative team on the 4 listing changes and locks in the 8-week test schedule. I monitor results, analyze lift, and report back at each hand-off.",
   },
 };
 
@@ -5229,6 +5543,802 @@ function RazorBladeCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Launch CR diagnosis canvas — tire inflator (pickup)                       */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+const TEST_TYPE_STYLE = {
+  image:   { bar: "bg-emerald-500", track: "bg-emerald-100", text: "text-emerald-700", border: "border-emerald-200", icon: ImageIcon,    label: "Main image" },
+  title:   { bar: "bg-slate-700",   track: "bg-slate-100",   text: "text-slate-700",   border: "border-slate-300",   icon: Type,         label: "Title" },
+  aplus:   { bar: "bg-blue-500",    track: "bg-blue-100",    text: "text-blue-700",    border: "border-blue-200",    icon: LayoutTemplate, label: "A+ content" },
+  bullets: { bar: "bg-amber-500",   track: "bg-amber-100",   text: "text-amber-700",   border: "border-amber-200",   icon: ListIcon,     label: "Bullets" },
+};
+
+function ClusterStatCard({ cluster, label }) {
+  const flagged = cluster.status === "flagged";
+  return (
+    <Card className={`p-4 ${flagged ? "border-rose-300" : ""}`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className={`text-10 uppercase tracking-wider font-semibold ${flagged ? "text-rose-700" : "text-emerald-700"}`}>
+            {label}
+          </div>
+          <div className="text-sm font-semibold text-slate-900 mt-0.5">
+            {cluster.name}
+          </div>
+        </div>
+        {flagged ? (
+          <Pill tone="rose">Flagged</Pill>
+        ) : (
+          <Pill tone="slate">At benchmark</Pill>
+        )}
+      </div>
+
+      <div className="mt-3 flex items-baseline gap-2">
+        <span className="text-2xl font-mono font-semibold text-slate-900">
+          {cluster.cr}
+        </span>
+        <span className="text-11 text-slate-500">{wrapMetric("CR")}</span>
+        <span className="text-11 text-slate-400">·</span>
+        <span className="text-11 text-slate-500 font-mono">
+          benchmark {cluster.benchmark}
+        </span>
+      </div>
+      <div className={`mt-1 text-xs font-mono font-medium ${flagged ? "text-rose-700" : "text-slate-600"}`}>
+        {cluster.gapPp} vs benchmark
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-slate-100 text-11 text-slate-500 space-y-1">
+        <div className="flex items-baseline justify-between">
+          <span>Monthly impressions</span>
+          <span className="font-mono text-slate-700">{cluster.impressions}</span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span>Clicks · conversions</span>
+          <span className="font-mono text-slate-700">
+            {cluster.clicks} · {cluster.conversions}
+          </span>
+        </div>
+        <div className="pt-1 text-slate-400 italic leading-relaxed">
+          e.g. {cluster.exampleTerms}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function CompetitorMainImage({ competitor }) {
+  const isSelf = competitor.type === "self";
+  return (
+    <div
+      className={`rounded-md border ${isSelf ? "border-rose-200 bg-rose-50/30" : "border-slate-200 bg-slate-50"} overflow-hidden`}
+    >
+      <div
+        className="flex items-center justify-center"
+        style={{ aspectRatio: "1 / 1" }}
+      >
+        {isSelf ? (
+          <div className="flex flex-col items-center gap-2 text-slate-400">
+            <ImageIcon className="w-8 h-8" strokeWidth={1.5} />
+            <div className="text-10 uppercase tracking-wider font-medium">
+              Product-only · white background
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-2 text-slate-500">
+            <Truck className="w-8 h-8 text-slate-600" strokeWidth={1.5} />
+            <div className="text-10 uppercase tracking-wider font-medium text-slate-600">
+              Pickup-context staging
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function HighlightedTitle({ title, highlights, mute }) {
+  if (mute || !highlights || highlights.length === 0) {
+    return <span>{title}</span>;
+  }
+  const escaped = highlights.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const re = new RegExp(`(${escaped.join("|")})`, "gi");
+  const parts = title.split(re);
+  return parts.map((p, i) =>
+    highlights.some((h) => h.toLowerCase() === p.toLowerCase()) ? (
+      <span
+        key={i}
+        className="bg-emerald-100 text-emerald-800 px-1 rounded-sm font-medium"
+      >
+        {p}
+      </span>
+    ) : (
+      <span key={i}>{p}</span>
+    )
+  );
+}
+
+function CompetitorColumn({ competitor }) {
+  const isSelf = competitor.type === "self";
+  return (
+    <div
+      className={`flex flex-col rounded-lg border overflow-hidden ${
+        isSelf
+          ? "border-rose-300 bg-rose-50/20"
+          : "border-slate-200 bg-white"
+      }`}
+    >
+      {/* Header */}
+      <div
+        className={`px-4 py-3 border-b ${
+          isSelf ? "border-rose-200 bg-rose-50/40" : "border-slate-200 bg-slate-50/60"
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div className={`text-sm font-semibold ${isSelf ? "text-rose-800" : "text-slate-900"}`}>
+            {competitor.name}
+          </div>
+          {isSelf ? (
+            <Pill tone="rose">Us</Pill>
+          ) : (
+            <Pill tone="slate">Competitor</Pill>
+          )}
+        </div>
+      </div>
+
+      <div className="p-4 space-y-4 flex-1">
+        {/* Main image */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            Main image
+          </div>
+          <CompetitorMainImage competitor={competitor} />
+          <div className={`mt-2 text-11 leading-relaxed ${isSelf ? "text-rose-800" : "text-slate-600"}`}>
+            {competitor.mainImageNote}
+          </div>
+        </div>
+
+        {/* Title */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            Title
+          </div>
+          <div className="text-xs text-slate-900 leading-relaxed">
+            <HighlightedTitle
+              title={competitor.title}
+              highlights={competitor.titleHighlights}
+              mute={isSelf}
+            />
+          </div>
+        </div>
+
+        {/* Bullets */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            Top 5 bullets
+          </div>
+          <ol className="space-y-1.5 text-11 text-slate-700 leading-relaxed">
+            {competitor.bulletPoints.map((b, i) => {
+              const hit =
+                !isSelf &&
+                competitor.bulletHighlights.some((h) =>
+                  b.toLowerCase().includes(h.toLowerCase())
+                );
+              return (
+                <li key={i} className="flex items-start gap-1.5">
+                  <span className="font-mono text-slate-400 flex-shrink-0">
+                    {i + 1}.
+                  </span>
+                  <span
+                    className={
+                      hit
+                        ? "bg-emerald-100 text-emerald-800 px-1 rounded-sm font-medium"
+                        : ""
+                    }
+                  >
+                    {b}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+
+        {/* A+ */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            A+ first module
+          </div>
+          <div
+            className={`text-11 leading-relaxed rounded-md border px-2.5 py-2 ${
+              isSelf
+                ? "border-rose-200 bg-white text-rose-800"
+                : "border-emerald-200 bg-emerald-50/40 text-emerald-900"
+            }`}
+          >
+            {competitor.aplusFirstModule}
+          </div>
+        </div>
+
+        {/* Reviews */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            Reviews
+          </div>
+          <div className="flex items-center gap-3 text-11">
+            <span className="flex items-center gap-1">
+              <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+              <span className="font-mono font-semibold text-slate-900">
+                {competitor.reviewsRating}
+              </span>
+            </span>
+            <span className="text-slate-400">·</span>
+            <span className="font-mono text-slate-700">
+              {competitor.reviewsCount}
+            </span>
+            <span className="text-slate-400">reviews</span>
+          </div>
+          <div className="mt-1 text-11 text-slate-500">
+            Truck mentions ·{" "}
+            <span
+              className={`font-mono ${
+                isSelf ? "text-rose-700 font-semibold" : "text-slate-700"
+              }`}
+            >
+              {competitor.truckMentionCount}
+            </span>
+          </div>
+        </div>
+
+        {/* Price */}
+        <div className="pt-3 border-t border-slate-100 flex items-baseline justify-between">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Price
+          </div>
+          <div className="text-right">
+            <div className="text-sm font-mono font-semibold text-slate-900">
+              {competitor.price}
+            </div>
+            <div className="text-10 text-slate-500 mt-0.5">
+              {competitor.priceNote}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HypothesisCard({ hypothesis }) {
+  const [modifying, setModifying] = useState(false);
+  const typeStyle = TEST_TYPE_STYLE[hypothesis.type];
+  const TypeIcon = typeStyle.icon;
+  const priorityTone = hypothesis.priority === "P0" ? "emerald" : "amber";
+  return (
+    <Card className="border-slate-200 overflow-hidden flex flex-col">
+      <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/40 flex items-start gap-3">
+        <div
+          className={`w-8 h-8 rounded-md border flex items-center justify-center flex-shrink-0 ${typeStyle.border} bg-white`}
+        >
+          <TypeIcon className={`w-4 h-4 ${typeStyle.text}`} strokeWidth={1.75} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <Pill tone="dark">{hypothesis.label}</Pill>
+            <Pill tone={priorityTone}>{hypothesis.priority}</Pill>
+            <span className="text-11 text-slate-500">{typeStyle.label}</span>
+          </div>
+          <div className="text-sm font-semibold text-slate-900 leading-snug">
+            {hypothesis.title}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 py-3 space-y-3 text-xs flex-1">
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Treatment
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.treatment}
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Variable control
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.variableControl}
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Sample size
+            </div>
+            <div className="text-slate-700 font-mono text-11 leading-relaxed">
+              {hypothesis.sampleSize}
+            </div>
+          </div>
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Duration
+            </div>
+            <div className="text-slate-700 font-mono">{hypothesis.duration}</div>
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Success metric
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.successMetric}
+          </div>
+        </div>
+        <div className="pt-2 border-t border-slate-100">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Why this lifts CR
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.expectedImpact}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/40">
+        {modifying ? (
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="e.g. swap the F-150 for a Silverado scene"
+              className="flex-1 px-2.5 py-1.5 bg-white border border-slate-300 rounded-md text-11 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+            />
+            <button
+              type="button"
+              onClick={() => setModifying(false)}
+              className="text-11 text-slate-600 hover:text-slate-900 px-1.5"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 px-2 py-1 rounded"
+            >
+              <Send className="w-3 h-3" />
+              Send
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <div className="text-11 text-slate-500">
+              Confidence{" "}
+              <span className="font-mono text-slate-900 font-medium">
+                {hypothesis.confidence}%
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 text-11 px-1.5 py-1 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded font-medium"
+              >
+                <X className="w-3 h-3" />
+                Decline
+              </button>
+              <button
+                type="button"
+                onClick={() => setModifying(true)}
+                className="inline-flex items-center gap-1 text-11 font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-1.5 py-1 rounded bg-white"
+              >
+                <Edit3 className="w-3 h-3" />
+                Modify
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-1.5 py-1 rounded"
+              >
+                <Check className="w-3 h-3" />
+                Approve
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+function TestScheduleGantt({ schedule, hypotheses }) {
+  const totalWeeks = 8;
+  const colWidthPct = 100 / totalWeeks;
+  const hypothesesById = Object.fromEntries(hypotheses.map((h) => [h.id, h]));
+  return (
+    <Card className="p-5">
+      {/* Legend */}
+      <div className="mb-4 flex items-center gap-4 flex-wrap">
+        {Object.entries(TEST_TYPE_STYLE).map(([key, style]) => (
+          <div key={key} className="flex items-center gap-1.5">
+            <span
+              className={`inline-block w-3 h-3 rounded-sm ${style.bar}`}
+            />
+            <span className="text-11 text-slate-600">{style.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Header row · weeks */}
+      <div className="relative">
+        <div className="flex border-b border-slate-200 pb-1.5 mb-2 pl-32">
+          {Array.from({ length: totalWeeks }, (_, i) => (
+            <div
+              key={i}
+              className="text-10 uppercase tracking-wider text-slate-500 font-medium text-center"
+              style={{ width: `${colWidthPct}%` }}
+            >
+              W{i + 1}
+            </div>
+          ))}
+        </div>
+
+        {/* Gantt rows */}
+        <div className="space-y-2">
+          {schedule.map((row) => {
+            const hyp = hypothesesById[row.hypothesisId];
+            const style = TEST_TYPE_STYLE[row.type];
+            const startPct = ((row.startWeek - 1) / totalWeeks) * 100;
+            const widthPct = ((row.endWeek - row.startWeek + 1) / totalWeeks) * 100;
+            return (
+              <div key={row.hypothesisId} className="flex items-center">
+                <div className="flex items-center gap-1.5 text-11 font-medium text-slate-700 flex-shrink-0" style={{ width: "128px" }}>
+                  <Pill tone="dark">{hyp.label}</Pill>
+                  <span className={`${style.text}`}>{style.label}</span>
+                </div>
+                <div className={`flex-1 relative h-7 ${style.track} rounded-md`}>
+                  <div
+                    className={`absolute top-0 h-7 rounded-md ${style.bar} flex items-center px-2.5`}
+                    style={{ left: `${startPct}%`, width: `${widthPct}%` }}
+                  >
+                    <span className="text-10 font-mono font-semibold text-white">
+                      W{row.startWeek} – W{row.endWeek} · {row.endWeek - row.startWeek + 1}w
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function LaunchCRCanvas() {
+  const L = LAUNCH_CR;
+  const [clusteringOpen, setClusteringOpen] = useState(false);
+  const pickupCluster = L.clusters.find((c) => c.id === "pickup");
+  return (
+    <>
+      <CanvasHeader
+        kicker="Launch CR · tire inflator · pickup market"
+        title={L.sku}
+        meta={
+          <>
+            <Pill tone="slate">
+              <Calendar className="w-3 h-3" />
+              May · current month
+            </Pill>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              Raised by {L.initiator} on {L.confirmedOn}
+            </Pill>
+            <Pill tone="slate">
+              <Workflow className="w-3 h-3" />
+              Diagnosis + 4 tests
+            </Pill>
+          </>
+        }
+      />
+
+      {/* Constraint callout · before 现状 */}
+      <div className="px-6 pt-5">
+        <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
+          <div className="flex items-start gap-2.5">
+            <Lock className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-11 uppercase tracking-wider text-amber-800 font-semibold mb-1">
+                Constraint · listing changes need the brand creative team
+              </div>
+              <div className="text-sm text-amber-900 leading-relaxed">
+                {L.constraint}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 1. Current state · audience clustering */}
+      <div className="px-6">
+        <SectionLabel kicker="3 audience clusters · pickup is the flagged one">
+          1. Current state · 现状
+        </SectionLabel>
+        <div className="grid grid-cols-3 gap-3">
+          {L.clusters.map((c, i) => (
+            <ClusterStatCard
+              key={c.id}
+              cluster={c}
+              label={`Cluster ${i + 1}`}
+            />
+          ))}
+        </div>
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setClusteringOpen(true)}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 rounded-md text-xs font-medium text-slate-700"
+          >
+            <Layers className="w-3.5 h-3.5 text-slate-500" />
+            View clustering logic
+            <ArrowUpRight className="w-3 h-3 text-slate-400" />
+          </button>
+        </div>
+      </div>
+
+      {/* 2. Specific problem · pickup deep-dive + competitive teardown */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="Why pickup cluster CR is 6.4pp below benchmark">
+          2. Specific problem · 具体问题
+        </SectionLabel>
+
+        {/* Pickup numbers row */}
+        <div className="grid grid-cols-3 gap-3">
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Pickup-cluster impressions · monthly
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {L.pickupDeepDive.impressions}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              {wrapMetric("CTR")}{" "}
+              <span className="font-mono text-slate-700">
+                {L.pickupDeepDive.ctr}
+              </span>{" "}
+              · benchmark{" "}
+              <span className="font-mono text-slate-700">
+                {L.pickupDeepDive.ctrBenchmark}
+              </span>
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Clicks
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {L.pickupDeepDive.clicks}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              Traffic is landing — the issue lives downstream.
+            </div>
+          </Card>
+          <Card className="p-4 border-rose-300">
+            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+              Conversions
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-rose-700">
+              {L.pickupDeepDive.conversions}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              {wrapMetric("CR")}{" "}
+              <span className="font-mono text-rose-700 font-semibold">
+                {pickupCluster.cr}
+              </span>{" "}
+              · benchmark{" "}
+              <span className="font-mono text-slate-700">
+                {pickupCluster.benchmark}
+              </span>
+            </div>
+          </Card>
+        </div>
+
+        {/* Lost revenue callout */}
+        <div className="mt-3 bg-rose-50 border border-rose-200 rounded-md px-4 py-3 flex items-start gap-3">
+          <DollarSign className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
+          <div className="flex-1">
+            <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-0.5">
+              Estimated lost revenue ·{" "}
+              <span className="font-mono">
+                {L.pickupDeepDive.estLostRevenue}
+              </span>
+            </div>
+            <div className="text-xs text-rose-900 leading-relaxed">
+              {L.pickupDeepDive.estLostRevenueNote}
+            </div>
+          </div>
+        </div>
+
+        {/* Position split */}
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Organic rank · pickup cluster
+            </div>
+            <div className="mt-1 flex items-baseline gap-3">
+              <span className="text-base font-mono font-semibold text-slate-900">
+                avg {L.pickupDeepDive.organicRankAvg}
+              </span>
+              <span className="text-11 text-slate-500">
+                best{" "}
+                <span className="font-mono text-slate-700">
+                  {L.pickupDeepDive.organicRankBest}
+                </span>
+              </span>
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              We rank on these queries — visibility isn't the bottleneck.
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Ad position · pickup cluster
+            </div>
+            <div className="mt-1 flex items-baseline gap-3">
+              <span className="text-base font-mono font-semibold text-slate-900">
+                avg {L.pickupDeepDive.adPositionAvg}
+              </span>
+              <span className="text-11 text-slate-500">
+                best{" "}
+                <span className="font-mono text-slate-700">
+                  {L.pickupDeepDive.adPositionBest}
+                </span>
+              </span>
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              We're paying to show up · clicks come · conversions don't.
+            </div>
+          </Card>
+        </div>
+
+        {/* Audience profile */}
+        <Card className="mt-3 p-4 bg-slate-50/60">
+          <div className="flex items-start gap-2.5">
+            <Users className="w-4 h-4 text-slate-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                Pickup buyer profile
+              </div>
+              <div className="text-xs text-slate-700 leading-relaxed">
+                {L.pickupDeepDive.audienceProfile}
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Competitive listing teardown */}
+        <div className="mt-6">
+          <SectionLabel kicker="Side-by-side · Competitor A · Competitor B · Us">
+            Competitive listing teardown
+          </SectionLabel>
+          <div className="grid grid-cols-3 gap-3 items-stretch">
+            {L.competitors.map((c, i) => (
+              <CompetitorColumn key={i} competitor={c} />
+            ))}
+          </div>
+        </div>
+
+        {/* Agent diagnosis callout */}
+        <div className="mt-4 bg-slate-900 text-white rounded-md px-5 py-4">
+          <div className="flex items-start gap-3">
+            <div className="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1.5">
+                Where the gap is
+              </div>
+              <div className="text-sm text-white leading-relaxed mb-3">
+                {L.agentDiagnosis.summary}
+              </div>
+              <div className="grid grid-cols-3 gap-3 pt-3 border-t border-slate-700">
+                {L.agentDiagnosis.signals.map((s, i) => (
+                  <div key={i}>
+                    <div className="text-10 uppercase tracking-wider text-emerald-400 font-semibold mb-1">
+                      {s.label}
+                    </div>
+                    <div className="text-11 text-slate-300 leading-relaxed">
+                      {s.gap}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Recommendation · 4 hypotheses */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="4 listing-content tests · 2 P0 · 2 P1">
+          3. Recommendation · 具体建议
+        </SectionLabel>
+        <div className="grid md:grid-cols-2 gap-3">
+          {L.hypotheses.map((h) => (
+            <HypothesisCard key={h.id} hypothesis={h} />
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Milestones · test schedule */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="8-week test window · 1 parallel pair · 2 sequential dependencies">
+          4. Milestones · 里程碑
+        </SectionLabel>
+        <TestScheduleGantt schedule={L.schedule} hypotheses={L.hypotheses} />
+        <div className="mt-3 space-y-2">
+          {L.scheduleLogic.map((line, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{line}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 text-11 text-slate-500 leading-relaxed italic">
+          {L.scheduleTradeoff}
+        </div>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom approval bar */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Approve scope
+            </div>
+            <div className="text-xs text-slate-700 leading-relaxed max-w-2xl">
+              {L.approval.summary}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
+            >
+              <X className="w-3.5 h-3.5" />
+              Decline
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              Modify
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              {L.approval.primaryLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <InspectionDrawer
+        open={clusteringOpen}
+        onClose={() => setClusteringOpen(false)}
+        title="Search-term clustering · tire inflator"
+        methodologyDescription={L.clusteringInspection.methodology}
+        tableHeaders={L.clusteringInspection.tableHeaders}
+        tableRows={L.clusteringInspection.tableRows}
+        columnWidths={L.clusteringInspection.columnWidths}
+        definitionsList={L.clusteringInspection.rules}
+        definitionsLabel="Cluster rules"
+      />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  Chat panel + top bar + company brain drawer                               */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -5800,13 +6910,7 @@ export default function App({ locale, setLocale }) {
       case "razor-blade":
         return <RazorBladeCanvas />;
       case "launch-cr":
-        return (
-          <PlaceholderCanvas
-            kicker="Launch CR · tire inflator"
-            title="Pickup-related search terms underperform"
-            part="Part 4"
-          />
-        );
+        return <LaunchCRCanvas />;
       default:
         return null;
     }

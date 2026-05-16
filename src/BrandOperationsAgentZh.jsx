@@ -30,6 +30,13 @@ import {
   ListTree,
   Calendar,
   DollarSign,
+  Image as ImageIcon,
+  Type,
+  LayoutTemplate,
+  List as ListIcon,
+  Truck,
+  Star,
+  Users,
 } from "lucide-react";
 import {
   LineChart,
@@ -1314,6 +1321,313 @@ const RAZOR_BLADE = {
     primaryLabel: "批准 Phase 1 + 2(自动激活 Phase 3 审核)",
     summary:
       "批准后将并行运行 3 个 Phase 2 实验,所有实验结束后自动呈现 Phase 3 供审核。",
+  },
+};
+
+/* Launch CR 诊断画布 — 轮胎充气泵(皮卡市场) */
+const LAUNCH_CR = {
+  sku: "SKU-TI-A · 轮胎充气泵(皮卡)",
+  initiator: "Jamal Hassan",
+  confirmedOn: "May 15",
+  constraint:
+    "Listing 改动 — 主图、标题、A+、文案 — 由品牌创意团队上手。我负责把问题摆出来、把测试设计好、把结果盯下来。",
+  clusters: [
+    {
+      id: "pickup",
+      name: "皮卡",
+      cr: "2.0%",
+      benchmark: "8.4%",
+      gapPp: "−6.4pp",
+      status: "flagged",
+      impressions: "28,420",
+      clicks: "442",
+      conversions: "9",
+      exampleTerms: "tire inflator for F-150 · pickup tire pump · truck tire inflator 12V",
+    },
+    {
+      id: "generic",
+      name: "通用便携",
+      cr: "6.7%",
+      benchmark: "7.2%",
+      gapPp: "−0.5pp",
+      status: "ok",
+      impressions: "41,680",
+      clicks: "938",
+      conversions: "63",
+      exampleTerms: "portable tire inflator · cordless air pump · 12V tire inflator",
+    },
+    {
+      id: "rv",
+      name: "房车 / 越野",
+      cr: "5.4%",
+      benchmark: "6.1%",
+      gapPp: "−0.7pp",
+      status: "ok",
+      impressions: "13,240",
+      clicks: "264",
+      conversions: "14",
+      exampleTerms: "rv tire inflator · off road air compressor · jeep tire pump",
+    },
+  ],
+  pickupDeepDive: {
+    impressions: "28,420",
+    clicks: "442",
+    conversions: "9",
+    ctr: "1.56%",
+    ctrBenchmark: "2.1%",
+    estLostRevenue: "$980 / 月",
+    estLostRevenueNote:
+      "皮卡集群 CR 如果回到 8.4% 基准,本流量上每月转化量从 9 升到约 37 单。按 $34.99 ASP 算,每月留在桌上的钱约 $980。等到付费流量进一步往这个集群推,缺口还会放大。",
+    organicRankAvg: "#14",
+    organicRankBest: "#3",
+    adPositionAvg: "slot 4",
+    adPositionBest: "slot 1",
+    audienceProfile:
+      "皮卡买家 · 男性为主 28-55 岁 · 约 38% 是商用 / 车队用途 · 强烈偏好重型 / 耐用化的视觉语言 · 对品牌专属度敏感 — 他们靠标题和主图判断这个产品是不是「为皮卡造的」,而不是恰好能装上去的通用配件。",
+  },
+  competitors: [
+    {
+      name: "Competitor A",
+      type: "competitor",
+      mainImageNote:
+        "黑色 F-150 三分之二车头视角 · 充气泵正在给 35 寸卡车胎打气。一眼就读到「这就是为皮卡造的」。",
+      mainImageHighlights: ["F-150 入镜", "在卡车胎上工作", "户外生活场景"],
+      title:
+        "Heavy Duty Tire Inflator for Truck & SUV · 160 PSI · Digital Auto-Stop · 12V DC",
+      titleHighlights: ["Heavy Duty", "for Truck & SUV", "160 PSI"],
+      bulletPoints: [
+        "Inflates a stock F-150 tire from 20 to 35 PSI in 4 min 20 sec",
+        "Brass cylinder rated for 160 PSI sustained · 50% above the category average",
+        "Auto-stop at target PSI · works on truck, SUV, and trailer tires",
+        "12V DC plug · 11-foot reach cord covers all 4 truck tires from one outlet",
+        "Includes Schrader, Presta, and ball-needle adapters",
+      ],
+      bulletHighlights: ["F-150", "Heavy Duty", "truck"],
+      aplusFirstModule:
+        "卡车 vs 轿车胎的胎压和胎壁对比图 · 解释为什么常规打气泵在 35 寸卡车胎上跑不动。",
+      reviewsRating: "4.6",
+      reviewsCount: "8,420",
+      truckMentionCount: "2,140(25.4%)",
+      price: "$54.99",
+      priceNote: "高端 · 比我方高 24%",
+    },
+    {
+      name: "Competitor B",
+      type: "competitor",
+      mainImageNote:
+        "升高 Silverado 双胎侧视角 · 配件摆在尾门上。户外 / 实用场景毫无歧义。",
+      mainImageHighlights: ["Silverado 场景", "尾门摆件", "硬派陈列"],
+      title:
+        "Truck Tire Inflator · 12V Air Compressor for Pickup & Off-Road · 150 PSI Heavy Duty",
+      titleHighlights: ["Truck", "Pickup & Off-Road", "Heavy Duty"],
+      bulletPoints: [
+        "Built for pickup trucks, SUVs, and off-road rigs — handles 33-37\" tires",
+        "150 PSI rated brass piston · 3x duty cycle of plastic-piston units",
+        "Inflates a 33\" Silverado tire 18 → 35 PSI in 5 min 10 sec",
+        "10-foot power cord + 24-inch hose · reaches all 4 corners of a full-size truck",
+        "12-month replacement warranty · TPMS-safe pressure sensor",
+      ],
+      bulletHighlights: ["pickup", "33-37\" tires", "Silverado"],
+      aplusFirstModule:
+        "使用场景网格:33 寸皮卡胎 / 18 寸 SUV 胎 / 32 寸越野胎 — 每个场景标注实测充气时间。",
+      reviewsRating: "4.4",
+      reviewsCount: "5,640",
+      truckMentionCount: "1,310(23.2%)",
+      price: "$48.99",
+      priceNote: "中位 · 比我方高 10%",
+    },
+    {
+      name: "我方 · SKU-TI-A",
+      type: "self",
+      mainImageNote:
+        "白底纯产品图 · 单独打气泵,没车、没场景。读起来就是个通用配件 — 皮卡买家看不出这是给他们的。",
+      mainImageHighlights: [],
+      title:
+        "Portable Tire Inflator · 12V Cordless Air Pump · Digital Display · 150 PSI",
+      titleHighlights: [],
+      bulletPoints: [
+        "Cordless rechargeable battery · 4 inflations on a single charge",
+        "150 PSI max pressure · digital display with auto-stop",
+        "Compact size fits in any glove box or trunk",
+        "Includes nozzle adapters for tires, balls, and pool floats",
+        "USB-C charging · LED flashlight built in",
+      ],
+      bulletHighlights: [],
+      aplusFirstModule:
+        "产品特性轮播 · 电池续航、数字显示、USB-C 充电。一条都没提到皮卡。",
+      reviewsRating: "4.3",
+      reviewsCount: "486",
+      truckMentionCount: "18(3.7%)",
+      price: "$44.49",
+      priceNote: "参考 · 我方挂牌价",
+    },
+  ],
+  agentDiagnosis: {
+    summary:
+      "我们 listing 没有给皮卡买家他们要看的三个信号。主图里没有卡车。标题没说「为皮卡设计」。A+ 没放在皮卡胎上的性能数据。三个加在一起,皮卡买家扫一眼就知道这不是给他们的 — 即便产品其实完全能用。",
+    signals: [
+      {
+        label: "视觉场景",
+        gap: "主图没有皮卡 · 白底纯产品图",
+      },
+      {
+        label: "标题信号",
+        gap: "标题前 30 字没出现 truck / pickup / heavy duty",
+      },
+      {
+        label: "A+ 证据",
+        gap: "A+ 没有皮卡胎性能数据 · 没出现 F-150 / Silverado / Ram",
+      },
+    ],
+  },
+  hypotheses: [
+    {
+      id: "h1",
+      label: "H1",
+      priority: "P0",
+      title: "主图重做 · 加入皮卡场景",
+      treatment:
+        "拍一张新主图:黑色 F-150,充气泵接在前驾驶位胎上。标题和 A+ 保持现状。",
+      variableControl:
+        "只换主图。标题、bullets、A+ 全部保持当前状态 — 这样信号读起来干净。",
+      sampleSize: "皮卡集群每组 8,400 曝光 · 按检测 5pp 提升量定的",
+      duration: "14 天",
+      successMetric: "皮卡集群 CR ≥ 4.5%",
+      expectedImpact:
+        "单项最大提升 — 主图是皮卡买家在搜索结果里第一眼看到的东西。",
+      type: "image",
+      typeLabel: "主图",
+      confidence: 78,
+      confidenceLabel:
+        "9 次同品类(车配)主图更换历史 · 场景化主图能稳定带来 3-7pp CR 提升",
+    },
+    {
+      id: "h2",
+      label: "H2",
+      priority: "P0",
+      title: "标题改写 · 前 30 字插入「Heavy Duty for Truck/SUV」",
+      treatment:
+        "把「Heavy Duty for Truck/SUV」挪到标题最前。标题其余部分不动。",
+      variableControl:
+        "只改标题。主图、A+、bullets 在测试期内一律不动。",
+      sampleSize: "Listing 级 · 皮卡集群的自然 + 付费流量",
+      duration: "21 天",
+      successMetric: "皮卡集群 CTR + CR 联合提升",
+      expectedImpact:
+        "标题同时影响自然匹配相关性和搜索结果页的点击决策 — 串联拉动 CTR 和 CR。",
+      type: "title",
+      typeLabel: "标题",
+      confidence: 74,
+      confidenceLabel:
+        "12 次历史标题改写测试 · 前 30 字带核心词能可靠地拉高品类匹配相关性",
+    },
+    {
+      id: "h3",
+      label: "H3",
+      priority: "P1",
+      title: "A+ 模块 · F-150 充气性能数据",
+      treatment:
+        "新增 A+ 第一模块:「Inflates an F-150 stock tire from 20 to 35 PSI in 4 min 30 sec」 — 大字号数字 + 配产品图。",
+      variableControl:
+        "只动 A+。前两项测试的主图和标题在本测试期间保持冻结。",
+      sampleSize: "皮卡集群的详情页流量 · Listing 级读数",
+      duration: "21 天",
+      successMetric: "皮卡集群 CR 提升 + 详情页跳出率下降",
+      expectedImpact:
+        "解决「这玩意儿在我皮卡上到底行不行」的疑问 — 在皮卡买家点进详情页后补上证据。",
+      type: "aplus",
+      typeLabel: "A+",
+      confidence: 68,
+      confidenceLabel:
+        "7 次历史 A+ 首模块改写 · 对 CR 的拉动比图/标题小,但方向稳定",
+    },
+    {
+      id: "h4",
+      label: "H4",
+      priority: "P1",
+      title: "Bullets 重排 · 皮卡证据提到第 1 条",
+      treatment:
+        "把「inflates a 33\" pickup tire in under 5 min」挪到第 1 条 bullet。无线电池那条往下挤到第 4。",
+      variableControl:
+        "只动 bullets。上面几项的状态保持当前。",
+      sampleSize: "皮卡集群的详情页流量",
+      duration: "21 天",
+      successMetric: "皮卡集群 CR 提升 · 详情页转化流量上的读数",
+      expectedImpact:
+        "单独效果最小 — 但成本低,可以叠在前三个上面。当作干净收尾。",
+      type: "bullets",
+      typeLabel: "Bullets",
+      confidence: 65,
+      confidenceLabel:
+        "11 次历史 bullets 重排 · 单独效果有限(集群 CR 提升 ≤ 1pp)",
+    },
+  ],
+  schedule: [
+    { hypothesisId: "h1", label: "H1 · 主图", startWeek: 1, endWeek: 2, type: "image" },
+    { hypothesisId: "h2", label: "H2 · 标题", startWeek: 1, endWeek: 3, type: "title" },
+    { hypothesisId: "h3", label: "H3 · A+", startWeek: 3, endWeek: 5, type: "aplus" },
+    { hypothesisId: "h4", label: "H4 · Bullets", startWeek: 6, endWeek: 8, type: "bullets" },
+  ],
+  scheduleLogic: [
+    "H1 + H2 并行 · 主图打的是 SERP 上的点击决策,标题打的是自然匹配 — 两者不会污染彼此。",
+    "H3 接在 H1 之后 · 两个都作用在详情页 CR 上,并行跑会把信号搅在一起。",
+    "H4 接在 H3 之后 · bullets 和 A+ 都在详情页上被读到,顺序跑保持变量隔离,读数才干净。",
+  ],
+  scheduleTradeoff:
+    "总测试窗口 8 周 · 4 个测试 · 1 对并行 · 2 处顺序依赖。代价就是总时长 vs 变量干净度 — 全部并行 3 周能跑完,但 CR 信号没法解读。",
+  clusteringInspection: {
+    methodology:
+      "皮卡集群包含含「pickup」「truck」或任一主流皮卡型号(F-150、Silverado、Ram、Tacoma、Sierra、Tundra、Frontier)的搜索词。房车 / 越野集群需要包含「rv」「off-road」「jeep」或「overland」。其余归入通用便携集群。按 30 天搜索量降序排列。",
+    tableHeaders: ["搜索词", "集群", "30 天曝光", "集群 CR"],
+    columnWidths: ["44%", "20%", "18%", "18%"],
+    tableRows: [
+      ["portable tire inflator",              "通用便携",    "12.8K", "6.7%"],
+      ["12v tire inflator",                   "通用便携",    "9.4K",  "6.7%"],
+      ["cordless tire inflator",              "通用便携",    "7.6K",  "6.7%"],
+      ["tire inflator for car",               "通用便携",    "6.2K",  "6.7%"],
+      ["air compressor for tires",            "通用便携",    "5.8K",  "6.7%"],
+      ["tire inflator with gauge",            "通用便携",    "4.2K",  "6.7%"],
+      ["mini tire inflator",                  "通用便携",    "3.4K",  "6.7%"],
+      ["tire inflator for f-150",             "皮卡",        "4.8K",  "2.0%"],
+      ["truck tire inflator 12v",             "皮卡",        "4.2K",  "2.0%"],
+      ["pickup tire pump",                    "皮卡",        "3.6K",  "2.0%"],
+      ["tire inflator silverado",             "皮卡",        "3.2K",  "2.0%"],
+      ["heavy duty tire inflator truck",      "皮卡",        "2.8K",  "2.0%"],
+      ["ram 1500 tire inflator",              "皮卡",        "2.4K",  "2.0%"],
+      ["tacoma tire inflator",                "皮卡",        "2.1K",  "2.0%"],
+      ["tundra tire pump",                    "皮卡",        "1.8K",  "2.0%"],
+      ["sierra tire inflator",                "皮卡",        "1.6K",  "2.0%"],
+      ["pickup truck air pump",               "皮卡",        "1.4K",  "2.0%"],
+      ["tire inflator for frontier",          "皮卡",        "0.9K",  "2.0%"],
+      ["rv tire inflator",                    "房车 / 越野", "4.6K",  "5.4%"],
+      ["jeep tire pump",                      "房车 / 越野", "3.2K",  "5.4%"],
+      ["off road air compressor",             "房车 / 越野", "2.4K",  "5.4%"],
+      ["overland tire inflator",              "房车 / 越野", "1.6K",  "5.4%"],
+      ["jeep wrangler tire pump",             "房车 / 越野", "0.9K",  "5.4%"],
+      ["off road tire inflator portable",     "房车 / 越野", "0.6K",  "5.4%"],
+    ],
+    rules: [
+      {
+        term: "皮卡集群",
+        definition:
+          "包含「pickup」「truck」或任一主流皮卡型号名称(F-150、Silverado、Ram、Tacoma、Sierra、Tundra、Frontier)的搜索词。是该品类里商用 / 重型用途最强的一类。",
+      },
+      {
+        term: "房车 / 越野集群",
+        definition:
+          "包含「rv」「off-road」「jeep」「wrangler」「overland」的搜索词。和皮卡相邻但不同 — 这类买家关心离地间隙、大尺寸胎、越野使用信号。",
+      },
+      {
+        term: "通用便携集群",
+        definition:
+          "其余 — 描述品类本身、不带车辆锚点的搜索词。这一群主要是乘用车车主,是该品类的基线。",
+      },
+    ],
+  },
+  approval: {
+    primaryLabel: "批准测试计划",
+    summary:
+      "批准后我会把 4 项 listing 改动 brief 给品牌创意团队,并锁定 8 周测试日程。结果我来盯、提升度我来分析,每个交接节点都向你回报。",
   },
 };
 
@@ -5204,6 +5518,802 @@ function RazorBladeCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Launch CR 诊断画布 — 轮胎充气泵(皮卡)                                       */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+const TEST_TYPE_STYLE = {
+  image:   { bar: "bg-emerald-500", track: "bg-emerald-100", text: "text-emerald-700", border: "border-emerald-200", icon: ImageIcon,    label: "主图" },
+  title:   { bar: "bg-slate-700",   track: "bg-slate-100",   text: "text-slate-700",   border: "border-slate-300",   icon: Type,         label: "标题" },
+  aplus:   { bar: "bg-blue-500",    track: "bg-blue-100",    text: "text-blue-700",    border: "border-blue-200",    icon: LayoutTemplate, label: "A+" },
+  bullets: { bar: "bg-amber-500",   track: "bg-amber-100",   text: "text-amber-700",   border: "border-amber-200",   icon: ListIcon,     label: "Bullets" },
+};
+
+function ClusterStatCard({ cluster, label }) {
+  const flagged = cluster.status === "flagged";
+  return (
+    <Card className={`p-4 ${flagged ? "border-rose-300" : ""}`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <div className={`text-10 uppercase tracking-wider font-semibold ${flagged ? "text-rose-700" : "text-emerald-700"}`}>
+            {label}
+          </div>
+          <div className="text-sm font-semibold text-slate-900 mt-0.5">
+            {cluster.name}
+          </div>
+        </div>
+        {flagged ? (
+          <Pill tone="rose">问题集群</Pill>
+        ) : (
+          <Pill tone="slate">达基准</Pill>
+        )}
+      </div>
+
+      <div className="mt-3 flex items-baseline gap-2">
+        <span className="text-2xl font-mono font-semibold text-slate-900">
+          {cluster.cr}
+        </span>
+        <span className="text-11 text-slate-500">{wrapMetric("CR")}</span>
+        <span className="text-11 text-slate-400">·</span>
+        <span className="text-11 text-slate-500 font-mono">
+          基准 {cluster.benchmark}
+        </span>
+      </div>
+      <div className={`mt-1 text-xs font-mono font-medium ${flagged ? "text-rose-700" : "text-slate-600"}`}>
+        {cluster.gapPp} vs 基准
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-slate-100 text-11 text-slate-500 space-y-1">
+        <div className="flex items-baseline justify-between">
+          <span>月曝光</span>
+          <span className="font-mono text-slate-700">{cluster.impressions}</span>
+        </div>
+        <div className="flex items-baseline justify-between">
+          <span>点击 · 转化</span>
+          <span className="font-mono text-slate-700">
+            {cluster.clicks} · {cluster.conversions}
+          </span>
+        </div>
+        <div className="pt-1 text-slate-400 italic leading-relaxed">
+          示例:{cluster.exampleTerms}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function CompetitorMainImage({ competitor }) {
+  const isSelf = competitor.type === "self";
+  return (
+    <div
+      className={`rounded-md border ${isSelf ? "border-rose-200 bg-rose-50/30" : "border-slate-200 bg-slate-50"} overflow-hidden`}
+    >
+      <div
+        className="flex items-center justify-center"
+        style={{ aspectRatio: "1 / 1" }}
+      >
+        {isSelf ? (
+          <div className="flex flex-col items-center gap-2 text-slate-400">
+            <ImageIcon className="w-8 h-8" strokeWidth={1.5} />
+            <div className="text-10 uppercase tracking-wider font-medium">
+              纯产品图 · 白底
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-2 text-slate-500">
+            <Truck className="w-8 h-8 text-slate-600" strokeWidth={1.5} />
+            <div className="text-10 uppercase tracking-wider font-medium text-slate-600">
+              皮卡场景
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function HighlightedTitle({ title, highlights, mute }) {
+  if (mute || !highlights || highlights.length === 0) {
+    return <span>{title}</span>;
+  }
+  const escaped = highlights.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  const re = new RegExp(`(${escaped.join("|")})`, "gi");
+  const parts = title.split(re);
+  return parts.map((p, i) =>
+    highlights.some((h) => h.toLowerCase() === p.toLowerCase()) ? (
+      <span
+        key={i}
+        className="bg-emerald-100 text-emerald-800 px-1 rounded-sm font-medium"
+      >
+        {p}
+      </span>
+    ) : (
+      <span key={i}>{p}</span>
+    )
+  );
+}
+
+function CompetitorColumn({ competitor }) {
+  const isSelf = competitor.type === "self";
+  return (
+    <div
+      className={`flex flex-col rounded-lg border overflow-hidden ${
+        isSelf
+          ? "border-rose-300 bg-rose-50/20"
+          : "border-slate-200 bg-white"
+      }`}
+    >
+      {/* Header */}
+      <div
+        className={`px-4 py-3 border-b ${
+          isSelf ? "border-rose-200 bg-rose-50/40" : "border-slate-200 bg-slate-50/60"
+        }`}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div className={`text-sm font-semibold ${isSelf ? "text-rose-800" : "text-slate-900"}`}>
+            {competitor.name}
+          </div>
+          {isSelf ? (
+            <Pill tone="rose">我方</Pill>
+          ) : (
+            <Pill tone="slate">竞品</Pill>
+          )}
+        </div>
+      </div>
+
+      <div className="p-4 space-y-4 flex-1">
+        {/* Main image */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            主图
+          </div>
+          <CompetitorMainImage competitor={competitor} />
+          <div className={`mt-2 text-11 leading-relaxed ${isSelf ? "text-rose-800" : "text-slate-600"}`}>
+            {competitor.mainImageNote}
+          </div>
+        </div>
+
+        {/* Title */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            标题
+          </div>
+          <div className="text-xs text-slate-900 leading-relaxed">
+            <HighlightedTitle
+              title={competitor.title}
+              highlights={competitor.titleHighlights}
+              mute={isSelf}
+            />
+          </div>
+        </div>
+
+        {/* Bullets */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            前 5 条 bullets
+          </div>
+          <ol className="space-y-1.5 text-11 text-slate-700 leading-relaxed">
+            {competitor.bulletPoints.map((b, i) => {
+              const hit =
+                !isSelf &&
+                competitor.bulletHighlights.some((h) =>
+                  b.toLowerCase().includes(h.toLowerCase())
+                );
+              return (
+                <li key={i} className="flex items-start gap-1.5">
+                  <span className="font-mono text-slate-400 flex-shrink-0">
+                    {i + 1}.
+                  </span>
+                  <span
+                    className={
+                      hit
+                        ? "bg-emerald-100 text-emerald-800 px-1 rounded-sm font-medium"
+                        : ""
+                    }
+                  >
+                    {b}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+
+        {/* A+ */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            A+ 首模块
+          </div>
+          <div
+            className={`text-11 leading-relaxed rounded-md border px-2.5 py-2 ${
+              isSelf
+                ? "border-rose-200 bg-white text-rose-800"
+                : "border-emerald-200 bg-emerald-50/40 text-emerald-900"
+            }`}
+          >
+            {competitor.aplusFirstModule}
+          </div>
+        </div>
+
+        {/* Reviews */}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+            评论
+          </div>
+          <div className="flex items-center gap-3 text-11">
+            <span className="flex items-center gap-1">
+              <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+              <span className="font-mono font-semibold text-slate-900">
+                {competitor.reviewsRating}
+              </span>
+            </span>
+            <span className="text-slate-400">·</span>
+            <span className="font-mono text-slate-700">
+              {competitor.reviewsCount}
+            </span>
+            <span className="text-slate-400">条</span>
+          </div>
+          <div className="mt-1 text-11 text-slate-500">
+            提及 truck 的评论 ·{" "}
+            <span
+              className={`font-mono ${
+                isSelf ? "text-rose-700 font-semibold" : "text-slate-700"
+              }`}
+            >
+              {competitor.truckMentionCount}
+            </span>
+          </div>
+        </div>
+
+        {/* Price */}
+        <div className="pt-3 border-t border-slate-100 flex items-baseline justify-between">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            价格
+          </div>
+          <div className="text-right">
+            <div className="text-sm font-mono font-semibold text-slate-900">
+              {competitor.price}
+            </div>
+            <div className="text-10 text-slate-500 mt-0.5">
+              {competitor.priceNote}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HypothesisCard({ hypothesis }) {
+  const [modifying, setModifying] = useState(false);
+  const typeStyle = TEST_TYPE_STYLE[hypothesis.type];
+  const TypeIcon = typeStyle.icon;
+  const priorityTone = hypothesis.priority === "P0" ? "emerald" : "amber";
+  return (
+    <Card className="border-slate-200 overflow-hidden flex flex-col">
+      <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/40 flex items-start gap-3">
+        <div
+          className={`w-8 h-8 rounded-md border flex items-center justify-center flex-shrink-0 ${typeStyle.border} bg-white`}
+        >
+          <TypeIcon className={`w-4 h-4 ${typeStyle.text}`} strokeWidth={1.75} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <Pill tone="dark">{hypothesis.label}</Pill>
+            <Pill tone={priorityTone}>{hypothesis.priority}</Pill>
+            <span className="text-11 text-slate-500">{typeStyle.label}</span>
+          </div>
+          <div className="text-sm font-semibold text-slate-900 leading-snug">
+            {hypothesis.title}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 py-3 space-y-3 text-xs flex-1">
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            动作
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.treatment}
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            变量控制
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.variableControl}
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              样本量
+            </div>
+            <div className="text-slate-700 font-mono text-11 leading-relaxed">
+              {hypothesis.sampleSize}
+            </div>
+          </div>
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              时长
+            </div>
+            <div className="text-slate-700 font-mono">{hypothesis.duration}</div>
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            成功指标
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.successMetric}
+          </div>
+        </div>
+        <div className="pt-2 border-t border-slate-100">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            为什么能拉 CR
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {hypothesis.expectedImpact}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/40">
+        {modifying ? (
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="比如:把 F-150 换成 Silverado 场景"
+              className="flex-1 px-2.5 py-1.5 bg-white border border-slate-300 rounded-md text-11 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+            />
+            <button
+              type="button"
+              onClick={() => setModifying(false)}
+              className="text-11 text-slate-600 hover:text-slate-900 px-1.5"
+            >
+              取消
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 px-2 py-1 rounded"
+            >
+              <Send className="w-3 h-3" />
+              发送
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <div className="text-11 text-slate-500">
+              置信度{" "}
+              <span className="font-mono text-slate-900 font-medium">
+                {hypothesis.confidence}%
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 text-11 px-1.5 py-1 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded font-medium"
+              >
+                <X className="w-3 h-3" />
+                拒绝
+              </button>
+              <button
+                type="button"
+                onClick={() => setModifying(true)}
+                className="inline-flex items-center gap-1 text-11 font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-1.5 py-1 rounded bg-white"
+              >
+                <Edit3 className="w-3 h-3" />
+                修改
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-1.5 py-1 rounded"
+              >
+                <Check className="w-3 h-3" />
+                批准
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </Card>
+  );
+}
+
+function TestScheduleGantt({ schedule, hypotheses }) {
+  const totalWeeks = 8;
+  const colWidthPct = 100 / totalWeeks;
+  const hypothesesById = Object.fromEntries(hypotheses.map((h) => [h.id, h]));
+  return (
+    <Card className="p-5">
+      {/* Legend */}
+      <div className="mb-4 flex items-center gap-4 flex-wrap">
+        {Object.entries(TEST_TYPE_STYLE).map(([key, style]) => (
+          <div key={key} className="flex items-center gap-1.5">
+            <span
+              className={`inline-block w-3 h-3 rounded-sm ${style.bar}`}
+            />
+            <span className="text-11 text-slate-600">{style.label}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Header row · weeks */}
+      <div className="relative">
+        <div className="flex border-b border-slate-200 pb-1.5 mb-2 pl-32">
+          {Array.from({ length: totalWeeks }, (_, i) => (
+            <div
+              key={i}
+              className="text-10 uppercase tracking-wider text-slate-500 font-medium text-center"
+              style={{ width: `${colWidthPct}%` }}
+            >
+              W{i + 1}
+            </div>
+          ))}
+        </div>
+
+        {/* Gantt rows */}
+        <div className="space-y-2">
+          {schedule.map((row) => {
+            const hyp = hypothesesById[row.hypothesisId];
+            const style = TEST_TYPE_STYLE[row.type];
+            const startPct = ((row.startWeek - 1) / totalWeeks) * 100;
+            const widthPct = ((row.endWeek - row.startWeek + 1) / totalWeeks) * 100;
+            return (
+              <div key={row.hypothesisId} className="flex items-center">
+                <div className="flex items-center gap-1.5 text-11 font-medium text-slate-700 flex-shrink-0" style={{ width: "128px" }}>
+                  <Pill tone="dark">{hyp.label}</Pill>
+                  <span className={`${style.text}`}>{style.label}</span>
+                </div>
+                <div className={`flex-1 relative h-7 ${style.track} rounded-md`}>
+                  <div
+                    className={`absolute top-0 h-7 rounded-md ${style.bar} flex items-center px-2.5`}
+                    style={{ left: `${startPct}%`, width: `${widthPct}%` }}
+                  >
+                    <span className="text-10 font-mono font-semibold text-white">
+                      W{row.startWeek} – W{row.endWeek} · {row.endWeek - row.startWeek + 1}w
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function LaunchCRCanvas() {
+  const L = LAUNCH_CR;
+  const [clusteringOpen, setClusteringOpen] = useState(false);
+  const pickupCluster = L.clusters.find((c) => c.id === "pickup");
+  return (
+    <>
+      <CanvasHeader
+        kicker="新品 CR 诊断 · 轮胎充气泵 · 皮卡市场"
+        title={L.sku}
+        meta={
+          <>
+            <Pill tone="slate">
+              <Calendar className="w-3 h-3" />
+              5 月 · 本月
+            </Pill>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              {L.initiator} 于 {L.confirmedOn} 提出
+            </Pill>
+            <Pill tone="slate">
+              <Workflow className="w-3 h-3" />
+              诊断 + 4 项测试
+            </Pill>
+          </>
+        }
+      />
+
+      {/* Constraint callout · before 现状 */}
+      <div className="px-6 pt-5">
+        <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
+          <div className="flex items-start gap-2.5">
+            <Lock className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-11 uppercase tracking-wider text-amber-800 font-semibold mb-1">
+                约束 · Listing 改动需要品牌创意团队
+              </div>
+              <div className="text-sm text-amber-900 leading-relaxed">
+                {L.constraint}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 1. 现状 · 受众聚类 */}
+      <div className="px-6">
+        <SectionLabel kicker="3 个受众集群 · 皮卡是问题集群">
+          1. 现状
+        </SectionLabel>
+        <div className="grid grid-cols-3 gap-3">
+          {L.clusters.map((c, i) => (
+            <ClusterStatCard
+              key={c.id}
+              cluster={c}
+              label={`集群 ${i + 1}`}
+            />
+          ))}
+        </div>
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            onClick={() => setClusteringOpen(true)}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 rounded-md text-xs font-medium text-slate-700"
+          >
+            <Layers className="w-3.5 h-3.5 text-slate-500" />
+            查看聚类逻辑
+            <ArrowUpRight className="w-3 h-3 text-slate-400" />
+          </button>
+        </div>
+      </div>
+
+      {/* 2. 具体问题 · 皮卡深拆 + 竞品 listing 拆解 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="皮卡集群 CR 比基准低 6.4pp 的原因">
+          2. 具体问题
+        </SectionLabel>
+
+        {/* Pickup numbers row */}
+        <div className="grid grid-cols-3 gap-3">
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              皮卡集群曝光 · 月度
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {L.pickupDeepDive.impressions}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              {wrapMetric("CTR")}{" "}
+              <span className="font-mono text-slate-700">
+                {L.pickupDeepDive.ctr}
+              </span>{" "}
+              · 基准{" "}
+              <span className="font-mono text-slate-700">
+                {L.pickupDeepDive.ctrBenchmark}
+              </span>
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              点击
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {L.pickupDeepDive.clicks}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              流量已经进来了 — 问题在下游。
+            </div>
+          </Card>
+          <Card className="p-4 border-rose-300">
+            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+              转化
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-rose-700">
+              {L.pickupDeepDive.conversions}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              {wrapMetric("CR")}{" "}
+              <span className="font-mono text-rose-700 font-semibold">
+                {pickupCluster.cr}
+              </span>{" "}
+              · 基准{" "}
+              <span className="font-mono text-slate-700">
+                {pickupCluster.benchmark}
+              </span>
+            </div>
+          </Card>
+        </div>
+
+        {/* Lost revenue callout */}
+        <div className="mt-3 bg-rose-50 border border-rose-200 rounded-md px-4 py-3 flex items-start gap-3">
+          <DollarSign className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
+          <div className="flex-1">
+            <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-0.5">
+              估算流失收入 ·{" "}
+              <span className="font-mono">
+                {L.pickupDeepDive.estLostRevenue}
+              </span>
+            </div>
+            <div className="text-xs text-rose-900 leading-relaxed">
+              {L.pickupDeepDive.estLostRevenueNote}
+            </div>
+          </div>
+        </div>
+
+        {/* Position split */}
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              自然排名 · 皮卡集群
+            </div>
+            <div className="mt-1 flex items-baseline gap-3">
+              <span className="text-base font-mono font-semibold text-slate-900">
+                平均 {L.pickupDeepDive.organicRankAvg}
+              </span>
+              <span className="text-11 text-slate-500">
+                最佳{" "}
+                <span className="font-mono text-slate-700">
+                  {L.pickupDeepDive.organicRankBest}
+                </span>
+              </span>
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              我们在这些搜索词上有排名 · 可见度不是瓶颈。
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              广告位置 · 皮卡集群
+            </div>
+            <div className="mt-1 flex items-baseline gap-3">
+              <span className="text-base font-mono font-semibold text-slate-900">
+                平均 {L.pickupDeepDive.adPositionAvg}
+              </span>
+              <span className="text-11 text-slate-500">
+                最佳{" "}
+                <span className="font-mono text-slate-700">
+                  {L.pickupDeepDive.adPositionBest}
+                </span>
+              </span>
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              我们花钱买到了曝光 · 点击有 · 就是不转化。
+            </div>
+          </Card>
+        </div>
+
+        {/* Audience profile */}
+        <Card className="mt-3 p-4 bg-slate-50/60">
+          <div className="flex items-start gap-2.5">
+            <Users className="w-4 h-4 text-slate-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                皮卡买家画像
+              </div>
+              <div className="text-xs text-slate-700 leading-relaxed">
+                {L.pickupDeepDive.audienceProfile}
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Competitive listing teardown */}
+        <div className="mt-6">
+          <SectionLabel kicker="并排对比 · Competitor A · Competitor B · 我方">
+            竞品 listing 拆解
+          </SectionLabel>
+          <div className="grid grid-cols-3 gap-3 items-stretch">
+            {L.competitors.map((c, i) => (
+              <CompetitorColumn key={i} competitor={c} />
+            ))}
+          </div>
+        </div>
+
+        {/* Agent diagnosis callout */}
+        <div className="mt-4 bg-slate-900 text-white rounded-md px-5 py-4">
+          <div className="flex items-start gap-3">
+            <div className="w-7 h-7 rounded-md bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1.5">
+                问题在哪
+              </div>
+              <div className="text-sm text-white leading-relaxed mb-3">
+                {L.agentDiagnosis.summary}
+              </div>
+              <div className="grid grid-cols-3 gap-3 pt-3 border-t border-slate-700">
+                {L.agentDiagnosis.signals.map((s, i) => (
+                  <div key={i}>
+                    <div className="text-10 uppercase tracking-wider text-emerald-400 font-semibold mb-1">
+                      {s.label}
+                    </div>
+                    <div className="text-11 text-slate-300 leading-relaxed">
+                      {s.gap}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. 具体建议 · 4 项假设 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="4 项 listing 内容测试 · 2 个 P0 · 2 个 P1">
+          3. 具体建议
+        </SectionLabel>
+        <div className="grid md:grid-cols-2 gap-3">
+          {L.hypotheses.map((h) => (
+            <HypothesisCard key={h.id} hypothesis={h} />
+          ))}
+        </div>
+      </div>
+
+      {/* 4. 里程碑 · 测试日程 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="8 周测试窗口 · 1 对并行 · 2 处顺序依赖">
+          4. 里程碑
+        </SectionLabel>
+        <TestScheduleGantt schedule={L.schedule} hypotheses={L.hypotheses} />
+        <div className="mt-3 space-y-2">
+          {L.scheduleLogic.map((line, i) => (
+            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
+              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
+              <span>{line}</span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-3 text-11 text-slate-500 leading-relaxed italic">
+          {L.scheduleTradeoff}
+        </div>
+      </div>
+
+      <div className="h-2" />
+
+      {/* Bottom approval bar */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              批准范围
+            </div>
+            <div className="text-xs text-slate-700 leading-relaxed max-w-2xl">
+              {L.approval.summary}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
+            >
+              <X className="w-3.5 h-3.5" />
+              拒绝
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              修改
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              {L.approval.primaryLabel}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <InspectionDrawer
+        open={clusteringOpen}
+        onClose={() => setClusteringOpen(false)}
+        title="搜索词聚类逻辑 · 轮胎充气泵"
+        methodologyDescription={L.clusteringInspection.methodology}
+        tableHeaders={L.clusteringInspection.tableHeaders}
+        tableRows={L.clusteringInspection.tableRows}
+        columnWidths={L.clusteringInspection.columnWidths}
+        definitionsList={L.clusteringInspection.rules}
+        definitionsLabel="集群规则"
+      />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  Chat panel + top bar + company brain drawer                               */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -5774,13 +6884,7 @@ export default function App({ locale, setLocale }) {
       case "razor-blade":
         return <RazorBladeCanvas />;
       case "launch-cr":
-        return (
-          <PlaceholderCanvas
-            kicker="新品 CR 诊断 · 轮胎充气泵"
-            title="皮卡相关搜索词 CR 偏低"
-            part="Part 4"
-          />
-        );
+        return <LaunchCRCanvas />;
       default:
         return null;
     }
