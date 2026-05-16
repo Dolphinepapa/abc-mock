@@ -546,22 +546,23 @@ const STRATEGY = {
     {
       id: "bedroom-ctr",
       type: "informational",
-      title: "Bedroom-intent keywords underperforming on CTR",
+      title: "Bedroom-context traffic stuck — the problem is CTR",
       summary:
-        "14 search terms with bedroom intent generate $3.2K/month traffic at 1.1% CTR, well below the 2.8% category benchmark for the same intent cluster.",
+        "14 bedroom-related keywords drive only $3.2K/mo in traffic. CTR is 1.1% vs the 2.8% category benchmark — less than half.",
       observations: [
-        "5 of these 14 bedroom-intent keywords are live in current campaigns — flagged with rose tint in the Ad architecture panel (top bar → Ad architecture)",
-        "Full list of the 14 keywords and the word-type rules is auditable via 'View audience segmentation logic ↗' to the right of the segment chips",
-        "Current CTR on those terms: 1.1% (28-day avg). Category benchmark for same intent cluster: 2.8%.",
-        "Root-cause hypothesis: hero image and first 3 detail-page photos emphasize living-room / lobby context. No bedroom-context image in the current carousel.",
+        "Their organic positions average around #18 (top-5 in this category sit within #4); ad slots also lag (slot 4 vs hero slot 2)",
+        "5 of the 14 are running in current campaigns — flagged red in the Ad architecture panel on the right",
+        "Hero image and the first 3 detail-page photos are all living-room / lobby context, no bedroom shot — likely why CTR can't lift",
       ],
       projectedImpact: {
         primary: "+$18K/month sales",
-        condition: "if bedroom-CTR closes to category benchmark and CR holds at current 8.4%",
+        condition: "Assumes bedroom CTR closes to category benchmark",
       },
       ownership: "Brand team",
       ownershipReason:
-        "Listing content changes (hero image, photo carousel, bullet positioning) fall outside platform-level execution scope. Agent flags and quantifies impact; team executes.",
+        "Reworking the hero image, photo order, and copy needs the brand team. Agent finds and quantifies the gap; it doesn't shoot the photos.",
+      recommendation:
+        "Shoot one bedroom-context hero image and run a 14-day A/B — control is the current hero, treatment adds a bedroom scene.",
       actions: ["Brief listing team", "Snooze 7d", "Mark resolved"],
     },
     {
@@ -1787,6 +1788,18 @@ function InformationalInsightCard({ insight }) {
           </div>
         </div>
       </div>
+
+      {/* Recommendation */}
+      {insight.recommendation && (
+        <div className="px-5 py-3 border-t border-amber-100 bg-amber-50/40">
+          <div className="text-11 uppercase tracking-wider text-amber-800 font-medium mb-1">
+            Recommendation
+          </div>
+          <div className="text-xs text-slate-700 leading-relaxed">
+            {insight.recommendation}
+          </div>
+        </div>
+      )}
 
       {/* Action bar */}
       <div className="px-5 py-3 border-t border-amber-100 flex items-center justify-between">

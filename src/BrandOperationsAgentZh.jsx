@@ -546,22 +546,23 @@ const STRATEGY = {
     {
       id: "bedroom-ctr",
       type: "informational",
-      title: "卧室意图关键词的 CTR 表现不佳",
+      title: "卧室场景流量上不去 — 问题在点击率",
       summary:
-        "14 个卧室意图搜索词每月带来 $3.2K 流量,CTR 仅 1.1%,远低于同意图集群的品类基准 2.8%。",
+        "14 个卧室相关词每月只带来 $3.2K 流量。点击率 1.1%,品类基准 2.8% — 差了一半多。",
       observations: [
-        "这 14 个卧室意图关键词中有 5 个在当前广告活动中线上 — 在广告架构面板中以玫红色高亮标记(顶栏 → 广告架构)",
-        "完整 14 个关键词清单与词性分类规则可点击分段栏右侧的 '查看人群划分逻辑 ↗' 审查",
-        "当前这些词的 CTR:1.1%(28 天均值)。同意图集群的品类基准:2.8%。",
-        "根因假设:主图与详情页前 3 张图均强调客厅/大厅场景,当前主图轮播中没有卧室场景图。",
+        "这 14 个词的自然位在 18 名左右(品类前 5 都在 #4 以内),广告位也偏后(slot 4 vs 头部 slot 2)",
+        "5 个词当前在投广告中。在右侧 Ad architecture 面板里标红了",
+        "主图和详情页前 3 张图都是客厅/大厅场景,没有卧室场景图 — 这可能是点击率上不去的原因",
       ],
       projectedImpact: {
         primary: "+$18K / 月销售额",
-        condition: "假设卧室 CTR 追平品类基准,且 CR 保持在当前 8.4%",
+        condition: "卧室点击率追平品类基准后估算",
       },
       ownership: "品牌团队",
       ownershipReason:
-        "Listing 内容变更(主图、图片轮播、bullet point 排序)不在平台层执行范围内。Agent 负责发现与量化影响,团队负责执行。",
+        "改主图、调图序、改文案需要品牌团队上手。Agent 负责发现和量化,不替团队拍图。",
+      recommendation:
+        "拍一张卧室场景主图做 A/B 测试 — control 是当前主图,treatment 加入卧室场景。14 天能看出来。",
       actions: ["通知 Listing 团队", "暂缓 7 天", "标记为已解决"],
     },
     {
@@ -1787,6 +1788,18 @@ function InformationalInsightCard({ insight }) {
           </div>
         </div>
       </div>
+
+      {/* Recommendation */}
+      {insight.recommendation && (
+        <div className="px-5 py-3 border-t border-amber-100 bg-amber-50/40">
+          <div className="text-11 uppercase tracking-wider text-amber-800 font-medium mb-1">
+            建议
+          </div>
+          <div className="text-xs text-slate-700 leading-relaxed">
+            {insight.recommendation}
+          </div>
+        </div>
+      )}
 
       {/* Action bar */}
       <div className="px-5 py-3 border-t border-amber-100 flex items-center justify-between">
