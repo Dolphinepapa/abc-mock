@@ -1643,6 +1643,255 @@ const LAUNCH_CR = {
   },
 };
 
+/* Defense canvas — agent-initiated, time-sensitive */
+const DEFENSE = {
+  sku: "SKU-A · Arc Floor Lamp",
+  initiator: "Brand Ops Agent",
+  initiatorRole: "real-time monitoring alert",
+  detectedAt: "2 min ago",
+  attackerSku: "SKU-X",
+  timeSensitive: {
+    window: "48 hours",
+    expiresIn: "~5 days",
+    reason:
+      "competitor's 18%-off coupon expires in ~5 days — the decision window is closing",
+  },
+  currentState: {
+    ourBsr: "#2",
+    ourBsrHeldDays: 27,
+    ourSales: "$138K / mo",
+    ourTacos: 18.1,
+    ourDailyAdSpend: "$620",
+    bsrCategory: "Floor Lamps",
+  },
+  attackSignals: [
+    {
+      id: "bidding",
+      title: "Bidding is aggressive",
+      icon: "DollarSign",
+      lines: [
+        "SKU-X's CPC on our 7 hero keywords is up +180% over the past 96 hours (source: bid-loss reports).",
+        "Estimated SKU-X daily ad spend $1,400 vs our $620 — 2.3x ours on these 7 terms.",
+      ],
+    },
+    {
+      id: "organic",
+      title: "Organic momentum is stacking",
+      icon: "TrendingUp",
+      lines: [
+        "SKU-X review velocity is 2.3x ours over the past 30 days · new A+ content launched 12 days ago.",
+        "Listing CR climbed 6.4% → 8.9% — they're not just buying traffic, the detail page is winning too.",
+      ],
+    },
+    {
+      id: "promo",
+      title: "Promo signal · this attack has a clock",
+      icon: "Clock",
+      lines: [
+        "SKU-X has been running an 18%-off coupon for 9 days · typical 14-day window.",
+        "I estimate ~5 days left. When the coupon drops, their momentum likely fades.",
+      ],
+    },
+  ],
+  competitorTrend: [
+    { day: "D-6", adPosition: 4.8, organicRank: 14, estDailySales: 1820 },
+    { day: "D-5", adPosition: 4.2, organicRank: 13, estDailySales: 1960 },
+    { day: "D-4", adPosition: 3.6, organicRank: 12, estDailySales: 2240 },
+    { day: "D-3", adPosition: 3.1, organicRank: 11, estDailySales: 2480 },
+    { day: "D-2", adPosition: 2.6, organicRank: 10, estDailySales: 2810 },
+    { day: "D-1", adPosition: 2.2, organicRank: 9,  estDailySales: 3140 },
+    { day: "D-0", adPosition: 2.0, organicRank: 8,  estDailySales: 3380 },
+  ],
+  projection: {
+    headline: "SKU-A is projected to drop to BSR #4-5 within 14 days",
+    detail:
+      "Extending SKU-X's current trajectory linearly · if we don't move, they keep eating impression share on the 7 hero terms. Ads + organic + promo all biting together — our #2 doesn't hold.",
+    revenueLoss: "$42K / 14 days",
+    revenueLossNote:
+      "Estimated from current traffic share lost × our $34.99 ASP · doesn't include downstream BSR-slide effects",
+    confidence: 78,
+    confidenceLabel: "Based on 12 prior attack trajectories of this shape",
+  },
+  postures: [
+    {
+      id: "defend-all",
+      name: "Defend at all costs",
+      kind: "aggressive",
+      tone: "blue",
+      recommended: false,
+      tagline: "Match bids on their strongest 7 terms",
+      approach:
+        "Match SKU-X bids on all 7 hero keywords · increase SB-layer daily budget +80% · run a 14-day matching coupon (15% off). Fight on their strongest ground.",
+      cost: "+$11.4K ad spend / 14 days · contribution margin -3.2pp",
+      risk: "Bidding war re-escalates · competitor likely counters · CPC stays elevated after the 14-day window closes",
+      outcomeProbability: "78% probability of holding BSR ≤ #3",
+      recommendedWhen: "Long-term LTV at BSR #1-3 justifies the short-term margin hit",
+      confidence: 73,
+      confidenceLabel: "Familiar playbook · but the cost lands on our margin",
+    },
+    {
+      id: "wait",
+      name: "Wait it out",
+      kind: "patient",
+      tone: "slate",
+      recommended: false,
+      tagline: "Let their promo window expire · don't engage",
+      approach:
+        "Hold ad spend at current level · monitor BSR + traffic share at high frequency · keep a counter-plan drafted · launch only if rank drops to #4.",
+      cost: "$0 incremental",
+      risk: "BSR likely dips to #4-5 short-term · estimated $42K revenue impact over 14 days · if SKU-X isn't purely promo-driven, the recovery costs more",
+      outcomeProbability: "65% probability metrics revert after coupon expires · we hold mid-position",
+      recommendedWhen: "We're confident this attack is ~90% promo-driven and time-bound",
+      confidence: 58,
+      confidenceLabel: "Lower confidence — I can't confirm SKU-X doesn't have a second wave",
+    },
+    {
+      id: "counter-attack",
+      name: "Counter-attack on weaknesses",
+      kind: "asymmetric",
+      tone: "emerald",
+      recommended: true,
+      tagline: "12 SKU-X weak terms + a contrasting promo",
+      approach:
+        "Don't fight on their strongest 7. Go to the 12 keywords where SKU-X is weak (lower ad position, lower CR) and expand share there + run a contrasting promo (buy-2-save-$18, dollar amount not percent) — don't collide with their 18%-off head-on.",
+      cost: "+$7.8K ad spend / 14 days · contribution margin -1.8pp (mostly from buy-2 discount)",
+      risk: "3 of the 12 weak terms have thin traffic — lift may underperform model; the contrasting promo needs the listing team ~36 hrs to ship",
+      outcomeProbability: "71% probability of holding BSR ≤ #3 · plus 23% probability of gaining share on SKU-X's weak terms",
+      recommendedWhen: "Competitor has identifiable weak spots AND our LTV math supports the asymmetric play",
+      confidence: 71,
+      confidenceLabel: "Highest of the three · backed by SKU-117's same-shape precedent",
+      reference: {
+        sku: "Bed frame · SKU-117",
+        period: "2025 Q3",
+        outcome: "Held BSR #2 throughout the entire attack window",
+        method:
+          "Competitor SKU-Y attacked with high CPC on 5 hero terms + promo · we avoided the head-on fight and bid up on 9 long-tail terms where SKU-Y was weak, plus a buy-1-get-1 bundle. After the attack window closed, SKU-Y's share dropped back and we picked up 2 BSR sub-category #1 slots.",
+        confidencePct: 71,
+        compatibilityNote:
+          "Structural match · same 'promo-driven + concentrated hero terms' attack shape · same identifiable weak terms. Difference: floor-lamp lever is 'buy 2 save $18' (SKU-117 used buy-1-get-1) — lever type is comparable but not identical, which is why confidence isn't 80%.",
+      },
+    },
+  ],
+  deepDive: {
+    "counter-attack": {
+      kicker:
+        "Expand on 12 SKU-X weak terms · contrasting promo · don't burn cash on their strongest ground",
+      targetKeywords: [
+        { keyword: "arc floor lamp",                ourAdPosition: "#3", skuxAdPosition: "#7",  ourCr: "9.4%", projectedImpact: "+$2.1K / 14 days" },
+        { keyword: "tall arc lamp living room",     ourAdPosition: "#4", skuxAdPosition: "#9",  ourCr: "8.8%", projectedImpact: "+$1.8K / 14 days" },
+        { keyword: "modern arc floor lamp",         ourAdPosition: "#3", skuxAdPosition: "#8",  ourCr: "9.1%", projectedImpact: "+$1.6K / 14 days" },
+        { keyword: "arc floor lamp gold",           ourAdPosition: "#5", skuxAdPosition: "#11", ourCr: "8.6%", projectedImpact: "+$0.9K / 14 days" },
+        { keyword: "arc lamp for sectional",        ourAdPosition: "#4", skuxAdPosition: "#10", ourCr: "9.7%", projectedImpact: "+$0.8K / 14 days" },
+        { keyword: "arc floor lamp black",          ourAdPosition: "#6", skuxAdPosition: "#12", ourCr: "7.9%", projectedImpact: "+$0.7K / 14 days" },
+        { keyword: "mid century arc floor lamp",    ourAdPosition: "#4", skuxAdPosition: "#9",  ourCr: "8.4%", projectedImpact: "+$0.6K / 14 days" },
+        { keyword: "arc lamp over couch",           ourAdPosition: "#5", skuxAdPosition: "#13", ourCr: "9.2%", projectedImpact: "+$0.6K / 14 days" },
+        { keyword: "tall floor lamp for high ceiling", ourAdPosition: "#6", skuxAdPosition: "#10", ourCr: "8.1%", projectedImpact: "+$0.5K / 14 days" },
+        { keyword: "arc lamp marble base",          ourAdPosition: "#5", skuxAdPosition: "#14", ourCr: "8.9%", projectedImpact: "+$0.4K / 14 days" },
+        { keyword: "curved floor lamp",             ourAdPosition: "#7", skuxAdPosition: "#11", ourCr: "7.6%", projectedImpact: "+$0.4K / 14 days" },
+        { keyword: "arc reading lamp",              ourAdPosition: "#6", skuxAdPosition: "#12", ourCr: "8.2%", projectedImpact: "+$0.3K / 14 days" },
+      ],
+      bidChanges: [
+        { keyword: "arc floor lamp",                currentBid: "$1.84", proposedBid: "$2.40", dailyDelta: "+$84" },
+        { keyword: "tall arc lamp living room",     currentBid: "$1.62", proposedBid: "$2.20", dailyDelta: "+$72" },
+        { keyword: "modern arc floor lamp",         currentBid: "$1.78", proposedBid: "$2.30", dailyDelta: "+$68" },
+        { keyword: "arc floor lamp gold",           currentBid: "$1.42", proposedBid: "$1.95", dailyDelta: "+$48" },
+        { keyword: "arc lamp for sectional",        currentBid: "$1.36", proposedBid: "$1.90", dailyDelta: "+$44" },
+        { keyword: "arc floor lamp black",          currentBid: "$1.48", proposedBid: "$1.95", dailyDelta: "+$38" },
+        { keyword: "Other 6 long-tail terms (rolled up)", currentBid: "—", proposedBid: "—",   dailyDelta: "+$204" },
+      ],
+      bidChangesTotal: "+$558 / day · +$7.8K / 14 days",
+      promo: {
+        type: "Contrasting promo · buy 2, save $18",
+        structure:
+          "Buy 2 arc floor lamps, save $18 (≈ 9% off equivalent, but expressed as a flat dollar amount, not a percent) — deliberately on a different dimension than SKU-X's 18% off.",
+        rationale:
+          "SKU-X is fighting on percent-off · we step out of that comparison entirely and put our promo on dollar amount · doesn't read as a follow, and the buy-2 push pulls average order value up 37%.",
+        marginImpact: "Contribution margin -1.8pp · ~520 buy-2 orders projected over 14 days",
+        executionGate:
+          "Listing team ships in ≤ 36 hrs · I sync ad campaigns · inventory check ≥ 2,400 units",
+      },
+      milestones: [
+        {
+          day: "D+1",
+          window: "Today → tomorrow",
+          action: "Raise bids on the 12 weak terms · alerts go live · promo brief sent to Listing team",
+          gate: "Bid-update fill rate ≥ 95% · brief acknowledged",
+        },
+        {
+          day: "D+3",
+          window: "This week",
+          action: "Buy-2-save-$18 promo goes live · ad campaigns tagged with promo",
+          gate: "Promo page live · buy-2 orders ≥ 8% of daily order mix",
+        },
+        {
+          day: "D+7",
+          window: "Next Monday",
+          action: "First checkpoint review · weak-term impression share + our BSR hold",
+          gate: "12-term weighted impression share +18pp · BSR held ≤ #3",
+        },
+        {
+          day: "D+14",
+          window: "End of window",
+          action: "Competitor promo window expected to expire · evaluate scaling bids back",
+          gate: "BSR held ≤ #3 · 14-day net impact tracking to +$8-10K (after ad cost)",
+        },
+      ],
+      milestonesTradeoff:
+        "D+1 to D+3 is the critical stretch — bids and promo need to land together to work. The 36-hour Listing-team gate is the hard constraint; if they can't slot it, we degrade to a 'bids only, no promo' fallback.",
+    },
+    "defend-all": {
+      kicker: "Match bids and run a matching coupon · fight where they're strongest",
+      costBreakdown: [
+        { line: "Match SKU-X CPC on 7 hero terms",       dailyDelta: "+$640", note: "Pulls our average CPC from $1.82 to ~$2.95" },
+        { line: "SB-layer daily budget +80%",            dailyDelta: "+$180", note: "Reinforces top-of-SERP slot capture" },
+        { line: "14-day matching coupon (15% off) margin sacrifice", dailyDelta: "—", note: "Contribution margin -3.2pp · ~1,180 orders affected over 14 days" },
+      ],
+      costTotal: "+$11.4K ad spend / 14 days · contribution margin -3.2pp",
+      milestones: [
+        { day: "D+1",  window: "Today → tomorrow", action: "Match bids on 7 terms · schedule matching coupon for 14 days", gate: "Bid-update fill rate ≥ 95% · coupon scheduled" },
+        { day: "D+3",  window: "This week",        action: "First bid-war review · check whether SKU-X re-bids again",      gate: "≥ 5 of 7 terms back at ad position ≤ #2" },
+        { day: "D+7",  window: "Next Monday",      action: "Mid-window review · decide whether to double down",             gate: "BSR held ≤ #3 · TACoS ≤ 24% before coupon ends" },
+        { day: "D+14", window: "End of window",    action: "Coupon ends · roll bids back in stages",                       gate: "BSR held ≤ #3 · roll-back path locked in" },
+      ],
+    },
+    wait: {
+      kicker: "Don't engage · turn up monitoring · keep the counter ready but holstered",
+      monitoringPlan: [
+        { item: "BSR live monitoring",     frequency: "Every 4 hours",  trigger: "BSR drops to #4 → alert fires → notify Maya + Devon" },
+        { item: "7 hero-term traffic share", frequency: "Daily",          trigger: "Our share down ≥ 15% → kick off counter-plan brief" },
+        { item: "SKU-X promo page",        frequency: "Daily",          trigger: "Promo de-listed = take the win, prep retreat from defensive posture" },
+      ],
+      readyResponse:
+        "Counter-plan drafted in advance · if BSR actually drops to #4, we switch to 'counter-attack on weaknesses' within 6 hours. Cost is eating ~$15-18K in losses first + BSR recovery takes another 7-10 days.",
+      milestones: [
+        { day: "D+1",  window: "Today → tomorrow", action: "Monitoring alert parameters live · counter-plan brief in the drawer",         gate: "All 3 monitors active · brief ready" },
+        { day: "D+3",  window: "This week",        action: "Mid-check · does trend match the 'promo-driven' assumption?",                  gate: "SKU-X organic momentum starting to turn → assumption holds" },
+        { day: "D+7",  window: "Next Monday",      action: "First BSR checkpoint · decide whether to trigger counter",                    gate: "BSR still ≤ #3 → keep waiting; BSR = #4 → trigger switch" },
+        { day: "D+14", window: "End of window",    action: "Competitor promo window expected to expire · verify the assumption",          gate: "Promo de-listed + metrics revert = plan worked; otherwise damage control" },
+      ],
+    },
+  },
+  reasoning: {
+    chain: [
+      "Monitoring signal fired: SKU-X's 24-hour rolling-average CPC on our 7 hero terms crossed the +120% threshold 4 hours ago · competitor-attack detector triggered.",
+      "Cross-section check: SKU-X organic rank 14 → 8 over the same window, listing CR 6.4% → 8.9%, review velocity 2.3x — three independent signals say this isn't a single-point spike.",
+      "Promo window detection: SKU-X's 18%-off coupon has been live for 9 days · typical cycle 14 days · estimated 5 days remaining — the attack is time-bound, which sets the strategic terrain.",
+      "Filter Company Brain for precedents: 7 cases match the 'promo-driven + hero-term attack' shape · 4 chose defend-all, 2 chose wait, 3 chose asymmetric (overlap). Result spread: asymmetric BSR-hold rate at 14 days = 71%, defend-all = 64%, wait = 38%.",
+      "Re-filter against current context: SKU-X is already ahead on hero-term CPC · marginal returns on us matching are thin. SKU-X is at ad position ≥ #8 on 12 weak terms · that's an exploitable asymmetric structure.",
+      "Evaluate lever compatibility: SKU-X is fighting on percent-off · matching with 15% off pulls us into a price-war spiral. Buy-2-save-$18 is a contrasting lever · different dimension · +37% AOV partially offsets the margin sacrifice.",
+      "Risk math: 71% confidence on the asymmetric play comes from precedent structural match · I subtract 9pp for lever-type difference (SKU-117 used buy-1-get-1, not dollar-amount) — confidence doesn't reach 80%.",
+      "Time-sensitivity constraint: promo window expected to close in 5 days · the 48-hour decision window reflects 'wait until D+3 to launch → effective response window collapses to 6 days · too late to buy BSR back'.",
+    ],
+    accuracy: 74,
+    accuracyLabel: "comparable competitor-attack cases",
+  },
+  approval: {
+    primaryLabel: "Approve recommended posture (Counter-attack on weaknesses)",
+    secondaryLabel: "Choose different posture",
+    timeSensitiveLabel: "Time-sensitive · 48-hour decision window",
+  },
+};
+
 /* Peak season canvas */
 const PEAK = {
   trafficForecast: [
@@ -6342,6 +6591,748 @@ function LaunchCRCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Defense canvas — agent-initiated, time-sensitive                          */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+const THREAT_SIGNAL_ICONS = {
+  DollarSign,
+  TrendingUp,
+  Clock,
+};
+
+function ThreatSignalCard({ signal }) {
+  const Icon = THREAT_SIGNAL_ICONS[signal.icon] || AlertCircle;
+  return (
+    <Card className="p-4 flex flex-col h-full">
+      <div className="flex items-start gap-2.5 mb-2">
+        <div className="w-7 h-7 rounded-md bg-rose-50 border border-rose-200 flex items-center justify-center flex-shrink-0">
+          <Icon className="w-3.5 h-3.5 text-rose-700" strokeWidth={1.75} />
+        </div>
+        <div className="text-sm font-semibold text-slate-900 leading-snug">
+          {signal.title}
+        </div>
+      </div>
+      <div className="space-y-1.5 text-xs text-slate-700 leading-relaxed">
+        {signal.lines.map((line, i) => (
+          <div key={i} className="flex items-start gap-1.5">
+            <CornerDownRight className="w-3 h-3 text-slate-300 mt-0.5 flex-shrink-0" />
+            <span>{line}</span>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+function CompetitorTrendChart({ data }) {
+  const charts = [
+    {
+      label: "SKU-X ad position",
+      dataKey: "adPosition",
+      kicker: "Lower number = higher slot · climbed from ~#5 to #2 in a week",
+      reversed: true,
+      domain: [1, 6],
+      stroke: "#e11d48",
+      format: (v) => `#${v.toFixed(1)}`,
+    },
+    {
+      label: "SKU-X organic rank",
+      dataKey: "organicRank",
+      kicker: "Lower number = higher rank · climbed from #14 to #8",
+      reversed: true,
+      domain: [6, 16],
+      stroke: "#b45309",
+      format: (v) => `#${Math.round(v)}`,
+    },
+    {
+      label: "SKU-X estimated daily sales",
+      dataKey: "estDailySales",
+      kicker: "$ / day · rose from ~$1.8K to ~$3.4K",
+      reversed: false,
+      domain: [1500, 3600],
+      stroke: "#0f766e",
+      format: (v) => `$${(v / 1000).toFixed(1)}K`,
+    },
+  ];
+  return (
+    <div className="grid grid-cols-3 gap-3">
+      {charts.map((c) => (
+        <Card key={c.dataKey} className="p-4">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            {c.label}
+          </div>
+          <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
+            {c.kicker}
+          </div>
+          <div className="mt-2" style={{ height: 96 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="day"
+                  tick={{ fontSize: 10, fill: "#64748b" }}
+                  axisLine={{ stroke: "#cbd5e1" }}
+                  tickLine={false}
+                />
+                <YAxis
+                  reversed={c.reversed}
+                  domain={c.domain}
+                  tick={{ fontSize: 10, fill: "#64748b" }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={36}
+                  tickFormatter={c.format}
+                />
+                <Tooltip
+                  contentStyle={{
+                    fontSize: 11,
+                    border: "1px solid #cbd5e1",
+                    borderRadius: 6,
+                    padding: "4px 8px",
+                  }}
+                  formatter={(value) => [c.format(value), c.label]}
+                />
+                <Line
+                  type="monotone"
+                  dataKey={c.dataKey}
+                  stroke={c.stroke}
+                  strokeWidth={2}
+                  dot={{ r: 2.5, fill: c.stroke, strokeWidth: 0 }}
+                  activeDot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+function PostureCard({ posture, selected, onSelect }) {
+  const isRecommended = posture.recommended;
+  const borderClass = isRecommended
+    ? "border-emerald-500 border-2"
+    : selected
+    ? "border-slate-400 border-2"
+    : "border-slate-200";
+  const kindLabel =
+    posture.kind === "aggressive"
+      ? "Head-on"
+      : posture.kind === "patient"
+      ? "Patient"
+      : "Asymmetric";
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={`text-left bg-white rounded-lg ${borderClass} hover:border-slate-400 transition-colors overflow-hidden flex flex-col`}
+    >
+      <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/40">
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+          {isRecommended && (
+            <Pill tone="emerald">
+              <Sparkles className="w-3 h-3" />
+              Agent recommended
+            </Pill>
+          )}
+          <Pill tone={posture.tone}>{kindLabel}</Pill>
+          {selected && !isRecommended && (
+            <span className="text-10 text-slate-500 font-medium">Selected</span>
+          )}
+        </div>
+        <div className="text-sm font-semibold text-slate-900 leading-snug">
+          {posture.name}
+        </div>
+        <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
+          {posture.tagline}
+        </div>
+      </div>
+
+      <div className="px-4 py-3 space-y-2.5 text-xs flex-1">
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Approach
+          </div>
+          <div className="text-slate-700 leading-relaxed">{posture.approach}</div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2.5 pt-1">
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Cost
+            </div>
+            <div className="text-slate-700 leading-relaxed font-mono text-11">
+              {posture.cost}
+            </div>
+          </div>
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Outcome probability
+            </div>
+            <div className="text-slate-700 leading-relaxed text-11">
+              {posture.outcomeProbability}
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-1">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Risk
+          </div>
+          <div className="text-slate-700 leading-relaxed text-11">{posture.risk}</div>
+        </div>
+
+        <div className="pt-1">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Use when
+          </div>
+          <div className="text-slate-700 leading-relaxed text-11 italic">
+            {posture.recommendedWhen}
+          </div>
+        </div>
+
+        {posture.reference && (
+          <div className="bg-slate-900 text-white rounded-md px-3 py-2.5 mt-2">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1">
+              <Brain className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+              <span className="text-11 font-medium">Company Brain · precedent</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1">
+              <span className="text-11 font-medium text-white">
+                {posture.reference.sku}
+              </span>
+              <span className="text-10 text-slate-500">·</span>
+              <span className="text-10 text-slate-400 font-mono">
+                {posture.reference.period}
+              </span>
+            </div>
+            <div className="text-11 text-emerald-400 font-medium mb-1.5 leading-relaxed">
+              {posture.reference.outcome}
+            </div>
+            <div className="text-11 text-slate-300 leading-relaxed">
+              {posture.reference.method}
+            </div>
+            <div className="mt-2 pt-2 border-t border-slate-700 flex items-center justify-between">
+              <span className="text-10 text-slate-500">Precedent confidence</span>
+              <span className="text-11 font-mono text-emerald-400 font-medium">
+                {posture.reference.confidencePct}%
+              </span>
+            </div>
+            <div className="mt-1.5 flex items-start gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-1 rounded leading-relaxed">
+              <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+              <span>{posture.reference.compatibilityNote}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/40 flex items-center justify-between">
+        <span className="text-11 text-slate-500">
+          Confidence{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {posture.confidence}%
+          </span>
+        </span>
+        <span className="text-10 text-slate-500 leading-tight max-w-[55%] text-right">
+          {posture.confidenceLabel}
+        </span>
+      </div>
+    </button>
+  );
+}
+
+function PostureDeepDive({ posture, deepDive }) {
+  if (posture.id === "counter-attack") {
+    const d = deepDive;
+    return (
+      <Card className="p-5">
+        <div className="text-11 text-slate-500 leading-relaxed mb-4">
+          {d.kicker}
+        </div>
+
+        <div className="mb-5">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
+            12 target keywords · we're stronger · SKU-X is weaker
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-slate-200">
+                  <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Keyword</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Our ad pos.</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">SKU-X ad pos.</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Our {wrapMetric("CR")}</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Projected impact</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.targetKeywords.map((kw, i) => (
+                  <tr key={i} className="border-b border-slate-100 last:border-0">
+                    <td className="py-2 px-2 text-slate-900 font-mono">{kw.keyword}</td>
+                    <td className="py-2 px-2 text-right font-mono text-slate-700">{kw.ourAdPosition}</td>
+                    <td className="py-2 px-2 text-right font-mono text-slate-500">{kw.skuxAdPosition}</td>
+                    <td className="py-2 px-2 text-right font-mono text-slate-700">{kw.ourCr}</td>
+                    <td className="py-2 px-2 text-right font-mono text-emerald-700 font-medium">{kw.projectedImpact}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="mb-5">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
+            Bid changes · 14-day window
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-slate-200">
+                  <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Keyword</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Current bid</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Proposed bid</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Daily $ delta</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.bidChanges.map((b, i) => (
+                  <tr key={i} className="border-b border-slate-100 last:border-0">
+                    <td className="py-2 px-2 text-slate-900 font-mono">{b.keyword}</td>
+                    <td className="py-2 px-2 text-right font-mono text-slate-500">{b.currentBid}</td>
+                    <td className="py-2 px-2 text-right font-mono text-slate-900 font-medium">{b.proposedBid}</td>
+                    <td className="py-2 px-2 text-right font-mono text-rose-700">{b.dailyDelta}</td>
+                  </tr>
+                ))}
+                <tr className="bg-slate-50/60">
+                  <td className="py-2 px-2 text-10 uppercase tracking-wider text-slate-700 font-semibold">Total</td>
+                  <td colSpan={2} />
+                  <td className="py-2 px-2 text-right font-mono text-slate-900 font-semibold">{d.bidChangesTotal}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="bg-emerald-50/40 border border-emerald-200 rounded-md px-4 py-3">
+          <div className="flex items-start gap-2.5">
+            <Sparkles className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-11 uppercase tracking-wider text-emerald-800 font-semibold mb-1">
+                Contrasting promo · don't compete on the percent-off axis
+              </div>
+              <div className="text-sm text-slate-900 font-medium mb-1">
+                {d.promo.type}
+              </div>
+              <div className="text-xs text-slate-700 leading-relaxed mb-2">
+                {d.promo.structure}
+              </div>
+              <div className="text-xs text-slate-700 leading-relaxed mb-2">
+                <span className="text-10 uppercase tracking-wider text-emerald-800 font-semibold mr-1.5">Why this lever</span>
+                {d.promo.rationale}
+              </div>
+              <div className="grid grid-cols-2 gap-3 mt-2 pt-2 border-t border-emerald-200">
+                <div>
+                  <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-0.5">Margin impact</div>
+                  <div className="text-11 text-slate-700 leading-relaxed">{d.promo.marginImpact}</div>
+                </div>
+                <div>
+                  <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-0.5">Execution gate</div>
+                  <div className="text-11 text-slate-700 leading-relaxed">{d.promo.executionGate}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
+    );
+  }
+
+  if (posture.id === "defend-all") {
+    const d = deepDive;
+    return (
+      <Card className="p-5">
+        <div className="text-11 text-slate-500 leading-relaxed mb-4">
+          {d.kicker}
+        </div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
+          Cost breakdown · 14-day window
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-slate-200">
+                <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Action</th>
+                <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Daily $ delta</th>
+                <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              {d.costBreakdown.map((row, i) => (
+                <tr key={i} className="border-b border-slate-100 last:border-0">
+                  <td className="py-2 px-2 text-slate-900">{row.line}</td>
+                  <td className="py-2 px-2 text-right font-mono text-rose-700 font-medium">{row.dailyDelta}</td>
+                  <td className="py-2 px-2 text-slate-600 leading-relaxed">{row.note}</td>
+                </tr>
+              ))}
+              <tr className="bg-slate-50/60">
+                <td className="py-2 px-2 text-10 uppercase tracking-wider text-slate-700 font-semibold">Total</td>
+                <td colSpan={2} className="py-2 px-2 font-mono text-slate-900 font-semibold">{d.costTotal}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    );
+  }
+
+  // wait
+  const d = deepDive;
+  return (
+    <Card className="p-5">
+      <div className="text-11 text-slate-500 leading-relaxed mb-4">
+        {d.kicker}
+      </div>
+      <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
+        Monitoring plan · triggers switch us to counter-attack
+      </div>
+      <div className="overflow-x-auto mb-4">
+        <table className="w-full text-xs">
+          <thead>
+            <tr className="border-b border-slate-200">
+              <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Monitor</th>
+              <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Frequency</th>
+              <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Trigger</th>
+            </tr>
+          </thead>
+          <tbody>
+            {d.monitoringPlan.map((row, i) => (
+              <tr key={i} className="border-b border-slate-100 last:border-0">
+                <td className="py-2 px-2 text-slate-900">{row.item}</td>
+                <td className="py-2 px-2 text-slate-700 font-mono">{row.frequency}</td>
+                <td className="py-2 px-2 text-slate-700 leading-relaxed">{row.trigger}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="bg-slate-50/60 border border-slate-200 rounded-md px-4 py-3 flex items-start gap-2.5">
+        <ShieldCheck className="w-4 h-4 text-slate-600 mt-0.5 flex-shrink-0" />
+        <div className="text-xs text-slate-700 leading-relaxed">
+          <span className="text-10 uppercase tracking-wider text-slate-500 font-semibold mr-1.5">Ready counter</span>
+          {d.readyResponse}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function DefenseMilestoneTimeline({ milestones }) {
+  return (
+    <Card className="p-5">
+      <div className="grid grid-cols-4 gap-3">
+        {milestones.map((m, i) => (
+          <div key={i} className="relative">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-7 h-7 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+                <span className="text-11 font-mono font-semibold text-emerald-700">
+                  {m.day}
+                </span>
+              </div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                {m.window}
+              </div>
+            </div>
+            <div className="text-xs text-slate-900 font-medium leading-snug mb-1.5">
+              {m.action}
+            </div>
+            <div className="flex items-start gap-1.5 text-11 text-slate-600 leading-relaxed">
+              <CircleDot className="w-3 h-3 text-emerald-600 mt-0.5 flex-shrink-0" />
+              <span>{m.gate}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+function DefenseCanvas() {
+  const D = DEFENSE;
+  const [selectedPostureId, setSelectedPostureId] = useState("counter-attack");
+  const selectedPosture = D.postures.find((p) => p.id === selectedPostureId);
+  const selectedDeepDive = D.deepDive[selectedPostureId];
+  const selectedMilestones = selectedDeepDive.milestones;
+  const recommendedPosture = D.postures.find((p) => p.recommended);
+
+  return (
+    <>
+      <CanvasHeader
+        kicker="Defense · BSR guard"
+        title={`${D.sku} under attack from ${D.attackerSku}`}
+        meta={
+          <>
+            <Pill tone="rose">
+              <AlertCircle className="w-3 h-3" />
+              Monitoring alert · {D.detectedAt}
+            </Pill>
+            <Pill tone="emerald">
+              <Sparkles className="w-3 h-3" />
+              Agent monitoring
+            </Pill>
+            <Pill tone="slate">
+              <Workflow className="w-3 h-3" />
+              3 response postures
+            </Pill>
+          </>
+        }
+      />
+
+      {/* Time-sensitive constraint callout · before 现状 */}
+      <div className="px-6 pt-5">
+        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
+          <div className="flex items-start gap-2.5">
+            <Clock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
+            <div className="flex-1">
+              <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
+                Time-sensitive · recommend decision within {D.timeSensitive.window}
+              </div>
+              <div className="text-sm text-rose-900 leading-relaxed">
+                {D.timeSensitive.reason} · waiting until D+3 leaves an effective response window of ~6 days.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 1. Current state */}
+      <div className="px-6">
+        <SectionLabel kicker={`SKU-A currently BSR ${D.currentState.ourBsr} · held for ${D.currentState.ourBsrHeldDays} days`}>
+          1. Current state · 现状
+        </SectionLabel>
+
+        <div className="grid grid-cols-4 gap-3 mb-4">
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Our BSR · {D.currentState.bsrCategory}
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {D.currentState.ourBsr}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              Held <span className="font-mono">{D.currentState.ourBsrHeldDays}</span> days
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Monthly sales
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {D.currentState.ourSales}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">Reference baseline</div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              {wrapMetric("TACoS")}
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {D.currentState.ourTacos}%
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              Daily ad spend <span className="font-mono">{D.currentState.ourDailyAdSpend}</span>
+            </div>
+          </Card>
+          <Card className="p-4 border-rose-300">
+            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+              Attacker
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-rose-700">
+              {D.attackerSku}
+            </div>
+            <div className="text-11 text-rose-700 mt-1">
+              Primary threat on 7 hero terms
+            </div>
+          </Card>
+        </div>
+
+        <div className="mb-4">
+          <SectionLabel kicker="3 independent signals · all pointing the same way">
+            Attack signals
+          </SectionLabel>
+          <div className="grid grid-cols-3 gap-3">
+            {D.attackSignals.map((s) => (
+              <ThreatSignalCard key={s.id} signal={s} />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <SectionLabel kicker="Past 7 days · leftmost is earliest">
+            SKU-X 7-day momentum trace
+          </SectionLabel>
+          <CompetitorTrendChart data={D.competitorTrend} />
+        </div>
+      </div>
+
+      {/* 2. Specific problem */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="What happens if we don't move · 14-day projection">
+          2. Specific problem · 具体问题
+        </SectionLabel>
+
+        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-md bg-rose-100 border border-rose-200 flex items-center justify-center flex-shrink-0">
+              <TrendingUp className="w-4 h-4 text-rose-700" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
+                Projected impact
+              </div>
+              <div className="text-base font-semibold text-rose-900 leading-snug mb-2">
+                {D.projection.headline}
+              </div>
+              <div className="text-xs text-rose-900 leading-relaxed mb-3">
+                {D.projection.detail}
+              </div>
+              <div className="grid grid-cols-3 gap-3 pt-3 border-t border-rose-200">
+                <div>
+                  <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold mb-0.5">
+                    Estimated revenue loss
+                  </div>
+                  <div className="text-base font-mono font-semibold text-rose-900">
+                    {D.projection.revenueLoss}
+                  </div>
+                  <div className="text-11 text-rose-700 mt-0.5 leading-relaxed">
+                    {D.projection.revenueLossNote}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold mb-0.5">
+                    Projection confidence
+                  </div>
+                  <div className="text-base font-mono font-semibold text-rose-900">
+                    {D.projection.confidence}%
+                  </div>
+                  <div className="text-11 text-rose-700 mt-0.5 leading-relaxed">
+                    {D.projection.confidenceLabel}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold mb-0.5">
+                    Key assumption
+                  </div>
+                  <div className="text-11 text-rose-900 leading-relaxed">
+                    SKU-X's current momentum continues · we don't respond
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Recommendation */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="3 postures · click to switch deep-dive · recommended is highlighted">
+          3. Recommendation · 具体建议
+        </SectionLabel>
+        <div className="grid grid-cols-3 gap-3 items-stretch">
+          {D.postures.map((p) => (
+            <PostureCard
+              key={p.id}
+              posture={p}
+              selected={selectedPostureId === p.id}
+              onSelect={() => setSelectedPostureId(p.id)}
+            />
+          ))}
+        </div>
+
+        <div className="mt-4">
+          <SectionLabel kicker={`Deep-dive · ${selectedPosture.name}`}>
+            Selected posture
+          </SectionLabel>
+          <PostureDeepDive posture={selectedPosture} deepDive={selectedDeepDive} />
+        </div>
+      </div>
+
+      {/* 4. Milestones */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker={`W1-2 schedule · ${selectedPosture.name}`}>
+          4. Milestones · 里程碑
+        </SectionLabel>
+        <DefenseMilestoneTimeline milestones={selectedMilestones} />
+        {selectedPostureId === "counter-attack" && (
+          <div className="mt-3 text-11 text-slate-500 leading-relaxed italic">
+            {D.deepDive["counter-attack"].milestonesTradeoff}
+          </div>
+        )}
+      </div>
+
+      <div className="h-2" />
+
+      <ReasoningSection reasoning={D.reasoning} />
+
+      {/* Time-sensitive approval bar */}
+      <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
+        <div className="flex items-center gap-1.5 mb-3">
+          <Clock className="w-3.5 h-3.5 text-rose-700" />
+          <span className="text-11 uppercase tracking-wider text-rose-700 font-semibold">
+            {D.approval.timeSensitiveLabel}
+          </span>
+          <span className="text-11 text-slate-500">
+            · competitor coupon expires in {D.timeSensitive.expiresIn}
+          </span>
+        </div>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div className="min-w-0 max-w-xl text-xs text-slate-700 leading-relaxed">
+            Currently selected: <span className="font-medium text-slate-900">{selectedPosture.name}</span>{" "}
+            · confidence <span className="font-mono">{selectedPosture.confidence}%</span>
+            {selectedPostureId !== "counter-attack" && (
+              <span className="text-slate-500">
+                {" "}· Agent recommends switching back to "{recommendedPosture.name}"
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              type="button"
+              className="text-11 font-medium text-slate-500 hover:text-slate-700 px-2"
+            >
+              Escalate to human review
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              Modify
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+            >
+              <ArrowRight className="w-3.5 h-3.5" />
+              {D.approval.secondaryLabel}
+            </button>
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+            >
+              <Check className="w-3.5 h-3.5" />
+              {selectedPostureId === "counter-attack"
+                ? D.approval.primaryLabel
+                : `Approve "${selectedPosture.name}"`}
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  Chat panel + top bar + company brain drawer                               */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -6903,13 +7894,7 @@ export default function App({ locale, setLocale }) {
       case "strategy":
         return <StrategyCanvas />;
       case "defense":
-        return (
-          <PlaceholderCanvas
-            kicker="Defense · BSR guard"
-            title="SKU-A · under competitor attack"
-            part="Part 5"
-          />
-        );
+        return <DefenseCanvas />;
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
