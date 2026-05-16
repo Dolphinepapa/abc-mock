@@ -74,6 +74,8 @@ const METRIC_DEFINITIONS = {
     "在一组地区投放广告、在匹配的对照地区不投放,通过对比销售差异分离真实因果影响。",
   ctr: "Click-through Rate · 点击率 · 点击 ÷ 曝光。",
   cr: "Conversion Rate · 转化率 · 订单 ÷ 点击。",
+  impressions:
+    "曝光 · 广告被展示的次数(不论用户是否注意)。月曝光 = 过去 30 天累计曝光。",
 };
 
 const THREADS = [
@@ -929,6 +931,8 @@ function wrapMetric(label) {
     CR: METRIC_DEFINITIONS.cr,
     SOV: METRIC_DEFINITIONS.sov,
     LTV: METRIC_DEFINITIONS.ltv,
+    月曝光: METRIC_DEFINITIONS.impressions,
+    转化率: METRIC_DEFINITIONS.cr,
   };
   const def = map[label];
   if (def) return <MetricTerm definition={def}>{label}</MetricTerm>;

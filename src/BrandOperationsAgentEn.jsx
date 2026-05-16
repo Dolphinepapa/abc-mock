@@ -75,6 +75,8 @@ const METRIC_DEFINITIONS = {
     "Run ads in a set of regions while withholding in matched control regions, then compare sales to isolate true causal impact.",
   ctr: "Click-through rate · Clicks ÷ impressions.",
   cr: "Conversion rate · Orders ÷ clicks.",
+  impressions:
+    "Number of times an ad is displayed — regardless of whether the user noticed it. Monthly impressions = past-30-day total.",
 };
 
 const THREADS = [
@@ -929,6 +931,8 @@ function wrapMetric(label) {
     CR: METRIC_DEFINITIONS.cr,
     SOV: METRIC_DEFINITIONS.sov,
     LTV: METRIC_DEFINITIONS.ltv,
+    "Monthly impressions": METRIC_DEFINITIONS.impressions,
+    "Conversion rate": METRIC_DEFINITIONS.cr,
   };
   const def = map[label];
   if (def) return <MetricTerm definition={def}>{label}</MetricTerm>;
