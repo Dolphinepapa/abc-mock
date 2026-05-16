@@ -1454,6 +1454,7 @@ function PerformanceStrip() {
         methodologyDescription={FLOOR_LAMP_CLUSTERING.methodology}
         tableHeaders={FLOOR_LAMP_CLUSTERING.tableHeaders}
         tableRows={FLOOR_LAMP_CLUSTERING.rows}
+        columnWidths={["44%", "16%", "14%", "26%"]}
         definitionsList={FLOOR_LAMP_CLUSTERING.rules}
         definitionsLabel="词性分类规则"
         footer={clusterFooter}

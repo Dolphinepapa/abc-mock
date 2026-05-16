@@ -7,6 +7,7 @@ export default function InspectionDrawer({
   methodologyDescription,
   tableHeaders = [],
   tableRows = [],
+  columnWidths,
   definitionsList,
   definitionsLabel = "Definitions",
   footer,
@@ -47,7 +48,16 @@ export default function InspectionDrawer({
         <div className="flex-1 overflow-y-auto">
           {tableRows.length > 0 && (
             <div className="px-5 py-4">
-              <table className="w-full text-xs">
+              <table
+                className={`w-full text-xs ${columnWidths ? "table-fixed" : ""}`}
+              >
+                {columnWidths && (
+                  <colgroup>
+                    {columnWidths.map((w, i) => (
+                      <col key={i} style={{ width: w }} />
+                    ))}
+                  </colgroup>
+                )}
                 <thead>
                   <tr className="border-b border-slate-200">
                     {tableHeaders.map((h, i) => (
