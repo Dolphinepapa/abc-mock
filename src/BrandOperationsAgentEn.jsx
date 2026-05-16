@@ -440,18 +440,18 @@ const STRATEGY = {
       type: "executable",
       title: "Apply prior #2 → #1 capture playbook to SKU-A",
       summary:
-        "ABC Home Goods · Bed frame SKU-117 went #2 → #1 in 7 weeks (Q4 2025) using a concentrated ad-lift + promo playbook. Floor Lamps SKU-A matches on lifecycle stage, competitive intensity, and price band.",
+        "ABC Home Goods · Bed frame SKU-117 went #2 → #1 in 7 weeks (Q4 2025) using TACoS lifted 19% → 31% (temporary) + 14-day promo. Floor Lamps SKU-A matches on lifecycle stage, competitive intensity, and price band.",
       reference: {
         sku: "Bed frame · SKU-117",
         period: "Q4 2025",
         outcome: "#2 → #1 in 7 weeks",
         method:
-          "4 weeks of concentrated ad lift (TACoS 19% → 31% temporary) + 14-day 15%-off promo. Captured #1 in week 6. Through the 6-week taper that followed, sales held +18% above pre-campaign baseline — best-seller halo carried organic clicks +34% and offset the ad-spend reduction.",
+          "4 weeks of TACoS lifted 19% → 31% (temporary) + 14-day 15%-off promo. Captured #1 in week 6. Through the 6-week taper that followed, sales held +18% above pre-campaign baseline — best-seller halo carried organic clicks +34% and offset the ad-spend reduction.",
       },
       plan: {
         phases: [
           {
-            label: "Weeks 1–4 · Aggressive lift",
+            label: "Weeks 1–4 · Budget +67% · SB layer · promo on",
             actions: [
               "Daily ad budget $848 → $1,420 (+67%)",
               "Add SB headline ad layer on top 12 hero category keywords",
@@ -461,7 +461,7 @@ const STRATEGY = {
             sales: 172,
           },
           {
-            label: "Weeks 5–8 · Capture + halo activates",
+            label: "Weeks 5–8 · Hold architecture · halo lifts organic",
             actions: [
               "Maintain week-4 architecture through capture window",
               "Best-seller halo expected to lift organic clicks +28% to +42%",
@@ -470,7 +470,7 @@ const STRATEGY = {
             sales: 196,
           },
           {
-            label: "Weeks 9–12 · Ad taper · halo sustains sales",
+            label: "Weeks 9–12 · Budget −35% · organic + halo carry",
             actions: [
               "Daily ad budget $1,420 → $920 (−35%)",
               "Organic + halo expected to outpace ad reduction · sales hold or modestly grow",
@@ -532,9 +532,9 @@ const STRATEGY = {
       "Analyzed current listing health: rank #2, sales $138K/mo, TACoS 18.1% — well within target band. Listing is mature and operating efficiently. Pure ad-architecture changes alone are unlikely to close to #1.",
       "Audited current ad architecture (5 campaigns, $848/d combined). No structural inefficiency detected at the campaign level.",
       "Scanned listing for pockets of weakness. Identified bedroom-context search terms as the highest-impact CTR gap — but resolution requires listing-content edits, which fall outside agent execution scope (surfaced as Insight #1).",
-      "Pulled 9 prior #2 → #1 captures from Company Brain. 7 of 9 used a concentrated ad-lift + promo playbook. Best similarity match: bed frame SKU-117 in Q4 2025 (same lifecycle stage, comparable competitive intensity, adjacent price band).",
+      "Pulled 9 prior #2 → #1 captures from Company Brain. 7 of 9 used a short-term budget lift + promo playbook. Best similarity match: bed frame SKU-117 in Q4 2025 (same lifecycle stage, comparable competitive intensity, adjacent price band).",
       "Drafted 3-phase plan from that playbook (Insight #2). Best-seller halo and taper outcomes modeled from observed prior outcome.",
-      "Composed sequential milestone path: listing fix (team) + ad lift (agent) → capture → efficiency restore.",
+      "Composed sequential milestone path: listing fix (team) + short-term budget lift (agent) → #1 capture → return to target TACoS.",
       "Confidence on 90-day timeline: 81%.",
     ],
     accuracy: 81,
