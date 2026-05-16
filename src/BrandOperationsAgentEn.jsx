@@ -37,6 +37,10 @@ import {
   Truck,
   Star,
   Users,
+  FileSpreadsheet,
+  MoreVertical,
+  Trash2,
+  MessageSquare,
 } from "lucide-react";
 import {
   LineChart,
@@ -2170,6 +2174,754 @@ const COMPANY_BRAIN = {
         appliedIn: ["Defense case · BSR slippage detection", "Razor-blade plan competitor map"],
         definition: "Daily BSR snapshots stored as time series; agent now monitors rank delta thresholds (≥3 positions/week) for alerts.",
       },
+    },
+  ],
+
+  connectors: [
+    {
+      id: "cn-amazon-ads",
+      name: "Amazon Advertising API",
+      type: "api",
+      status: "live",
+      lastSync: "4 min ago",
+      scopeUrl: "https://advertising.amazon.com/account/oauth-scope",
+      sensitivity: "Internal",
+    },
+    {
+      id: "cn-walmart-connect",
+      name: "Walmart Connect API",
+      type: "api",
+      status: "live",
+      lastSync: "12 min ago",
+      scopeUrl: "https://advertising.walmart.com/scope",
+      sensitivity: "Internal",
+    },
+    {
+      id: "cn-tiktok-ads",
+      name: "TikTok Ads Manager API",
+      type: "api",
+      status: "syncing",
+      lastSync: "just started",
+      scopeUrl: "https://ads.tiktok.com/marketing_api/scope",
+      sensitivity: "Internal",
+    },
+    {
+      id: "cn-brand-analytics",
+      name: "Amazon Brand Analytics",
+      type: "api",
+      status: "live",
+      lastSync: "2h ago",
+      scopeUrl: "https://sellercentral.amazon.com/brand-analytics/scope",
+      sensitivity: "Sensitive",
+    },
+    {
+      id: "cn-helium10",
+      name: "Helium10 scrape",
+      type: "scrape",
+      status: "paused",
+      lastSync: "3 days ago",
+      scopeUrl: "https://helium10.com/integrations/scope",
+      sensitivity: "Internal",
+    },
+    {
+      id: "cn-slack",
+      name: "Slack notifications",
+      type: "api",
+      status: "live",
+      lastSync: "last event 8 min ago",
+      scopeUrl: "https://slack.com/oauth/scope",
+      sensitivity: "Public",
+    },
+    {
+      id: "cn-gdrive",
+      name: "Google Drive",
+      type: "file",
+      status: "live",
+      lastSync: "6 docs indexed",
+      scopeUrl: "https://drive.google.com/oauth/scope",
+      sensitivity: "Sensitive",
+    },
+  ],
+
+  uploadedDocs: [
+    {
+      id: "doc-q4-retro",
+      filename: "Q4-2025-Retrospective.pdf",
+      type: "pdf",
+      status: "indexed",
+      patternsCount: 3,
+      uploadedAt: "Apr 12",
+      uploadedBy: "Maya Chen",
+      sensitivity: "Sensitive",
+    },
+    {
+      id: "doc-pricing",
+      filename: "Pricing-Strategy-2026.xlsx",
+      type: "xlsx",
+      status: "indexed",
+      patternsCount: 2,
+      uploadedAt: "Apr 28",
+      uploadedBy: "Sara Lin",
+      sensitivity: "Confidential",
+    },
+    {
+      id: "doc-teardown",
+      filename: "Competitor-Teardown-Floor-Lamps.pdf",
+      type: "pdf",
+      status: "indexed",
+      patternsCount: 4,
+      uploadedAt: "May 2",
+      uploadedBy: "Devon Park",
+      sensitivity: "Internal",
+    },
+    {
+      id: "doc-style",
+      filename: "Brand-Style-Guide-v3.pdf",
+      type: "pdf",
+      status: "no_patterns",
+      patternsCount: 0,
+      uploadedAt: "Feb 14",
+      uploadedBy: "Maya Chen",
+      sensitivity: "Internal",
+    },
+    {
+      id: "doc-bsr-csv",
+      filename: "BSR-Trajectory-2024-Q4.csv",
+      type: "csv",
+      status: "indexed",
+      patternsCount: 1,
+      uploadedAt: "Apr 8",
+      uploadedBy: "Devon Park",
+      sensitivity: "Internal",
+    },
+    {
+      id: "doc-sku-postmortem",
+      filename: "SKU-launch-postmortem-PB-A.pdf",
+      type: "pdf",
+      status: "processing",
+      patternsCount: null,
+      uploadedAt: "May 14",
+      uploadedBy: "Devon Park",
+      sensitivity: "Internal",
+    },
+  ],
+
+  patterns: [
+    {
+      id: "pat-brand-ad-cpc",
+      name: "Sustained brand-ad investment → CPC decline",
+      category: "Strategy",
+      confidencePct: 76,
+      usedInCount: 7,
+      sourceCount: 12,
+      sensitivity: "Internal",
+      addedAt: "May 14",
+      detail: {
+        definition: "When brand-ad spend sustains for 8+ weeks at 2x baseline, CPC trends down as relevance-driven impressions replace bid-driven ones.",
+        lineage: "Distilled across 12 scale-up cases; first observed SKU-117 Q3 2024, re-confirmed SKU-A Q1 2026.",
+        sourceList: [
+          ["SKU-117 Q3 2024", "Brand-ad spend 2.1x → CPC -22.3% over 11 weeks"],
+          ["SKU-toothbrush Q2 2025", "Brand-ad spend 1.9x → CPC -14.6% over 9 weeks"],
+          ["SKU-A Q1 2026", "Brand-ad spend 2.4x → CPC -18.1% over 10 weeks"],
+          ["+9 additional cases", "Avg CPC delta -18.4%, window 8–13 weeks"],
+        ],
+        appliedIn: ["Omnichannel Amazon plan", "Omnichannel Walmart SB expansion", "BSR capture playbook"],
+      },
+    },
+    {
+      id: "pat-bsr-capture",
+      name: "Best-seller capture · #2 → #1 via concentrated ad lift",
+      category: "Strategy",
+      confidencePct: 81,
+      usedInCount: 4,
+      sourceCount: 6,
+      sensitivity: "Sensitive",
+      addedAt: "Apr 22",
+      detail: {
+        definition: "From a #2 BSR position, a 3-week concentrated ad push (3-4x normal spend) flips to #1 in 6 of 6 observed cases when category leader is not running promo.",
+        lineage: "All 6 cases were ABC-internal SKUs in lighting, bedroom, bath categories 2023–2025.",
+        sourceList: [
+          ["SKU-117 Bed frame · Jul 2024", "Push 3.4x · BSR #2 → #1 by week 3, held 14 weeks"],
+          ["SKU-A Floor lamp · Nov 2024", "Push 2.9x · BSR #2 → #1 by week 2, held 9 weeks"],
+          ["SKU-toothbrush · Jan 2025", "Push 3.1x · BSR #2 → #1 by week 3, held 11 weeks"],
+          ["+3 additional cases", "All converged #2 → #1 within 3 weeks of push start"],
+        ],
+        appliedIn: ["BSR capture playbook · 3-phase", "Omnichannel Amazon plan"],
+      },
+    },
+    {
+      id: "pat-bedroom-ctr",
+      name: "Bedroom-cluster CTR diagnosis",
+      category: "Optimization",
+      confidencePct: 73,
+      usedInCount: 3,
+      sourceCount: 4,
+      sensitivity: "Internal",
+      addedAt: "Mar 9",
+      detail: {
+        definition: "When bedroom-context keyword CTR is 1.1–1.4% vs category benchmark 2.8%, root cause is almost always main-image scene mismatch (living-room vs bedroom).",
+        lineage: "4 ABC SKUs across floor lamps and bed frames showed same pattern; fix-rate after main-image rework was 4/4.",
+        sourceList: [
+          ["SKU-A Floor lamp · Feb 2025", "Bedroom CTR 1.2% → 2.6% after bedroom hero image"],
+          ["SKU-A2 Floor lamp · Apr 2025", "Bedroom CTR 1.1% → 2.4% after re-shoot"],
+          ["SKU-117 Bed frame · Aug 2025", "Bedroom CTR 1.4% → 3.1% after staging"],
+          ["+1 additional case", "Same pattern, fix-rate 100%"],
+        ],
+        appliedIn: ["Floor Lamp optimization canvas", "Bed frame launch CR playbook"],
+      },
+    },
+    {
+      id: "pat-longtail-harvest",
+      name: "Long-tail keyword harvest from search-term reports",
+      category: "Optimization",
+      confidencePct: 84,
+      usedInCount: 11,
+      sourceCount: 18,
+      sensitivity: "Internal",
+      addedAt: "Feb 18",
+      detail: {
+        definition: "Search-term reports with ≥18 impressions and CR ≥ category median surface long-tail keywords worth promoting to exact-match. Expected incremental ACoS improvement 4–9 pt within 14 days.",
+        lineage: "18 SKU windows over 2024–2025, ABC + benchmarked against 3 partner-brand case studies.",
+        sourceList: [
+          ["SKU-A 2024 Q4 harvest", "37 terms promoted · ACoS -6.2 pt in 14d"],
+          ["SKU-117 2025 Q1 harvest", "29 terms promoted · ACoS -4.8 pt in 14d"],
+          ["SKU-toothbrush 2025 Q2 harvest", "44 terms promoted · ACoS -8.1 pt in 14d"],
+          ["+15 additional windows", "Avg ACoS delta -6.4 pt"],
+        ],
+        appliedIn: ["Negative keyword harvest decision class", "Optimization canvas · long-tail tab"],
+      },
+    },
+    {
+      id: "pat-bid-raise-cap",
+      name: "Bid raise within 15% · CR > target 48hr trigger",
+      category: "Execution",
+      confidencePct: 89,
+      usedInCount: 38,
+      sourceCount: 38,
+      sensitivity: "Internal",
+      addedAt: "Jan 12",
+      detail: {
+        definition: "Auto-raise bid by up to 15% when keyword CR exceeds target for 48 consecutive hours. 0 reverts across 38 invocations in the past 90 days; reviewer audit clean.",
+        lineage: "Highest-confidence executable pattern in the brain. Audit cadence: weekly by Maya, quarterly by Devon.",
+        sourceList: [
+          ["38 invocations · Feb 12 – May 14", "0 reverts · avg incremental conversions +14.3% per affected keyword"],
+          ["Reviewer audit · Apr 28", "Maya signed off · clean"],
+          ["Reviewer audit · Mar 31", "Devon signed off · clean"],
+        ],
+        appliedIn: ["Bid raise decision class (autonomous)", "Execution canvas · live ops tab"],
+      },
+    },
+    {
+      id: "pat-negkw-harvest",
+      name: "Negative keyword harvest from zero-conv 14d",
+      category: "Execution",
+      confidencePct: 87,
+      usedInCount: 22,
+      sourceCount: 22,
+      sensitivity: "Internal",
+      addedAt: "Jan 14",
+      detail: {
+        definition: "Keywords with 0 conversions and ≥84 clicks over a rolling 14-day window get auto-added to the campaign's negative list. Reverts <2% historically.",
+        lineage: "22 invocations in past 90 days; reverts: 0. Pattern is one of the cleanest 'subtract' classes.",
+        sourceList: [
+          ["22 invocations · Feb 14 – May 14", "0 reverts · avg wasted spend recaptured $1,847/wk per SKU"],
+          ["Edge case · Mar 22", "1 brand-defense keyword flagged for review (auto-suppressed correctly)"],
+        ],
+        appliedIn: ["Negative keyword decision class", "Optimization canvas"],
+      },
+    },
+    {
+      id: "pat-launch-ramp",
+      name: "Launch ramp curve · $120-180 price band",
+      category: "Launch",
+      confidencePct: 74,
+      usedInCount: 5,
+      sourceCount: 7,
+      sensitivity: "Internal",
+      addedAt: "Nov 4",
+      detail: {
+        definition: "For SKUs in $120-180 price band, expect 4-6 week ramp from 0 to ~70% of target run-rate. Faster ramp typically indicates over-spending; slower indicates listing-side gap.",
+        lineage: "7 ABC launches 2023–2025 plus 2 partner-brand case studies. Q4 2025 actuals diverged 14% — pattern flagged.",
+        sourceList: [
+          ["SKU-A Floor lamp · 2024 launch", "Week-5 hit 68% of run-rate"],
+          ["SKU-117 Bed frame · 2025 launch", "Week-6 hit 72% of run-rate"],
+          ["SKU-A2 Floor lamp · 2025 launch", "Week-4 hit 64% — flagged for review"],
+          ["+4 additional launches", "Avg week-5 ramp 67% of run-rate"],
+        ],
+        appliedIn: ["Launch CR playbook", "Currently flagged · Q4 actuals review"],
+      },
+    },
+    {
+      id: "pat-p0-main-image",
+      name: "P0 main-image rework before scale",
+      category: "Launch",
+      confidencePct: 78,
+      usedInCount: 6,
+      sourceCount: 8,
+      sensitivity: "Internal",
+      addedAt: "Aug 22",
+      detail: {
+        definition: "When launch-week CTR is below 0.6x of category benchmark, scaling spend before main-image rework wastes 60-70% of incremental dollars. Always rework first.",
+        lineage: "8 ABC launches showed this; in every case where the team scaled first, CTR did not recover until rework.",
+        sourceList: [
+          ["SKU-A2 · Apr 2025 launch", "Scaled too early · -42% wasted spend · rework fixed in week 8"],
+          ["SKU-117 · Jul 2024 launch", "Rework first · CTR 2.4% by week 3"],
+          ["+6 additional launches", "Pattern held 8/8"],
+        ],
+        appliedIn: ["Launch CR playbook · P0 sequencing", "Bed frame launch case"],
+      },
+    },
+    {
+      id: "pat-counter-attack",
+      name: "Counter-attack on competitor weakness (asymmetric)",
+      category: "Defense",
+      confidencePct: 71,
+      usedInCount: 4,
+      sourceCount: 5,
+      sensitivity: "Sensitive",
+      addedAt: "Dec 8",
+      detail: {
+        definition: "When attacked, instead of defending the contested SKU directly, attack the attacker's weakest SKU. Resource asymmetry favors defender 3/5 cases observed.",
+        lineage: "5 defense windows 2023–2025. Caveat: 2 of 5 cases the counter-attack didn't pull attacker off; treat as supplement to direct defense, not replacement.",
+        sourceList: [
+          ["Defense case · Jun 2024", "Counter-attack pulled attacker off in 11 days"],
+          ["Defense case · Nov 2024", "Counter-attack supplemental; direct defense did main work"],
+          ["+3 additional windows", "3/5 success rate"],
+        ],
+        appliedIn: ["Defense posture selection playbook"],
+      },
+    },
+    {
+      id: "pat-wait-out",
+      name: "Wait-out posture · promo-driven attacks",
+      category: "Defense",
+      confidencePct: 65,
+      usedInCount: 3,
+      sourceCount: 4,
+      sensitivity: "Internal",
+      addedAt: "Oct 11",
+      detail: {
+        definition: "When competitor attack is promo-driven (visible end date), wait-out posture (no spend response) is correct in 3 of 4 observed cases. Defending wastes dollars during the promo window.",
+        lineage: "4 windows 2024–2025. Caveat: requires visible promo end date — open-ended attacks need direct defense.",
+        sourceList: [
+          ["Defense case · Jul 2024", "Wait-out · attacker faded after promo, recovered BSR in 9 days"],
+          ["Defense case · Mar 2025", "Wait-out · same outcome"],
+          ["+2 additional cases", "1 false-positive (promo extended unexpectedly)"],
+        ],
+        appliedIn: ["Defense posture selection playbook"],
+      },
+    },
+    {
+      id: "pat-pickup-cr",
+      name: "Pickup-truck cluster CR diagnosis pattern",
+      category: "Optimization",
+      confidencePct: 76,
+      usedInCount: 2,
+      sourceCount: 3,
+      sensitivity: "Internal",
+      addedAt: "Sep 17",
+      detail: {
+        definition: "When pickup-truck/cargo context keyword CR is 0.8-1.2% but CTR is healthy, the gap is typically pricing-vs-context: shoppers click but bounce on price relative to the truck-specific use case.",
+        lineage: "3 cases in tools / outdoor categories. Smaller sample than other Optimization patterns — confidence reflects that.",
+        sourceList: [
+          ["Tool cart case · Apr 2025", "CR 0.9% → 2.1% after pricing repositioning"],
+          ["Outdoor light case · Aug 2024", "CR 1.1% → 2.4% after context bundle"],
+          ["+1 additional case", "Same diagnosis held"],
+        ],
+        appliedIn: ["Optimization canvas (rare-context tab)"],
+      },
+    },
+    {
+      id: "pat-razor-attach",
+      name: "Razor-blade attach lift via promo window",
+      category: "Strategy",
+      confidencePct: 72,
+      usedInCount: 3,
+      sourceCount: 4,
+      sensitivity: "Sensitive",
+      addedAt: "May 12",
+      detail: {
+        definition: "For razor-blade SKUs, running a 7-day handle promo during the buy-cycle window lifts blade attach rate 2.4-3.1 pts. Only valid when handle margin can absorb the promo discount.",
+        lineage: "4 windows · ABC toothbrush + 1 partner-brand teardown. Recently distilled from Q4-2025-Retrospective.pdf.",
+        sourceList: [
+          ["SKU-toothbrush · Mar 2025", "Attach 14.2% → 16.8% during 7-day window"],
+          ["SKU-toothbrush · Sep 2025", "Attach 13.9% → 17.0% during 7-day window"],
+          ["+2 additional windows", "Avg attach lift 2.7 pt"],
+        ],
+        appliedIn: ["Razor-blade plan · SKU-A bundle"],
+      },
+    },
+  ],
+
+  playbookList: [
+    {
+      id: "pb-bsr-3phase",
+      name: "3-phase BSR capture",
+      category: "Strategy",
+      basedOnCases: 6,
+      sensitivity: "Internal",
+      phases: [
+        { label: "Phase 1", focus: "Listing + creative hardening", durationWeeks: 3, exitGate: "Main-image CTR ≥ 2.4%" },
+        { label: "Phase 2", focus: "Concentrated ad lift · 3-4x spend", durationWeeks: 4, exitGate: "BSR position ≤ #2 sustained 7d" },
+        { label: "Phase 3", focus: "Hold + defend new position", durationWeeks: 5, exitGate: "BSR #1 sustained 14d · ROAS ≥ baseline" },
+      ],
+    },
+    {
+      id: "pb-brand-ad-scale",
+      name: "Brand-ad scale-up · CPC decline",
+      category: "Strategy",
+      basedOnCases: 12,
+      sensitivity: "Internal",
+      phases: [
+        { label: "Phase 1", focus: "Baseline brand-ad spend at 2x for 4 weeks", durationWeeks: 4, exitGate: "Branded impression share ≥ 38%" },
+        { label: "Phase 2", focus: "Hold spend, monitor CPC trend", durationWeeks: 4, exitGate: "CPC trending down week-over-week" },
+        { label: "Phase 3", focus: "Stabilize at lower CPC, taper spend", durationWeeks: 4, exitGate: "CPC -15% vs baseline · ROAS stable" },
+      ],
+    },
+    {
+      id: "pb-geo-holdout",
+      name: "Geographic holdout incrementality test",
+      category: "Strategy",
+      basedOnCases: 5,
+      sensitivity: "Internal",
+      phases: [
+        { label: "Phase 1", focus: "Geo selection + power-analysis sizing", durationWeeks: 2, exitGate: "Test/control DMAs matched · MDE ≤ 6%" },
+        { label: "Phase 2", focus: "Run test · spend zeroed in holdout DMAs", durationWeeks: 4, exitGate: "Run completed · daily logs clean" },
+        { label: "Phase 3", focus: "Readout + decision", durationWeeks: 2, exitGate: "Incremental ROAS computed · decision filed" },
+      ],
+    },
+    {
+      id: "pb-razor-pricing",
+      name: "Razor-blade pricing experiment design",
+      category: "Strategy",
+      basedOnCases: 4,
+      sensitivity: "Sensitive",
+      phases: [
+        { label: "Phase 1", focus: "Handle margin floor + blade attach baseline", durationWeeks: 1, exitGate: "Margin floor signed off by Sara" },
+        { label: "Phase 2", focus: "Test 7-day handle promo · 3 price points", durationWeeks: 3, exitGate: "Each price point hit ≥ 200 buyers" },
+        { label: "Phase 3", focus: "Attach measurement · 28d window post-promo", durationWeeks: 2, exitGate: "Attach delta computed with CI ≤ ±0.8 pt" },
+      ],
+    },
+    {
+      id: "pb-defense-3posture",
+      name: "Defense response · 3-posture selection",
+      category: "Defense",
+      basedOnCases: 9,
+      sensitivity: "Internal",
+      phases: [
+        { label: "Phase 1", focus: "Attack characterization · promo? bid? listing?", durationWeeks: 1, exitGate: "Posture choice filed: counter-attack / direct defense / wait-out" },
+        { label: "Phase 2", focus: "Execute chosen posture", durationWeeks: 1, exitGate: "BSR/SOV stabilizing or recovering" },
+      ],
+    },
+    {
+      id: "pb-launch-cr",
+      name: "P0/P1 hypothesis sequencing for launch CR",
+      category: "Launch",
+      basedOnCases: 7,
+      sensitivity: "Internal",
+      phases: [
+        { label: "Phase 1", focus: "P0 hypothesis · main image + price test", durationWeeks: 3, exitGate: "CTR ≥ 2.2% · CR ≥ 1.8%" },
+        { label: "Phase 2", focus: "P1 hypothesis · audience + keyword expansion", durationWeeks: 3, exitGate: "Run rate ≥ 60% of target" },
+        { label: "Phase 3", focus: "Scale + stabilize", durationWeeks: 2, exitGate: "Run rate ≥ 80% of target · ACoS in band" },
+      ],
+    },
+    {
+      id: "pb-peak-sov",
+      name: "Cross-platform peak season SOV defense",
+      category: "Defense",
+      basedOnCases: 3,
+      sensitivity: "Sensitive",
+      phases: [
+        { label: "Phase 1", focus: "Pre-peak SOV baseline · Amazon + Walmart", durationWeeks: 2, exitGate: "Baseline SOV captured per platform" },
+        { label: "Phase 2", focus: "Hold SOV through peak · ad budget elevated", durationWeeks: 3, exitGate: "SOV held within -3 pt of baseline" },
+        { label: "Phase 3", focus: "Post-peak normalize · taper", durationWeeks: 1, exitGate: "Spend taper completed · readout filed" },
+      ],
+    },
+  ],
+
+  decisionClassesDetail: [
+    {
+      id: "dc-bid-raise",
+      name: "Bid raise within 15%",
+      definition: "Auto-raise bid by up to 15% when keyword CR exceeds target for 48 consecutive hours.",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Jan 10",
+      thresholdSummary: "≤15% delta · trigger: CR > target 48hr",
+      recentInvocations: 38,
+      lastInvoked: "May 14, 03:18",
+      sensitivity: "Internal",
+      revoked: false,
+    },
+    {
+      id: "dc-bid-lower",
+      name: "Bid lower within 15%",
+      definition: "Auto-lower bid by up to 15% when keyword ACoS exceeds target for 72 consecutive hours.",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Jan 10",
+      thresholdSummary: "≤15% delta · trigger: ACoS > target 72hr",
+      recentInvocations: 22,
+      lastInvoked: "May 13, 21:42",
+      sensitivity: "Internal",
+      revoked: false,
+    },
+    {
+      id: "dc-negkw",
+      name: "Negative keyword harvest · zero-conv > 14d",
+      definition: "Keywords with 0 conversions and ≥84 clicks over rolling 14d get auto-added to campaign negative list.",
+      delegatedBy: "Devon Park",
+      delegatedAt: "Jan 14",
+      thresholdSummary: "0 conv · ≥84 clicks · 14d window",
+      recentInvocations: 22,
+      lastInvoked: "May 12, 11:08",
+      sensitivity: "Internal",
+      revoked: false,
+    },
+    {
+      id: "dc-budget-realloc",
+      name: "Budget reallocation within campaign · ≤20%",
+      definition: "Move up to 20% of budget between ad groups inside a campaign when CR signal supports it.",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Feb 14",
+      thresholdSummary: "≤20% delta · within-campaign only",
+      recentInvocations: 9,
+      lastInvoked: "May 11, 16:30",
+      sensitivity: "Internal",
+      revoked: false,
+    },
+    {
+      id: "dc-dayparting",
+      name: "Dayparting on saturated impression share",
+      definition: "Cut bids during low-CR hours when impression share is >85% — only on SKUs with stable IS.",
+      delegatedBy: "Devon Park",
+      delegatedAt: "Feb 22",
+      thresholdSummary: "IS > 85% · low-CR hours only",
+      recentInvocations: 4,
+      lastInvoked: "May 6, 09:14",
+      sensitivity: "Internal",
+      revoked: false,
+    },
+    {
+      id: "dc-match-consol",
+      name: "Match-type consolidation · CR > 7%",
+      definition: "Consolidate broad/phrase matches to exact when exact-match CR exceeds 7%.",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Mar 4",
+      thresholdSummary: "Exact CR > 7% · auto-consolidate",
+      recentInvocations: 6,
+      lastInvoked: "May 9, 14:22",
+      sensitivity: "Internal",
+      revoked: false,
+    },
+    {
+      id: "dc-pause-underperf",
+      name: "Pause underperforming ad group · contribution < $X for 11d",
+      definition: "Pause ad group when 11d rolling contribution dollars fall below SKU-level floor.",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Mar 18",
+      thresholdSummary: "Contribution < floor · 11d window",
+      recentInvocations: 3,
+      lastInvoked: "May 4, 08:55",
+      sensitivity: "Internal",
+      revoked: false,
+    },
+    {
+      id: "dc-brand-defense",
+      name: "Brand-defense bid raise · new entrant on brand terms",
+      definition: "Auto-raise bid on brand keywords when a new competitor ad appears on brand-term search results.",
+      delegatedBy: "Sara Lin",
+      delegatedAt: "Apr 2",
+      thresholdSummary: "New entrant detected · brand-terms only",
+      recentInvocations: 2,
+      lastInvoked: "May 10, 19:48",
+      sensitivity: "Sensitive",
+      revoked: false,
+    },
+    {
+      id: "dc-revoked-auto-kw",
+      name: "Auto-launch new keyword from search-term report",
+      definition: "Previously: auto-promote search terms with strong CR to exact-match keywords without review.",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Dec 8",
+      thresholdSummary: "Revoked Mar 28 by Maya · 1 false-positive case",
+      recentInvocations: 12,
+      lastInvoked: "Mar 26 (before revoke)",
+      sensitivity: "Sensitive",
+      revoked: true,
+      revokedAt: "Mar 28",
+      revokedBy: "Maya Chen",
+    },
+    {
+      id: "dc-revoked-auto-pause",
+      name: "Auto-pause low-CR keyword without manual review",
+      definition: "Previously: auto-pause keywords with sustained low CR — found edge case in launch SKUs (early CR is noisy).",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Nov 14",
+      thresholdSummary: "Revoked Feb 14 by Maya · edge case in launch SKUs",
+      recentInvocations: 8,
+      lastInvoked: "Feb 12 (before revoke)",
+      sensitivity: "Internal",
+      revoked: true,
+      revokedAt: "Feb 14",
+      revokedBy: "Maya Chen",
+    },
+  ],
+
+  brandDefaults: [
+    {
+      id: "bd-tacos-band",
+      key: "Default TACoS target band",
+      value: "15-22%",
+      category: "Budget",
+      rationale: "Industry plausibility band for mature SKUs.",
+      lastModified: "Apr 14",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-budget-review",
+      key: "Default ad budget review cadence",
+      value: "monthly",
+      category: "Operations",
+      rationale: "Quarterly review revealed monthly catches drift earlier.",
+      lastModified: "Mar 22",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-ab-min",
+      key: "Default A/B test minimum runtime",
+      value: "14 days",
+      category: "Quality",
+      rationale: "Avoid early-confidence bias on listing-side tests.",
+      lastModified: "Feb 14",
+      modifiedBy: "Devon Park",
+    },
+    {
+      id: "bd-bid-floor",
+      key: "Default keyword bid floor",
+      value: "$0.40",
+      category: "Budget",
+      rationale: "Lower bids see <5% impression share historically.",
+      lastModified: "Feb 14",
+      modifiedBy: "Devon Park",
+    },
+    {
+      id: "bd-auto-bid-cap",
+      key: "Default autonomous bid-change cap",
+      value: "15%",
+      category: "Operations",
+      rationale: "Aggregated reviewer audit shows 0 reverts inside this cap.",
+      lastModified: "Jan 10",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-launch-budget",
+      key: "Default new-SKU launch budget range",
+      value: "$30K-$60K/mo",
+      category: "Budget",
+      rationale: "Spans Mature to Aggressive launch postures.",
+      lastModified: "Feb 14",
+      modifiedBy: "Sara Lin",
+    },
+    {
+      id: "bd-voice",
+      key: "Default brand voice",
+      value: "Operator (concise, direct)",
+      category: "Voice",
+      rationale: "Matches agent voice manual.",
+      lastModified: "Apr 2",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-conf-routing",
+      key: "Default Confidential clearance routing",
+      value: "Senior team only",
+      category: "Operations",
+      rationale: "Sensitivity policy.",
+      lastModified: "Jan 14",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-holiday-window",
+      key: "Default holiday promo window",
+      value: "14 days",
+      category: "Budget",
+      rationale: "Matches typical Amazon promo flight.",
+      lastModified: "Apr 10",
+      modifiedBy: "Sara Lin",
+    },
+    {
+      id: "bd-paused-review",
+      key: "Default paused-campaign review cadence",
+      value: "7 days",
+      category: "Operations",
+      rationale: "Catches abandoned campaigns before drift.",
+      lastModified: "Apr 28",
+      modifiedBy: "Devon Park",
+    },
+  ],
+
+  recentQueries: [
+    {
+      id: "rq-razor-toothbrush",
+      question: "Compare razor and toothbrush product line margins",
+      asker: "Sara Lin",
+      askerInitials: "SL",
+      askedAt: "1d ago",
+      sensitivity: "Confidential",
+      threadId: "thread-margin-compare",
+    },
+    {
+      id: "rq-bedroom-cr",
+      question: "Why is bedroom-context CR underperforming?",
+      asker: "Maya Chen",
+      askerInitials: "MC",
+      askedAt: "3d ago",
+      sensitivity: "Internal",
+      threadId: "thread-bedroom-cr",
+    },
+    {
+      id: "rq-holiday-sku-a",
+      question: "Should we run a holiday promo for SKU-A given price lock?",
+      asker: "Devon Park",
+      askerInitials: "DP",
+      askedAt: "5d ago",
+      sensitivity: "Sensitive",
+      threadId: "thread-holiday-promo",
+    },
+    {
+      id: "rq-tiktok-floor",
+      question: "TikTok incrementality test methodology · what's the floor for go/no-go?",
+      asker: "Devon Park",
+      askerInitials: "DP",
+      askedAt: "6d ago",
+      sensitivity: "Internal",
+      threadId: "thread-tiktok-methodology",
+    },
+    {
+      id: "rq-walmart-amazon-cpc",
+      question: "Walmart vs Amazon CPC for power bank category",
+      asker: "Devon Park",
+      askerInitials: "DP",
+      askedAt: "8d ago",
+      sensitivity: "Internal",
+      threadId: "thread-cpc-compare",
+    },
+    {
+      id: "rq-sku-x-attack",
+      question: "How many SKU-X attack patterns in Company Brain over last year?",
+      asker: "Maya Chen",
+      askerInitials: "MC",
+      askedAt: "9d ago",
+      sensitivity: "Sensitive",
+      threadId: "thread-attack-count",
+    },
+    {
+      id: "rq-razor-attach-range",
+      question: "What's the typical attach rate range for razor-blade in our brand?",
+      asker: "Sara Lin",
+      askerInitials: "SL",
+      askedAt: "11d ago",
+      sensitivity: "Confidential",
+      threadId: "thread-attach-range",
     },
   ],
 };
@@ -7911,6 +8663,67 @@ const CLEARANCE_TONE = {
   Confidential: "rose",
 };
 
+const CLEARANCE_ORDER = ["Public", "Internal", "Sensitive", "Confidential"];
+function canView(userClearance, contentSensitivity) {
+  return (
+    CLEARANCE_ORDER.indexOf(userClearance) >=
+    CLEARANCE_ORDER.indexOf(contentSensitivity)
+  );
+}
+
+const CONNECTOR_STATUS_TONE = {
+  live: "emerald",
+  syncing: "blue",
+  paused: "rose",
+  auth_required: "rose",
+};
+const CONNECTOR_STATUS_LABEL = {
+  live: "live",
+  syncing: "syncing",
+  paused: "paused",
+  auth_required: "auth required",
+};
+const CONNECTOR_TYPE_LABEL = {
+  api: "API",
+  scrape: "scrape",
+  file: "file",
+};
+
+const DOC_STATUS_TONE = {
+  indexed: "emerald",
+  processing: "blue",
+  no_patterns: "slate",
+  queued: "amber",
+};
+const DOC_STATUS_LABEL = {
+  indexed: "indexed",
+  processing: "processing",
+  no_patterns: "no patterns",
+  queued: "queued",
+};
+
+const PATTERN_CATEGORY_TONE = {
+  Strategy: "emerald",
+  Optimization: "blue",
+  Execution: "slate",
+  Launch: "amber",
+  Defense: "rose",
+};
+const PATTERN_CATEGORY_LABEL = {
+  Strategy: "Strategy",
+  Optimization: "Optimization",
+  Execution: "Execution",
+  Launch: "Launch",
+  Defense: "Defense",
+};
+
+const DEFAULT_CATEGORY_LABEL = {
+  Operations: "Operations",
+  Budget: "Budget",
+  Voice: "Voice",
+  Quality: "Quality",
+};
+
 function BrainSection({ id, title, count, defaultOpen = false, children }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
@@ -8123,10 +8936,539 @@ function RecentActivityList({ entries, onSelect }) {
   );
 }
 
+function ConnectorList({ connectors }) {
+  return (
+    <div className="space-y-2">
+      {connectors.map((c) => (
+        <div
+          key={c.id}
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+        >
+          <div className="flex items-start gap-2">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-medium text-slate-900">
+                  {c.name}
+                </span>
+                <Pill tone="slate">{CONNECTOR_TYPE_LABEL[c.type]}</Pill>
+                <Pill tone={CONNECTOR_STATUS_TONE[c.status] || "slate"}>
+                  {CONNECTOR_STATUS_LABEL[c.status] || c.status}
+                </Pill>
+                <Pill tone={SENSITIVITY_TONE[c.sensitivity] || "slate"}>
+                  {c.sensitivity}
+                </Pill>
+              </div>
+              <div className="mt-1.5 flex items-center justify-between gap-2">
+                <a
+                  href={c.scopeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
+                >
+                  View OAuth scope
+                  <ArrowUpRight className="w-3 h-3" />
+                </a>
+                {c.lastSync && (
+                  <span className="text-11 text-slate-500 font-mono tabular-nums">
+                    {c.lastSync}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+      <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
+        To add a new connector or modify scope, start a conversation: "Connect
+        [service]" or "Update [service] scope".
+      </div>
+    </div>
+  );
+}
+
+function DocFileIcon({ type }) {
+  const Icon = type === "xlsx" || type === "csv" ? FileSpreadsheet : FileText;
+  return (
+    <div className="w-7 h-7 rounded-md bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+      <Icon className="w-3.5 h-3.5" />
+    </div>
+  );
+}
+
+function UploadedDocsList({ docs }) {
+  return (
+    <div className="space-y-2">
+      {docs.map((d) => (
+        <div
+          key={d.id}
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white flex items-start gap-2.5"
+        >
+          <DocFileIcon type={d.type} />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium text-slate-900 truncate">
+              {d.filename}
+            </div>
+            <div className="mt-1 flex items-center gap-2 flex-wrap">
+              <Pill tone={DOC_STATUS_TONE[d.status] || "slate"}>
+                {DOC_STATUS_LABEL[d.status] || d.status}
+              </Pill>
+              {d.patternsCount !== null && (
+                <span
+                  className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-10 font-mono tabular-nums border ${
+                    d.patternsCount > 0
+                      ? "bg-slate-900 text-white border-slate-900"
+                      : "bg-slate-100 text-slate-600 border-slate-200"
+                  }`}
+                >
+                  {d.patternsCount} patterns
+                </span>
+              )}
+              <Pill tone={SENSITIVITY_TONE[d.sensitivity] || "slate"}>
+                {d.sensitivity}
+              </Pill>
+            </div>
+            <div className="mt-1 text-11 text-slate-500">
+              {d.uploadedAt} · by {d.uploadedBy}
+            </div>
+          </div>
+          <button
+            type="button"
+            disabled
+            title="View source · View extracted patterns · Remove from brain"
+            className="flex-shrink-0 p-1 text-slate-400 hover:text-slate-600 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <MoreVertical className="w-4 h-4" />
+          </button>
+        </div>
+      ))}
+      <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
+        To upload a new document, start a conversation: "Upload [filename]" or
+        drag the file into the chat input.
+      </div>
+    </div>
+  );
+}
+
+function CapturedPatterns({ patterns, onSelect }) {
+  const [filter, setFilter] = useState("All");
+  const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
+  const filtered = filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
+  return (
+    <div>
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {categories.map((cat) => {
+          const active = filter === cat;
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setFilter(cat)}
+              className={`px-2 py-0.5 text-11 rounded-md border ${
+                active
+                  ? "bg-slate-900 text-white border-slate-900"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              {cat === "All" ? "All" : PATTERN_CATEGORY_LABEL[cat]}
+            </button>
+          );
+        })}
+      </div>
+      <div className="space-y-2">
+        {filtered.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            onClick={() => onSelect(p)}
+            className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white"
+          >
+            <div className="text-sm font-medium text-slate-900 leading-snug">
+              {p.name}
+            </div>
+            <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+              <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+                {PATTERN_CATEGORY_LABEL[p.category]}
+              </Pill>
+              <span className="text-11 text-slate-600">
+                Confidence{" "}
+                <span className="font-mono tabular-nums text-slate-900">
+                  {p.confidencePct}%
+                </span>
+              </span>
+              <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+                {p.sensitivity}
+              </Pill>
+            </div>
+            <div className="mt-1 text-11 text-slate-500">
+              Used in{" "}
+              <span className="font-mono tabular-nums text-slate-700">
+                {p.usedInCount}
+              </span>{" "}
+              · sources{" "}
+              <span className="font-mono tabular-nums text-slate-700">
+                {p.sourceCount}
+              </span>{" "}
+              · added {p.addedAt}
+            </div>
+          </button>
+        ))}
+        {filtered.length === 0 && (
+          <div className="text-11 text-slate-500 px-1 py-3">
+            No patterns in this category.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PlaybookList({ playbooks }) {
+  const [openId, setOpenId] = useState(null);
+  return (
+    <div className="space-y-2">
+      {playbooks.map((pb) => {
+        const open = openId === pb.id;
+        const phasesCount = pb.phases.length;
+        return (
+          <div
+            key={pb.id}
+            className="border border-slate-200 rounded-md bg-white"
+          >
+            <button
+              type="button"
+              onClick={() => setOpenId(open ? null : pb.id)}
+              className="w-full text-left px-3 py-2.5 hover:bg-slate-50 flex items-start gap-2"
+            >
+              <ChevronRight
+                className={`w-4 h-4 text-slate-500 mt-0.5 transition-transform ${open ? "rotate-90" : ""}`}
+              />
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-slate-900 leading-snug">
+                  {pb.name}
+                </div>
+                <div className="mt-1 flex items-center gap-2 flex-wrap">
+                  <Pill tone={PATTERN_CATEGORY_TONE[pb.category] || "slate"}>
+                    {PATTERN_CATEGORY_LABEL[pb.category]}
+                  </Pill>
+                  <Pill tone={SENSITIVITY_TONE[pb.sensitivity] || "slate"}>
+                    {pb.sensitivity}
+                  </Pill>
+                </div>
+                <div className="mt-1 text-11 text-slate-500">
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {phasesCount}
+                  </span>{" "}
+                  phases ·{" "}
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {pb.basedOnCases}
+                  </span>{" "}
+                  cases
+                </div>
+              </div>
+            </button>
+            {open && (
+              <div className="border-t border-slate-200 px-3 py-2.5 bg-slate-50/40">
+                <table className="w-full text-11">
+                  <thead>
+                    <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
+                      <th className="font-medium py-1 pr-2">Phase</th>
+                      <th className="font-medium py-1 pr-2">Focus</th>
+                      <th className="font-medium py-1 pr-2 text-right">Weeks</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pb.phases.map((ph, i) => (
+                      <tr key={i} className="border-t border-slate-200 align-top">
+                        <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
+                          {ph.label}
+                        </td>
+                        <td className="py-1.5 pr-2 text-slate-700">
+                          <div>{ph.focus}</div>
+                          <div className="text-10 text-slate-500 mt-0.5">
+                            Exit gate: {ph.exitGate}
+                          </div>
+                        </td>
+                        <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
+                          {ph.durationWeeks}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DecisionClassList({ classes }) {
+  const [revokedIds, setRevokedIds] = useState(new Set());
+  const [confirmingId, setConfirmingId] = useState(null);
+
+  const isJustRevoked = (id) => revokedIds.has(id);
+  const active = classes.filter((c) => !c.revoked && !isJustRevoked(c.id));
+  const justRevoked = classes.filter((c) => !c.revoked && isJustRevoked(c.id));
+  const historicallyRevoked = classes.filter((c) => c.revoked);
+
+  const onConfirm = (id) => {
+    setRevokedIds((s) => {
+      const next = new Set(s);
+      next.add(id);
+      return next;
+    });
+    setConfirmingId(null);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+          Active classes
+        </div>
+        <div className="space-y-2">
+          {active.map((dc) => (
+            <div
+              key={dc.id}
+              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+            >
+              <div className="flex items-start gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-slate-900 leading-snug">
+                    {dc.name}
+                  </div>
+                  <div className="text-11 text-slate-600 mt-1 leading-snug">
+                    {dc.definition}
+                  </div>
+                  <div className="text-10 text-slate-500 mt-1">
+                    {dc.thresholdSummary}
+                  </div>
+                  <div className="text-10 text-slate-500 mt-1">
+                    Invocations 30d:{" "}
+                    <span className="font-mono tabular-nums text-slate-700">
+                      {dc.recentInvocations}
+                    </span>{" "}
+                    · last{" "}
+                    <span className="font-mono tabular-nums text-slate-700">
+                      {dc.lastInvoked}
+                    </span>
+                  </div>
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+                      {dc.sensitivity}
+                    </Pill>
+                    <span className="text-10 text-slate-500">
+                      delegated by {dc.delegatedBy} · {dc.delegatedAt}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingId(dc.id)}
+                  className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  Revoke
+                </button>
+              </div>
+              {confirmingId === dc.id && (
+                <div className="mt-2 border-t border-slate-200 pt-2">
+                  <div className="text-11 text-slate-700 leading-snug">
+                    Revoke "{dc.name}"? Agent will require explicit approval for
+                    these actions going forward.
+                  </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingId(null)}
+                      className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onConfirm(dc.id)}
+                      className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
+                    >
+                      Confirm revoke
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {(justRevoked.length > 0 || historicallyRevoked.length > 0) && (
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            Recently revoked
+          </div>
+          <div className="space-y-2">
+            {justRevoked.map((dc) => (
+              <div
+                key={dc.id}
+                className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
+              >
+                <div className="text-sm font-medium text-slate-500 line-through leading-snug">
+                  {dc.name}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  revoked just now
+                </div>
+              </div>
+            ))}
+            {historicallyRevoked.map((dc) => (
+              <div
+                key={dc.id}
+                className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
+              >
+                <div className="text-sm font-medium text-slate-500 line-through leading-snug">
+                  {dc.name}
+                </div>
+                <div className="text-11 text-slate-600 mt-1 leading-snug">
+                  {dc.definition}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  {dc.thresholdSummary}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  Invoked{" "}
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {dc.recentInvocations}
+                  </span>{" "}
+                  times before revoke · last {dc.lastInvoked}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BrandDefaultsList({ defaults }) {
+  const [editId, setEditId] = useState(null);
+  return (
+    <div className="space-y-2">
+      {defaults.map((d) => (
+        <div
+          key={d.id}
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+        >
+          <div className="flex items-start gap-2">
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium text-slate-900 leading-snug">
+                {d.key}
+              </div>
+              <div className="mt-1 font-mono tabular-nums text-slate-900 text-sm">
+                {d.value}
+              </div>
+              <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+                <Pill tone="slate">{DEFAULT_CATEGORY_LABEL[d.category] || d.category}</Pill>
+                <span className="text-10 text-slate-500">
+                  {d.lastModified} by {d.modifiedBy}
+                </span>
+              </div>
+              <div className="text-11 text-slate-600 mt-1 leading-snug">
+                {d.rationale}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setEditId(editId === d.id ? null : d.id)}
+              className="flex-shrink-0 p-1 text-slate-500 hover:text-slate-900"
+              title="Edit via chat"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          {editId === d.id && (
+            <div className="mt-2 border-t border-slate-200 pt-2">
+              <div className="text-11 text-slate-700 leading-snug">
+                Open a chat conversation:{" "}
+                <span className="font-mono text-slate-900">
+                  "Update {d.key.toLowerCase()} to [new value]"
+                </span>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditId(null)}
+                  className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                >
+                  Cancel
+                </button>
+                <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
+                  Open chat
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RecentQueriesList({ queries, activeUser }) {
+  return (
+    <div className="space-y-2">
+      {queries.map((q) => {
+        const visible = canView(activeUser.clearance, q.sensitivity);
+        return (
+          <div
+            key={q.id}
+            className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+          >
+            <div className="text-sm font-medium text-slate-900 leading-snug flex items-start gap-2">
+              <MessageSquare className="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5" />
+              <span className="flex-1 min-w-0 truncate">
+                {visible
+                  ? q.question
+                  : "[Question restricted at your clearance · contact Maya Chen or higher clearance]"}
+              </span>
+            </div>
+            <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+              <div className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-semibold text-10 flex items-center justify-center flex-shrink-0">
+                {q.askerInitials}
+              </div>
+              <span className="text-11 text-slate-600">{q.asker}</span>
+              <span className="text-10 text-slate-500 font-mono tabular-nums">
+                {q.askedAt}
+              </span>
+              <Pill
+                tone={SENSITIVITY_TONE[q.sensitivity] || "slate"}
+                className="ml-auto"
+              >
+                {q.sensitivity}
+              </Pill>
+            </div>
+            <div className="mt-1.5">
+              <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
+                Open thread
+                <ArrowRight className="w-3 h-3" />
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function CompanyBrainContent() {
   const [activeUserId, setActiveUserId] = useState(COMPANY_BRAIN.identity.activeUserId);
   const [openActivity, setOpenActivity] = useState(null);
+  const [openPattern, setOpenPattern] = useState(null);
   const identity = { ...COMPANY_BRAIN.identity, activeUserId };
+  const activeUser =
+    identity.users.find((u) => u.id === activeUserId) || identity.users[0];
 
   const drawerRows = openActivity
     ? [
@@ -8156,6 +9498,68 @@ function CompanyBrainContent() {
             onSelect={setOpenActivity}
           />
         </BrainSection>
+        <BrainSection
+          id="connectors"
+          title="Connectors"
+          count={COMPANY_BRAIN.connectors.length}
+          defaultOpen={false}
+        >
+          <ConnectorList connectors={COMPANY_BRAIN.connectors} />
+        </BrainSection>
+        <BrainSection
+          id="uploaded-docs"
+          title="Uploaded documents"
+          count={COMPANY_BRAIN.uploadedDocs.length}
+          defaultOpen={false}
+        >
+          <UploadedDocsList docs={COMPANY_BRAIN.uploadedDocs} />
+        </BrainSection>
+        <BrainSection
+          id="captured-patterns"
+          title="Captured patterns"
+          count={COMPANY_BRAIN.patterns.length}
+          defaultOpen={false}
+        >
+          <CapturedPatterns
+            patterns={COMPANY_BRAIN.patterns}
+            onSelect={setOpenPattern}
+          />
+        </BrainSection>
+        <BrainSection
+          id="playbooks"
+          title="Playbooks"
+          count={COMPANY_BRAIN.playbookList.length}
+          defaultOpen={false}
+        >
+          <PlaybookList playbooks={COMPANY_BRAIN.playbookList} />
+        </BrainSection>
+        <BrainSection
+          id="decision-classes"
+          title="Decision classes"
+          count={COMPANY_BRAIN.decisionClassesDetail.filter((c) => !c.revoked).length}
+          defaultOpen={false}
+        >
+          <DecisionClassList classes={COMPANY_BRAIN.decisionClassesDetail} />
+        </BrainSection>
+        <BrainSection
+          id="brand-defaults"
+          title="Brand defaults"
+          count={COMPANY_BRAIN.brandDefaults.length}
+          defaultOpen={false}
+        >
+          <BrandDefaultsList defaults={COMPANY_BRAIN.brandDefaults} />
+        </BrainSection>
+        <BrainSection
+          id="recent-queries"
+          title="Recent queries"
+          count={COMPANY_BRAIN.recentQueries.length}
+          defaultOpen={false}
+        >
+          <RecentQueriesList
+            queries={COMPANY_BRAIN.recentQueries}
+            activeUser={activeUser}
+          />
+        </BrainSection>
       </div>
 
       <InspectionDrawer
@@ -8181,6 +9585,29 @@ function CompanyBrainContent() {
             : undefined
         }
         definitionsLabel="Detail"
+      />
+
+      <InspectionDrawer
+        open={!!openPattern}
+        onClose={() => setOpenPattern(null)}
+        title={openPattern?.name}
+        methodologyDescription={
+          openPattern
+            ? `${openPattern.detail.definition} ${openPattern.detail.lineage}`
+            : undefined
+        }
+        tableHeaders={["Source", "Outcome"]}
+        tableRows={openPattern ? openPattern.detail.sourceList : []}
+        columnWidths={["44%", "56%"]}
+        definitionsList={
+          openPattern
+            ? openPattern.detail.appliedIn.map((a, i) => ({
+                term: `Applied in ${i + 1}`,
+                definition: a,
+              }))
+            : undefined
+        }
+        definitionsLabel="Where it's been applied"
       />
     </>
   );

@@ -37,6 +37,10 @@ import {
   Truck,
   Star,
   Users,
+  FileSpreadsheet,
+  MoreVertical,
+  Trash2,
+  MessageSquare,
 } from "lucide-react";
 import {
   LineChart,
@@ -2163,6 +2167,813 @@ const COMPANY_BRAIN = {
         appliedIn: ["防御案例 · BSR 滑落检测", "razor-blade 计划竞品图谱"],
         definition: "日级 BSR 快照按时间序列存储;agent 现已监控排名变化阈值(每周 ≥3 位)用于告警。",
       },
+    },
+  ],
+
+  connectors: [
+    {
+      id: "cn-amazon-ads",
+      name: "Amazon Advertising API",
+      type: "api",
+      status: "live",
+      lastSync: "4 分钟前",
+      scopeUrl: "https://advertising.amazon.com/account/oauth-scope",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+    {
+      id: "cn-walmart-connect",
+      name: "Walmart Connect API",
+      type: "api",
+      status: "live",
+      lastSync: "12 分钟前",
+      scopeUrl: "https://advertising.walmart.com/scope",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+    {
+      id: "cn-tiktok-ads",
+      name: "TikTok Ads Manager API",
+      type: "api",
+      status: "syncing",
+      lastSync: "刚开始",
+      scopeUrl: "https://ads.tiktok.com/marketing_api/scope",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+    {
+      id: "cn-brand-analytics",
+      name: "Amazon Brand Analytics",
+      type: "api",
+      status: "live",
+      lastSync: "2 小时前",
+      scopeUrl: "https://sellercentral.amazon.com/brand-analytics/scope",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+    },
+    {
+      id: "cn-helium10",
+      name: "Helium10 scrape",
+      type: "scrape",
+      status: "paused",
+      lastSync: "3 天前",
+      scopeUrl: "https://helium10.com/integrations/scope",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+    {
+      id: "cn-slack",
+      name: "Slack 通知",
+      type: "api",
+      status: "live",
+      lastSync: "最近事件 8 分钟前",
+      scopeUrl: "https://slack.com/oauth/scope",
+      sensitivity: "Public",
+      sensitivityLabel: "公开",
+    },
+    {
+      id: "cn-gdrive",
+      name: "Google Drive",
+      type: "file",
+      status: "live",
+      lastSync: "已索引 6 份文档",
+      scopeUrl: "https://drive.google.com/oauth/scope",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+    },
+  ],
+
+  uploadedDocs: [
+    {
+      id: "doc-q4-retro",
+      filename: "Q4-2025-Retrospective.pdf",
+      type: "pdf",
+      status: "indexed",
+      patternsCount: 3,
+      uploadedAt: "Apr 12",
+      uploadedBy: "Maya Chen",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+    },
+    {
+      id: "doc-pricing",
+      filename: "Pricing-Strategy-2026.xlsx",
+      type: "xlsx",
+      status: "indexed",
+      patternsCount: 2,
+      uploadedAt: "Apr 28",
+      uploadedBy: "Sara Lin",
+      sensitivity: "Confidential",
+      sensitivityLabel: "机密",
+    },
+    {
+      id: "doc-teardown",
+      filename: "Competitor-Teardown-Floor-Lamps.pdf",
+      type: "pdf",
+      status: "indexed",
+      patternsCount: 4,
+      uploadedAt: "May 2",
+      uploadedBy: "Devon Park",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+    {
+      id: "doc-style",
+      filename: "Brand-Style-Guide-v3.pdf",
+      type: "pdf",
+      status: "no_patterns",
+      patternsCount: 0,
+      uploadedAt: "Feb 14",
+      uploadedBy: "Maya Chen",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+    {
+      id: "doc-bsr-csv",
+      filename: "BSR-Trajectory-2024-Q4.csv",
+      type: "csv",
+      status: "indexed",
+      patternsCount: 1,
+      uploadedAt: "Apr 8",
+      uploadedBy: "Devon Park",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+    {
+      id: "doc-sku-postmortem",
+      filename: "SKU-launch-postmortem-PB-A.pdf",
+      type: "pdf",
+      status: "processing",
+      patternsCount: null,
+      uploadedAt: "May 14",
+      uploadedBy: "Devon Park",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+    },
+  ],
+
+  patterns: [
+    {
+      id: "pat-brand-ad-cpc",
+      name: "品牌广告持续投放 → CPC 下行",
+      category: "Strategy",
+      confidencePct: 76,
+      usedInCount: 7,
+      sourceCount: 12,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "May 14",
+      detail: {
+        definition: "品牌广告在 2 倍基线水平持续投放 8 周以上时,CPC 随相关性驱动的曝光替代竞价驱动的曝光而下行。",
+        lineage: "由 12 个 scale-up 案例提炼;首次观察到是 SKU-117 2024 Q3,SKU-A 2026 Q1 再次确认。",
+        sourceList: [
+          ["SKU-117 · 2024 Q3", "品牌广告投放 2.1x → 11 周内 CPC 降 22.3%"],
+          ["SKU-toothbrush · 2025 Q2", "品牌广告投放 1.9x → 9 周内 CPC 降 14.6%"],
+          ["SKU-A · 2026 Q1", "品牌广告投放 2.4x → 10 周内 CPC 降 18.1%"],
+          ["另含 9 个案例", "平均 CPC 降幅 18.4%,窗口 8–13 周"],
+        ],
+        appliedIn: ["全渠道 Amazon 计划", "全渠道 Walmart SB 扩量", "BSR 占位打法"],
+      },
+    },
+    {
+      id: "pat-bsr-capture",
+      name: "BSR 占位 · 通过集中广告抬升从 #2 上 #1",
+      category: "Strategy",
+      confidencePct: 81,
+      usedInCount: 4,
+      sourceCount: 6,
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      addedAt: "Apr 22",
+      detail: {
+        definition: "从 BSR #2 出发,3 周集中广告投放(正常预算 3-4 倍)在 6/6 案例中翻盘到 #1 — 前提是类目第一未跑促销。",
+        lineage: "6 个案例均为 ABC 内部 SKU,涉及灯具、卧室、浴室类目,时间跨度 2023–2025。",
+        sourceList: [
+          ["SKU-117 床架 · 2024 年 7 月", "投放 3.4x · BSR 第 3 周到 #1,保持 14 周"],
+          ["SKU-A 落地灯 · 2024 年 11 月", "投放 2.9x · BSR 第 2 周到 #1,保持 9 周"],
+          ["SKU-toothbrush · 2025 年 1 月", "投放 3.1x · BSR 第 3 周到 #1,保持 11 周"],
+          ["另含 3 个案例", "全部在投放开始后 3 周内 #2 → #1"],
+        ],
+        appliedIn: ["3 阶段 BSR 占位打法", "全渠道 Amazon 计划"],
+      },
+    },
+    {
+      id: "pat-bedroom-ctr",
+      name: "卧室词簇 CTR 诊断模式",
+      category: "Optimization",
+      confidencePct: 73,
+      usedInCount: 3,
+      sourceCount: 4,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Mar 9",
+      detail: {
+        definition: "当卧室场景关键词 CTR 在 1.1–1.4%、类目基准是 2.8% 时,根因几乎总是主图场景错位(客厅 vs 卧室)。",
+        lineage: "ABC 4 个 SKU(落地灯、床架)出现同样模式;改完主图后 4/4 都修好了。",
+        sourceList: [
+          ["SKU-A 落地灯 · 2025 年 2 月", "卧室 CTR 1.2% → 2.6%,换了卧室主图后"],
+          ["SKU-A2 落地灯 · 2025 年 4 月", "卧室 CTR 1.1% → 2.4%,重拍后"],
+          ["SKU-117 床架 · 2025 年 8 月", "卧室 CTR 1.4% → 3.1%,换场景后"],
+          ["另含 1 个案例", "同样的诊断,改完都修好了"],
+        ],
+        appliedIn: ["落地灯优化画布", "床架上新 CR 打法"],
+      },
+    },
+    {
+      id: "pat-longtail-harvest",
+      name: "从搜索词报告抓长尾词",
+      category: "Optimization",
+      confidencePct: 84,
+      usedInCount: 11,
+      sourceCount: 18,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Feb 18",
+      detail: {
+        definition: "搜索词报告里曝光 ≥18、CR ≥ 类目中位数的词,升级到精准匹配后,14 天内 ACoS 预期改善 4–9 pt。",
+        lineage: "18 个 SKU 窗口跨 2024–2025,含 3 个合作品牌案例研究做对照。",
+        sourceList: [
+          ["SKU-A · 2024 Q4 抓取", "升级 37 个词 · 14 天 ACoS -6.2 pt"],
+          ["SKU-117 · 2025 Q1 抓取", "升级 29 个词 · 14 天 ACoS -4.8 pt"],
+          ["SKU-toothbrush · 2025 Q2 抓取", "升级 44 个词 · 14 天 ACoS -8.1 pt"],
+          ["另含 15 个窗口", "平均 ACoS 降幅 6.4 pt"],
+        ],
+        appliedIn: ["否定词抓取决策类别", "优化画布 · 长尾词"],
+      },
+    },
+    {
+      id: "pat-bid-raise-cap",
+      name: "出价上调 ≤15% · CR > 目标 48 小时触发",
+      category: "Execution",
+      confidencePct: 89,
+      usedInCount: 38,
+      sourceCount: 38,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Jan 12",
+      detail: {
+        definition: "关键词 CR 连续 48 小时超过目标时,自动上调出价 ≤15%。过去 90 天 38 次调用,0 次回滚;审计干净。",
+        lineage: "Brain 中置信度最高的可执行模式。审计节奏:Maya 每周、Devon 每季。",
+        sourceList: [
+          ["38 次调用 · 2 月 12 日 – 5 月 14 日", "0 回滚 · 每个受影响关键词平均增量转化 +14.3%"],
+          ["审计 · 4 月 28 日", "Maya 签字 · 干净"],
+          ["审计 · 3 月 31 日", "Devon 签字 · 干净"],
+        ],
+        appliedIn: ["出价上调决策类别(自主)", "执行画布 · 实时运营"],
+      },
+    },
+    {
+      id: "pat-negkw-harvest",
+      name: "否定词抓取 · 14 天零转化",
+      category: "Execution",
+      confidencePct: 87,
+      usedInCount: 22,
+      sourceCount: 22,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Jan 14",
+      detail: {
+        definition: "滚动 14 天 0 转化 + ≥84 次点击的关键词,自动加入广告组的否定词列表。历史回滚率 <2%。",
+        lineage: "过去 90 天 22 次调用,0 回滚。算 brain 里最干净的『减法』类别之一。",
+        sourceList: [
+          ["22 次调用 · 2 月 14 日 – 5 月 14 日", "0 回滚 · 每 SKU 每周平均回收浪费支出 $1,847"],
+          ["边界案例 · 3 月 22 日", "1 个品牌防御关键词被标记复核(自动抑制正确)"],
+        ],
+        appliedIn: ["否定词决策类别", "优化画布"],
+      },
+    },
+    {
+      id: "pat-launch-ramp",
+      name: "上新爬坡曲线 · $120-180 价格带",
+      category: "Launch",
+      confidencePct: 74,
+      usedInCount: 5,
+      sourceCount: 7,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Nov 4",
+      detail: {
+        definition: "$120-180 价格带的 SKU,4-6 周内从 0 爬到目标 run-rate 的 ~70%。比这快通常是花多了,比这慢是 listing 端有缺口。",
+        lineage: "ABC 7 个上新跨 2023–2025,加上 2 个合作品牌案例。Q4 2025 实际偏离 14% — 模式已被标记。",
+        sourceList: [
+          ["SKU-A 落地灯 · 2024 上新", "第 5 周到目标 run-rate 的 68%"],
+          ["SKU-117 床架 · 2025 上新", "第 6 周到目标 run-rate 的 72%"],
+          ["SKU-A2 落地灯 · 2025 上新", "第 4 周到目标 run-rate 的 64% — 已标记复核"],
+          ["另含 4 个上新", "平均第 5 周达 run-rate 的 67%"],
+        ],
+        appliedIn: ["上新 CR 打法", "当前已标记 · Q4 实际复核"],
+      },
+    },
+    {
+      id: "pat-p0-main-image",
+      name: "P0 主图先改再放量",
+      category: "Launch",
+      confidencePct: 78,
+      usedInCount: 6,
+      sourceCount: 8,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Aug 22",
+      detail: {
+        definition: "上新第一周 CTR 低于类目基准 0.6 倍时,主图未改就放量,60-70% 的增量预算白花。先改主图。",
+        lineage: "ABC 8 个上新都出现同模式;每次先放量的,CTR 都得等主图改完才能起来。",
+        sourceList: [
+          ["SKU-A2 · 2025 年 4 月上新", "放量太早 · 浪费 42% · 主图第 8 周才修好"],
+          ["SKU-117 · 2024 年 7 月上新", "先改主图 · 第 3 周 CTR 到 2.4%"],
+          ["另含 6 个上新", "模式成立 8/8"],
+        ],
+        appliedIn: ["上新 CR 打法 · P0 顺序", "床架上新案例"],
+      },
+    },
+    {
+      id: "pat-counter-attack",
+      name: "反击对手弱势位(非对称)",
+      category: "Defense",
+      confidencePct: 71,
+      usedInCount: 4,
+      sourceCount: 5,
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      addedAt: "Dec 8",
+      detail: {
+        definition: "被攻击时,不直接守被攻击的 SKU,而是去打攻击方最弱的 SKU。资源非对称让防御方在观察到的 5 个案例里有 3 次占优。",
+        lineage: "5 个防御窗口跨 2023–2025。提示:5 个案例里有 2 次反击没把攻击方拉开;反击是补充手段,不是替代直接防御。",
+        sourceList: [
+          ["防御案例 · 2024 年 6 月", "反击 11 天后把攻击方拉开"],
+          ["防御案例 · 2024 年 11 月", "反击只是补充,主要靠直接防御"],
+          ["另含 3 个窗口", "3/5 成功率"],
+        ],
+        appliedIn: ["防御姿态选择打法"],
+      },
+    },
+    {
+      id: "pat-wait-out",
+      name: "等待姿态 · 促销驱动的攻击",
+      category: "Defense",
+      confidencePct: 65,
+      usedInCount: 3,
+      sourceCount: 4,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Oct 11",
+      detail: {
+        definition: "竞品攻击是促销驱动的(有明确结束日期)时,等待姿态(不投入响应)在 4 个案例里有 3 次正确。促销期内防御浪费预算。",
+        lineage: "4 个窗口跨 2024–2025。提示:需要看到明确的促销结束日期 — 没有结束日期的攻击需要直接防御。",
+        sourceList: [
+          ["防御案例 · 2024 年 7 月", "等待 · 攻击方促销后退场,9 天 BSR 恢复"],
+          ["防御案例 · 2025 年 3 月", "等待 · 同样结果"],
+          ["另含 2 个案例", "1 次失误(促销意外延期)"],
+        ],
+        appliedIn: ["防御姿态选择打法"],
+      },
+    },
+    {
+      id: "pat-pickup-cr",
+      name: "Pickup-truck 词簇 CR 诊断模式",
+      category: "Optimization",
+      confidencePct: 76,
+      usedInCount: 2,
+      sourceCount: 3,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      addedAt: "Sep 17",
+      detail: {
+        definition: "pickup-truck / 车载场景关键词 CR 在 0.8-1.2% 但 CTR 健康时,差距通常是定价与场景错位:用户点了,但卡在与卡车场景对应的价格。",
+        lineage: "工具 / 户外类目 3 个案例。样本比其他优化模式小 — 置信度反映这一点。",
+        sourceList: [
+          ["工具车案例 · 2025 年 4 月", "调价后 CR 0.9% → 2.1%"],
+          ["户外灯案例 · 2024 年 8 月", "做场景组合后 CR 1.1% → 2.4%"],
+          ["另含 1 个案例", "同样诊断成立"],
+        ],
+        appliedIn: ["优化画布(冷门场景)"],
+      },
+    },
+    {
+      id: "pat-razor-attach",
+      name: "razor-blade 促销窗口拉动绑定购买率",
+      category: "Strategy",
+      confidencePct: 72,
+      usedInCount: 3,
+      sourceCount: 4,
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      addedAt: "May 12",
+      detail: {
+        definition: "razor-blade 类 SKU,在购买周期窗口内对手柄做 7 天促销,刀片绑定购买率提升 2.4-3.1 pt。前提:手柄毛利能吸收促销折扣。",
+        lineage: "4 个窗口 · ABC 牙刷 + 1 个合作品牌案例研究。最近从 Q4-2025-Retrospective.pdf 提炼出来。",
+        sourceList: [
+          ["SKU-toothbrush · 2025 年 3 月", "7 天窗口内绑定购买率 14.2% → 16.8%"],
+          ["SKU-toothbrush · 2025 年 9 月", "7 天窗口内绑定购买率 13.9% → 17.0%"],
+          ["另含 2 个窗口", "平均绑定购买率提升 2.7 pt"],
+        ],
+        appliedIn: ["razor-blade 计划 · SKU-A 套装"],
+      },
+    },
+  ],
+
+  playbookList: [
+    {
+      id: "pb-bsr-3phase",
+      name: "3 阶段 BSR 占位",
+      category: "Strategy",
+      basedOnCases: 6,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      phases: [
+        { label: "阶段 1", focus: "listing + 创意夯实", durationWeeks: 3, exitGate: "主图 CTR ≥ 2.4%" },
+        { label: "阶段 2", focus: "集中广告抬升 · 3-4x 投放", durationWeeks: 4, exitGate: "BSR ≤ #2 持续 7 天" },
+        { label: "阶段 3", focus: "守住新位置", durationWeeks: 5, exitGate: "BSR #1 持续 14 天 · ROAS ≥ 基线" },
+      ],
+    },
+    {
+      id: "pb-brand-ad-scale",
+      name: "品牌广告 scale-up · CPC 下行",
+      category: "Strategy",
+      basedOnCases: 12,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      phases: [
+        { label: "阶段 1", focus: "品牌广告投放 2x 基线 · 4 周", durationWeeks: 4, exitGate: "品牌曝光份额 ≥ 38%" },
+        { label: "阶段 2", focus: "保持投放,观察 CPC 趋势", durationWeeks: 4, exitGate: "CPC 周环比下行" },
+        { label: "阶段 3", focus: "稳定后逐步降投放", durationWeeks: 4, exitGate: "CPC 较基线 -15% · ROAS 稳定" },
+      ],
+    },
+    {
+      id: "pb-geo-holdout",
+      name: "分地区对照测试 · 增量效果验证",
+      category: "Strategy",
+      basedOnCases: 5,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      phases: [
+        { label: "阶段 1", focus: "地区选择 + 功效分析定样本量", durationWeeks: 2, exitGate: "对照 / 实验 DMA 匹配 · MDE ≤ 6%" },
+        { label: "阶段 2", focus: "跑测试 · 对照 DMA 广告归零", durationWeeks: 4, exitGate: "测试跑完 · 日志干净" },
+        { label: "阶段 3", focus: "读数 + 决策", durationWeeks: 2, exitGate: "增量 ROAS 算出 · 决策归档" },
+      ],
+    },
+    {
+      id: "pb-razor-pricing",
+      name: "razor-blade 定价实验设计",
+      category: "Strategy",
+      basedOnCases: 4,
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      phases: [
+        { label: "阶段 1", focus: "手柄毛利下限 + 刀片绑定基线", durationWeeks: 1, exitGate: "毛利下限由 Sara 签字" },
+        { label: "阶段 2", focus: "7 天手柄促销 · 3 个价格点", durationWeeks: 3, exitGate: "每个价格点 ≥ 200 名买家" },
+        { label: "阶段 3", focus: "促销后 28 天窗口测绑定", durationWeeks: 2, exitGate: "绑定差异置信区间 ≤ ±0.8 pt" },
+      ],
+    },
+    {
+      id: "pb-defense-3posture",
+      name: "防御响应 · 3 姿态选择",
+      category: "Defense",
+      basedOnCases: 9,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      phases: [
+        { label: "阶段 1", focus: "攻击性质判断 · 促销?出价?listing?", durationWeeks: 1, exitGate: "姿态归档:反击 / 直接防御 / 等待" },
+        { label: "阶段 2", focus: "执行所选姿态", durationWeeks: 1, exitGate: "BSR / 曝光份额企稳或恢复" },
+      ],
+    },
+    {
+      id: "pb-launch-cr",
+      name: "上新 CR · P0/P1 假设顺序",
+      category: "Launch",
+      basedOnCases: 7,
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      phases: [
+        { label: "阶段 1", focus: "P0 假设 · 主图 + 价格测试", durationWeeks: 3, exitGate: "CTR ≥ 2.2% · CR ≥ 1.8%" },
+        { label: "阶段 2", focus: "P1 假设 · 人群 + 关键词扩展", durationWeeks: 3, exitGate: "Run rate ≥ 目标 60%" },
+        { label: "阶段 3", focus: "放量 + 稳定", durationWeeks: 2, exitGate: "Run rate ≥ 目标 80% · ACoS 在带内" },
+      ],
+    },
+    {
+      id: "pb-peak-sov",
+      name: "跨平台旺季曝光份额防御",
+      category: "Defense",
+      basedOnCases: 3,
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      phases: [
+        { label: "阶段 1", focus: "峰前曝光份额基线 · Amazon + Walmart", durationWeeks: 2, exitGate: "各平台基线已取" },
+        { label: "阶段 2", focus: "峰内守份额 · 广告预算抬高", durationWeeks: 3, exitGate: "曝光份额波动 ≤ 基线 -3 pt" },
+        { label: "阶段 3", focus: "峰后回归 · 逐步降投放", durationWeeks: 1, exitGate: "投放降回完成 · 读数归档" },
+      ],
+    },
+  ],
+
+  decisionClassesDetail: [
+    {
+      id: "dc-bid-raise",
+      name: "出价上调 ≤15%",
+      definition: "关键词 CR 连续 48 小时超过目标时,自动上调出价 ≤15%。",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Jan 10",
+      thresholdSummary: "调幅 ≤15% · 触发:CR > 目标 48 小时",
+      recentInvocations: 38,
+      lastInvoked: "5 月 14 日 03:18",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: false,
+    },
+    {
+      id: "dc-bid-lower",
+      name: "出价下调 ≤15%",
+      definition: "关键词 ACoS 连续 72 小时超过目标时,自动下调出价 ≤15%。",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Jan 10",
+      thresholdSummary: "调幅 ≤15% · 触发:ACoS > 目标 72 小时",
+      recentInvocations: 22,
+      lastInvoked: "5 月 13 日 21:42",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: false,
+    },
+    {
+      id: "dc-negkw",
+      name: "否定词抓取 · 14 天零转化",
+      definition: "滚动 14 天 0 转化 + ≥84 次点击的关键词,自动加入广告组否定词列表。",
+      delegatedBy: "Devon Park",
+      delegatedAt: "Jan 14",
+      thresholdSummary: "0 转化 · ≥84 次点击 · 14 天窗口",
+      recentInvocations: 22,
+      lastInvoked: "5 月 12 日 11:08",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: false,
+    },
+    {
+      id: "dc-budget-realloc",
+      name: "campaign 内预算重分配 · ≤20%",
+      definition: "CR 信号支持时,在同一 campaign 内的广告组间移动最多 20% 预算。",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Feb 14",
+      thresholdSummary: "调幅 ≤20% · 仅 campaign 内",
+      recentInvocations: 9,
+      lastInvoked: "5 月 11 日 16:30",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: false,
+    },
+    {
+      id: "dc-dayparting",
+      name: "饱和曝光份额上的 dayparting",
+      definition: "曝光份额 > 85% 时,在低 CR 时段下调出价 — 仅限曝光份额稳定的 SKU。",
+      delegatedBy: "Devon Park",
+      delegatedAt: "Feb 22",
+      thresholdSummary: "曝光份额 > 85% · 仅低 CR 时段",
+      recentInvocations: 4,
+      lastInvoked: "5 月 6 日 09:14",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: false,
+    },
+    {
+      id: "dc-match-consol",
+      name: "匹配类型合并 · CR > 7%",
+      definition: "精准匹配 CR 超过 7% 时,把广泛 / 词组匹配合并到精准。",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Mar 4",
+      thresholdSummary: "精准 CR > 7% · 自动合并",
+      recentInvocations: 6,
+      lastInvoked: "5 月 9 日 14:22",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: false,
+    },
+    {
+      id: "dc-pause-underperf",
+      name: "暂停低效广告组 · 11 天贡献毛利 < $X",
+      definition: "广告组 11 天滚动贡献毛利低于 SKU 下限时暂停。",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Mar 18",
+      thresholdSummary: "贡献毛利 < 下限 · 11 天窗口",
+      recentInvocations: 3,
+      lastInvoked: "5 月 4 日 08:55",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: false,
+    },
+    {
+      id: "dc-brand-defense",
+      name: "品牌防御出价上调 · 品牌词上出现新进入者",
+      definition: "品牌词搜索结果上出现新竞品广告时,自动上调品牌关键词出价。",
+      delegatedBy: "Sara Lin",
+      delegatedAt: "Apr 2",
+      thresholdSummary: "检测到新进入者 · 仅品牌词",
+      recentInvocations: 2,
+      lastInvoked: "5 月 10 日 19:48",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      revoked: false,
+    },
+    {
+      id: "dc-revoked-auto-kw",
+      name: "搜索词报告自动上新关键词",
+      definition: "原:CR 强的搜索词自动升级到精准匹配,无人工复核。",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Dec 8",
+      thresholdSummary: "3 月 28 日 Maya 撤回 · 1 次误报",
+      recentInvocations: 12,
+      lastInvoked: "3 月 26 日(撤回前)",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      revoked: true,
+      revokedAt: "Mar 28",
+      revokedBy: "Maya Chen",
+    },
+    {
+      id: "dc-revoked-auto-pause",
+      name: "低 CR 关键词无复核自动暂停",
+      definition: "原:CR 持续偏低的关键词自动暂停 — 发现上新 SKU 早期 CR 噪声大,有边界案例。",
+      delegatedBy: "Maya Chen",
+      delegatedAt: "Nov 14",
+      thresholdSummary: "2 月 14 日 Maya 撤回 · 上新 SKU 边界案例",
+      recentInvocations: 8,
+      lastInvoked: "2 月 12 日(撤回前)",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      revoked: true,
+      revokedAt: "Feb 14",
+      revokedBy: "Maya Chen",
+    },
+  ],
+
+  brandDefaults: [
+    {
+      id: "bd-tacos-band",
+      key: "默认 TACoS 目标带",
+      value: "15-22%",
+      category: "Budget",
+      categoryLabel: "预算",
+      rationale: "成熟期 SKU 的行业合理带。",
+      lastModified: "Apr 14",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-budget-review",
+      key: "默认广告预算复盘节奏",
+      value: "每月",
+      category: "Operations",
+      categoryLabel: "运营",
+      rationale: "季度复盘发现每月看能更早发现漂移。",
+      lastModified: "Mar 22",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-ab-min",
+      key: "默认 A/B 测试最短时长",
+      value: "14 天",
+      category: "Quality",
+      categoryLabel: "质量",
+      rationale: "避免 listing 端测试的早期置信度偏差。",
+      lastModified: "Feb 14",
+      modifiedBy: "Devon Park",
+    },
+    {
+      id: "bd-bid-floor",
+      key: "默认关键词出价下限",
+      value: "$0.40",
+      category: "Budget",
+      categoryLabel: "预算",
+      rationale: "更低出价历史上曝光份额 <5%。",
+      lastModified: "Feb 14",
+      modifiedBy: "Devon Park",
+    },
+    {
+      id: "bd-auto-bid-cap",
+      key: "默认自主出价调整上限",
+      value: "15%",
+      category: "Operations",
+      categoryLabel: "运营",
+      rationale: "聚合审计显示该上限内 0 回滚。",
+      lastModified: "Jan 10",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-launch-budget",
+      key: "默认新品上新月预算带",
+      value: "$30K-$60K/月",
+      category: "Budget",
+      categoryLabel: "预算",
+      rationale: "跨越成熟到激进上新姿态。",
+      lastModified: "Feb 14",
+      modifiedBy: "Sara Lin",
+    },
+    {
+      id: "bd-voice",
+      key: "默认品牌语气",
+      value: "运营口吻(简练、直接)",
+      category: "Voice",
+      categoryLabel: "语气",
+      rationale: "与 agent voice 手册一致。",
+      lastModified: "Apr 2",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-conf-routing",
+      key: "默认机密权限路由",
+      value: "仅高级团队",
+      category: "Operations",
+      categoryLabel: "运营",
+      rationale: "敏感度策略。",
+      lastModified: "Jan 14",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-holiday-window",
+      key: "默认节日促销窗口",
+      value: "14 天",
+      category: "Budget",
+      categoryLabel: "预算",
+      rationale: "匹配 Amazon 典型促销节奏。",
+      lastModified: "Apr 10",
+      modifiedBy: "Sara Lin",
+    },
+    {
+      id: "bd-paused-review",
+      key: "默认已暂停 campaign 复盘节奏",
+      value: "7 天",
+      category: "Operations",
+      categoryLabel: "运营",
+      rationale: "在漂移前抓住被遗忘的 campaign。",
+      lastModified: "Apr 28",
+      modifiedBy: "Devon Park",
+    },
+  ],
+
+  recentQueries: [
+    {
+      id: "rq-razor-toothbrush",
+      question: "对比 razor 和牙刷产品线的毛利",
+      asker: "Sara Lin",
+      askerInitials: "SL",
+      askedAt: "1 天前",
+      sensitivity: "Confidential",
+      sensitivityLabel: "机密",
+      threadId: "thread-margin-compare",
+    },
+    {
+      id: "rq-bedroom-cr",
+      question: "卧室场景的 CR 为什么差?",
+      asker: "Maya Chen",
+      askerInitials: "MC",
+      askedAt: "3 天前",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      threadId: "thread-bedroom-cr",
+    },
+    {
+      id: "rq-holiday-sku-a",
+      question: "价格锁的情况下 SKU-A 要不要跑节日促销?",
+      asker: "Devon Park",
+      askerInitials: "DP",
+      askedAt: "5 天前",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      threadId: "thread-holiday-promo",
+    },
+    {
+      id: "rq-tiktok-floor",
+      question: "TikTok 增量测试方法 · go/no-go 底线在哪里?",
+      asker: "Devon Park",
+      askerInitials: "DP",
+      askedAt: "6 天前",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      threadId: "thread-tiktok-methodology",
+    },
+    {
+      id: "rq-walmart-amazon-cpc",
+      question: "充电宝类目 Walmart vs Amazon 的 CPC",
+      asker: "Devon Park",
+      askerInitials: "DP",
+      askedAt: "8 天前",
+      sensitivity: "Internal",
+      sensitivityLabel: "内部",
+      threadId: "thread-cpc-compare",
+    },
+    {
+      id: "rq-sku-x-attack",
+      question: "过去一年 Company Brain 里有多少 SKU-X 攻击模式?",
+      asker: "Maya Chen",
+      askerInitials: "MC",
+      askedAt: "9 天前",
+      sensitivity: "Sensitive",
+      sensitivityLabel: "敏感",
+      threadId: "thread-attack-count",
+    },
+    {
+      id: "rq-razor-attach-range",
+      question: "我们品牌 razor-blade 的绑定购买率典型范围?",
+      asker: "Sara Lin",
+      askerInitials: "SL",
+      askedAt: "11 天前",
+      sensitivity: "Confidential",
+      sensitivityLabel: "机密",
+      threadId: "thread-attach-range",
     },
   ],
 };
@@ -7889,6 +8700,74 @@ const CLEARANCE_TONE = {
   Confidential: "rose",
 };
 
+const CLEARANCE_ORDER = ["Public", "Internal", "Sensitive", "Confidential"];
+function canView(userClearance, contentSensitivity) {
+  return (
+    CLEARANCE_ORDER.indexOf(userClearance) >=
+    CLEARANCE_ORDER.indexOf(contentSensitivity)
+  );
+}
+
+const SENSITIVITY_LABEL_ZH = {
+  Public: "公开",
+  Internal: "内部",
+  Sensitive: "敏感",
+  Confidential: "机密",
+};
+
+const CONNECTOR_STATUS_TONE = {
+  live: "emerald",
+  syncing: "blue",
+  paused: "rose",
+  auth_required: "rose",
+};
+const CONNECTOR_STATUS_LABEL = {
+  live: "在线",
+  syncing: "同步中",
+  paused: "已暂停",
+  auth_required: "需重新授权",
+};
+const CONNECTOR_TYPE_LABEL = {
+  api: "API",
+  scrape: "抓取",
+  file: "文件",
+};
+
+const DOC_STATUS_TONE = {
+  indexed: "emerald",
+  processing: "blue",
+  no_patterns: "slate",
+  queued: "amber",
+};
+const DOC_STATUS_LABEL = {
+  indexed: "已索引",
+  processing: "处理中",
+  no_patterns: "无模式",
+  queued: "排队中",
+};
+
+const PATTERN_CATEGORY_TONE = {
+  Strategy: "emerald",
+  Optimization: "blue",
+  Execution: "slate",
+  Launch: "amber",
+  Defense: "rose",
+};
+const PATTERN_CATEGORY_LABEL = {
+  Strategy: "策略",
+  Optimization: "优化",
+  Execution: "执行",
+  Launch: "上新",
+  Defense: "防御",
+};
+
+const DEFAULT_CATEGORY_LABEL = {
+  Operations: "运营",
+  Budget: "预算",
+  Voice: "语气",
+  Quality: "质量",
+};
+
 function BrainSection({ id, title, count, defaultOpen = false, children }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
@@ -8101,10 +8980,534 @@ function RecentActivityList({ entries, onSelect }) {
   );
 }
 
+function ConnectorList({ connectors }) {
+  return (
+    <div className="space-y-2">
+      {connectors.map((c) => (
+        <div
+          key={c.id}
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+        >
+          <div className="flex items-start gap-2">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-medium text-slate-900">
+                  {c.name}
+                </span>
+                <Pill tone="slate">{CONNECTOR_TYPE_LABEL[c.type]}</Pill>
+                <Pill tone={CONNECTOR_STATUS_TONE[c.status] || "slate"}>
+                  {CONNECTOR_STATUS_LABEL[c.status] || c.status}
+                </Pill>
+                <Pill tone={SENSITIVITY_TONE[c.sensitivity] || "slate"}>
+                  {c.sensitivityLabel || SENSITIVITY_LABEL_ZH[c.sensitivity]}
+                </Pill>
+              </div>
+              <div className="mt-1.5 flex items-center justify-between gap-2">
+                <a
+                  href={c.scopeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
+                >
+                  查看 OAuth 权限范围
+                  <ArrowUpRight className="w-3 h-3" />
+                </a>
+                {c.lastSync && (
+                  <span className="text-11 text-slate-500 font-mono tabular-nums">
+                    {c.lastSync}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+      <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
+        要新增连接器或修改权限范围,在对话里说一句:"连接 [服务]" 或 "更新 [服务] 的权限范围"。
+      </div>
+    </div>
+  );
+}
+
+function DocFileIcon({ type }) {
+  const Icon = type === "xlsx" || type === "csv" ? FileSpreadsheet : FileText;
+  return (
+    <div className="w-7 h-7 rounded-md bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
+      <Icon className="w-3.5 h-3.5" />
+    </div>
+  );
+}
+
+function UploadedDocsList({ docs }) {
+  return (
+    <div className="space-y-2">
+      {docs.map((d) => (
+        <div
+          key={d.id}
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white flex items-start gap-2.5"
+        >
+          <DocFileIcon type={d.type} />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium text-slate-900 truncate">
+              {d.filename}
+            </div>
+            <div className="mt-1 flex items-center gap-2 flex-wrap">
+              <Pill tone={DOC_STATUS_TONE[d.status] || "slate"}>
+                {DOC_STATUS_LABEL[d.status] || d.status}
+              </Pill>
+              {d.patternsCount !== null && (
+                <span
+                  className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-10 font-mono tabular-nums border ${
+                    d.patternsCount > 0
+                      ? "bg-slate-900 text-white border-slate-900"
+                      : "bg-slate-100 text-slate-600 border-slate-200"
+                  }`}
+                >
+                  {d.patternsCount} 个模式
+                </span>
+              )}
+              <Pill tone={SENSITIVITY_TONE[d.sensitivity] || "slate"}>
+                {d.sensitivityLabel || SENSITIVITY_LABEL_ZH[d.sensitivity]}
+              </Pill>
+            </div>
+            <div className="mt-1 text-11 text-slate-500">
+              {d.uploadedAt} · 由 {d.uploadedBy} 上传
+            </div>
+          </div>
+          <button
+            type="button"
+            disabled
+            title="查看原文 · 查看提炼出的模式 · 从 brain 中移除"
+            className="flex-shrink-0 p-1 text-slate-400 hover:text-slate-600 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            <MoreVertical className="w-4 h-4" />
+          </button>
+        </div>
+      ))}
+      <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
+        要上传新文档,在对话里说一句:"上传 [文件名]",或者直接把文件拖进聊天框。
+      </div>
+    </div>
+  );
+}
+
+function CapturedPatterns({ patterns, onSelect }) {
+  const [filter, setFilter] = useState("All");
+  const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
+  const filtered = filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
+  return (
+    <div>
+      <div className="flex flex-wrap gap-1.5 mb-3">
+        {categories.map((cat) => {
+          const active = filter === cat;
+          return (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => setFilter(cat)}
+              className={`px-2 py-0.5 text-11 rounded-md border ${
+                active
+                  ? "bg-slate-900 text-white border-slate-900"
+                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              {cat === "All" ? "全部" : PATTERN_CATEGORY_LABEL[cat]}
+            </button>
+          );
+        })}
+      </div>
+      <div className="space-y-2">
+        {filtered.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            onClick={() => onSelect(p)}
+            className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white"
+          >
+            <div className="text-sm font-medium text-slate-900 leading-snug">
+              {p.name}
+            </div>
+            <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+              <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+                {PATTERN_CATEGORY_LABEL[p.category]}
+              </Pill>
+              <span className="text-11 text-slate-600">
+                置信度{" "}
+                <span className="font-mono tabular-nums text-slate-900">
+                  {p.confidencePct}%
+                </span>
+              </span>
+              <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+                {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
+              </Pill>
+            </div>
+            <div className="mt-1 text-11 text-slate-500">
+              已应用{" "}
+              <span className="font-mono tabular-nums text-slate-700">
+                {p.usedInCount}
+              </span>{" "}
+              次 · 来源{" "}
+              <span className="font-mono tabular-nums text-slate-700">
+                {p.sourceCount}
+              </span>{" "}
+              个 · 录入 {p.addedAt}
+            </div>
+          </button>
+        ))}
+        {filtered.length === 0 && (
+          <div className="text-11 text-slate-500 px-1 py-3">
+            当前类别下无模式。
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function PlaybookList({ playbooks }) {
+  const [openId, setOpenId] = useState(null);
+  return (
+    <div className="space-y-2">
+      {playbooks.map((pb) => {
+        const open = openId === pb.id;
+        const phasesCount = pb.phases.length;
+        return (
+          <div
+            key={pb.id}
+            className="border border-slate-200 rounded-md bg-white"
+          >
+            <button
+              type="button"
+              onClick={() => setOpenId(open ? null : pb.id)}
+              className="w-full text-left px-3 py-2.5 hover:bg-slate-50 flex items-start gap-2"
+            >
+              <ChevronRight
+                className={`w-4 h-4 text-slate-500 mt-0.5 transition-transform ${open ? "rotate-90" : ""}`}
+              />
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-slate-900 leading-snug">
+                  {pb.name}
+                </div>
+                <div className="mt-1 flex items-center gap-2 flex-wrap">
+                  <Pill tone={PATTERN_CATEGORY_TONE[pb.category] || "slate"}>
+                    {PATTERN_CATEGORY_LABEL[pb.category]}
+                  </Pill>
+                  <Pill tone={SENSITIVITY_TONE[pb.sensitivity] || "slate"}>
+                    {pb.sensitivityLabel || SENSITIVITY_LABEL_ZH[pb.sensitivity]}
+                  </Pill>
+                </div>
+                <div className="mt-1 text-11 text-slate-500">
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {phasesCount}
+                  </span>{" "}
+                  阶段 ·{" "}
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {pb.basedOnCases}
+                  </span>{" "}
+                  个案例
+                </div>
+              </div>
+            </button>
+            {open && (
+              <div className="border-t border-slate-200 px-3 py-2.5 bg-slate-50/40">
+                <table className="w-full text-11">
+                  <thead>
+                    <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
+                      <th className="font-medium py-1 pr-2">阶段</th>
+                      <th className="font-medium py-1 pr-2">重点</th>
+                      <th className="font-medium py-1 pr-2 text-right">周数</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pb.phases.map((ph, i) => (
+                      <tr key={i} className="border-t border-slate-200 align-top">
+                        <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
+                          {ph.label}
+                        </td>
+                        <td className="py-1.5 pr-2 text-slate-700">
+                          <div>{ph.focus}</div>
+                          <div className="text-10 text-slate-500 mt-0.5">
+                            通过条件:{ph.exitGate}
+                          </div>
+                        </td>
+                        <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
+                          {ph.durationWeeks}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DecisionClassList({ classes }) {
+  const [revokedIds, setRevokedIds] = useState(new Set());
+  const [confirmingId, setConfirmingId] = useState(null);
+
+  const isJustRevoked = (id) => revokedIds.has(id);
+  const active = classes.filter((c) => !c.revoked && !isJustRevoked(c.id));
+  const justRevoked = classes.filter((c) => !c.revoked && isJustRevoked(c.id));
+  const historicallyRevoked = classes.filter((c) => c.revoked);
+
+  const onConfirm = (id) => {
+    setRevokedIds((s) => {
+      const next = new Set(s);
+      next.add(id);
+      return next;
+    });
+    setConfirmingId(null);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+          活跃类别
+        </div>
+        <div className="space-y-2">
+          {active.map((dc) => (
+            <div
+              key={dc.id}
+              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+            >
+              <div className="flex items-start gap-2">
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium text-slate-900 leading-snug">
+                    {dc.name}
+                  </div>
+                  <div className="text-11 text-slate-600 mt-1 leading-snug">
+                    {dc.definition}
+                  </div>
+                  <div className="text-10 text-slate-500 mt-1">
+                    {dc.thresholdSummary}
+                  </div>
+                  <div className="text-10 text-slate-500 mt-1">
+                    近 30 天调用:{" "}
+                    <span className="font-mono tabular-nums text-slate-700">
+                      {dc.recentInvocations}
+                    </span>{" "}
+                    次 · 最近{" "}
+                    <span className="font-mono tabular-nums text-slate-700">
+                      {dc.lastInvoked}
+                    </span>
+                  </div>
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+                      {dc.sensitivityLabel || SENSITIVITY_LABEL_ZH[dc.sensitivity]}
+                    </Pill>
+                    <span className="text-10 text-slate-500">
+                      授权人 {dc.delegatedBy} · {dc.delegatedAt}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingId(dc.id)}
+                  className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
+                >
+                  <Trash2 className="w-3 h-3" />
+                  撤回
+                </button>
+              </div>
+              {confirmingId === dc.id && (
+                <div className="mt-2 border-t border-slate-200 pt-2">
+                  <div className="text-11 text-slate-700 leading-snug">
+                    撤回 "{dc.name}"?今后 agent 执行这类动作前需要明确批准。
+                  </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setConfirmingId(null)}
+                      className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                    >
+                      取消
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onConfirm(dc.id)}
+                      className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
+                    >
+                      确认撤回
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {(justRevoked.length > 0 || historicallyRevoked.length > 0) && (
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            近期已撤回
+          </div>
+          <div className="space-y-2">
+            {justRevoked.map((dc) => (
+              <div
+                key={dc.id}
+                className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
+              >
+                <div className="text-sm font-medium text-slate-500 line-through leading-snug">
+                  {dc.name}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">刚刚撤回</div>
+              </div>
+            ))}
+            {historicallyRevoked.map((dc) => (
+              <div
+                key={dc.id}
+                className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
+              >
+                <div className="text-sm font-medium text-slate-500 line-through leading-snug">
+                  {dc.name}
+                </div>
+                <div className="text-11 text-slate-600 mt-1 leading-snug">
+                  {dc.definition}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  {dc.thresholdSummary}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  撤回前累计调用{" "}
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {dc.recentInvocations}
+                  </span>{" "}
+                  次 · 最后一次 {dc.lastInvoked}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function BrandDefaultsList({ defaults }) {
+  const [editId, setEditId] = useState(null);
+  return (
+    <div className="space-y-2">
+      {defaults.map((d) => (
+        <div
+          key={d.id}
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+        >
+          <div className="flex items-start gap-2">
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium text-slate-900 leading-snug">
+                {d.key}
+              </div>
+              <div className="mt-1 font-mono tabular-nums text-slate-900 text-sm">
+                {d.value}
+              </div>
+              <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+                <Pill tone="slate">{d.categoryLabel || DEFAULT_CATEGORY_LABEL[d.category] || d.category}</Pill>
+                <span className="text-10 text-slate-500">
+                  {d.lastModified} · {d.modifiedBy} 修改
+                </span>
+              </div>
+              <div className="text-11 text-slate-600 mt-1 leading-snug">
+                {d.rationale}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setEditId(editId === d.id ? null : d.id)}
+              className="flex-shrink-0 p-1 text-slate-500 hover:text-slate-900"
+              title="通过对话修改"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          {editId === d.id && (
+            <div className="mt-2 border-t border-slate-200 pt-2">
+              <div className="text-11 text-slate-700 leading-snug">
+                在对话里说一句:
+                <span className="font-mono text-slate-900">
+                  "把 {d.key} 改为 [新值]"
+                </span>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setEditId(null)}
+                  className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                >
+                  取消
+                </button>
+                <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
+                  打开对话
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RecentQueriesList({ queries, activeUser }) {
+  return (
+    <div className="space-y-2">
+      {queries.map((q) => {
+        const visible = canView(activeUser.clearance, q.sensitivity);
+        return (
+          <div
+            key={q.id}
+            className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+          >
+            <div className="text-sm font-medium text-slate-900 leading-snug flex items-start gap-2">
+              <MessageSquare className="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5" />
+              <span className="flex-1 min-w-0 truncate">
+                {visible
+                  ? q.question
+                  : "[本问题在当前权限下受限 · 可联系 Maya Chen 或更高权限]"}
+              </span>
+            </div>
+            <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+              <div className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-semibold text-10 flex items-center justify-center flex-shrink-0">
+                {q.askerInitials}
+              </div>
+              <span className="text-11 text-slate-600">{q.asker}</span>
+              <span className="text-10 text-slate-500 font-mono tabular-nums">
+                {q.askedAt}
+              </span>
+              <Pill
+                tone={SENSITIVITY_TONE[q.sensitivity] || "slate"}
+                className="ml-auto"
+              >
+                {q.sensitivityLabel || SENSITIVITY_LABEL_ZH[q.sensitivity]}
+              </Pill>
+            </div>
+            <div className="mt-1.5">
+              <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
+                打开对话
+                <ArrowRight className="w-3 h-3" />
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function CompanyBrainContent() {
   const [activeUserId, setActiveUserId] = useState(COMPANY_BRAIN.identity.activeUserId);
   const [openActivity, setOpenActivity] = useState(null);
+  const [openPattern, setOpenPattern] = useState(null);
   const identity = { ...COMPANY_BRAIN.identity, activeUserId };
+  const activeUser =
+    identity.users.find((u) => u.id === activeUserId) || identity.users[0];
 
   const drawerRows = openActivity
     ? [
@@ -8134,6 +9537,68 @@ function CompanyBrainContent() {
             onSelect={setOpenActivity}
           />
         </BrainSection>
+        <BrainSection
+          id="connectors"
+          title="数据连接器"
+          count={COMPANY_BRAIN.connectors.length}
+          defaultOpen={false}
+        >
+          <ConnectorList connectors={COMPANY_BRAIN.connectors} />
+        </BrainSection>
+        <BrainSection
+          id="uploaded-docs"
+          title="已上传文档"
+          count={COMPANY_BRAIN.uploadedDocs.length}
+          defaultOpen={false}
+        >
+          <UploadedDocsList docs={COMPANY_BRAIN.uploadedDocs} />
+        </BrainSection>
+        <BrainSection
+          id="captured-patterns"
+          title="已捕获模式"
+          count={COMPANY_BRAIN.patterns.length}
+          defaultOpen={false}
+        >
+          <CapturedPatterns
+            patterns={COMPANY_BRAIN.patterns}
+            onSelect={setOpenPattern}
+          />
+        </BrainSection>
+        <BrainSection
+          id="playbooks"
+          title="打法库"
+          count={COMPANY_BRAIN.playbookList.length}
+          defaultOpen={false}
+        >
+          <PlaybookList playbooks={COMPANY_BRAIN.playbookList} />
+        </BrainSection>
+        <BrainSection
+          id="decision-classes"
+          title="决策类别"
+          count={COMPANY_BRAIN.decisionClassesDetail.filter((c) => !c.revoked).length}
+          defaultOpen={false}
+        >
+          <DecisionClassList classes={COMPANY_BRAIN.decisionClassesDetail} />
+        </BrainSection>
+        <BrainSection
+          id="brand-defaults"
+          title="品牌默认值"
+          count={COMPANY_BRAIN.brandDefaults.length}
+          defaultOpen={false}
+        >
+          <BrandDefaultsList defaults={COMPANY_BRAIN.brandDefaults} />
+        </BrainSection>
+        <BrainSection
+          id="recent-queries"
+          title="近期问询"
+          count={COMPANY_BRAIN.recentQueries.length}
+          defaultOpen={false}
+        >
+          <RecentQueriesList
+            queries={COMPANY_BRAIN.recentQueries}
+            activeUser={activeUser}
+          />
+        </BrainSection>
       </div>
 
       <InspectionDrawer
@@ -8159,6 +9624,29 @@ function CompanyBrainContent() {
             : undefined
         }
         definitionsLabel="详情"
+      />
+
+      <InspectionDrawer
+        open={!!openPattern}
+        onClose={() => setOpenPattern(null)}
+        title={openPattern?.name}
+        methodologyDescription={
+          openPattern
+            ? `${openPattern.detail.definition} ${openPattern.detail.lineage}`
+            : undefined
+        }
+        tableHeaders={["来源", "结果"]}
+        tableRows={openPattern ? openPattern.detail.sourceList : []}
+        columnWidths={["44%", "56%"]}
+        definitionsList={
+          openPattern
+            ? openPattern.detail.appliedIn.map((a, i) => ({
+                term: `应用 ${i + 1}`,
+                definition: a,
+              }))
+            : undefined
+        }
+        definitionsLabel="已应用于"
       />
     </>
   );
