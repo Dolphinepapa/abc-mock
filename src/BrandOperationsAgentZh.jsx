@@ -551,7 +551,7 @@ const STRATEGY = {
         "14 个卧室意图搜索词每月带来 $3.2K 流量,CTR 仅 1.1%,远低于同意图集群的品类基准 2.8%。",
       observations: [
         "这 14 个卧室意图关键词中有 5 个在当前广告活动中线上 — 在广告架构面板中以玫红色高亮标记(顶栏 → 广告架构)",
-        "完整 14 个关键词清单与聚类规则可在 Scenario 分段下点击 '查看聚类逻辑 ↗' 审查",
+        "完整 14 个关键词清单与词性分类规则可在 Scenario 分段下点击 '查看人群划分逻辑 ↗' 审查",
         "当前这些词的 CTR:1.1%(28 天均值)。同意图集群的品类基准:2.8%。",
         "根因假设:主图与详情页前 3 张图均强调客厅/大厅场景,当前主图轮播中没有卧室场景图。",
       ],
@@ -671,46 +671,64 @@ const STRATEGY = {
   },
 };
 
-/* Floor Lamp search-term clustering — backs the "查看聚类逻辑" InspectionDrawer */
+/* Floor Lamp 搜索词人群划分 — backs the "查看人群划分逻辑" InspectionDrawer */
 const FLOOR_LAMP_CLUSTERING = {
   methodology:
-    "Amazon 搜索词按用户意图语义 + 使用场景词 / 风格描述词进行聚类。每个搜索词归入恰好一个聚类(若同时命中多条规则,以匹配长度最长的为准)。",
-  tableHeaders: ["搜索词", "聚类", "月曝光", "月点击", "CR"],
+    "Amazon 搜索词按词性逐层打标签:先判断是否含产品主词,再判断是否带场景 / 风格 / 季节修饰词。同一关键词可同时含多种属性,以最具区分度的为主标签。表格按月搜索量降序排列。",
+  tableHeaders: ["关键词", "月搜索量", "词性", "具体类目"],
   rows: [
-    ["floor lamp for bedroom",          "卧室",        "18.4K", 184,  "6.4%"],
-    ["bedside floor lamp",              "卧室",        "12.2K", 122,  "5.9%"],
-    ["bedroom reading lamp",            "卧室",        "8.8K",  105,  "7.4%"],
-    ["modern floor lamp for living room","客厅",       "22.4K", 382,  "8.6%"],
-    ["tall floor lamp living room",     "客厅",        "16.8K", 258,  "8.1%"],
-    ["arc lamp living room",            "客厅",        "11.4K", 189,  "8.4%"],
-    ["kids room floor lamp",            "儿童房",      "4.8K",  52,   "7.4%"],
-    ["nursery floor lamp",              "儿童房",      "3.6K",  44,   "8.1%"],
-    ["child-safe floor lamp",           "儿童房",      "2.2K",  28,   "7.8%"],
-    ["study floor lamp",                "书房 / 办公", "5.4K",  72,   "8.0%"],
-    ["office floor lamp",               "书房 / 办公", "4.1K",  58,   "8.4%"],
-    ["desk reading floor lamp",         "书房 / 办公", "2.8K",  38,   "7.9%"],
-    ["modern floor lamp",               "现代",        "84.2K", 2021, "10.1%"],
-    ["contemporary floor lamp",         "现代",        "32.4K", 712,  "9.4%"],
-    ["minimalist floor lamp",           "现代",        "62.4K", 1622, "9.8%"],
-    ["mid-century floor lamp",          "中世纪",      "44.8K", 985,  "8.6%"],
-    ["mid-century modern lamp",         "中世纪",      "21.2K", 424,  "8.4%"],
-    ["retro 60s floor lamp",            "中世纪",      "12.8K", 244,  "8.0%"],
-    ["industrial floor lamp",           "工业",        "38.2K", 764,  "8.1%"],
-    ["loft floor lamp",                 "工业",        "14.4K", 274,  "7.8%"],
-    ["pipe floor lamp",                 "工业",        "9.6K",  192,  "8.0%"],
-    ["vintage floor lamp",              "复古",        "16.8K", 268,  "7.4%"],
-    ["antique brass floor lamp",        "复古",        "11.2K", 168,  "7.0%"],
-    ["old fashioned floor lamp",        "复古",        "8.4K",  134,  "7.6%"],
+    ["floor lamp",                          "240.4K", "中性词", "主词"],
+    ["modern floor lamp",                   "84.2K",  "风格词", "现代"],
+    ["minimalist floor lamp",               "62.4K",  "风格词", "现代"],
+    ["mid-century floor lamp",              "44.8K",  "风格词", "中世纪"],
+    ["industrial floor lamp",               "38.2K",  "风格词", "工业"],
+    ["tall floor lamp",                     "34.6K",  "中性词", "高度属性"],
+    ["contemporary floor lamp",             "32.4K",  "风格词", "现代"],
+    ["arc floor lamp",                      "28.8K",  "中性词", "形态属性"],
+    ["modern floor lamp for living room",   "22.4K",  "场景词", "客厅"],
+    ["mid-century modern lamp",             "21.2K",  "风格词", "中世纪"],
+    ["floor lamp for bedroom",              "18.4K",  "场景词", "卧室"],
+    ["tall floor lamp living room",         "16.8K",  "场景词", "客厅"],
+    ["vintage floor lamp",                  "16.8K",  "风格词", "复古"],
+    ["tripod floor lamp",                   "15.2K",  "中性词", "形态属性"],
+    ["loft floor lamp",                     "14.4K",  "风格词", "工业"],
+    ["retro 60s floor lamp",                "12.8K",  "风格词", "中世纪"],
+    ["bedside floor lamp",                  "12.2K",  "场景词", "卧室"],
+    ["arc lamp living room",                "11.4K",  "场景词", "客厅"],
+    ["antique brass floor lamp",            "11.2K",  "风格词", "复古"],
+    ["pipe floor lamp",                     "9.6K",   "风格词", "工业"],
+    ["bedroom reading lamp",                "8.8K",   "场景词", "卧室"],
+    ["old fashioned floor lamp",            "8.4K",   "风格词", "复古"],
+    ["outdoor patio floor lamp",            "6.8K",   "季节词", "户外 / 夏季"],
+    ["study floor lamp",                    "5.4K",   "场景词", "书房 / 办公"],
+    ["kids room floor lamp",                "4.8K",   "场景词", "儿童房"],
+    ["office floor lamp",                   "4.1K",   "场景词", "书房 / 办公"],
+    ["nursery floor lamp",                  "3.6K",   "场景词", "儿童房"],
+    ["holiday floor lamp",                  "3.2K",   "季节词", "节日 / 冬季"],
+    ["desk reading floor lamp",             "2.8K",   "场景词", "书房 / 办公"],
+    ["child-safe floor lamp",               "2.2K",   "场景词", "儿童房"],
   ],
   rules: [
-    { term: "卧室",        definition: "搜索词包含 bedroom / bedside / nightstand / nursery 等" },
-    { term: "客厅",        definition: "搜索词包含 living / sofa / family room / lounge 等" },
-    { term: "儿童房",      definition: "搜索词包含 kid / child / baby / nursery 等" },
-    { term: "书房 / 办公", definition: "搜索词包含 study / office / desk / reading 等" },
-    { term: "现代",        definition: "搜索词包含 modern / contemporary / minimalist / sleek 等" },
-    { term: "中世纪",      definition: "搜索词包含 mid-century / retro / 60s / atomic 等" },
-    { term: "工业",        definition: "搜索词包含 industrial / loft / pipe / metal 等" },
-    { term: "复古",        definition: "搜索词包含 vintage / antique / brass / old fashioned 等" },
+    {
+      term: "中性词",
+      definition:
+        "仅含产品主词(floor lamp)及物理属性词(tall / arc / tripod)。无场景、风格、季节信息;承接最宽泛的搜索需求。",
+    },
+    {
+      term: "场景词",
+      definition:
+        "包含使用场景(bedroom / living room / nursery / study)— 表达用户的使用环境;定位最精准。",
+    },
+    {
+      term: "风格词",
+      definition:
+        "包含视觉风格描述(modern / mid-century / industrial / vintage)— 表达用户的审美偏好;品类内竞品差异化的主战场。",
+    },
+    {
+      term: "季节词",
+      definition:
+        "包含季节或时段(outdoor / patio / holiday)— 此品类季节性较弱,样本量小,主要用于户外子品类。",
+    },
   ],
 };
 
@@ -1361,7 +1379,7 @@ function PerformanceStrip() {
               onClick={() => setClusteringOpen(true)}
               className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium flex-shrink-0"
             >
-              查看聚类逻辑
+              查看人群划分逻辑
               <ArrowUpRight className="w-3 h-3" />
             </button>
           )}
@@ -1388,12 +1406,12 @@ function PerformanceStrip() {
       <InspectionDrawer
         open={clusteringOpen}
         onClose={() => setClusteringOpen(false)}
-        title="搜索词聚类逻辑 · 落地灯"
+        title="人群划分逻辑 · 落地灯"
         methodologyDescription={FLOOR_LAMP_CLUSTERING.methodology}
         tableHeaders={FLOOR_LAMP_CLUSTERING.tableHeaders}
         tableRows={FLOOR_LAMP_CLUSTERING.rows}
         definitionsList={FLOOR_LAMP_CLUSTERING.rules}
-        definitionsLabel="聚类规则"
+        definitionsLabel="词性分类规则"
       />
     </>
   );

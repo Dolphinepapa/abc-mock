@@ -551,7 +551,7 @@ const STRATEGY = {
         "14 search terms with bedroom intent generate $3.2K/month traffic at 1.1% CTR, well below the 2.8% category benchmark for the same intent cluster.",
       observations: [
         "5 of these 14 bedroom-intent keywords are live in current campaigns — flagged with rose tint in the Ad architecture panel (top bar → Ad architecture)",
-        "Full list of the 14 keywords and the cluster rules is auditable via 'View clustering logic ↗' under the Scenario segment chip",
+        "Full list of the 14 keywords and the word-type rules is auditable via 'View audience segmentation logic ↗' under the Scenario segment chip",
         "Current CTR on those terms: 1.1% (28-day avg). Category benchmark for same intent cluster: 2.8%.",
         "Root-cause hypothesis: hero image and first 3 detail-page photos emphasize living-room / lobby context. No bedroom-context image in the current carousel.",
       ],
@@ -671,46 +671,64 @@ const STRATEGY = {
   },
 };
 
-/* Floor Lamp search-term clustering — backs the "View clustering logic" InspectionDrawer */
+/* Floor Lamp audience segmentation — backs the "View audience segmentation logic" InspectionDrawer */
 const FLOOR_LAMP_CLUSTERING = {
   methodology:
-    "Amazon search terms are clustered by user-intent semantics + use-case keywords / style descriptors. Each term lands in exactly one cluster (longest matching rule wins when multiple rules apply).",
-  tableHeaders: ["Search term", "Cluster", "Monthly impressions", "Monthly clicks", "CR"],
+    "Amazon search terms are tagged layer-by-layer by word type: first the product head noun, then any use-case / style / seasonal modifiers. A term may carry multiple attributes; the most distinctive is used as the primary tag. Rows are sorted by monthly search volume (descending).",
+  tableHeaders: ["Keyword", "Monthly searches", "Word type", "Specific category"],
   rows: [
-    ["floor lamp for bedroom",          "Bedroom",          "18.4K", 184,  "6.4%"],
-    ["bedside floor lamp",              "Bedroom",          "12.2K", 122,  "5.9%"],
-    ["bedroom reading lamp",            "Bedroom",          "8.8K",  105,  "7.4%"],
-    ["modern floor lamp for living room","Living room",     "22.4K", 382,  "8.6%"],
-    ["tall floor lamp living room",     "Living room",      "16.8K", 258,  "8.1%"],
-    ["arc lamp living room",            "Living room",      "11.4K", 189,  "8.4%"],
-    ["kids room floor lamp",            "Kid room",         "4.8K",  52,   "7.4%"],
-    ["nursery floor lamp",              "Kid room",         "3.6K",  44,   "8.1%"],
-    ["child-safe floor lamp",           "Kid room",         "2.2K",  28,   "7.8%"],
-    ["study floor lamp",                "Study / office",   "5.4K",  72,   "8.0%"],
-    ["office floor lamp",               "Study / office",   "4.1K",  58,   "8.4%"],
-    ["desk reading floor lamp",         "Study / office",   "2.8K",  38,   "7.9%"],
-    ["modern floor lamp",               "Modern",           "84.2K", 2021, "10.1%"],
-    ["contemporary floor lamp",         "Modern",           "32.4K", 712,  "9.4%"],
-    ["minimalist floor lamp",           "Modern",           "62.4K", 1622, "9.8%"],
-    ["mid-century floor lamp",          "Mid-century",      "44.8K", 985,  "8.6%"],
-    ["mid-century modern lamp",         "Mid-century",      "21.2K", 424,  "8.4%"],
-    ["retro 60s floor lamp",            "Mid-century",      "12.8K", 244,  "8.0%"],
-    ["industrial floor lamp",           "Industrial",       "38.2K", 764,  "8.1%"],
-    ["loft floor lamp",                 "Industrial",       "14.4K", 274,  "7.8%"],
-    ["pipe floor lamp",                 "Industrial",       "9.6K",  192,  "8.0%"],
-    ["vintage floor lamp",              "Vintage",          "16.8K", 268,  "7.4%"],
-    ["antique brass floor lamp",        "Vintage",          "11.2K", 168,  "7.0%"],
-    ["old fashioned floor lamp",        "Vintage",          "8.4K",  134,  "7.6%"],
+    ["floor lamp",                          "240.4K", "Generic",  "Head term"],
+    ["modern floor lamp",                   "84.2K",  "Style",    "Modern"],
+    ["minimalist floor lamp",               "62.4K",  "Style",    "Modern"],
+    ["mid-century floor lamp",              "44.8K",  "Style",    "Mid-century"],
+    ["industrial floor lamp",               "38.2K",  "Style",    "Industrial"],
+    ["tall floor lamp",                     "34.6K",  "Generic",  "Height attribute"],
+    ["contemporary floor lamp",             "32.4K",  "Style",    "Modern"],
+    ["arc floor lamp",                      "28.8K",  "Generic",  "Form attribute"],
+    ["modern floor lamp for living room",   "22.4K",  "Use-case", "Living room"],
+    ["mid-century modern lamp",             "21.2K",  "Style",    "Mid-century"],
+    ["floor lamp for bedroom",              "18.4K",  "Use-case", "Bedroom"],
+    ["tall floor lamp living room",         "16.8K",  "Use-case", "Living room"],
+    ["vintage floor lamp",                  "16.8K",  "Style",    "Vintage"],
+    ["tripod floor lamp",                   "15.2K",  "Generic",  "Form attribute"],
+    ["loft floor lamp",                     "14.4K",  "Style",    "Industrial"],
+    ["retro 60s floor lamp",                "12.8K",  "Style",    "Mid-century"],
+    ["bedside floor lamp",                  "12.2K",  "Use-case", "Bedroom"],
+    ["arc lamp living room",                "11.4K",  "Use-case", "Living room"],
+    ["antique brass floor lamp",            "11.2K",  "Style",    "Vintage"],
+    ["pipe floor lamp",                     "9.6K",   "Style",    "Industrial"],
+    ["bedroom reading lamp",                "8.8K",   "Use-case", "Bedroom"],
+    ["old fashioned floor lamp",            "8.4K",   "Style",    "Vintage"],
+    ["outdoor patio floor lamp",            "6.8K",   "Seasonal", "Outdoor / summer"],
+    ["study floor lamp",                    "5.4K",   "Use-case", "Study / office"],
+    ["kids room floor lamp",                "4.8K",   "Use-case", "Kid room"],
+    ["office floor lamp",                   "4.1K",   "Use-case", "Study / office"],
+    ["nursery floor lamp",                  "3.6K",   "Use-case", "Kid room"],
+    ["holiday floor lamp",                  "3.2K",   "Seasonal", "Holiday / winter"],
+    ["desk reading floor lamp",             "2.8K",   "Use-case", "Study / office"],
+    ["child-safe floor lamp",               "2.2K",   "Use-case", "Kid room"],
   ],
   rules: [
-    { term: "Bedroom",        definition: "Terms containing bedroom / bedside / nightstand / nursery" },
-    { term: "Living room",    definition: "Terms containing living / sofa / family room / lounge" },
-    { term: "Kid room",       definition: "Terms containing kid / child / baby / nursery" },
-    { term: "Study / office", definition: "Terms containing study / office / desk / reading" },
-    { term: "Modern",         definition: "Terms containing modern / contemporary / minimalist / sleek" },
-    { term: "Mid-century",    definition: "Terms containing mid-century / retro / 60s / atomic" },
-    { term: "Industrial",     definition: "Terms containing industrial / loft / pipe / metal" },
-    { term: "Vintage",        definition: "Terms containing vintage / antique / brass / old fashioned" },
+    {
+      term: "Generic",
+      definition:
+        "Product head noun (floor lamp) + physical attributes (tall / arc / tripod). No use-case, style, or seasonal signal; absorbs the broadest search intent.",
+    },
+    {
+      term: "Use-case",
+      definition:
+        "Contains a usage scenario (bedroom / living room / nursery / study) — signals where / how the buyer will use it. Sharpest targeting.",
+    },
+    {
+      term: "Style",
+      definition:
+        "Contains a visual style descriptor (modern / mid-century / industrial / vintage) — signals aesthetic preference. The main differentiation battleground inside the category.",
+    },
+    {
+      term: "Seasonal",
+      definition:
+        "Contains a season or time qualifier (outdoor / patio / holiday). Floor Lamps has weak seasonality so volume is small — mostly applies to the outdoor sub-category.",
+    },
   ],
 };
 
@@ -1361,7 +1379,7 @@ function PerformanceStrip() {
               onClick={() => setClusteringOpen(true)}
               className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium flex-shrink-0"
             >
-              View clustering logic
+              View audience segmentation logic
               <ArrowUpRight className="w-3 h-3" />
             </button>
           )}
@@ -1388,12 +1406,12 @@ function PerformanceStrip() {
       <InspectionDrawer
         open={clusteringOpen}
         onClose={() => setClusteringOpen(false)}
-        title="Floor Lamp search-term clustering"
+        title="Floor Lamp audience segmentation"
         methodologyDescription={FLOOR_LAMP_CLUSTERING.methodology}
         tableHeaders={FLOOR_LAMP_CLUSTERING.tableHeaders}
         tableRows={FLOOR_LAMP_CLUSTERING.rows}
         definitionsList={FLOOR_LAMP_CLUSTERING.rules}
-        definitionsLabel="Cluster rules"
+        definitionsLabel="Word-type rules"
       />
     </>
   );
