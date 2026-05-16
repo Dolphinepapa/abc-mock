@@ -125,9 +125,9 @@ const STRATEGY = {
 
     segments: [
       { id: "all",      label: "All",            count: 64, kicker: "All category keywords (excl. brand)" },
-      { id: "core",     label: "Core terms",     count:  8, kicker: "floor lamp · arc · tripod · tall · reading" },
-      { id: "scenario", label: "Scenario terms", count: 32, kicker: "bedroom · living · kid room · study" },
-      { id: "style",    label: "Style terms",    count: 24, kicker: "modern · vintage · mid-century · industrial" },
+      { id: "core",     label: "Generic keywords",   count:  8, kicker: "floor lamp · arc · tripod · tall · reading" },
+      { id: "scenario", label: "Use-case keywords",  count: 32, kicker: "bedroom · living · kid room · study" },
+      { id: "style",    label: "Attribute keywords", count: 24, kicker: "modern · vintage · mid-century · industrial" },
     ],
 
     gapsBySegment: {
@@ -372,7 +372,7 @@ const STRATEGY = {
         ctr: 1.2,
         cr: 7.6,
         topKeywords: [
-          { kw: "Auto-discovery surfaced terms (~28 in 30d)", impressions: 38400, clicks: 461, ctr: 1.2, cr: 7.6 },
+          { kw: "Auto-targeting discovery terms (~28 in 30d)", impressions: 38400, clicks: 461, ctr: 1.2, cr: 7.6 },
         ],
       },
       {
@@ -429,7 +429,7 @@ const STRATEGY = {
     {
       id: "bedroom-ctr",
       type: "informational",
-      title: "Bedroom-context search terms underperforming on CTR",
+      title: "Bedroom-intent keywords underperforming on CTR",
       summary:
         "14 search terms with bedroom intent generate $3.2K/month traffic at 1.1% CTR, well below the 2.8% category benchmark for the same intent cluster.",
       observations: [
@@ -513,7 +513,7 @@ const STRATEGY = {
     },
     {
       idx: 2,
-      label: "Ad framework lift",
+      label: "Ad architecture lift",
       target: "Hero keywords reach Top-3 organic · SOV 14% → 26%",
       window: "Weeks 1–4",
       dependsOn: "Agent · from Insight #2 plan",
@@ -529,7 +529,7 @@ const STRATEGY = {
     },
     {
       idx: 4,
-      label: "Efficiency restoration",
+      label: "Return to target TACoS",
       target: "TACoS back to 17–19% · sales hold within −5% of peak",
       window: "Weeks 9–12",
       dependsOn: "Activated after #3 captured",
@@ -626,7 +626,7 @@ const PEAK = {
   ],
   competitiveSignals: [
     {
-      label: "Aggregate competitor bid budget",
+      label: "Competitor bid spend lift",
       value: "+40 to 60%",
       detail: "3 competitor SKUs increased over past 14 days",
     },
@@ -636,7 +636,7 @@ const PEAK = {
       detail: "1 new SKU in launch-phase aggressive bidding",
     },
     {
-      label: "Hero-keyword SOV pressure",
+      label: "Competitor SOV gain on hero keywords",
       value: "+27pp",
       detail: "Composite competitive SOV move on top 12 category terms",
     },
