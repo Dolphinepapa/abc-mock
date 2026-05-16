@@ -17,7 +17,8 @@ export default function MetricTerm({ definition, children }) {
       {open && (
         <span
           role="tooltip"
-          className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-2 w-max max-w-[280px] bg-slate-900 text-white text-xs leading-relaxed rounded-md shadow-lg px-3 py-2 pointer-events-none"
+          style={{ maxWidth: "280px" }}
+          className="absolute z-50 left-1/2 -translate-x-1/2 bottom-full mb-2 w-max bg-slate-900 text-white text-xs leading-relaxed rounded-md shadow-lg px-3 py-2 pointer-events-none"
         >
           {definition}
           <span

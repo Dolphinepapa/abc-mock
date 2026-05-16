@@ -75,50 +75,150 @@ const METRIC_DEFINITIONS = {
   cr: "Conversion Rate · 转化率 · 订单 ÷ 点击。",
 };
 
-const CHAT_MESSAGES = [
+const THREADS = [
+  {
+    id: "defense",
+    canvasId: "defense",
+    initiator: "agent",
+    initiatorName: "品牌运营助手",
+    initiatorRole: "监控警报",
+    initialTimestamp: "2 分钟前",
+    lastActivityTimestamp: "2 分钟前",
+    unread: true,
+    title: "防御警报 · SKU-A",
+    turns: [
+      {
+        speaker: "agent",
+        timestamp: "2 分钟前",
+        body:
+          "SKU-A 的 BSR #2 位置正在受到主动攻击。竞品 SKU-X 过去 96 小时内在 7 个核心关键词上加大出价,平均广告位由 #5 升至 #2;SKU-X 自然排名也由 #14 升至 #8。若当前趋势延续,SKU-A 预计 14 天内跌至 BSR #4-5。",
+        canvasLink: false,
+      },
+      {
+        speaker: "user",
+        timestamp: "刚刚",
+        body: "推荐怎么应对?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "刚刚",
+        body:
+          "已起草防御方案,提供 3 种应对姿态供选择。打开画布查看 — 推荐姿态已高亮。",
+        canvasLink: true,
+      },
+    ],
+  },
   {
     id: "strategy",
-    user: "Maya Chen",
-    role: "电商副总裁",
+    canvasId: "strategy",
+    initiator: "user",
+    initiatorName: "Maya Chen",
+    initiatorRole: "电商副总裁",
     initials: "MC",
-    timestamp: "May 4, 09:14",
-    question:
-      "SKU-A 在落地灯品类排名第 2,我们如何争取 BS?具体打法是什么?",
-    agentSummary:
-      "已起草广告架构重构方案与 12 周路线图,提出 6 项变更。",
+    initialTimestamp: "May 4, 09:14",
+    lastActivityTimestamp: "May 4, 09:16",
+    unread: false,
+    title: "策略 · SKU-A 落地灯 BS 路径",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 4, 09:14",
+        body: "SKU-A 在落地灯品类排名第 2,我们如何争取 BS?具体打法是什么?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 4, 09:16",
+        body:
+          "已起草广告架构重构方案与 12 周路线图,提出 6 项变更。打开画布查看。",
+        canvasLink: true,
+      },
+    ],
   },
   {
-    id: "peak",
-    user: "Sara Lin",
-    role: "投资组合负责人",
+    id: "omnichannel",
+    canvasId: "omnichannel",
+    initiator: "user",
+    initiatorName: "Devon Park",
+    initiatorRole: "高级增长经理",
+    initials: "DP",
+    initialTimestamp: "May 11, 16:42",
+    lastActivityTimestamp: "May 11, 16:48",
+    unread: false,
+    title: "全渠道 · 移动充电宝 $100K 分配",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 11, 16:42",
+        body:
+          "我们 SKU-PB-A 移动充电宝目前在 Amazon + Walmart + TikTok 三个平台。本月总预算 $100K,该怎么分配?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 11, 16:48",
+        body:
+          "已分析三平台数据并起草分配方案:Amazon $42K · Walmart $28K · TikTok $12K(增量性测试)· 储备 $18K。打开画布查看各平台细节。",
+        canvasLink: true,
+      },
+    ],
+  },
+  {
+    id: "razor-blade",
+    canvasId: "razor-blade",
+    initiator: "user",
+    initiatorName: "Sara Lin",
+    initiatorRole: "投资组合负责人",
     initials: "SL",
-    timestamp: "May 13, 10:08",
-    question:
-      "距离旺季还有 6 周,3 个竞品已抬高出价。组合层面该如何应对?",
-    agentSummary:
-      "已构建组合应对矩阵:4 防守 / 3 加注 / 2 收缩。",
+    initialTimestamp: "May 13, 10:08",
+    lastActivityTimestamp: "May 13, 10:14",
+    unread: false,
+    title: "刮胡刀 + 刀头 · Henry's",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 13, 10:08",
+        body:
+          "Henry's 刮胡刀产品线 — 刀头 3 个月换一次。需要保持产品线 blended margin ≥ 15% 的同时把整体销售额最大化。该如何测试和制定定价 + 营销策略?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 13, 10:14",
+        body:
+          "已起草 3 阶段方案:Phase 1 基线诊断 · Phase 2 三组并行定价实验 · Phase 3 待 Phase 2 结果激活的决策树。打开画布查看。",
+        canvasLink: true,
+      },
+    ],
   },
   {
-    id: "execution",
-    user: "Jamal Hassan",
-    role: "运营经理",
+    id: "launch-cr",
+    canvasId: "launch-cr",
+    initiator: "user",
+    initiatorName: "Jamal Hassan",
+    initiatorRole: "运营经理",
     initials: "JH",
-    timestamp: "May 15, 08:31",
-    question:
-      "过去 7 天你对 SKU-A 做了哪些广告优化?",
-    agentSummary:
-      "已执行 23 个操作 · 团队批准 18 个 · 自主执行 5 个 · 回滚 0 个。",
-  },
-  {
-    id: "launch",
-    user: "Maya Chen",
-    role: "电商副总裁",
-    initials: "MC",
-    timestamp: "May 15, 11:47",
-    question:
-      "我们将在 4 周后在落地灯品类上线 SKU-C,需要一份完整的上线计划。",
-    agentSummary:
-      "基于 7 个过往可比新品已起草上线计划。5 阶段打法已就绪。",
+    initialTimestamp: "May 15, 08:31",
+    lastActivityTimestamp: "May 15, 08:38",
+    unread: false,
+    title: "新品 CR 诊断 · 轮胎充气泵",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 15, 08:31",
+        body:
+          "我们新上的轮胎充气泵针对皮卡市场,但 pickup-related 搜索词的转化率特别差。该如何定位问题、优化产品?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 15, 08:38",
+        body:
+          "已完成受众聚类与竞品 listing 对比拆解,识别 4 个假设(2 个 P0:主图重做 + 标题重写;2 个 P1:A+ 模块 + bullet 重排)。打开画布查看测试计划。",
+        canvasLink: true,
+      },
+    ],
   },
 ];
 
@@ -2882,93 +2982,74 @@ function TopBar({ onOpenBrain, onOpenAdArch, locale, setLocale }) {
 }
 
 function ChatPanel({ activeId, onSelect }) {
+  const agentFlagged = THREADS.filter((t) => t.initiator === "agent");
+  const userThreads = THREADS.filter((t) => t.initiator === "user");
+  const newCount = agentFlagged.filter((t) => t.unread).length;
+
   return (
     <aside className="w-80 flex-shrink-0 border-r border-slate-200 bg-white flex flex-col">
-      <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+      <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
         <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
           对话
         </div>
-        <div className="text-11 text-slate-400 font-mono">5 条消息</div>
+        <div className="text-11 text-slate-400 font-mono">
+          {THREADS.length} 个会话
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2.5">
-        {CHAT_MESSAGES.map((msg) => {
-          const active = activeId === msg.id;
-          return (
-            <button
-              type="button"
-              key={msg.id}
-              onClick={() => onSelect(msg.id)}
-              className={`w-full text-left rounded-lg border transition-colors p-3 ${
-                active
-                  ? "bg-slate-50 border-slate-300"
-                  : "bg-white border-slate-200 hover:border-slate-300"
-              }`}
-            >
-              {/* User question */}
-              <div className="flex items-start gap-2">
-                <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-10 font-semibold text-slate-700 flex-shrink-0">
-                  {msg.initials}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline justify-between gap-2">
-                    <div className="text-xs font-medium text-slate-900 truncate">
-                      {msg.user}
-                    </div>
-                    <div className="text-10 text-slate-400 font-mono flex-shrink-0">
-                      {msg.timestamp}
-                    </div>
-                  </div>
-                  <div className="text-11 text-slate-500">{msg.role}</div>
-                  <div className="text-xs text-slate-800 mt-1.5 leading-relaxed">
-                    {msg.question}
-                  </div>
-                </div>
-              </div>
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5">
+        {agentFlagged.length > 0 && (
+          <div>
+            <div className="px-1 mb-2 flex items-center gap-2">
+              <ChevronDown className="w-3 h-3 text-slate-500" />
+              <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Agent 提示
+              </span>
+              {newCount > 0 && (
+                <span className="text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 font-medium">
+                  {newCount} 新
+                </span>
+              )}
+            </div>
+            <div className="space-y-2">
+              {agentFlagged.map((thread) => (
+                <ThreadCard
+                  key={thread.id}
+                  thread={thread}
+                  active={activeId === thread.id}
+                  onSelect={onSelect}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
-              {/* Agent reply */}
-              <div className="flex items-start gap-2 mt-2.5 pt-2.5 border-t border-slate-100">
-                <div className="w-6 h-6 rounded-md bg-slate-900 flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-3 h-3 text-emerald-400" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-medium text-slate-900">
-                    品牌运营助手
-                  </div>
-                  <div className="text-xs text-slate-600 mt-1 leading-relaxed">
-                    {msg.agentSummary}
-                  </div>
-                  <div
-                    className={`mt-1.5 inline-flex items-center gap-1 text-11 font-medium ${
-                      active ? "text-emerald-700" : "text-slate-500"
-                    }`}
-                  >
-                    {active ? (
-                      <>
-                        <CircleDot className="w-3 h-3" />
-                        正在查看画布
-                      </>
-                    ) : (
-                      <>
-                        <FileText className="w-3 h-3" />
-                        打开画布
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </button>
-          );
-        })}
+        <div>
+          <div className="px-1 mb-2 flex items-center gap-2">
+            <ChevronDown className="w-3 h-3 text-slate-500" />
+            <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              你的会话
+            </span>
+          </div>
+          <div className="space-y-2">
+            {userThreads.map((thread) => (
+              <ThreadCard
+                key={thread.id}
+                thread={thread}
+                active={activeId === thread.id}
+                onSelect={onSelect}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Locked input */}
-      <div className="border-t border-slate-200 p-3 bg-slate-50/50">
+      <div className="border-t border-slate-200 p-3 bg-slate-50/50 flex-shrink-0">
         <div className="relative">
           <input
             type="text"
             disabled
-            placeholder="向 agent 询问任何关于落地灯的问题……"
+            placeholder="开始新会话……"
             className="w-full pl-3 pr-20 py-2.5 text-xs bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
           />
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
@@ -2978,11 +3059,131 @@ function ChatPanel({ activeId, onSelect }) {
             </span>
           </div>
         </div>
-        <div className="text-10 text-slate-400 mt-2 leading-relaxed">
-          本演示中输入框已禁用。点击上方任一条消息可查看对应画布。
-        </div>
       </div>
     </aside>
+  );
+}
+
+function ThreadCard({ thread, active, onSelect }) {
+  const isAgent = thread.initiator === "agent";
+  const lastTurn = thread.turns[thread.turns.length - 1];
+  const previewBody = lastTurn?.body || "";
+
+  return (
+    <div
+      className={`rounded-lg border transition-colors ${
+        active
+          ? "bg-slate-50 border-slate-300"
+          : "bg-white border-slate-200 hover:border-slate-300"
+      } ${isAgent ? "border-l-2 border-l-emerald-500" : ""}`}
+    >
+      <button
+        type="button"
+        onClick={() => onSelect(thread.id)}
+        className="w-full text-left p-3"
+      >
+        <div className="flex items-start gap-2">
+          {isAgent ? (
+            <div className="w-6 h-6 rounded-md bg-slate-900 flex items-center justify-center flex-shrink-0 relative">
+              <Sparkles className="w-3 h-3 text-emerald-400" />
+              {thread.unread && (
+                <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-rose-500 rounded-full border border-white" />
+              )}
+            </div>
+          ) : (
+            <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-10 font-semibold text-slate-700 flex-shrink-0">
+              {thread.initials}
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-baseline justify-between gap-2">
+              <div className="text-xs font-semibold text-slate-900 truncate">
+                {thread.title}
+              </div>
+              <div className="text-10 text-slate-400 font-mono flex-shrink-0">
+                {thread.lastActivityTimestamp}
+              </div>
+            </div>
+            <div className="text-11 text-slate-500 truncate mt-0.5">
+              {thread.initiatorName} · {thread.initiatorRole}
+            </div>
+            {isAgent && (
+              <div className="mt-1.5 inline-flex items-center gap-1 text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-1.5 py-0.5 font-medium">
+                <Sparkles className="w-2.5 h-2.5" />
+                Agent 标记 · 监控警报
+              </div>
+            )}
+            {!active && (
+              <div className="text-xs text-slate-600 mt-1.5 leading-relaxed line-clamp-2">
+                {previewBody}
+              </div>
+            )}
+          </div>
+        </div>
+      </button>
+
+      {active && (
+        <div className="border-t border-slate-200">
+          <div className="px-3 py-3 space-y-3">
+            {thread.turns.map((turn, i) => (
+              <ThreadTurn key={i} turn={turn} thread={thread} />
+            ))}
+          </div>
+          <div className="border-t border-slate-100 px-3 py-2.5 bg-slate-50/60">
+            <div className="relative">
+              <input
+                type="text"
+                disabled
+                placeholder="回复……"
+                className="w-full pl-3 pr-14 py-2 text-11 bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
+              />
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                <Lock className="w-2.5 h-2.5 text-slate-400" />
+                <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
+                  锁定
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ThreadTurn({ turn, thread }) {
+  const isAgent = turn.speaker === "agent";
+  return (
+    <div className="flex items-start gap-2">
+      {isAgent ? (
+        <div className="w-5 h-5 rounded-md bg-slate-900 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-2.5 h-2.5 text-emerald-400" />
+        </div>
+      ) : (
+        <div className="w-5 h-5 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-10 font-semibold text-slate-700 flex-shrink-0">
+          {thread.initials || "U"}
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-2">
+          <span className="text-11 font-medium text-slate-900">
+            {isAgent ? "Agent" : thread.initiatorName}
+          </span>
+          <span className="text-10 text-slate-400 font-mono">
+            {turn.timestamp}
+          </span>
+        </div>
+        <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
+          {turn.body}
+        </div>
+        {turn.canvasLink && (
+          <div className="mt-1 inline-flex items-center gap-1 text-11 text-emerald-700 font-medium">
+            <FileText className="w-3 h-3" />
+            画布已打开 →
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -3177,6 +3378,33 @@ function CompanyBrainDrawer({ open, onClose }) {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Placeholder canvas — for threads whose canvas is built in later Parts     */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function PlaceholderCanvas({ kicker, title, part }) {
+  return (
+    <>
+      <CanvasHeader kicker={kicker} title={title} meta={null} />
+      <div className="px-6 pt-8">
+        <div className="border border-dashed border-slate-300 rounded-lg p-8 text-center bg-slate-50/40">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            画布待构建
+          </div>
+          <div className="text-sm text-slate-700 leading-relaxed">
+            会话结构已建立。该画布在{" "}
+            <span className="font-mono font-medium text-slate-900">{part}</span>{" "}
+            实现。
+          </div>
+          <div className="text-11 text-slate-500 mt-2 leading-relaxed">
+            可在左侧查看本会话的 turn-by-turn 历史。
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -3201,11 +3429,42 @@ export default function App({ locale, setLocale }) {
 
   const canvas = (() => {
     switch (activeId) {
-      case "strategy":  return <StrategyCanvas />;
-      case "peak":      return <PeakSeasonCanvas />;
-      case "execution": return <ExecutionCanvas />;
-      case "launch":    return <LaunchCanvas />;
-      default:          return null;
+      case "strategy":
+        return <StrategyCanvas />;
+      case "defense":
+        return (
+          <PlaceholderCanvas
+            kicker="防御 · BSR 守卫"
+            title="SKU-A · 受到竞品攻击"
+            part="Part 5"
+          />
+        );
+      case "omnichannel":
+        return (
+          <PlaceholderCanvas
+            kicker="全渠道 · 移动充电宝"
+            title="$100K 预算在 Amazon / Walmart / TikTok 分配"
+            part="Part 2"
+          />
+        );
+      case "razor-blade":
+        return (
+          <PlaceholderCanvas
+            kicker="刮胡刀 + 刀头 · Henry's"
+            title="产品线 blended margin ≥ 15% · 销售最大化"
+            part="Part 3"
+          />
+        );
+      case "launch-cr":
+        return (
+          <PlaceholderCanvas
+            kicker="新品 CR 诊断 · 轮胎充气泵"
+            title="皮卡相关搜索词 CR 偏低"
+            part="Part 4"
+          />
+        );
+      default:
+        return null;
     }
   })();
 

@@ -76,50 +76,149 @@ const METRIC_DEFINITIONS = {
   cr: "Conversion rate · Orders ÷ clicks.",
 };
 
-const CHAT_MESSAGES = [
+const THREADS = [
+  {
+    id: "defense",
+    canvasId: "defense",
+    initiator: "agent",
+    initiatorName: "Brand Ops Agent",
+    initiatorRole: "monitoring alert",
+    initialTimestamp: "2 min ago",
+    lastActivityTimestamp: "2 min ago",
+    unread: true,
+    title: "Defense alert · SKU-A",
+    turns: [
+      {
+        speaker: "agent",
+        timestamp: "2 min ago",
+        body:
+          "SKU-A's #2 BSR position is under active attack. Competitor SKU-X has bid aggressively on 7 hero keywords for the past 96 hours; average ad position improved from #5 to #2 and SKU-X's organic rank climbed from #14 to #8. If the trend holds, I project SKU-A drops to BSR #4-5 within 14 days.",
+        canvasLink: false,
+      },
+      {
+        speaker: "user",
+        timestamp: "just now",
+        body: "What's the recommended response?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "just now",
+        body:
+          "Drafted a defense plan with three response postures. Opening the canvas — recommended posture is highlighted.",
+        canvasLink: true,
+      },
+    ],
+  },
   {
     id: "strategy",
-    user: "Maya Chen",
-    role: "VP, eCommerce",
+    canvasId: "strategy",
+    initiator: "user",
+    initiatorName: "Maya Chen",
+    initiatorRole: "VP, eCommerce",
     initials: "MC",
-    timestamp: "May 4, 09:14",
-    question:
-      "SKU-A is ranked #2 in Floor Lamps. How do we capture best seller? What's the approach?",
-    agentSummary:
-      "Drafted ad architecture redesign and 12-week roadmap. 6 changes proposed.",
+    initialTimestamp: "May 4, 09:14",
+    lastActivityTimestamp: "May 4, 09:16",
+    unread: false,
+    title: "Strategy · SKU-A best-seller path",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 4, 09:14",
+        body: "SKU-A is ranked #2 in Floor Lamps. How do we capture best seller? What's the approach?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 4, 09:16",
+        body: "Drafted ad architecture redesign and 12-week roadmap. 6 changes proposed. Opening the canvas.",
+        canvasLink: true,
+      },
+    ],
   },
   {
-    id: "peak",
-    user: "Sara Lin",
-    role: "Portfolio Lead",
+    id: "omnichannel",
+    canvasId: "omnichannel",
+    initiator: "user",
+    initiatorName: "Devon Park",
+    initiatorRole: "Sr. Growth Manager",
+    initials: "DP",
+    initialTimestamp: "May 11, 16:42",
+    lastActivityTimestamp: "May 11, 16:48",
+    unread: false,
+    title: "Omnichannel · power bank $100K allocation",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 11, 16:42",
+        body:
+          "SKU-PB-A power bank runs on Amazon + Walmart + TikTok. Total monthly budget is $100K. How should it split across the three?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 11, 16:48",
+        body:
+          "Drafted allocation: Amazon $42K · Walmart $28K · TikTok $12K (incrementality test) · Reserve $18K. Opening the canvas for per-channel detail.",
+        canvasLink: true,
+      },
+    ],
+  },
+  {
+    id: "razor-blade",
+    canvasId: "razor-blade",
+    initiator: "user",
+    initiatorName: "Sara Lin",
+    initiatorRole: "Portfolio Lead",
     initials: "SL",
-    timestamp: "May 13, 10:08",
-    question:
-      "Peak season is 6 weeks out. 3 competitors raised bids. How should the portfolio respond?",
-    agentSummary:
-      "Built portfolio response matrix: 4 defend / 3 lean-in / 2 step-back.",
+    initialTimestamp: "May 13, 10:08",
+    lastActivityTimestamp: "May 13, 10:14",
+    unread: false,
+    title: "Razor + blade · Henry's",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 13, 10:08",
+        body:
+          "Henry's razor product line — blades replace every 3 months. Maximize total sales while keeping product-line blended margin ≥ 15%. How should we test and design the pricing + marketing strategy?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 13, 10:14",
+        body:
+          "Drafted 3-phase plan: Phase 1 baseline diagnosis · Phase 2 three parallel pricing experiments · Phase 3 decision tree pending Phase 2 results. Opening the canvas.",
+        canvasLink: true,
+      },
+    ],
   },
   {
-    id: "execution",
-    user: "Jamal Hassan",
-    role: "Ops Manager",
+    id: "launch-cr",
+    canvasId: "launch-cr",
+    initiator: "user",
+    initiatorName: "Jamal Hassan",
+    initiatorRole: "Ops Manager",
     initials: "JH",
-    timestamp: "May 15, 08:31",
-    question:
-      "What ad optimizations have you done for SKU-A in the past 7 days?",
-    agentSummary:
-      "23 actions taken · 18 team-approved · 5 autonomous · 0 reverted.",
-  },
-  {
-    id: "launch",
-    user: "Maya Chen",
-    role: "VP, eCommerce",
-    initials: "MC",
-    timestamp: "May 15, 11:47",
-    question:
-      "We're launching SKU-C in Floor Lamps in 4 weeks. I need a complete go-to-market plan.",
-    agentSummary:
-      "Drafted launch plan from 7 prior comparable launches. 5-phase playbook ready.",
+    initialTimestamp: "May 15, 08:31",
+    lastActivityTimestamp: "May 15, 08:38",
+    unread: false,
+    title: "Launch CR · tire inflator (pickup)",
+    turns: [
+      {
+        speaker: "user",
+        timestamp: "May 15, 08:31",
+        body:
+          "Newly launched tire inflator targeting the pickup truck market — pickup-related search terms have very low CR. How do we diagnose and improve?",
+        canvasLink: false,
+      },
+      {
+        speaker: "agent",
+        timestamp: "May 15, 08:38",
+        body:
+          "Completed audience clustering + competitor listing teardown. Identified 4 hypotheses (2 P0: main image rework + title rewrite; 2 P1: A+ module + bullet reorder). Opening the canvas for the test schedule.",
+        canvasLink: true,
+      },
+    ],
   },
 ];
 
@@ -2887,93 +2986,74 @@ function TopBar({ onOpenBrain, onOpenAdArch, locale, setLocale }) {
 }
 
 function ChatPanel({ activeId, onSelect }) {
+  const agentFlagged = THREADS.filter((t) => t.initiator === "agent");
+  const userThreads = THREADS.filter((t) => t.initiator === "user");
+  const newCount = agentFlagged.filter((t) => t.unread).length;
+
   return (
     <aside className="w-80 flex-shrink-0 border-r border-slate-200 bg-white flex flex-col">
-      <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+      <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
         <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-          Conversation
+          Conversations
         </div>
-        <div className="text-11 text-slate-400 font-mono">5 messages</div>
+        <div className="text-11 text-slate-400 font-mono">
+          {THREADS.length} threads
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2.5">
-        {CHAT_MESSAGES.map((msg) => {
-          const active = activeId === msg.id;
-          return (
-            <button
-              type="button"
-              key={msg.id}
-              onClick={() => onSelect(msg.id)}
-              className={`w-full text-left rounded-lg border transition-colors p-3 ${
-                active
-                  ? "bg-slate-50 border-slate-300"
-                  : "bg-white border-slate-200 hover:border-slate-300"
-              }`}
-            >
-              {/* User question */}
-              <div className="flex items-start gap-2">
-                <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-10 font-semibold text-slate-700 flex-shrink-0">
-                  {msg.initials}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-baseline justify-between gap-2">
-                    <div className="text-xs font-medium text-slate-900 truncate">
-                      {msg.user}
-                    </div>
-                    <div className="text-10 text-slate-400 font-mono flex-shrink-0">
-                      {msg.timestamp}
-                    </div>
-                  </div>
-                  <div className="text-11 text-slate-500">{msg.role}</div>
-                  <div className="text-xs text-slate-800 mt-1.5 leading-relaxed">
-                    {msg.question}
-                  </div>
-                </div>
-              </div>
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5">
+        {agentFlagged.length > 0 && (
+          <div>
+            <div className="px-1 mb-2 flex items-center gap-2">
+              <ChevronDown className="w-3 h-3 text-slate-500" />
+              <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Agent-flagged
+              </span>
+              {newCount > 0 && (
+                <span className="text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 font-medium">
+                  {newCount} new
+                </span>
+              )}
+            </div>
+            <div className="space-y-2">
+              {agentFlagged.map((thread) => (
+                <ThreadCard
+                  key={thread.id}
+                  thread={thread}
+                  active={activeId === thread.id}
+                  onSelect={onSelect}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
-              {/* Agent reply */}
-              <div className="flex items-start gap-2 mt-2.5 pt-2.5 border-t border-slate-100">
-                <div className="w-6 h-6 rounded-md bg-slate-900 flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-3 h-3 text-emerald-400" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-medium text-slate-900">
-                    Brand Ops Agent
-                  </div>
-                  <div className="text-xs text-slate-600 mt-1 leading-relaxed">
-                    {msg.agentSummary}
-                  </div>
-                  <div
-                    className={`mt-1.5 inline-flex items-center gap-1 text-11 font-medium ${
-                      active ? "text-emerald-700" : "text-slate-500"
-                    }`}
-                  >
-                    {active ? (
-                      <>
-                        <CircleDot className="w-3 h-3" />
-                        Viewing canvas
-                      </>
-                    ) : (
-                      <>
-                        <FileText className="w-3 h-3" />
-                        Open canvas
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </button>
-          );
-        })}
+        <div>
+          <div className="px-1 mb-2 flex items-center gap-2">
+            <ChevronDown className="w-3 h-3 text-slate-500" />
+            <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Your conversations
+            </span>
+          </div>
+          <div className="space-y-2">
+            {userThreads.map((thread) => (
+              <ThreadCard
+                key={thread.id}
+                thread={thread}
+                active={activeId === thread.id}
+                onSelect={onSelect}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Locked input */}
-      <div className="border-t border-slate-200 p-3 bg-slate-50/50">
+      <div className="border-t border-slate-200 p-3 bg-slate-50/50 flex-shrink-0">
         <div className="relative">
           <input
             type="text"
             disabled
-            placeholder="Ask the agent anything about Floor Lamps…"
+            placeholder="Start new conversation…"
             className="w-full pl-3 pr-20 py-2.5 text-xs bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
           />
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
@@ -2983,12 +3063,131 @@ function ChatPanel({ activeId, onSelect }) {
             </span>
           </div>
         </div>
-        <div className="text-10 text-slate-400 mt-2 leading-relaxed">
-          Input disabled in this stakeholder mock. Click any message above to
-          view its canvas.
-        </div>
       </div>
     </aside>
+  );
+}
+
+function ThreadCard({ thread, active, onSelect }) {
+  const isAgent = thread.initiator === "agent";
+  const lastTurn = thread.turns[thread.turns.length - 1];
+  const previewBody = lastTurn?.body || "";
+
+  return (
+    <div
+      className={`rounded-lg border transition-colors ${
+        active
+          ? "bg-slate-50 border-slate-300"
+          : "bg-white border-slate-200 hover:border-slate-300"
+      } ${isAgent ? "border-l-2 border-l-emerald-500" : ""}`}
+    >
+      <button
+        type="button"
+        onClick={() => onSelect(thread.id)}
+        className="w-full text-left p-3"
+      >
+        <div className="flex items-start gap-2">
+          {isAgent ? (
+            <div className="w-6 h-6 rounded-md bg-slate-900 flex items-center justify-center flex-shrink-0 relative">
+              <Sparkles className="w-3 h-3 text-emerald-400" />
+              {thread.unread && (
+                <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-rose-500 rounded-full border border-white" />
+              )}
+            </div>
+          ) : (
+            <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-10 font-semibold text-slate-700 flex-shrink-0">
+              {thread.initials}
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-baseline justify-between gap-2">
+              <div className="text-xs font-semibold text-slate-900 truncate">
+                {thread.title}
+              </div>
+              <div className="text-10 text-slate-400 font-mono flex-shrink-0">
+                {thread.lastActivityTimestamp}
+              </div>
+            </div>
+            <div className="text-11 text-slate-500 truncate mt-0.5">
+              {thread.initiatorName} · {thread.initiatorRole}
+            </div>
+            {isAgent && (
+              <div className="mt-1.5 inline-flex items-center gap-1 text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-1.5 py-0.5 font-medium">
+                <Sparkles className="w-2.5 h-2.5" />
+                Flagged by agent · monitoring alert
+              </div>
+            )}
+            {!active && (
+              <div className="text-xs text-slate-600 mt-1.5 leading-relaxed line-clamp-2">
+                {previewBody}
+              </div>
+            )}
+          </div>
+        </div>
+      </button>
+
+      {active && (
+        <div className="border-t border-slate-200">
+          <div className="px-3 py-3 space-y-3">
+            {thread.turns.map((turn, i) => (
+              <ThreadTurn key={i} turn={turn} thread={thread} />
+            ))}
+          </div>
+          <div className="border-t border-slate-100 px-3 py-2.5 bg-slate-50/60">
+            <div className="relative">
+              <input
+                type="text"
+                disabled
+                placeholder="Reply…"
+                className="w-full pl-3 pr-14 py-2 text-11 bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
+              />
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                <Lock className="w-2.5 h-2.5 text-slate-400" />
+                <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
+                  Locked
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ThreadTurn({ turn, thread }) {
+  const isAgent = turn.speaker === "agent";
+  return (
+    <div className="flex items-start gap-2">
+      {isAgent ? (
+        <div className="w-5 h-5 rounded-md bg-slate-900 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-2.5 h-2.5 text-emerald-400" />
+        </div>
+      ) : (
+        <div className="w-5 h-5 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-10 font-semibold text-slate-700 flex-shrink-0">
+          {thread.initials || "U"}
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-2">
+          <span className="text-11 font-medium text-slate-900">
+            {isAgent ? "Agent" : thread.initiatorName}
+          </span>
+          <span className="text-10 text-slate-400 font-mono">
+            {turn.timestamp}
+          </span>
+        </div>
+        <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
+          {turn.body}
+        </div>
+        {turn.canvasLink && (
+          <div className="mt-1 inline-flex items-center gap-1 text-11 text-emerald-700 font-medium">
+            <FileText className="w-3 h-3" />
+            Canvas opened →
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -3185,6 +3384,32 @@ function CompanyBrainDrawer({ open, onClose }) {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Placeholder canvas — for threads whose canvas is built in later Parts     */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function PlaceholderCanvas({ kicker, title, part }) {
+  return (
+    <>
+      <CanvasHeader kicker={kicker} title={title} meta={null} />
+      <div className="px-6 pt-8">
+        <div className="border border-dashed border-slate-300 rounded-lg p-8 text-center bg-slate-50/40">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            Canvas pending
+          </div>
+          <div className="text-sm text-slate-700 leading-relaxed">
+            Thread structure is in place. This canvas is built in{" "}
+            <span className="font-mono font-medium text-slate-900">{part}</span>.
+          </div>
+          <div className="text-11 text-slate-500 mt-2 leading-relaxed">
+            Review this thread's turn-by-turn history in the sidebar.
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -3209,11 +3434,42 @@ export default function App({ locale, setLocale }) {
 
   const canvas = (() => {
     switch (activeId) {
-      case "strategy":  return <StrategyCanvas />;
-      case "peak":      return <PeakSeasonCanvas />;
-      case "execution": return <ExecutionCanvas />;
-      case "launch":    return <LaunchCanvas />;
-      default:          return null;
+      case "strategy":
+        return <StrategyCanvas />;
+      case "defense":
+        return (
+          <PlaceholderCanvas
+            kicker="Defense · BSR guard"
+            title="SKU-A · under competitor attack"
+            part="Part 5"
+          />
+        );
+      case "omnichannel":
+        return (
+          <PlaceholderCanvas
+            kicker="Omnichannel · power bank"
+            title="$100K budget across Amazon / Walmart / TikTok"
+            part="Part 2"
+          />
+        );
+      case "razor-blade":
+        return (
+          <PlaceholderCanvas
+            kicker="Razor + blade · Henry's"
+            title="Maximize sales · keep blended margin ≥ 15%"
+            part="Part 3"
+          />
+        );
+      case "launch-cr":
+        return (
+          <PlaceholderCanvas
+            kicker="Launch CR · tire inflator"
+            title="Pickup-related search terms underperform"
+            part="Part 4"
+          />
+        );
+      default:
+        return null;
     }
   })();
 
