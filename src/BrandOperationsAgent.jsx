@@ -54,91 +54,91 @@ const CHAT_MESSAGES = [
   {
     id: "strategy",
     user: "Maya Chen",
-    role: "VP, eCommerce",
+    role: "电商副总裁",
     initials: "MC",
     timestamp: "May 4, 09:14",
     question:
-      "SKU-A is ranked #2 in Floor Lamps. How do we capture best seller? What's the approach?",
+      "SKU-A 在落地灯品类排名第 2,我们如何争取 BS?具体打法是什么?",
     agentSummary:
-      "Drafted ad architecture redesign and 12-week roadmap. 6 changes proposed.",
+      "已起草广告架构重构方案与 12 周路线图,提出 6 项变更。",
   },
   {
     id: "peak",
     user: "Sara Lin",
-    role: "Portfolio Lead",
+    role: "投资组合负责人",
     initials: "SL",
     timestamp: "May 13, 10:08",
     question:
-      "Peak season is 6 weeks out. 3 competitors raised bids. How should the portfolio respond?",
+      "距离旺季还有 6 周,3 个竞品已抬高出价。组合层面该如何应对?",
     agentSummary:
-      "Built portfolio response matrix: 4 defend / 3 lean-in / 2 step-back.",
+      "已构建组合应对矩阵:4 防守 / 3 加注 / 2 收缩。",
   },
   {
     id: "execution",
     user: "Jamal Hassan",
-    role: "Ops Manager",
+    role: "运营经理",
     initials: "JH",
     timestamp: "May 15, 08:31",
     question:
-      "What ad optimizations have you done for SKU-A in the past 7 days?",
+      "过去 7 天你对 SKU-A 做了哪些广告优化?",
     agentSummary:
-      "23 actions taken · 18 team-approved · 5 autonomous · 0 reverted.",
+      "已执行 23 个操作 · 团队批准 18 个 · 自主执行 5 个 · 回滚 0 个。",
   },
   {
     id: "launch",
     user: "Maya Chen",
-    role: "VP, eCommerce",
+    role: "电商副总裁",
     initials: "MC",
     timestamp: "May 15, 11:47",
     question:
-      "We're launching SKU-C in Floor Lamps in 4 weeks. I need a complete go-to-market plan.",
+      "我们将在 4 周后在落地灯品类上线 SKU-C,需要一份完整的上线计划。",
     agentSummary:
-      "Drafted launch plan from 7 prior comparable launches. 5-phase playbook ready.",
+      "基于 7 个过往可比新品已起草上线计划。5 阶段打法已就绪。",
   },
 ];
 
 /* Strategy canvas */
 const STRATEGY = {
-  goal: "Best seller rank in Floor Lamps · within 90 days",
+  goal: "在落地灯品类拿下 BS 排名 · 90 天内",
   goalConfirmedBy: "Maya Chen",
   goalConfirmedOn: "May 4",
 
   /* Current listing performance — gap to #1 best seller by search-term segment */
   performance: {
     rank: "#2",
-    rankCategory: "Floor Lamps",
+    rankCategory: "落地灯",
     rankHeldDays: 27,
     salesLast30d: 138400,
     tacos: 18.1,
-    bestSellerSku: "SKU-204 · competitor",
+    bestSellerSku: "SKU-204 · 竞品",
 
     segments: [
-      { id: "all",      label: "All",            count: 64, kicker: "All category keywords (excl. brand)" },
-      { id: "core",     label: "Generic keywords",   count:  8, kicker: "floor lamp · arc · tripod · tall · reading" },
-      { id: "scenario", label: "Use-case keywords",  count: 32, kicker: "bedroom · living · kid room · study" },
-      { id: "style",    label: "Attribute keywords", count: 24, kicker: "modern · vintage · mid-century · industrial" },
+      { id: "all",      label: "全部",            count: 64, kicker: "所有品类关键词(不含品牌)" },
+      { id: "core",     label: "核搜词",   count:  8, kicker: "floor lamp · arc · tripod · tall · reading" },
+      { id: "scenario", label: "场景关键词",  count: 32, kicker: "bedroom · living · kid room · study" },
+      { id: "style",    label: "属性关键词", count: 24, kicker: "modern · vintage · mid-century · industrial" },
     ],
 
     gapsBySegment: {
       all: [
-        { kicker: "Traffic",    label: "Monthly impressions", currentValue: "1.84M", currentNumeric: 1.84, benchmarkValue: "2.92M", benchmarkNumeric: 2.92, gap: "−37%",   gapDetail: "−1.08M / month" },
-        { kicker: "Click",      label: "Click-through rate",  currentValue: "2.1%",  currentNumeric: 2.1,  benchmarkValue: "2.6%",  benchmarkNumeric: 2.6,  gap: "−0.5pp", gapDetail: "−19% relative" },
-        { kicker: "Conversion", label: "Conversion rate",     currentValue: "8.9%",  currentNumeric: 8.9,  benchmarkValue: "9.2%",  benchmarkNumeric: 9.2,  gap: "−0.3pp", gapDetail: "−3% relative" },
+        { kicker: "流量",    label: "月曝光", currentValue: "1.84M", currentNumeric: 1.84, benchmarkValue: "2.92M", benchmarkNumeric: 2.92, gap: "−37%",   gapDetail: "−1.08M / 月" },
+        { kicker: "点击",      label: "CTR",  currentValue: "2.1%",  currentNumeric: 2.1,  benchmarkValue: "2.6%",  benchmarkNumeric: 2.6,  gap: "−0.5pp", gapDetail: "相对 −19%" },
+        { kicker: "转化", label: "转化率",     currentValue: "8.9%",  currentNumeric: 8.9,  benchmarkValue: "9.2%",  benchmarkNumeric: 9.2,  gap: "−0.3pp", gapDetail: "相对 −3%" },
       ],
       core: [
-        { kicker: "Traffic",    label: "Monthly impressions", currentValue: "920K",  currentNumeric: 0.92, benchmarkValue: "1.42M", benchmarkNumeric: 1.42, gap: "−35%",   gapDetail: "−500K / month" },
-        { kicker: "Click",      label: "Click-through rate",  currentValue: "2.4%",  currentNumeric: 2.4,  benchmarkValue: "2.8%",  benchmarkNumeric: 2.8,  gap: "−0.4pp", gapDetail: "−14% relative" },
-        { kicker: "Conversion", label: "Conversion rate",     currentValue: "9.4%",  currentNumeric: 9.4,  benchmarkValue: "9.5%",  benchmarkNumeric: 9.5,  gap: "−0.1pp", gapDetail: "near parity · strength area" },
+        { kicker: "流量",    label: "月曝光", currentValue: "920K",  currentNumeric: 0.92, benchmarkValue: "1.42M", benchmarkNumeric: 1.42, gap: "−35%",   gapDetail: "−500K / 月" },
+        { kicker: "点击",      label: "CTR",  currentValue: "2.4%",  currentNumeric: 2.4,  benchmarkValue: "2.8%",  benchmarkNumeric: 2.8,  gap: "−0.4pp", gapDetail: "相对 −14%" },
+        { kicker: "转化", label: "转化率",     currentValue: "9.4%",  currentNumeric: 9.4,  benchmarkValue: "9.5%",  benchmarkNumeric: 9.5,  gap: "−0.1pp", gapDetail: "接近持平 · 优势项" },
       ],
       scenario: [
-        { kicker: "Traffic",    label: "Monthly impressions", currentValue: "480K",  currentNumeric: 0.48, benchmarkValue: "680K",  benchmarkNumeric: 0.68, gap: "−29%",   gapDetail: "−200K / month" },
-        { kicker: "Click",      label: "Click-through rate",  currentValue: "1.4%",  currentNumeric: 1.4,  benchmarkValue: "2.5%",  benchmarkNumeric: 2.5,  gap: "−1.1pp", gapDetail: "−44% relative · widest gap",     widest: true },
-        { kicker: "Conversion", label: "Conversion rate",     currentValue: "8.2%",  currentNumeric: 8.2,  benchmarkValue: "9.1%",  benchmarkNumeric: 9.1,  gap: "−0.9pp", gapDetail: "−10% relative" },
+        { kicker: "流量",    label: "月曝光", currentValue: "480K",  currentNumeric: 0.48, benchmarkValue: "680K",  benchmarkNumeric: 0.68, gap: "−29%",   gapDetail: "−200K / 月" },
+        { kicker: "点击",      label: "CTR",  currentValue: "1.4%",  currentNumeric: 1.4,  benchmarkValue: "2.5%",  benchmarkNumeric: 2.5,  gap: "−1.1pp", gapDetail: "相对 −44% · 差距最大",     widest: true },
+        { kicker: "转化", label: "转化率",     currentValue: "8.2%",  currentNumeric: 8.2,  benchmarkValue: "9.1%",  benchmarkNumeric: 9.1,  gap: "−0.9pp", gapDetail: "相对 −10%" },
       ],
       style: [
-        { kicker: "Traffic",    label: "Monthly impressions", currentValue: "440K",  currentNumeric: 0.44, benchmarkValue: "820K",  benchmarkNumeric: 0.82, gap: "−46%",   gapDetail: "−380K / month · widest gap",     widest: true },
-        { kicker: "Click",      label: "Click-through rate",  currentValue: "2.2%",  currentNumeric: 2.2,  benchmarkValue: "2.4%",  benchmarkNumeric: 2.4,  gap: "−0.2pp", gapDetail: "−8% relative" },
-        { kicker: "Conversion", label: "Conversion rate",     currentValue: "8.8%",  currentNumeric: 8.8,  benchmarkValue: "9.0%",  benchmarkNumeric: 9.0,  gap: "−0.2pp", gapDetail: "−2% relative" },
+        { kicker: "流量",    label: "月曝光", currentValue: "440K",  currentNumeric: 0.44, benchmarkValue: "820K",  benchmarkNumeric: 0.82, gap: "−46%",   gapDetail: "−380K / 月 · 差距最大",     widest: true },
+        { kicker: "点击",      label: "CTR",  currentValue: "2.2%",  currentNumeric: 2.2,  benchmarkValue: "2.4%",  benchmarkNumeric: 2.4,  gap: "−0.2pp", gapDetail: "相对 −8%" },
+        { kicker: "转化", label: "转化率",     currentValue: "8.8%",  currentNumeric: 8.8,  benchmarkValue: "9.0%",  benchmarkNumeric: 9.0,  gap: "−0.2pp", gapDetail: "相对 −2%" },
       ],
     },
 
@@ -146,16 +146,16 @@ const STRATEGY = {
     segmentBreakdown: {
       scenario: [
         {
-          name: "Bedroom",
+          name: "卧室",
           exampleTerms: "floor lamp for bedroom · bedside floor lamp · bedroom reading lamp",
           terms: 14, impressionsK: 142,
           organicRank: 18, organicRankBenchmark: 4,
           adPosition: 4,  adPositionBenchmark: 2,
           ctr: 1.1, cr: 6.4,
-          alert: true, alertNote: "Largest gap — Insight #1",
+          alert: true, alertNote: "差距最大 — 洞察 #1",
         },
         {
-          name: "Living room",
+          name: "客厅",
           exampleTerms: "modern floor lamp for living room · tall floor lamp living room · arc lamp living room",
           terms: 9, impressionsK: 218,
           organicRank:  6, organicRankBenchmark: 3,
@@ -163,7 +163,7 @@ const STRATEGY = {
           ctr: 1.8, cr: 9.1,
         },
         {
-          name: "Kid room",
+          name: "儿童房",
           exampleTerms: "kids room floor lamp · nursery floor lamp · child-safe floor lamp",
           terms: 5, impressionsK: 68,
           organicRank: 11, organicRankBenchmark: 5,
@@ -171,7 +171,7 @@ const STRATEGY = {
           ctr: 1.4, cr: 7.8,
         },
         {
-          name: "Study",
+          name: "书房",
           exampleTerms: "study floor lamp · office floor lamp · desk reading floor lamp",
           terms: 4, impressionsK: 52,
           organicRank:  9, organicRankBenchmark: 4,
@@ -181,7 +181,7 @@ const STRATEGY = {
       ],
       style: [
         {
-          name: "Modern",
+          name: "现代",
           exampleTerms: "modern floor lamp · contemporary floor lamp · sleek floor lamp",
           terms: 9, impressionsK: 196,
           organicRank:  5, organicRankBenchmark: 3,
@@ -189,7 +189,7 @@ const STRATEGY = {
           ctr: 2.4, cr: 9.2,
         },
         {
-          name: "Mid-century",
+          name: "中世纪",
           exampleTerms: "mid-century floor lamp · mid-century modern lamp · retro 60s floor lamp",
           terms: 6, impressionsK: 112,
           organicRank:  8, organicRankBenchmark: 5,
@@ -197,7 +197,7 @@ const STRATEGY = {
           ctr: 2.2, cr: 8.6,
         },
         {
-          name: "Industrial",
+          name: "工业风",
           exampleTerms: "industrial floor lamp · loft floor lamp · pipe floor lamp",
           terms: 5, impressionsK: 84,
           organicRank: 11, organicRankBenchmark: 6,
@@ -205,13 +205,13 @@ const STRATEGY = {
           ctr: 1.9, cr: 8.1,
         },
         {
-          name: "Vintage",
+          name: "复古",
           exampleTerms: "vintage floor lamp · antique brass floor lamp · old fashioned floor lamp",
           terms: 4, impressionsK: 48,
           organicRank: 15, organicRankBenchmark: 7,
           adPosition: 4,  adPositionBenchmark: 3,
           ctr: 1.6, cr: 7.4,
-          alert: true, alertNote: "Traffic + CTR both lagging",
+          alert: true, alertNote: "流量与 CTR 均落后",
         },
       ],
     },
@@ -232,8 +232,8 @@ const STRATEGY = {
     adGroups: [
       {
         id: "ag-brand-exact",
-        name: "Brand · Exact match",
-        campaignName: "SP — Branded Defense",
+        name: "品牌 · 精准匹配",
+        campaignName: "SP — 品牌防御",
         campaignType: "SP",
         keywordCount: 12,
         dailyBudget: 84,
@@ -251,8 +251,8 @@ const STRATEGY = {
       },
       {
         id: "ag-brand-phrase",
-        name: "Brand · Phrase match",
-        campaignName: "SP — Branded Defense",
+        name: "品牌 · 词组匹配",
+        campaignName: "SP — 品牌防御",
         campaignType: "SP",
         keywordCount: 18,
         dailyBudget: 84,
@@ -270,8 +270,8 @@ const STRATEGY = {
       },
       {
         id: "ag-cat-broad",
-        name: "Category · Broad match",
-        campaignName: "SP — Category Broad",
+        name: "品类 · 广泛匹配",
+        campaignName: "SP — 品类广泛",
         campaignType: "SP",
         keywordCount: 22,
         dailyBudget: 312,
@@ -284,16 +284,16 @@ const STRATEGY = {
         topKeywords: [
           { kw: "modern floor lamp",      impressions: 142000, clicks: 2556, ctr: 1.8, cr: 8.4 },
           { kw: "minimalist floor lamp",  impressions:  96400, clicks: 2024, ctr: 2.1, cr: 9.1 },
-          { kw: "floor lamp for bedroom", impressions:  38200, clicks:  420, ctr: 1.1, cr: 6.2, flagged: "Bedroom · Insight #1" },
-          { kw: "bedside floor lamp",     impressions:  22400, clicks:  224, ctr: 1.0, cr: 5.8, flagged: "Bedroom · Insight #1" },
-          { kw: "bedroom reading lamp",   impressions:  14200, clicks:  170, ctr: 1.2, cr: 7.4, flagged: "Bedroom · Insight #1" },
+          { kw: "floor lamp for bedroom", impressions:  38200, clicks:  420, ctr: 1.1, cr: 6.2, flagged: "卧室 · 洞察 #1" },
+          { kw: "bedside floor lamp",     impressions:  22400, clicks:  224, ctr: 1.0, cr: 5.8, flagged: "卧室 · 洞察 #1" },
+          { kw: "bedroom reading lamp",   impressions:  14200, clicks:  170, ctr: 1.2, cr: 7.4, flagged: "卧室 · 洞察 #1" },
           { kw: "tall arc floor lamp",    impressions:  18600, clicks:  372, ctr: 2.0, cr: 8.9 },
         ],
       },
       {
         id: "ag-cat-hero-exact",
-        name: "Category Hero · Exact",
-        campaignName: "SP — Category Exact",
+        name: "品类核心 · 精准",
+        campaignName: "SP — 品类精准",
         campaignType: "SP",
         keywordCount: 6,
         dailyBudget: 97,
@@ -304,14 +304,14 @@ const STRATEGY = {
         ctr: 2.4,
         cr: 10.1,
         topKeywords: [
-          { kw: "modern floor lamp (exact)",     impressions: 84200, clicks: 2021, ctr: 2.4, cr: 10.1 },
-          { kw: "minimalist floor lamp (exact)", impressions: 62400, clicks: 1622, ctr: 2.6, cr:  9.8 },
+          { kw: "modern floor lamp (精准)",     impressions: 84200, clicks: 2021, ctr: 2.4, cr: 10.1 },
+          { kw: "minimalist floor lamp (精准)", impressions: 62400, clicks: 1622, ctr: 2.6, cr:  9.8 },
         ],
       },
       {
         id: "ag-cat-secondary-exact",
-        name: "Category Secondary · Exact",
-        campaignName: "SP — Category Exact",
+        name: "品类次级 · 精准",
+        campaignName: "SP — 品类精准",
         campaignType: "SP",
         keywordCount: 12,
         dailyBudget: 97,
@@ -329,8 +329,8 @@ const STRATEGY = {
       },
       {
         id: "ag-longtail-phrase",
-        name: "Long-tail · Phrase",
-        campaignName: "SP — Long-tail Phrase",
+        name: "长尾 · 词组",
+        campaignName: "SP — 长尾词组",
         campaignType: "SP",
         keywordCount: 24,
         dailyBudget: 49,
@@ -342,17 +342,17 @@ const STRATEGY = {
         cr: 8.4,
         topKeywords: [
           { kw: "modern floor lamp for living room", impressions: 18200, clicks: 382, ctr: 2.1, cr: 8.6 },
-          { kw: "tall floor lamp for bedroom",       impressions: 12100, clicks: 145, ctr: 1.2, cr: 6.4, flagged: "Bedroom · Insight #1" },
-          { kw: "floor lamp for small bedroom",      impressions:  8400, clicks:  92, ctr: 1.1, cr: 5.8, flagged: "Bedroom · Insight #1" },
+          { kw: "tall floor lamp for bedroom",       impressions: 12100, clicks: 145, ctr: 1.2, cr: 6.4, flagged: "卧室 · 洞察 #1" },
+          { kw: "floor lamp for small bedroom",      impressions:  8400, clicks:  92, ctr: 1.1, cr: 5.8, flagged: "卧室 · 洞察 #1" },
           { kw: "industrial floor lamp",             impressions: 11200, clicks: 224, ctr: 2.0, cr: 8.0 },
         ],
       },
       {
         id: "ag-longtail-auto",
-        name: "Long-tail · Discovery (auto)",
-        campaignName: "SP — Long-tail Phrase",
+        name: "长尾 · 自动发现",
+        campaignName: "SP — 长尾词组",
         campaignType: "SP",
-        keywordCount: "auto",
+        keywordCount: "自动",
         dailyBudget: 49,
         spend30d: 1120,
         sales30d:  4780,
@@ -361,15 +361,15 @@ const STRATEGY = {
         ctr: 1.2,
         cr: 7.6,
         topKeywords: [
-          { kw: "Auto-targeting discovery terms (~28 in 30d)", impressions: 38400, clicks: 461, ctr: 1.2, cr: 7.6 },
+          { kw: "自动定位发现的搜索词(30 天约 28 个)", impressions: 38400, clicks: 461, ctr: 1.2, cr: 7.6 },
         ],
       },
       {
         id: "ag-sd-adjacent",
-        name: "SD · Adjacent SKU audience",
-        campaignName: "SD — Detail Page",
+        name: "SD · 邻近 SKU 受众",
+        campaignName: "SD — 详情页",
         campaignType: "SD",
-        keywordCount: "audience",
+        keywordCount: "受众",
         dailyBudget: 38,
         spend30d: 1480,
         sales30d:  6420,
@@ -378,15 +378,15 @@ const STRATEGY = {
         ctr: 1.2,
         cr: 7.1,
         topKeywords: [
-          { kw: "Adjacent-SKU shoppers (audience)", impressions: 64200, clicks: 770, ctr: 1.2, cr: 7.1 },
+          { kw: "邻近 SKU 购物者(受众)", impressions: 64200, clicks: 770, ctr: 1.2, cr: 7.1 },
         ],
       },
       {
         id: "ag-sd-remarketing",
-        name: "SD · Detail-page remarketing",
-        campaignName: "SD — Detail Page",
+        name: "SD · 详情页再营销",
+        campaignName: "SD — 详情页",
         campaignType: "SD",
-        keywordCount: "audience",
+        keywordCount: "受众",
         dailyBudget: 38,
         spend30d:  800,
         sales30d: 3360,
@@ -395,7 +395,7 @@ const STRATEGY = {
         ctr: 1.0,
         cr: 6.2,
         topKeywords: [
-          { kw: "Detail-page remarketing (14d window)", impressions: 32400, clicks: 324, ctr: 1.0, cr: 6.2 },
+          { kw: "详情页再营销(14 天窗口)", impressions: 32400, clicks: 324, ctr: 1.0, cr: 6.2 },
         ],
       },
     ],
@@ -403,14 +403,14 @@ const STRATEGY = {
 
   /* Listing operation log — past milestones on this SKU */
   operationLog: [
-    { date: "Apr 4, 2025",  milestone: "Listing launched",                                detail: "Initial price $189 · 4 listing photos · 3 bullet points" },
-    { date: "May 18, 2025", milestone: "Hero image refreshed to lifestyle context",       detail: "CTR lifted 1.2% → 1.8% within 14 days" },
-    { date: "Jul 22, 2025", milestone: "Crossed 100 reviews · avg 4.6 stars",             detail: "CR rose to 7.4% (category benchmark at the time: 6.2%)" },
-    { date: "Sep 8, 2025",  milestone: "A+ Content launched · feature comparison module", detail: "CR sustained ≥ 8.2% for 8 consecutive weeks" },
-    { date: "Nov 16, 2025", milestone: "Hero-term CR broke category benchmark",            detail: "'modern floor lamp' CR 8.9% vs category 6.4%" },
-    { date: "Jan 11, 2026", milestone: "Captured Top-5 category rank",                     detail: "First time in top-5 organic position" },
-    { date: "Feb 22, 2026", milestone: "CTR on 'minimalist floor lamp' +52% vs category",  detail: "Held for 21 consecutive days — confirms creative fit on this term" },
-    { date: "Apr 18, 2026", milestone: "Captured #2 category rank",                        detail: "Current position · held for 27 days" },
+    { date: "Apr 4, 2025",  milestone: "Listing 上线",                                detail: "初始售价 $189 · 4 张主图 · 3 条 bullet point" },
+    { date: "May 18, 2025", milestone: "主图更换为生活场景图",       detail: "14 天内 CTR 从 1.2% 提升至 1.8%" },
+    { date: "Jul 22, 2025", milestone: "评论数突破 100 · 平均 4.6 星",             detail: "CR 提升至 7.4%(当时品类基准:6.2%)" },
+    { date: "Sep 8, 2025",  milestone: "A+ Content 上线 · 功能对比模块", detail: "CR 连续 8 周保持 ≥ 8.2%" },
+    { date: "Nov 16, 2025", milestone: "核心关键词 CR 突破品类基准",            detail: "'modern floor lamp' CR 8.9%,品类 6.4%" },
+    { date: "Jan 11, 2026", milestone: "拿下品类 Top-5 排名",                     detail: "首次进入自然排名前 5" },
+    { date: "Feb 22, 2026", milestone: "'minimalist floor lamp' CTR 高出品类 +52%",  detail: "连续保持 21 天 — 验证该词的素材契合度" },
+    { date: "Apr 18, 2026", milestone: "拿下品类第 2 名",                        detail: "当前排名 · 已保持 27 天" },
   ],
 
   /* Agent insights — two distinct types */
@@ -418,62 +418,62 @@ const STRATEGY = {
     {
       id: "bedroom-ctr",
       type: "informational",
-      title: "Bedroom-intent keywords underperforming on CTR",
+      title: "卧室意图关键词的 CTR 表现不佳",
       summary:
-        "14 search terms with bedroom intent generate $3.2K/month traffic at 1.1% CTR, well below the 2.8% category benchmark for the same intent cluster.",
+        "14 个卧室意图搜索词每月带来 $3.2K 流量,CTR 仅 1.1%,远低于同意图集群的品类基准 2.8%。",
       observations: [
-        "5 of these 14 bedroom-intent keywords are live in current campaigns — flagged with rose tint in the Ad architecture panel (top bar → Ad architecture)",
-        "Current CTR on those terms: 1.1% (28-day avg). Category benchmark for same intent cluster: 2.8%.",
-        "Root-cause hypothesis: hero image and first 3 detail-page photos emphasize living-room / lobby context. No bedroom-context image in the current carousel.",
+        "这 14 个卧室意图关键词中有 5 个在当前广告活动中线上 — 在广告架构面板中以玫红色高亮标记(顶栏 → 广告架构)",
+        "当前这些词的 CTR:1.1%(28 天均值)。同意图集群的品类基准:2.8%。",
+        "根因假设:主图与详情页前 3 张图均强调客厅/大厅场景,当前主图轮播中没有卧室场景图。",
       ],
       projectedImpact: {
-        primary: "+$18K/month sales",
-        condition: "if bedroom-CTR closes to category benchmark and CR holds at current 8.4%",
+        primary: "+$18K / 月销售额",
+        condition: "假设卧室 CTR 追平品类基准,且 CR 保持在当前 8.4%",
       },
-      ownership: "Brand team",
+      ownership: "品牌团队",
       ownershipReason:
-        "Listing content changes (hero image, photo carousel, bullet positioning) fall outside platform-level execution scope. Agent flags and quantifies impact; team executes.",
-      actions: ["Brief listing team", "Snooze 7d", "Mark resolved"],
+        "Listing 内容变更(主图、图片轮播、bullet point 排序)不在平台层执行范围内。Agent 负责发现与量化影响,团队负责执行。",
+      actions: ["通知 Listing 团队", "暂缓 7 天", "标记为已解决"],
     },
     {
       id: "best-seller-playbook",
       type: "executable",
-      title: "Apply prior #2 → #1 capture playbook to SKU-A",
+      title: "将之前 #2 → #1 的争取打法应用到 SKU-A",
       summary:
-        "ABC Home Goods · Bed frame SKU-117 went #2 → #1 in 7 weeks (Q4 2025) using a concentrated ad-lift + promo playbook. Floor Lamps SKU-A matches on lifecycle stage, competitive intensity, and price band.",
+        "ABC Home Goods · 床架 SKU-117 在 7 周内完成 #2 → #1(2025 Q4),使用了集中广告加注 + 促销的打法。落地灯 SKU-A 在生命周期阶段、竞争烈度、价格带上均匹配。",
       reference: {
-        sku: "Bed frame · SKU-117",
-        period: "Q4 2025",
-        outcome: "#2 → #1 in 7 weeks",
+        sku: "床架 · SKU-117",
+        period: "2025 Q4",
+        outcome: "7 周内 #2 → #1",
         method:
-          "4 weeks of concentrated ad lift (TACoS 19% → 31% temporary) + 14-day 15%-off promo. Captured #1 in week 6. Through the 6-week taper that followed, sales held +18% above pre-campaign baseline — best-seller halo carried organic clicks +34% and offset the ad-spend reduction.",
+          "4 周集中广告加注(TACoS 临时由 19% 升至 31%)+ 14 天 15% 折扣促销。在第 6 周拿下 #1。随后 6 周的回落期内,销售额保持在活动前基线 +18% — BS 光环带动自然点击 +34%,抵消了广告花费的下降。",
       },
       plan: {
         phases: [
           {
-            label: "Weeks 1–4 · Aggressive lift",
+            label: "1–4 周 · 激进加注",
             actions: [
-              "Daily ad budget $848 → $1,420 (+67%)",
-              "Add SB headline ad layer on top 12 hero category keywords",
-              "Add 14-day promo coupon: 12% off",
+              "日广告预算 $848 → $1,420(+67%)",
+              "在前 12 个核心品类关键词上叠加 SB 头条广告层",
+              "上线 14 天促销券:12% 折扣",
             ],
             tacos: 32.4,
             sales: 172,
           },
           {
-            label: "Weeks 5–8 · Capture + halo activates",
+            label: "5–8 周 · 争取 + 光环启动",
             actions: [
-              "Maintain week-4 architecture through capture window",
-              "Best-seller halo expected to lift organic clicks +28% to +42%",
+              "在争取窗口期保持第 4 周的广告架构",
+              "BS 光环预计带动自然点击 +28% 至 +42%",
             ],
             tacos: 28.6,
             sales: 196,
           },
           {
-            label: "Weeks 9–12 · Ad taper · halo sustains sales",
+            label: "9–12 周 · 广告回落 · 光环支撑销售",
             actions: [
-              "Daily ad budget $1,420 → $920 (−35%)",
-              "Organic + halo expected to outpace ad reduction · sales hold or modestly grow",
+              "日广告预算 $1,420 → $920(−35%)",
+              "自然 + 光环预计跑赢广告下调 · 销售保持或小幅增长",
             ],
             tacos: 17.8,
             sales: 204,
@@ -482,11 +482,11 @@ const STRATEGY = {
         summary: {
           cumulativeSalesLift: 158,
           finalTacos: 17.8,
-          captureWindow: "Week 6–8",
+          captureWindow: "第 6–8 周",
         },
       },
       confidence: 81,
-      confidenceLabel: "9 prior comparable #2 → #1 captures · 7 of 9 used this playbook shape",
+      confidenceLabel: "9 个过往可比 #2 → #1 争取案例 · 其中 7 个使用此类打法",
     },
   ],
 
@@ -494,58 +494,58 @@ const STRATEGY = {
   milestonePath: [
     {
       idx: 1,
-      label: "Listing optimization",
-      target: "Bedroom-intent CTR closes to category benchmark (1.1% → 2.0%+)",
-      window: "Weeks 1–2",
-      dependsOn: "Brand team · from Insight #1",
+      label: "Listing 优化",
+      target: "卧室意图 CTR 追平品类基准(1.1% → 2.0%+)",
+      window: "第 1–2 周",
+      dependsOn: "品牌团队 · 来自洞察 #1",
       status: "blocked-on-team",
     },
     {
       idx: 2,
-      label: "Ad architecture lift",
-      target: "Hero keywords reach Top-3 organic · SOV 14% → 26%",
-      window: "Weeks 1–4",
-      dependsOn: "Agent · from Insight #2 plan",
+      label: "广告架构提升",
+      target: "核心关键词进入自然 Top-3 · SOV 14% → 26%",
+      window: "第 1–4 周",
+      dependsOn: "Agent · 来自洞察 #2 计划",
       status: "awaiting-approval",
     },
     {
       idx: 3,
-      label: "Best seller capture",
-      target: "Category rank #1",
-      window: "Weeks 6–8",
-      dependsOn: "Outcome of #1 + #2",
+      label: "争取 BS",
+      target: "品类排名 #1",
+      window: "第 6–8 周",
+      dependsOn: "#1 + #2 的结果",
       status: "goal",
     },
     {
       idx: 4,
-      label: "Return to target TACoS",
-      target: "TACoS back to 17–19% · sales hold within −5% of peak",
-      window: "Weeks 9–12",
-      dependsOn: "Activated after #3 captured",
+      label: "回到目标 TACoS",
+      target: "TACoS 回到 17–19% · 销售保持在峰值 −5% 以内",
+      window: "第 9–12 周",
+      dependsOn: "#3 完成后启动",
       status: "preview",
     },
   ],
 
   reasoning: {
     chain: [
-      "Starting from stated goal: best seller capture within 90 days.",
-      "Analyzed current listing health: rank #2, sales $138K/mo, TACoS 18.1% — well within target band. Listing is mature and operating efficiently. Pure ad-architecture changes alone are unlikely to close to #1.",
-      "Audited current ad architecture (5 campaigns, $848/d combined). No structural inefficiency detected at the campaign level.",
-      "Scanned listing for pockets of weakness. Identified bedroom-context search terms as the highest-impact CTR gap — but resolution requires listing-content edits, which fall outside agent execution scope (surfaced as Insight #1).",
-      "Pulled 9 prior #2 → #1 captures from Company Brain. 7 of 9 used a concentrated ad-lift + promo playbook. Best similarity match: bed frame SKU-117 in Q4 2025 (same lifecycle stage, comparable competitive intensity, adjacent price band).",
-      "Drafted 3-phase plan from that playbook (Insight #2). Best-seller halo and taper outcomes modeled from observed prior outcome.",
-      "Composed sequential milestone path: listing fix (team) + ad lift (agent) → capture → efficiency restore.",
-      "Confidence on 90-day timeline: 81%.",
+      "从既定目标出发:90 天内争取 BS。",
+      "分析当前 listing 健康度:排名 #2,销售额 $138K/月,TACoS 18.1% — 在目标区间内。Listing 处于成熟期且运行高效。仅靠广告架构调整难以追到 #1。",
+      "审计当前广告架构(5 个广告活动,合计日预算 $848)。在广告活动层面未发现结构性低效。",
+      "扫描 listing 的薄弱环节,识别出卧室场景搜索词为最高影响的 CTR 缺口 — 但其解决需要 listing 内容修改,不在 agent 执行范围内(已作为洞察 #1 呈现)。",
+      "从公司大脑中调取 9 个过往 #2 → #1 案例,其中 7 个使用了集中广告加注 + 促销打法。最佳匹配:2025 Q4 床架 SKU-117(相同生命周期阶段、可比竞争烈度、相邻价格带)。",
+      "基于该打法起草 3 阶段计划(洞察 #2)。BS 光环与回落阶段的产出基于观测到的过往结果建模。",
+      "编排顺序里程碑路径:listing 修复(团队)+ 广告加注(agent)→ 争取 → 恢复效率。",
+      "90 天时间表的信心度:81%。",
     ],
     accuracy: 81,
-    accuracyLabel: "similar #2 → #1 captures",
+    accuracyLabel: "同类 #2 → #1 争取案例",
   },
 };
 
 /* Peak season canvas */
 const PEAK = {
   trafficForecast: [
-    { week: "Now", traffic: 100, pressure: 58 },
+    { week: "当前", traffic: 100, pressure: 58 },
     { week: "W+1", traffic: 118, pressure: 72 },
     { week: "W+2", traffic: 144, pressure: 81 },
     { week: "W+3", traffic: 172, pressure: 89 },
@@ -555,31 +555,31 @@ const PEAK = {
   ],
   competitiveSignals: [
     {
-      label: "Competitor bid spend lift",
-      value: "+40 to 60%",
-      detail: "3 competitor SKUs increased over past 14 days",
+      label: "竞品出价花费增长",
+      value: "+40 至 60%",
+      detail: "过去 14 天内 3 个竞品 SKU 抬高出价",
     },
     {
-      label: "New entrant",
-      value: "9 days in market",
-      detail: "1 new SKU in launch-phase aggressive bidding",
+      label: "新入场者",
+      value: "上线 9 天",
+      detail: "1 个新 SKU 处于上线期激进竞价",
     },
     {
-      label: "Competitor SOV gain on hero keywords",
+      label: "竞品在核心关键词上的 SOV 增长",
       value: "+27pp",
-      detail: "Composite competitive SOV move on top 12 category terms",
+      detail: "Top 12 品类词上的综合竞品 SOV 变动",
     },
   ],
   portfolio: [
-    { sku: "SKU-A Arc Floor Lamp",     lifecycle: "Scaling",  sov: 18.4, posture: "defend",    tacosCap: 32, bidAdj: "+18%" },
-    { sku: "SKU-B Tripod 64\"",       lifecycle: "Scaling",  sov: 14.2, posture: "defend",    tacosCap: 32, bidAdj: "+14%" },
-    { sku: "SKU-D Reading Lamp",       lifecycle: "Mature",   sov:  9.6, posture: "defend",    tacosCap: 32, bidAdj: "+12%" },
-    { sku: "SKU-E Mid-Century",        lifecycle: "Mature",   sov: 11.8, posture: "defend",    tacosCap: 32, bidAdj: "+9%"  },
-    { sku: "SKU-F Minimal LED",        lifecycle: "Scaling",  sov:  6.4, posture: "lean-in",   tacosCap: 38, bidAdj: "+28%" },
-    { sku: "SKU-G Corner Arc",         lifecycle: "Scaling",  sov:  5.1, posture: "lean-in",   tacosCap: 38, bidAdj: "+24%" },
-    { sku: "SKU-H Industrial",         lifecycle: "Launch",   sov:  3.2, posture: "lean-in",   tacosCap: 42, bidAdj: "+32%" },
-    { sku: "SKU-I Vintage Brass",      lifecycle: "Decline",  sov:  2.1, posture: "step-back", tacosCap: 18, bidAdj: "−22%" },
-    { sku: "SKU-J Glass Globe",        lifecycle: "Decline",  sov:  1.8, posture: "step-back", tacosCap: 18, bidAdj: "−18%" },
+    { sku: "SKU-A 弧形落地灯",     lifecycle: "增长",  sov: 18.4, posture: "defend",    tacosCap: 32, bidAdj: "+18%" },
+    { sku: "SKU-B 三脚架 64\"",       lifecycle: "增长",  sov: 14.2, posture: "defend",    tacosCap: 32, bidAdj: "+14%" },
+    { sku: "SKU-D 阅读灯",       lifecycle: "成熟",   sov:  9.6, posture: "defend",    tacosCap: 32, bidAdj: "+12%" },
+    { sku: "SKU-E 中世纪",        lifecycle: "成熟",   sov: 11.8, posture: "defend",    tacosCap: 32, bidAdj: "+9%"  },
+    { sku: "SKU-F 极简 LED",        lifecycle: "增长",  sov:  6.4, posture: "lean-in",   tacosCap: 38, bidAdj: "+28%" },
+    { sku: "SKU-G 角落弧形",         lifecycle: "增长",  sov:  5.1, posture: "lean-in",   tacosCap: 38, bidAdj: "+24%" },
+    { sku: "SKU-H 工业风",         lifecycle: "新品",   sov:  3.2, posture: "lean-in",   tacosCap: 42, bidAdj: "+32%" },
+    { sku: "SKU-I 复古黄铜",      lifecycle: "衰退",  sov:  2.1, posture: "step-back", tacosCap: 18, bidAdj: "−22%" },
+    { sku: "SKU-J 玻璃球",        lifecycle: "衰退",  sov:  1.8, posture: "step-back", tacosCap: 18, bidAdj: "−18%" },
   ],
   decision: {
     additionalWeeklyBudget: 42,
@@ -589,13 +589,13 @@ const PEAK = {
   },
   reasoning: {
     chain: [
-      "Holding TACoS flat through a peak traffic shift would surrender SOV at the most valuable window.",
-      "Pulled prior 3 peak seasons from Company Brain. Brands that held flat TACoS lost an average of 14pp category SOV — took 4–6 months to recover.",
-      "Lifecycle-stage segmentation: defend on Scaling/Mature high-SOV SKUs; lean-in on under-saturated Scaling/Launch SKUs where competitive bid pressure hasn't peaked; step-back on Decline SKUs to preserve margin.",
-      "Confidence on SOV defense outcome: 71%.",
+      "在峰值流量切换期间保持 TACoS 不变,意味着在最有价值的窗口让出 SOV。",
+      "从公司大脑调取过去 3 次旺季数据。保持 TACoS 不变的品牌平均损失 14pp 品类 SOV — 恢复耗时 4–6 个月。",
+      "按生命周期阶段分层:对增长/成熟期高 SOV SKU 采取防守;对竞品出价尚未饱和的增长/新品 SKU 采取加注;对衰退期 SKU 采取收缩以保护利润。",
+      "SOV 防御结果的信心度:71%。",
     ],
     accuracy: 71,
-    accuracyLabel: "peak-season SOV defense outcomes",
+    accuracyLabel: "旺季 SOV 防御结果",
   },
 };
 
@@ -608,65 +608,65 @@ const EXECUTION = {
     reverted: 0,
   },
   actions: [
-    { ts: "May 15 · 08:24", type: "Bid edit",       kind: "autonomous", delta: 'Bid on "modern floor lamp" raised $1.40 → $1.85', reason: "CTR above target for 48hr; bid raise within delegated class.",                approver: "Autonomous · class: bid_raise_under_15pct",  status: "Live" },
-    { ts: "May 14 · 22:11", type: "Budget",         kind: "approved",   delta: "Daily budget on SP-Category-Exact raised $480 → $640",        reason: "Hit cap on 7 of last 9 days; impression share suppressed by ~6pp.",        approver: "Approved by Maya Chen",                       status: "Live" },
-    { ts: "May 14 · 14:08", type: "Keyword",        kind: "approved",   delta: "Added 6 long-tail keywords harvested from search-term report", reason: "CR > 9% in past 14 days; currently auto-targeting only.",                  approver: "Approved by Devon Park",                      status: "Live" },
-    { ts: "May 13 · 16:42", type: "Bid edit",       kind: "autonomous", delta: 'Bid on "tripod floor lamp" lowered $1.95 → $1.70',           reason: "ACoS exceeded target by 12pp for 72hr; within delegated class.",           approver: "Autonomous · class: bid_lower_under_15pct",   status: "Live" },
-    { ts: "May 13 · 09:22", type: "Restructure",    kind: "approved",   delta: "Split SP-Category-Broad into Broad + Phrase tiers",          reason: "Phrase-only subset projected +14% efficiency on mid-funnel terms.",        approver: "Approved by Sara Lin",                        status: "Live" },
-    { ts: "May 12 · 18:34", type: "Budget",         kind: "approved",   delta: "Reallocated $320/day from SP-Branded → SP-Category-Exact",   reason: "Branded impression share saturated at 98%; marginal $ better deployed.",   approver: "Approved by Maya Chen",                       status: "Live" },
-    { ts: "May 11 · 11:15", type: "Keyword",        kind: "approved",   delta: 'Negatives added: "lava lamp", "salt lamp", "lamp shade"',    reason: "High-impression, zero-conversion terms identified in search-term report.", approver: "Approved by Jamal Hassan",                    status: "Live" },
-    { ts: "May 10 · 14:52", type: "Bid edit",       kind: "autonomous", delta: 'Bid on "reading floor lamp modern" raised $1.40 → $1.62',   reason: "CR > target for 48hr; bid raise within delegated class.",                  approver: "Autonomous · class: bid_raise_under_15pct",   status: "Live" },
-    { ts: "May 09 · 10:08", type: "Bid edit",       kind: "autonomous", delta: 'Bid on "corner floor lamp" lowered $1.25 → $1.10',          reason: "ACoS spike of +14pp sustained 72hr; auto-throttle engaged.",               approver: "Autonomous · class: bid_lower_under_15pct",   status: "Live" },
+    { ts: "May 15 · 08:24", type: "出价调整",       kind: "autonomous", delta: '"modern floor lamp" 出价上调 $1.40 → $1.85', reason: "CTR 连续 48 小时高于目标;出价上调在授权类别内。",                approver: "自主执行 · 类别:bid_raise_under_15pct",  status: "线上" },
+    { ts: "May 14 · 22:11", type: "预算",         kind: "approved",   delta: "SP-Category-Exact 日预算上调 $480 → $640",        reason: "最近 9 天有 7 天触顶;曝光份额被压制约 6pp。",        approver: "由 Maya Chen 批准",                       status: "线上" },
+    { ts: "May 14 · 14:08", type: "关键词",        kind: "approved",   delta: "从搜索词报告中新增 6 个长尾关键词", reason: "过去 14 天 CR > 9%;此前仅靠自动定位覆盖。",                  approver: "由 Devon Park 批准",                      status: "线上" },
+    { ts: "May 13 · 16:42", type: "出价调整",       kind: "autonomous", delta: '"tripod floor lamp" 出价下调 $1.95 → $1.70',           reason: "ACoS 连续 72 小时超目标 12pp;在授权类别内。",           approver: "自主执行 · 类别:bid_lower_under_15pct",   status: "线上" },
+    { ts: "May 13 · 09:22", type: "重构",    kind: "approved",   delta: "将 SP-Category-Broad 拆分为广泛 + 词组两层",          reason: "仅词组的子集在中部漏斗词上预计 +14% 效率。",        approver: "由 Sara Lin 批准",                        status: "线上" },
+    { ts: "May 12 · 18:34", type: "预算",         kind: "approved",   delta: "将 $320/天 从 SP-Branded 重分配至 SP-Category-Exact",   reason: "品牌词曝光份额已饱和至 98%;边际预算用在他处更有效。",   approver: "由 Maya Chen 批准",                       status: "线上" },
+    { ts: "May 11 · 11:15", type: "关键词",        kind: "approved",   delta: '新增否定词:"lava lamp"、"salt lamp"、"lamp shade"',    reason: "搜索词报告中识别出高曝光零转化词。", approver: "由 Jamal Hassan 批准",                    status: "线上" },
+    { ts: "May 10 · 14:52", type: "出价调整",       kind: "autonomous", delta: '"reading floor lamp modern" 出价上调 $1.40 → $1.62',   reason: "CR 连续 48 小时高于目标;出价上调在授权类别内。",                  approver: "自主执行 · 类别:bid_raise_under_15pct",   status: "线上" },
+    { ts: "May 09 · 10:08", type: "出价调整",       kind: "autonomous", delta: '"corner floor lamp" 出价下调 $1.25 → $1.10',          reason: "ACoS 飙升 +14pp 持续 72 小时;自动节流已启动。",               approver: "自主执行 · 类别:bid_lower_under_15pct",   status: "线上" },
   ],
   pending: [
-    { ts: "May 15 · 11:42", summary: "Pause underperforming AG: Category-Phrase-Long-Tail (47 terms)",      reason: "Net contribution −$184/day for past 11 days." },
-    { ts: "May 15 · 09:18", summary: "Increase daily cap on SP-Branded-Defense by $180",                    reason: "Competitor SKU-X started bidding on our brand terms 4 days ago." },
-    { ts: "May 14 · 17:55", summary: "Migrate 8 keywords from SP-broad to SP-exact",                       reason: "CR consistently > 7% — match-type consolidation expected to lift efficiency." },
+    { ts: "May 15 · 11:42", summary: "暂停表现不佳的广告组:Category-Phrase-Long-Tail(47 个词)",      reason: "过去 11 天净贡献为 −$184/天。" },
+    { ts: "May 15 · 09:18", summary: "将 SP-Branded-Defense 日预算上限提高 $180",                    reason: "竞品 SKU-X 于 4 天前开始竞价我方品牌词。" },
+    { ts: "May 14 · 17:55", summary: "将 8 个关键词从 SP 广泛迁移至 SP 精准",                       reason: "CR 持续 > 7% — 匹配方式收敛预计提升效率。" },
   ],
   autonomousClasses: [
-    { name: "Bid raise / lower (≤15% delta)",                 count: 38, lastUsed: "May 15 · 08:24" },
-    { name: "Negative keyword harvest (zero-conv > 14d)",     count: 22, lastUsed: "May 13 · 06:00" },
-    { name: "Budget reallocation within campaign (≤20%)",     count:  9, lastUsed: "May 14 · 03:12" },
-    { name: "Dayparting on saturated impression share",       count:  4, lastUsed: "May 11 · 18:30" },
+    { name: "出价提升 / 下调(≤15%)",                 count: 38, lastUsed: "May 15 · 08:24" },
+    { name: "否定词收集(零转化 > 14 天)",     count: 22, lastUsed: "May 13 · 06:00" },
+    { name: "广告活动内预算重新分配(≤20%)",     count:  9, lastUsed: "May 14 · 03:12" },
+    { name: "曝光份额饱和时分时段投放",       count:  4, lastUsed: "May 11 · 18:30" },
   ],
   reasoning: {
     chain: [
-      "Past 7 days, the agent took 23 ad-platform actions on SKU-A.",
-      "18 followed the standing review-and-approve flow; team approved each within an average of 47 minutes.",
-      "5 ran under previously delegated decision classes — all bid edits within ±15% delta. Team retains revocation authority at any time.",
-      "0 actions were reverted; net efficiency improvement on SKU-A over the period: ACoS −3.2pp, impression share +4pp.",
+      "过去 7 天,agent 在 SKU-A 上执行了 23 个广告平台操作。",
+      "其中 18 个走标准的审核-批准流程;团队平均在 47 分钟内完成批准。",
+      "5 个在已授权的决策类别下运行 — 均为 ±15% 内的出价调整。团队随时可撤销授权。",
+      "0 个操作被回滚;期间 SKU-A 的净效率提升:ACoS −3.2pp,曝光份额 +4pp。",
     ],
     accuracy: 94,
-    accuracyLabel: "actions retained after team review",
+    accuracyLabel: "团队审核后保留的操作",
   },
 };
 
 /* Launch canvas */
 const LAUNCH = {
-  sku: "SKU-C Tripod Floor Lamp",
-  category: "Floor Lamps",
+  sku: "SKU-C 三脚架落地灯",
+  category: "落地灯",
   targetLaunch: "June 12",
   priorLaunches: [
-    { sku: "SKU-prior-3 Brass Arc",  date: "2025 Q4", outcome: "Top-12 in 11 weeks", similarity: "High",   note: "Same price band, same category" },
-    { sku: "SKU-prior-5 Industrial", date: "2025 Q4", outcome: "Top-20 in 9 weeks",  similarity: "High",   note: "Same lifecycle entry point" },
-    { sku: "SKU-prior-2 Mid-century",date: "2025 Q3", outcome: "Top-8 in 14 weeks",  similarity: "Medium", note: "Adjacent style cluster" },
+    { sku: "SKU-prior-3 黄铜弧形",  date: "2025 Q4", outcome: "11 周内进入 Top-12", similarity: "高",   note: "相同价格带、相同品类" },
+    { sku: "SKU-prior-5 工业风", date: "2025 Q4", outcome: "9 周内进入 Top-20",  similarity: "高",   note: "相同生命周期切入点" },
+    { sku: "SKU-prior-2 中世纪",date: "2025 Q3", outcome: "14 周内进入 Top-8",  similarity: "中", note: "相邻风格集群" },
   ],
   campaignArchitecture: [
-    { type: "SP", name: "SP — Launch Hero",        adgroups: ["Head exact (6 kw)", "Head phrase (6 kw)"],            budget: 920 },
-    { type: "SP", name: "SP — Launch Mid",         adgroups: ["Mid phrase (24 kw)", "Mid exact (after wk 2)"],      budget: 1480 },
-    { type: "SP", name: "SP — Launch Long-tail",   adgroups: ["Long-tail phrase (64 kw)"],                          budget: 740 },
-    { type: "SB", name: "SB — Category Headline",  adgroups: ["Hero-keyword video (6 kw)"],                         budget: 680 },
-    { type: "SD", name: "SD — Detail-page Audience", adgroups: ["Adjacent-SKU shoppers"],                           budget: 240 },
+    { type: "SP", name: "SP — 上线核心",        adgroups: ["头部精准(6 个词)", "头部词组(6 个词)"],            budget: 920 },
+    { type: "SP", name: "SP — 上线中部",         adgroups: ["中部词组(24 个词)", "中部精准(第 2 周后)"],      budget: 1480 },
+    { type: "SP", name: "SP — 上线长尾",   adgroups: ["长尾词组(64 个词)"],                          budget: 740 },
+    { type: "SB", name: "SB — 品类头条",  adgroups: ["核心关键词视频(6 个词)"],                         budget: 680 },
+    { type: "SD", name: "SD — 详情页受众", adgroups: ["邻近 SKU 购物者"],                           budget: 240 },
   ],
   keywords: [
-    { tier: "Head",      count:  6, dailyBudget: 920,  examples: "modern floor lamp · minimalist floor lamp" },
-    { tier: "Mid",       count: 24, dailyBudget: 1480, examples: "arc floor lamp · tripod floor lamp · reading lamp tall" },
-    { tier: "Long-tail", count: 64, dailyBudget: 740,  examples: "modern floor lamp for small apartment · tripod 64 inch" },
+    { tier: "头部",      count:  6, dailyBudget: 920,  examples: "modern floor lamp · minimalist floor lamp" },
+    { tier: "中部",       count: 24, dailyBudget: 1480, examples: "arc floor lamp · tripod floor lamp · reading lamp tall" },
+    { tier: "长尾", count: 64, dailyBudget: 740,  examples: "modern floor lamp for small apartment · tripod 64 inch" },
   ],
   bidStrategy: [
-    { phase: "Week 1 · Aggressive", head: "$2.40 – $2.85", mid: "$1.60 – $1.95", long: "$0.80 – $1.10", logic: "Establish auction presence; bid floor on hero keywords for early ranking signal." },
-    { phase: "Week 2–3 · Stabilize", head: "$2.10 – $2.45", mid: "$1.40 – $1.70", long: "$0.65 – $0.90", logic: "Tune from observed CTR / CR. Defend SOV gained in week 1." },
-    { phase: "Week 4 · Efficiency", head: "$1.80 – $2.10", mid: "$1.20 – $1.45", long: "$0.55 – $0.75", logic: "Shift to TACoS optimization. Long-tail tier prioritized for incremental efficient revenue." },
+    { phase: "第 1 周 · 激进", head: "$2.40 – $2.85", mid: "$1.60 – $1.95", long: "$0.80 – $1.10", logic: "建立竞价存在感;在核心关键词上以出价底价获取早期排名信号。" },
+    { phase: "第 2–3 周 · 稳定", head: "$2.10 – $2.45", mid: "$1.40 – $1.70", long: "$0.65 – $0.90", logic: "依据观测到的 CTR / CR 调优,守住第 1 周获取的 SOV。" },
+    { phase: "第 4 周 · 效率", head: "$1.80 – $2.10", mid: "$1.20 – $1.45", long: "$0.55 – $0.75", logic: "转向 TACoS 优化。长尾层优先用于获取边际高效收入。" },
   ],
   pacing: [
     { week: "W1", daily: 449, total: 3143 },
@@ -675,20 +675,20 @@ const LAUNCH = {
     { week: "W4", daily: 311, total: 2177 },
   ],
   milestones: [
-    { week: 1, gate: "Impression threshold", target: "≥ 50K impressions on hero keywords",   rationale: "Confirms auction presence before scaling spend." },
-    { week: 2, gate: "CTR threshold",        target: "CTR ≥ 1.4% on Mid tier",                 rationale: "Confirms creative + listing relevance before mid-tier scale-up." },
-    { week: 3, gate: "SOV threshold",        target: "Category SOV ≥ 4%",                       rationale: "Confirms category-level visibility before final efficiency phase." },
-    { week: 4, gate: "TACoS gate",           target: "TACoS ≤ 42% blended",                     rationale: "Confirms efficiency envelope before steady-state scaling." },
+    { week: 1, gate: "曝光门槛", target: "核心关键词曝光 ≥ 50K",   rationale: "在扩大花费前确认竞价存在感。" },
+    { week: 2, gate: "CTR 门槛",        target: "中部层 CTR ≥ 1.4%",                 rationale: "在中部层放量前确认素材与 listing 的相关性。" },
+    { week: 3, gate: "SOV 门槛",        target: "品类 SOV ≥ 4%",                       rationale: "在最终效率阶段前确认品类层可见性。" },
+    { week: 4, gate: "TACoS 门槛",           target: "综合 TACoS ≤ 42%",                     rationale: "在进入稳态放量前确认效率区间。" },
   ],
   reasoning: {
     chain: [
-      "Drew methodology from 7 prior launches in Company Brain; 3 high-similarity launches weighted most.",
-      "Common pattern across successful launches: aggressive week-1 bid floor on 4–6 hero keywords; lifecycle transition at impression threshold 50K; SP-broad → SP-exact switch at CR threshold 5%.",
-      "Drafted 5-phase playbook with milestone gates approved phase-by-phase, not whole-plan-upfront.",
-      "Confidence on hitting Top-12 within 12 weeks: 81%.",
+      "从公司大脑中 7 个过往上线案例提取方法论,其中 3 个高相似度案例权重最高。",
+      "成功案例的共同模式:第 1 周在 4–6 个核心关键词上以激进出价底价投放;在曝光达 50K 门槛时切换生命周期;CR 达 5% 时由 SP 广泛切换至 SP 精准。",
+      "起草 5 阶段打法,采用里程碑门槛逐阶段批准,而非整体一次批准。",
+      "12 周内进入 Top-12 的信心度:81%。",
     ],
     accuracy: 81,
-    accuracyLabel: "similar new-SKU launches",
+    accuracyLabel: "同类新 SKU 上线",
   },
 };
 
@@ -697,10 +697,10 @@ const COMPANY_BRAIN = {
   playbooks: 19,
   capturedPatterns: 142,
   recentEntries: [
-    { name: "Best-seller capture · SB-layer pattern", added: "May 2 · from SKU-prior-1 outcome" },
-    { name: "Peak-season SOV defense · scaling SKUs", added: "Apr 28 · from 2025 Q4 retrospective" },
-    { name: "Funnel bottleneck · CTR resolution playbook", added: "Apr 21 · from SKU-B outcome" },
-    { name: "Launch ramp curve · price band $120–180", added: "Apr 14 · from SKU-prior-5 outcome" },
+    { name: "争取 BS · SB 叠加层模式", added: "May 2 · 来自 SKU-prior-1 的结果" },
+    { name: "旺季 SOV 防御 · 增长期 SKU", added: "Apr 28 · 来自 2025 Q4 复盘" },
+    { name: "漏斗瓶颈 · CTR 解决方案打法", added: "Apr 21 · 来自 SKU-B 的结果" },
+    { name: "上线爬坡曲线 · 价格带 $120–180", added: "Apr 14 · 来自 SKU-prior-5 的结果" },
   ],
 };
 
@@ -760,19 +760,19 @@ function Card({ children, className = "" }) {
   );
 }
 
-function ActionBar({ approveLabel = "Approve" }) {
+function ActionBar({ approveLabel = "批准" }) {
   const [modifying, setModifying] = useState(false);
   return (
     <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
       {modifying ? (
         <div className="space-y-3">
           <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-            Modify in plain language
+            用自然语言修改
           </div>
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="e.g. hold the SB layer launch until SKU-A inventory clears"
+              placeholder="例如:在 SKU-A 库存出清前暂缓上线 SB 叠加层"
               className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
             />
             <button
@@ -780,21 +780,21 @@ function ActionBar({ approveLabel = "Approve" }) {
               onClick={() => setModifying(false)}
               className="px-3 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
             >
-              Cancel
+              取消
             </button>
             <button
               type="button"
               className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-md"
             >
               <Send className="w-3.5 h-3.5" />
-              Send modification
+              发送修改
             </button>
           </div>
         </div>
       ) : (
         <div className="flex items-center justify-between">
           <div className="text-xs text-slate-500">
-            Recommendation generated 14 minutes ago · awaiting team decision
+            14 分钟前生成 · 等待团队决策
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -802,7 +802,7 @@ function ActionBar({ approveLabel = "Approve" }) {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
             >
               <X className="w-3.5 h-3.5" />
-              Decline
+              拒绝
             </button>
             <button
               type="button"
@@ -810,7 +810,7 @@ function ActionBar({ approveLabel = "Approve" }) {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
             >
               <Edit3 className="w-3.5 h-3.5" />
-              Modify
+              修改
             </button>
             <button
               type="button"
@@ -842,17 +842,17 @@ function ReasoningSection({ reasoning }) {
             <ChevronRight className="w-4 h-4 text-slate-500" />
           )}
           <span className="text-xs uppercase tracking-wider font-medium text-slate-700">
-            Agent reasoning
+            Agent 推理
           </span>
           <span className="text-xs text-slate-400">·</span>
           <span className="text-xs text-slate-500">
-            Historical accuracy:{" "}
+            历史准确率:{" "}
             <span className="font-mono text-slate-700">{reasoning.accuracy}%</span>{" "}
-            on {reasoning.accuracyLabel}
+            ·{reasoning.accuracyLabel}
           </span>
         </div>
         <div className="text-xs text-slate-400">
-          {reasoning.chain.length} steps
+          {reasoning.chain.length} 步
         </div>
       </button>
       {open && (
@@ -912,7 +912,7 @@ function GapCard({ gap }) {
           </div>
         </div>
         {gap.widest && (
-          <Pill tone="rose">Widest gap</Pill>
+          <Pill tone="rose">差距最大</Pill>
         )}
       </div>
 
@@ -934,7 +934,7 @@ function GapCard({ gap }) {
 
         <div>
           <div className="flex items-baseline justify-between mb-1">
-            <span className="text-11 text-slate-500">#1 best seller</span>
+            <span className="text-11 text-slate-500">#1 BS</span>
             <span className="text-sm font-mono text-slate-700">
               {gap.benchmarkValue}
             </span>
@@ -947,7 +947,7 @@ function GapCard({ gap }) {
 
       <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
         <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-          Gap to #1
+          与 #1 的差距
         </span>
         <div className="text-right">
           <div
@@ -969,29 +969,29 @@ function SegmentBreakdownTable({ rows }) {
   return (
     <Card>
       <div className="px-4 py-2.5 border-b border-slate-100 bg-slate-50/40 text-11 text-slate-600 leading-relaxed">
-        Impressions are decomposed into{" "}
-        <span className="text-slate-900 font-medium">avg organic rank</span>{" "}
-        and{" "}
-        <span className="text-slate-900 font-medium">avg ad position</span>{" "}
-        — the two levers that drive impression volume.
+        曝光被拆解为{" "}
+        <span className="text-slate-900 font-medium">平均自然排名</span>{" "}
+        与{" "}
+        <span className="text-slate-900 font-medium">平均广告位</span>{" "}
+        — 驱动曝光体量的两个杠杆。
       </div>
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-slate-200">
             <th className="text-left text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              Sub-segment
+              子分段
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              Terms
+              词数
             </th>
             <th className="text-left text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              Monthly impressions
+              月曝光
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              Avg organic rank
+              平均自然排名
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
-              Avg ad position
+              平均广告位
             </th>
             <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2.5 px-3">
               CTR
@@ -1030,7 +1030,7 @@ function SegmentBreakdownTable({ rows }) {
                   </div>
                   {r.exampleTerms && (
                     <div className="text-10 text-slate-500 mt-1 leading-relaxed">
-                      e.g. {r.exampleTerms}
+                      示例:{r.exampleTerms}
                     </div>
                   )}
                 </td>
@@ -1066,7 +1066,7 @@ function SegmentBreakdownTable({ rows }) {
                     #{r.organicRank}
                   </div>
                   <div className="text-10 text-slate-400 font-mono mt-0.5">
-                    best #{r.organicRankBenchmark}
+                    BS #{r.organicRankBenchmark}
                   </div>
                 </td>
                 <td className="py-2.5 px-3 text-right align-top">
@@ -1077,10 +1077,10 @@ function SegmentBreakdownTable({ rows }) {
                         : "text-slate-700"
                     }`}
                   >
-                    slot {r.adPosition}
+                    位 {r.adPosition}
                   </div>
                   <div className="text-10 text-slate-400 font-mono mt-0.5">
-                    best slot {r.adPositionBenchmark}
+                    BS 位 {r.adPositionBenchmark}
                   </div>
                 </td>
                 <td
@@ -1117,14 +1117,14 @@ function PerformanceStrip() {
     <>
       {/* Status meta line */}
       <div className="mb-3 flex items-center gap-2 text-11 text-slate-500">
-        <Pill tone="slate">Currently {p.rank}</Pill>
+        <Pill tone="slate">当前 {p.rank}</Pill>
         <span>·</span>
         <span>
-          {p.rankCategory} · held {p.rankHeldDays}d · sales{" "}
+          {p.rankCategory} · 已保持 {p.rankHeldDays} 天 · 销售额{" "}
           <span className="font-mono text-slate-700">
-            ${(p.salesLast30d / 1000).toFixed(0)}K/mo
+            ${(p.salesLast30d / 1000).toFixed(0)}K / 月
           </span>{" "}
-          · blended TACoS{" "}
+          · 综合 TACoS{" "}
           <span className="font-mono text-slate-700">{p.tacos}%</span>
         </span>
       </div>
@@ -1175,7 +1175,7 @@ function PerformanceStrip() {
       {breakdown && (
         <div className="mt-4">
           <div className="mb-2 text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Sub-segment breakdown
+            子分段拆解
           </div>
           <SegmentBreakdownTable rows={breakdown} />
         </div>
@@ -1203,7 +1203,7 @@ function AdGroupRow({ adGroup, expanded, onToggle }) {
               <div className="text-sm font-medium text-slate-900 flex items-center gap-2">
                 {adGroup.name}
                 {flaggedCount > 0 && (
-                  <Pill tone="rose">{flaggedCount} flagged</Pill>
+                  <Pill tone="rose">{flaggedCount} 项标记</Pill>
                 )}
               </div>
               <div className="text-11 text-slate-500 mt-0.5 flex items-center gap-1.5">
@@ -1241,23 +1241,23 @@ function AdGroupRow({ adGroup, expanded, onToggle }) {
             <div className="px-9 py-3 border-b border-slate-100">
               <div className="flex items-center justify-between mb-2">
                 <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-                  Top keywords / audiences
+                  Top 关键词 / 受众
                 </div>
                 <div className="text-11 text-slate-400">
-                  {adGroup.topKeywords.length} shown · ranked by impressions
+                  共 {adGroup.topKeywords.length} 条 · 按曝光排序
                 </div>
               </div>
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-slate-200">
                     <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 pr-3">
-                      Keyword / audience
+                      关键词 / 受众
                     </th>
                     <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 px-3">
-                      Impressions
+                      曝光
                     </th>
                     <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 px-3">
-                      Clicks
+                      点击
                     </th>
                     <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-1.5 px-3">
                       CTR
@@ -1340,11 +1340,11 @@ function AdArchitectureTable() {
   };
   const s = STRATEGY.adArchitecture.summary;
   const colHeaders = [
-    { label: "Ad group · parent campaign", align: "left" },
-    { label: "Targets", align: "right" },
-    { label: "Daily $", align: "right" },
-    { label: "Spend 30d", align: "right" },
-    { label: "Sales 30d", align: "right" },
+    { label: "广告组 · 所属广告活动", align: "left" },
+    { label: "定位数", align: "right" },
+    { label: "日预算 $", align: "right" },
+    { label: "30 天花费", align: "right" },
+    { label: "30 天销售额", align: "right" },
     { label: "TACoS", align: "right" },
     { label: "CTR", align: "right" },
     { label: "CR", align: "right" },
@@ -1379,7 +1379,7 @@ function AdArchitectureTable() {
         <tfoot>
           <tr className="border-t border-slate-200 bg-slate-50/60">
             <td className="py-2.5 px-3 text-11 uppercase tracking-wider text-slate-500 font-medium">
-              Blended · {s.adGroupCount} ad groups · {s.campaignCount} campaigns
+              综合 · {s.adGroupCount} 个广告组 · {s.campaignCount} 个广告活动
             </td>
             <td className="py-2.5 px-3 text-right font-mono text-slate-700">
               {s.keywordCount}
@@ -1458,8 +1458,8 @@ function InformationalInsightCard({ insight }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <Pill tone="amber">Brand team action</Pill>
-            <span className="text-11 text-slate-500">Insight #1 of 2</span>
+            <Pill tone="amber">品牌团队操作</Pill>
+            <span className="text-11 text-slate-500">洞察 #1 / 共 2 条</span>
           </div>
           <div className="text-sm font-medium text-slate-900">
             {insight.title}
@@ -1472,7 +1472,7 @@ function InformationalInsightCard({ insight }) {
 
       {/* Observations */}
       <div className="px-5 py-4">
-        <SectionLabel>Observations</SectionLabel>
+        <SectionLabel>观察</SectionLabel>
         <ul className="space-y-1.5">
           {insight.observations.map((obs, i) => (
             <li
@@ -1490,7 +1490,7 @@ function InformationalInsightCard({ insight }) {
       <div className="px-5 py-3 border-t border-amber-100 bg-amber-50/20 grid grid-cols-2 gap-6">
         <div>
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Projected impact
+            预期影响
           </div>
           <div className="text-sm font-mono font-semibold text-emerald-700 mt-0.5">
             {insight.projectedImpact.primary}
@@ -1501,7 +1501,7 @@ function InformationalInsightCard({ insight }) {
         </div>
         <div>
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Why agent isn't executing
+            Agent 为何不执行
           </div>
           <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
             {insight.ownershipReason}
@@ -1512,7 +1512,7 @@ function InformationalInsightCard({ insight }) {
       {/* Action bar */}
       <div className="px-5 py-3 border-t border-amber-100 flex items-center justify-between">
         <div className="text-11 text-slate-500">
-          Owned by{" "}
+          责任人:{" "}
           <span className="text-slate-900 font-medium">
             {insight.ownership}
           </span>
@@ -1548,9 +1548,9 @@ function ExecutableInsightCard({ insight }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <Pill tone="emerald">Agent-executable</Pill>
+            <Pill tone="emerald">Agent 可执行</Pill>
             <span className="text-11 text-slate-500">
-              Insight #2 of 2 · approve or modify
+              洞察 #2 / 共 2 条 · 批准或修改
             </span>
           </div>
           <div className="text-sm font-medium text-slate-900">
@@ -1564,7 +1564,7 @@ function ExecutableInsightCard({ insight }) {
 
       {/* Reference precedent */}
       <div className="px-5 py-4 border-b border-slate-100">
-        <SectionLabel>Reference precedent · Company Brain</SectionLabel>
+        <SectionLabel>参考先例 · 公司大脑</SectionLabel>
         <div className="bg-slate-900 text-white rounded-md px-4 py-3">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1.5">
             <Brain className="w-3.5 h-3.5 text-emerald-400" />
@@ -1586,18 +1586,18 @@ function ExecutableInsightCard({ insight }) {
 
       {/* Plan phases */}
       <div className="px-5 py-4 border-b border-slate-100">
-        <SectionLabel kicker="3-phase plan">Proposed plan</SectionLabel>
+        <SectionLabel kicker="3 阶段计划">建议方案</SectionLabel>
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-slate-200">
               <th className="text-left text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
-                Phase
+                阶段
               </th>
               <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
-                Exp. TACoS
+                预期 TACoS
               </th>
               <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
-                Exp. sales/mo
+                预期月销售额
               </th>
             </tr>
           </thead>
@@ -1636,7 +1636,7 @@ function ExecutableInsightCard({ insight }) {
       <div className="px-5 py-3 border-b border-slate-100 grid grid-cols-3 gap-6">
         <div>
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Cumulative sales lift
+            累计销售额增量
           </div>
           <div className="text-base font-mono font-semibold text-emerald-700 mt-0.5">
             +${insight.plan.summary.cumulativeSalesLift}K
@@ -1644,7 +1644,7 @@ function ExecutableInsightCard({ insight }) {
         </div>
         <div>
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Final TACoS
+            最终 TACoS
           </div>
           <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
             {insight.plan.summary.finalTacos}%
@@ -1652,7 +1652,7 @@ function ExecutableInsightCard({ insight }) {
         </div>
         <div>
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Capture window
+            争取窗口
           </div>
           <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
             {insight.plan.summary.captureWindow}
@@ -1665,11 +1665,11 @@ function ExecutableInsightCard({ insight }) {
         {modifying ? (
           <div className="flex items-center gap-2">
             <div className="text-11 uppercase tracking-wider text-slate-500 font-medium flex-shrink-0">
-              Modify:
+              修改:
             </div>
             <input
               type="text"
-              placeholder="e.g. delay promo by 2 weeks until inventory clears"
+              placeholder="例如:在库存出清前将促销推迟 2 周"
               className="flex-1 px-3 py-1.5 bg-white border border-slate-300 rounded-md text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
             />
             <button
@@ -1677,20 +1677,20 @@ function ExecutableInsightCard({ insight }) {
               onClick={() => setModifying(false)}
               className="text-xs text-slate-600 hover:text-slate-900 px-2"
             >
-              Cancel
+              取消
             </button>
             <button
               type="button"
               className="inline-flex items-center gap-1 text-xs font-medium text-white bg-slate-900 hover:bg-slate-800 px-2.5 py-1.5 rounded-md"
             >
               <Send className="w-3 h-3" />
-              Send
+              发送
             </button>
           </div>
         ) : (
           <div className="flex items-center justify-between">
             <div className="text-11 text-slate-500">
-              Confidence{" "}
+              信心度{" "}
               <span className="font-mono text-slate-900 font-medium">
                 {insight.confidence}%
               </span>{" "}
@@ -1702,7 +1702,7 @@ function ExecutableInsightCard({ insight }) {
                 className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md font-medium"
               >
                 <X className="w-3.5 h-3.5" />
-                Decline
+                拒绝
               </button>
               <button
                 type="button"
@@ -1710,14 +1710,14 @@ function ExecutableInsightCard({ insight }) {
                 className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-md bg-white"
               >
                 <Edit3 className="w-3.5 h-3.5" />
-                Modify
+                修改
               </button>
               <button
                 type="button"
                 className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1.5 rounded-md"
               >
                 <Check className="w-3.5 h-3.5" />
-                Approve plan
+                批准方案
               </button>
             </div>
           </div>
@@ -1732,15 +1732,15 @@ function MilestonePath() {
     "blocked-on-team": {
       tone: "amber",
       icon: Clock,
-      label: "Waiting on team",
+      label: "等待团队",
     },
     "awaiting-approval": {
       tone: "slate",
       icon: AlertCircle,
-      label: "Awaiting approval",
+      label: "等待批准",
     },
-    "goal": { tone: "emerald", icon: Target, label: "Goal" },
-    "preview": { tone: "slate", icon: CircleDot, label: "Next phase preview" },
+    "goal": { tone: "emerald", icon: Target, label: "目标" },
+    "preview": { tone: "slate", icon: CircleDot, label: "下一阶段预览" },
   };
   return (
     <div className="grid grid-cols-4 gap-3">
@@ -1806,17 +1806,17 @@ function StrategyCanvas() {
   return (
     <>
       <CanvasHeader
-        kicker="Strategy · best-seller path"
-        title="SKU-A path to best seller in Floor Lamps"
+        kicker="策略 · BS 路径"
+        title="SKU-A 在落地灯品类的 BS 路径"
         meta={
           <>
             <Pill tone="slate">
               <Target className="w-3 h-3" />
-              90-day window
+              90 天窗口期
             </Pill>
             <Pill tone="emerald">
               <ShieldCheck className="w-3 h-3" />
-              Goal confirmed
+              目标已确认
             </Pill>
           </>
         }
@@ -1829,7 +1829,7 @@ function StrategyCanvas() {
             <Target className="w-4 h-4 text-emerald-400 flex-shrink-0" />
             <div className="min-w-0">
               <div className="text-11 uppercase tracking-wider text-slate-400 font-medium">
-                Stated goal
+                目标
               </div>
               <div className="text-sm font-medium truncate">
                 {STRATEGY.goal}
@@ -1838,17 +1838,17 @@ function StrategyCanvas() {
           </div>
           <div className="flex items-center gap-3 text-xs text-slate-300 flex-shrink-0">
             <span>
-              Confirmed by{" "}
+              由{" "}
               <span className="text-white font-medium">
                 {STRATEGY.goalConfirmedBy}
               </span>{" "}
-              on {STRATEGY.goalConfirmedOn}
+              于 {STRATEGY.goalConfirmedOn} 确认
             </span>
             <button
               type="button"
               className="text-slate-300 hover:text-white underline underline-offset-2"
             >
-              Change goal
+              修改目标
             </button>
           </div>
         </div>
@@ -1859,7 +1859,7 @@ function StrategyCanvas() {
         <div className="flex items-center gap-4 bg-white border border-slate-200 rounded-lg p-3">
           <img
             src="/sku-a-hero.png"
-            alt="SKU-A · Arc Floor Lamp hero image"
+            alt="SKU-A · 弧形落地灯主图"
             className="w-20 h-20 rounded-md object-cover flex-shrink-0 border border-slate-200"
           />
           <div className="flex-1 min-w-0">
@@ -1867,10 +1867,10 @@ function StrategyCanvas() {
               Listing
             </div>
             <div className="text-sm font-semibold text-slate-900 truncate">
-              SKU-A · Arc Floor Lamp
+              SKU-A · 弧形落地灯
             </div>
             <div className="text-xs text-slate-500 mt-0.5">
-              Floor Lamps · linen drum shade · 3-CCT · arc-stand
+              落地灯 · 亚麻鼓型灯罩 · 3-CCT · 弧形支架
             </div>
           </div>
         </div>
@@ -1878,8 +1878,8 @@ function StrategyCanvas() {
 
       {/* Gap to best seller — three core path metrics */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="Traffic · Click · Conversion · vs #1 best seller">
-          Gap to best seller
+        <SectionLabel kicker="流量 · 点击 · 转化 · 对比 BS">
+          与 BS 的差距
         </SectionLabel>
         <PerformanceStrip />
       </div>
@@ -1889,9 +1889,9 @@ function StrategyCanvas() {
       {/* Listing operation log */}
       <div className="px-6 pt-6">
         <SectionLabel
-          kicker={`${STRATEGY.operationLog.length} milestones · launch → today`}
+          kicker={`${STRATEGY.operationLog.length} 个里程碑 · 上线至今`}
         >
-          Listing operation log
+          Listing 操作记录
         </SectionLabel>
         <OperationLog />
       </div>
@@ -1899,9 +1899,9 @@ function StrategyCanvas() {
       {/* Agent insights */}
       <div className="px-6 pt-6">
         <SectionLabel
-          kicker={`${STRATEGY.insights.length} surfaced this run · ordered by impact`}
+          kicker={`本次发现 ${STRATEGY.insights.length} 条 · 按影响排序`}
         >
-          Agent insights
+          Agent 洞察
         </SectionLabel>
         <div className="space-y-3">
           {STRATEGY.insights.map((insight) =>
@@ -1916,8 +1916,8 @@ function StrategyCanvas() {
 
       {/* Milestone path */}
       <div className="px-6 pt-6 pb-6">
-        <SectionLabel kicker="Sequenced gates · this specific goal">
-          Milestone path to best seller
+        <SectionLabel kicker="顺序门槛 · 针对当前目标">
+          通往 BS 的里程碑路径
         </SectionLabel>
         <MilestonePath />
       </div>
@@ -1933,45 +1933,45 @@ function StrategyCanvas() {
 
 function PostureBadge({ posture }) {
   if (posture === "defend") {
-    return <Pill tone="blue">Defend</Pill>;
+    return <Pill tone="blue">防守</Pill>;
   }
   if (posture === "lean-in") {
-    return <Pill tone="emerald">Lean-in</Pill>;
+    return <Pill tone="emerald">加注</Pill>;
   }
-  return <Pill tone="slate">Step-back</Pill>;
+  return <Pill tone="slate">收缩</Pill>;
 }
 
 function PeakSeasonCanvas() {
   return (
     <>
       <CanvasHeader
-        kicker="Optimization · market-condition forecast"
-        title="Peak season response · 6 weeks out"
+        kicker="优化 · 市场状况预测"
+        title="旺季应对 · 6 周倒计时"
         meta={
           <>
             <Pill tone="amber">
               <AlertCircle className="w-3 h-3" />
-              Competitive pressure rising
+              竞争压力上升
             </Pill>
-            <Pill tone="slate">9 SKU portfolio</Pill>
+            <Pill tone="slate">9 SKU 组合</Pill>
           </>
         }
       />
 
       {/* Traffic + pressure chart */}
       <div className="px-6 pt-5">
-        <SectionLabel kicker="Predicted category traffic + competitive bid pressure">
-          6-week forecast
+        <SectionLabel kicker="预测品类流量 + 竞品出价压力">
+          6 周预测
         </SectionLabel>
         <Card className="p-5">
           <div className="flex items-center gap-6 mb-3 text-xs">
             <div className="flex items-center gap-2">
               <div className="w-3 h-px bg-slate-900" />
-              <span className="text-slate-600">Category traffic (indexed)</span>
+              <span className="text-slate-600">品类流量(指数)</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-px bg-emerald-600 border-t border-dashed" />
-              <span className="text-slate-600">Competitive bid pressure</span>
+              <span className="text-slate-600">竞品出价压力</span>
             </div>
           </div>
           <div style={{ width: "100%", height: 220 }}>
@@ -2026,8 +2026,8 @@ function PeakSeasonCanvas() {
 
       {/* Competitive intel */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="Past 14 days">
-          Competitive signals
+        <SectionLabel kicker="过去 14 天">
+          竞品信号
         </SectionLabel>
         <div className="grid grid-cols-3 gap-3">
           {PEAK.competitiveSignals.map((sig, i) => (
@@ -2048,8 +2048,8 @@ function PeakSeasonCanvas() {
 
       {/* Portfolio matrix */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker={`${PEAK.portfolio.length} SKUs · differentiated posture`}>
-          Portfolio response matrix
+        <SectionLabel kicker={`${PEAK.portfolio.length} 个 SKU · 差异化姿态`}>
+          组合应对矩阵
         </SectionLabel>
         <Card>
           <table className="w-full text-sm">
@@ -2059,19 +2059,19 @@ function PeakSeasonCanvas() {
                   SKU
                 </th>
                 <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                  Lifecycle
+                  生命周期
                 </th>
                 <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                  Current SOV
+                  当前 SOV
                 </th>
                 <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                  Posture
+                  姿态
                 </th>
                 <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                  TACoS cap
+                  TACoS 上限
                 </th>
                 <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                  Bid Δ
+                  出价 Δ
                 </th>
               </tr>
             </thead>
@@ -2113,27 +2113,25 @@ function PeakSeasonCanvas() {
         <Card className="bg-slate-900 text-white border-slate-900">
           <div className="px-5 py-4">
             <div className="text-xs uppercase tracking-wider text-emerald-400 font-medium mb-2">
-              Recommended framework
+              建议框架
             </div>
             <div className="text-sm leading-relaxed text-slate-100">
-              Accept TACoS ceiling of{" "}
-              <span className="font-mono font-medium text-white">32%</span> on{" "}
-              {PEAK.decision.defendCount} defend-mode SKUs during peak window.
-              Reduce ceiling to{" "}
-              <span className="font-mono font-medium text-white">18%</span> on{" "}
-              {PEAK.decision.stepBackCount} step-back SKUs to preserve margin.
-              Commit additional{" "}
+              旺季窗口对{" "}
+              {PEAK.decision.defendCount} 个防守模式 SKU 接受 TACoS 上限{" "}
+              <span className="font-mono font-medium text-white">32%</span>。
+              对 {PEAK.decision.stepBackCount} 个收缩 SKU 将上限降至{" "}
+              <span className="font-mono font-medium text-white">18%</span>{" "}
+              以保护利润。
+              在 {PEAK.decision.leanInCount} 个竞品出价压力尚未饱和的加注 SKU 上追加{" "}
               <span className="font-mono font-medium text-emerald-400">
-                ${PEAK.decision.additionalWeeklyBudget}K weekly budget
-              </span>{" "}
-              on {PEAK.decision.leanInCount} lean-in SKUs where competitive bid
-              pressure has not yet reached saturation.
+                ${PEAK.decision.additionalWeeklyBudget}K 周预算
+              </span>。
             </div>
           </div>
         </Card>
       </div>
 
-      <ActionBar approveLabel="Approve framework" />
+      <ActionBar approveLabel="批准框架" />
       <ReasoningSection reasoning={PEAK.reasoning} />
     </>
   );
@@ -2146,11 +2144,11 @@ function PeakSeasonCanvas() {
 function ExecutionCanvas() {
   const [filter, setFilter] = useState("all");
   const filters = [
-    { id: "all", label: "All actions" },
-    { id: "Bid edit", label: "Bid edits" },
-    { id: "Budget", label: "Budget" },
-    { id: "Keyword", label: "Keyword" },
-    { id: "Restructure", label: "Restructure" },
+    { id: "all", label: "全部操作" },
+    { id: "出价调整", label: "出价调整" },
+    { id: "预算", label: "预算" },
+    { id: "关键词", label: "关键词" },
+    { id: "重构", label: "重构" },
   ];
   const visible = EXECUTION.actions.filter(
     (a) => filter === "all" || a.type === filter
@@ -2159,15 +2157,15 @@ function ExecutionCanvas() {
   return (
     <>
       <CanvasHeader
-        kicker="Execution · log"
-        title="SKU-A actions · past 7 days"
+        kicker="执行 · 日志"
+        title="SKU-A 操作 · 过去 7 天"
         meta={
           <>
             <Pill tone="emerald">
               <Activity className="w-3 h-3" />
-              All live
+              全部线上
             </Pill>
-            <Pill tone="slate">0 reverted</Pill>
+            <Pill tone="slate">0 个回滚</Pill>
           </>
         }
       />
@@ -2177,7 +2175,7 @@ function ExecutionCanvas() {
         <div className="grid grid-cols-4 gap-3">
           <Card className="px-4 py-3">
             <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-              Total actions
+              总操作数
             </div>
             <div className="text-2xl font-mono font-semibold text-slate-900 mt-1">
               {EXECUTION.summary.total}
@@ -2185,7 +2183,7 @@ function ExecutionCanvas() {
           </Card>
           <Card className="px-4 py-3">
             <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-              Team-approved
+              团队批准
             </div>
             <div className="text-2xl font-mono font-semibold text-slate-900 mt-1">
               {EXECUTION.summary.teamApproved}
@@ -2193,7 +2191,7 @@ function ExecutionCanvas() {
           </Card>
           <Card className="px-4 py-3">
             <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-              Autonomous
+              自主执行
             </div>
             <div className="text-2xl font-mono font-semibold text-emerald-700 mt-1">
               {EXECUTION.summary.autonomous}
@@ -2201,7 +2199,7 @@ function ExecutionCanvas() {
           </Card>
           <Card className="px-4 py-3">
             <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-              Reverted
+              回滚
             </div>
             <div className="text-2xl font-mono font-semibold text-slate-900 mt-1">
               {EXECUTION.summary.reverted}
@@ -2230,8 +2228,8 @@ function ExecutionCanvas() {
 
       {/* Timeline */}
       <div className="px-6 pt-5">
-        <SectionLabel kicker={`${visible.length} entries`}>
-          Action timeline
+        <SectionLabel kicker={`${visible.length} 条记录`}>
+          操作时间线
         </SectionLabel>
         <div className="relative pl-6">
           <div className="absolute left-2 top-2 bottom-2 w-px bg-slate-200" />
@@ -2260,7 +2258,7 @@ function ExecutionCanvas() {
                         </Pill>
                         {a.kind === "autonomous" && (
                           <span className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
-                            Autonomous
+                            自主执行
                           </span>
                         )}
                       </div>
@@ -2281,7 +2279,7 @@ function ExecutionCanvas() {
                           type="button"
                           className="text-11 text-slate-500 hover:text-rose-700 underline underline-offset-2"
                         >
-                          Revoke autonomy
+                          撤销授权
                         </button>
                       )}
                     </div>
@@ -2295,8 +2293,8 @@ function ExecutionCanvas() {
 
       {/* Pending approval */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker={`${EXECUTION.pending.length} awaiting team`}>
-          Pending team approval
+        <SectionLabel kicker={`${EXECUTION.pending.length} 项等待团队`}>
+          等待团队批准
         </SectionLabel>
         <Card>
           <div className="divide-y divide-slate-100">
@@ -2324,13 +2322,13 @@ function ExecutionCanvas() {
                     type="button"
                     className="text-xs px-2.5 py-1 text-slate-600 hover:text-slate-900"
                   >
-                    Decline
+                    拒绝
                   </button>
                   <button
                     type="button"
                     className="text-xs px-2.5 py-1 text-white bg-emerald-600 hover:bg-emerald-700 rounded-md font-medium"
                   >
-                    Approve
+                    批准
                   </button>
                 </div>
               </div>
@@ -2341,8 +2339,8 @@ function ExecutionCanvas() {
 
       {/* Autonomous classes */}
       <div className="px-6 pt-6 pb-6">
-        <SectionLabel kicker="Decision classes delegated to agent">
-          Running autonomously
+        <SectionLabel kicker="已授权给 Agent 的决策类别">
+          自主执行中
         </SectionLabel>
         <Card>
           <div className="divide-y divide-slate-100">
@@ -2358,14 +2356,14 @@ function ExecutionCanvas() {
                       {c.name}
                     </div>
                     <div className="text-xs text-slate-500 mt-0.5">
-                      Last used {c.lastUsed}
+                      上次使用 {c.lastUsed}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <div className="text-right">
                     <div className="text-10 uppercase tracking-wider text-slate-400 font-medium">
-                      Actions
+                      操作数
                     </div>
                     <div className="text-sm font-mono font-medium text-slate-700">
                       {c.count}
@@ -2375,7 +2373,7 @@ function ExecutionCanvas() {
                     type="button"
                     className="text-xs px-2.5 py-1 text-slate-700 border border-slate-300 hover:bg-slate-50 rounded-md bg-white"
                   >
-                    Revoke
+                    撤销
                   </button>
                 </div>
               </div>
@@ -2396,27 +2394,27 @@ function ExecutionCanvas() {
 function LaunchCanvas() {
   const [tab, setTab] = useState("architecture");
   const tabs = [
-    { id: "architecture", label: "Campaign architecture", icon: Workflow },
-    { id: "keywords",     label: "Keyword allocation",    icon: ListTree },
-    { id: "bids",         label: "Bid strategy",          icon: TrendingUp },
-    { id: "pacing",       label: "Budget pacing",         icon: DollarSign },
-    { id: "milestones",   label: "Milestone gates",       icon: Target },
+    { id: "architecture", label: "广告活动架构", icon: Workflow },
+    { id: "keywords",     label: "关键词分配",    icon: ListTree },
+    { id: "bids",         label: "出价策略",          icon: TrendingUp },
+    { id: "pacing",       label: "预算节奏",         icon: DollarSign },
+    { id: "milestones",   label: "里程碑门槛",       icon: Target },
   ];
 
   return (
     <>
       <CanvasHeader
-        kicker="Learning · new product launch"
-        title={`Launch plan · ${LAUNCH.sku}`}
+        kicker="学习 · 新品上线"
+        title={`上线计划 · ${LAUNCH.sku}`}
         meta={
           <>
             <Pill tone="slate">
               <Calendar className="w-3 h-3" />
-              {LAUNCH.targetLaunch} launch
+              {LAUNCH.targetLaunch} 上线
             </Pill>
             <Pill tone="emerald">
               <Brain className="w-3 h-3" />
-              7 prior launches referenced
+              参考 7 个过往上线
             </Pill>
           </>
         }
@@ -2429,13 +2427,12 @@ function LaunchCanvas() {
             <div className="flex items-center gap-2 mb-2">
               <Brain className="w-4 h-4 text-emerald-400" />
               <div className="text-xs uppercase tracking-wider text-emerald-400 font-medium">
-                Methodology trace · Company Brain
+                方法论溯源 · 公司大脑
               </div>
             </div>
             <div className="text-sm text-slate-200 leading-relaxed mb-3">
-              Drawing on 7 prior launches in this category and price band.
-              Patterns extracted: keyword taxonomies, campaign structures, bid
-              ramp curves, launch-phase playbooks.
+              基于本品类与价格带的 7 个过往上线案例。
+              提取的模式:关键词分类、广告活动结构、出价爬坡曲线、上线阶段打法。
             </div>
             <div className="grid grid-cols-3 gap-2">
               {LAUNCH.priorLaunches.map((p, i) => (
@@ -2448,7 +2445,7 @@ function LaunchCanvas() {
                     {p.date} · {p.outcome}
                   </div>
                   <div className="text-11 text-emerald-400 mt-1">
-                    {p.similarity} similarity · {p.note}
+                    {p.similarity}相似度 · {p.note}
                   </div>
                 </div>
               ))}
@@ -2489,16 +2486,16 @@ function LaunchCanvas() {
               <thead>
                 <tr className="border-b border-slate-200">
                   <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Type
+                    类型
                   </th>
                   <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Campaign
+                    广告活动
                   </th>
                   <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Ad groups
+                    广告组
                   </th>
                   <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Daily budget
+                    日预算
                   </th>
                 </tr>
               </thead>
@@ -2528,7 +2525,7 @@ function LaunchCanvas() {
               <tfoot>
                 <tr className="border-t border-slate-200 bg-slate-50/60">
                   <td colSpan={3} className="py-2.5 px-4 text-xs uppercase tracking-wider text-slate-500 font-medium">
-                    Total daily budget
+                    日预算合计
                   </td>
                   <td className="py-2.5 px-4 text-right font-mono font-semibold text-slate-900">
                     $4,060
@@ -2545,16 +2542,16 @@ function LaunchCanvas() {
               <thead>
                 <tr className="border-b border-slate-200">
                   <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Tier
+                    层级
                   </th>
                   <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Count
+                    词数
                   </th>
                   <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Daily budget
+                    日预算
                   </th>
                   <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Examples
+                    示例
                   </th>
                 </tr>
               </thead>
@@ -2589,16 +2586,16 @@ function LaunchCanvas() {
               <thead>
                 <tr className="border-b border-slate-200">
                   <th className="text-left text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Phase
+                    阶段
                   </th>
                   <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Head
+                    头部
                   </th>
                   <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Mid
+                    中部
                   </th>
                   <th className="text-right text-xs uppercase tracking-wider text-slate-500 font-medium py-2.5 px-4">
-                    Long-tail
+                    长尾
                   </th>
                 </tr>
               </thead>
@@ -2663,7 +2660,7 @@ function LaunchCanvas() {
                     labelStyle={{ color: "#94a3b8" }}
                     formatter={(v, name) => [
                       `$${v.toLocaleString()}`,
-                      name === "total" ? "Weekly" : "Daily",
+                      name === "total" ? "周" : "日",
                     ]}
                   />
                   <Bar dataKey="total" fill="#0f172a" radius={[4, 4, 0, 0]} />
@@ -2671,9 +2668,8 @@ function LaunchCanvas() {
               </ResponsiveContainer>
             </div>
             <div className="text-xs text-slate-500 mt-3 leading-relaxed">
-              Front-loaded ramp: 26% of 4-week budget concentrated in week 1 to
-              establish auction presence. Daily cap deescalates as efficiency
-              data accrues.
+              前置爬坡:4 周预算中 26% 集中在第 1 周以建立竞价存在感。
+              随效率数据积累,日预算上限逐步回落。
             </div>
           </Card>
         )}
@@ -2695,14 +2691,14 @@ function LaunchCanvas() {
                         {m.gate}
                       </div>
                       <div className="text-xs text-slate-600 mt-0.5">
-                        Target: {m.target}
+                        目标:{m.target}
                       </div>
                       <div className="text-xs text-slate-500 mt-0.5 leading-relaxed">
                         {m.rationale}
                       </div>
                     </div>
                   </div>
-                  <Pill tone="slate">Gate</Pill>
+                  <Pill tone="slate">门槛</Pill>
                 </div>
               ))}
             </div>
@@ -2713,7 +2709,7 @@ function LaunchCanvas() {
       {/* Action bar — special multi-option for launch */}
       <div className="px-6 pt-6 pb-2">
         <div className="text-xs uppercase tracking-wider text-slate-500 font-medium mb-2">
-          Approval options
+          批准选项
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <button
@@ -2721,27 +2717,27 @@ function LaunchCanvas() {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
           >
             <Check className="w-3.5 h-3.5" />
-            Approve full plan
+            批准全部计划
           </button>
           <button
             type="button"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 rounded-md bg-white"
           >
-            Approve phase-by-phase
+            逐阶段批准
           </button>
           <button
             type="button"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 rounded-md bg-white"
           >
             <Edit3 className="w-3.5 h-3.5" />
-            Modify any phase
+            修改任一阶段
           </button>
           <button
             type="button"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
           >
             <X className="w-3.5 h-3.5" />
-            Decline
+            拒绝
           </button>
         </div>
       </div>
@@ -2778,16 +2774,16 @@ function TopBar({ onOpenBrain, onOpenAdArch }) {
         <span className="text-slate-300">/</span>
         <div className="text-sm text-slate-600">ABC Home Goods</div>
         <Pill tone="slate" className="ml-1">
-          Floor Lamps
+          落地灯
         </Pill>
       </div>
 
       <div className="flex-1 flex items-center justify-center gap-2 text-xs text-slate-600">
         <PulseDot />
         <span>
-          Agent ingested{" "}
+          Agent 自 06:00 起已摄入{" "}
           <span className="font-mono text-slate-900 font-medium">4,182</span>{" "}
-          data points since 06:00 AM
+          个数据点
         </span>
       </div>
 
@@ -2795,7 +2791,7 @@ function TopBar({ onOpenBrain, onOpenAdArch }) {
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-md">
           <Lock className="w-3 h-3 text-emerald-700" />
           <span className="text-11 font-medium text-emerald-800">
-            Team retains override · all classes
+            团队保留所有类别的覆盖权
           </span>
         </div>
         <button
@@ -2805,7 +2801,7 @@ function TopBar({ onOpenBrain, onOpenAdArch }) {
         >
           <ListTree className="w-3.5 h-3.5 text-slate-600" />
           <span className="text-11 font-medium text-slate-700">
-            Ad architecture
+            广告架构
           </span>
         </button>
         <button
@@ -2815,7 +2811,7 @@ function TopBar({ onOpenBrain, onOpenAdArch }) {
         >
           <Brain className="w-3.5 h-3.5 text-slate-600" />
           <span className="text-11 font-medium text-slate-700">
-            Company Brain
+            公司大脑
           </span>
         </button>
         <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-11 font-medium text-slate-700">
@@ -2831,9 +2827,9 @@ function ChatPanel({ activeId, onSelect }) {
     <aside className="w-80 flex-shrink-0 border-r border-slate-200 bg-white flex flex-col">
       <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
         <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-          Conversation
+          对话
         </div>
-        <div className="text-11 text-slate-400 font-mono">5 messages</div>
+        <div className="text-11 text-slate-400 font-mono">5 条消息</div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-3 space-y-2.5">
@@ -2878,7 +2874,7 @@ function ChatPanel({ activeId, onSelect }) {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-medium text-slate-900">
-                    Brand Ops Agent
+                    品牌运营助手
                   </div>
                   <div className="text-xs text-slate-600 mt-1 leading-relaxed">
                     {msg.agentSummary}
@@ -2891,12 +2887,12 @@ function ChatPanel({ activeId, onSelect }) {
                     {active ? (
                       <>
                         <CircleDot className="w-3 h-3" />
-                        Viewing canvas
+                        正在查看画布
                       </>
                     ) : (
                       <>
                         <FileText className="w-3 h-3" />
-                        Open canvas
+                        打开画布
                       </>
                     )}
                   </div>
@@ -2913,19 +2909,18 @@ function ChatPanel({ activeId, onSelect }) {
           <input
             type="text"
             disabled
-            placeholder="Ask the agent anything about Floor Lamps…"
+            placeholder="向 agent 询问任何关于落地灯的问题……"
             className="w-full pl-3 pr-20 py-2.5 text-xs bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
           />
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
             <Lock className="w-3 h-3 text-slate-400" />
             <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
-              Demo locked
+              演示锁定
             </span>
           </div>
         </div>
         <div className="text-10 text-slate-400 mt-2 leading-relaxed">
-          Input disabled in this stakeholder mock. Click any message above to
-          view its canvas.
+          本演示中输入框已禁用。点击上方任一条消息可查看对应画布。
         </div>
       </div>
     </aside>
@@ -2950,11 +2945,11 @@ function AdArchitectureDrawer({ open, onClose }) {
           <div className="flex items-center gap-2">
             <ListTree className="w-4 h-4 text-slate-700" />
             <div className="text-sm font-semibold text-slate-900 tracking-tight">
-              Ad architecture
+              广告架构
             </div>
             <span className="text-slate-300">·</span>
             <span className="text-xs text-slate-600">SKU-A</span>
-            <Pill tone="slate">Live</Pill>
+            <Pill tone="slate">线上</Pill>
           </div>
           <button
             type="button"
@@ -2969,7 +2964,7 @@ function AdArchitectureDrawer({ open, onClose }) {
         <div className="px-5 py-3 border-b border-slate-200 grid grid-cols-6 gap-4 flex-shrink-0">
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Ad groups
+              广告组
             </div>
             <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
               {s.adGroupCount}
@@ -2977,7 +2972,7 @@ function AdArchitectureDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Campaigns
+              广告活动
             </div>
             <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
               {s.campaignCount}
@@ -2985,7 +2980,7 @@ function AdArchitectureDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Keywords
+              关键词
             </div>
             <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
               {s.keywordCount}
@@ -2993,7 +2988,7 @@ function AdArchitectureDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Daily budget
+              日预算
             </div>
             <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
               ${s.dailyBudget}
@@ -3001,7 +2996,7 @@ function AdArchitectureDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Sales 30d
+              30 天销售额
             </div>
             <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
               ${(s.sales30d / 1000).toFixed(0)}K
@@ -3021,12 +3016,12 @@ function AdArchitectureDrawer({ open, onClose }) {
         <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/40 flex-shrink-0">
           <div className="text-11 text-slate-600 leading-relaxed">
             <span className="text-slate-900 font-medium">
-              Click any ad group
+              点击任一广告组
             </span>{" "}
-            to see its top keywords / audiences with click and conversion data.
-            Rose-tinted rows are keywords flagged by{" "}
-            <span className="text-rose-700 font-medium">Insight #1</span>{" "}
-            (bedroom-context CTR gap).
+            可查看其 Top 关键词 / 受众及对应的点击与转化数据。
+            玫红色行为被{" "}
+            <span className="text-rose-700 font-medium">洞察 #1</span>{" "}
+            (卧室场景 CTR 缺口)标记的关键词。
           </div>
         </div>
 
@@ -3055,9 +3050,9 @@ function CompanyBrainDrawer({ open, onClose }) {
           <div className="flex items-center gap-2">
             <Brain className="w-4 h-4 text-emerald-700" />
             <div className="text-sm font-semibold text-slate-900 tracking-tight">
-              Company Brain
+              公司大脑
             </div>
-            <Pill tone="slate">Read-only</Pill>
+            <Pill tone="slate">只读</Pill>
           </div>
           <button
             type="button"
@@ -3070,16 +3065,14 @@ function CompanyBrainDrawer({ open, onClose }) {
 
         <div className="px-5 py-4 border-b border-slate-200">
           <div className="text-xs text-slate-600 leading-relaxed">
-            ABC Home Goods's accumulated operations methodology. Every
-            approved decision, captured pattern, and prior playbook is owned by
-            the brand and portable.
+            ABC Home Goods 沉淀的运营方法论。所有已批准的决策、已捕获的模式、过往打法均归品牌所有,可随时迁移。
           </div>
         </div>
 
         <div className="px-5 py-4 border-b border-slate-200 grid grid-cols-3 gap-3">
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Decision classes
+              决策类别
             </div>
             <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
               {COMPANY_BRAIN.decisionClasses}
@@ -3087,7 +3080,7 @@ function CompanyBrainDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Playbooks
+              打法库
             </div>
             <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
               {COMPANY_BRAIN.playbooks}
@@ -3095,7 +3088,7 @@ function CompanyBrainDrawer({ open, onClose }) {
           </div>
           <div>
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Captured patterns
+              已捕获模式
             </div>
             <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
               {COMPANY_BRAIN.capturedPatterns}
@@ -3104,7 +3097,7 @@ function CompanyBrainDrawer({ open, onClose }) {
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
-          <SectionLabel>Recent entries</SectionLabel>
+          <SectionLabel>最新条目</SectionLabel>
           <div className="space-y-2">
             {COMPANY_BRAIN.recentEntries.map((e, i) => (
               <div
