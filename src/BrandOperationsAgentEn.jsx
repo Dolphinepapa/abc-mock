@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Activity,
   Lock,
@@ -2628,8 +2628,9 @@ function PerformanceStrip() {
   );
 }
 
-function AdGroupRow({ adGroup, expanded, onToggle }) {
+function AdGroupRow({ adGroup, expanded, onToggle, compact }) {
   const flaggedCount = adGroup.topKeywords.filter((k) => k.flagged).length;
+  const colSpan = compact ? 6 : 8;
   return (
     <>
       <tr
@@ -2663,15 +2664,19 @@ function AdGroupRow({ adGroup, expanded, onToggle }) {
         <td className="py-2.5 px-3 text-right font-mono text-slate-700">
           ${adGroup.dailyBudget}
         </td>
-        <td className="py-2.5 px-3 text-right font-mono text-slate-700">
-          ${adGroup.spend30d.toLocaleString()}
-        </td>
+        {!compact && (
+          <td className="py-2.5 px-3 text-right font-mono text-slate-700">
+            ${adGroup.spend30d.toLocaleString()}
+          </td>
+        )}
         <td className="py-2.5 px-3 text-right font-mono text-slate-900 font-medium">
           ${adGroup.sales30d.toLocaleString()}
         </td>
-        <td className="py-2.5 px-3 text-right font-mono text-slate-700">
-          {adGroup.tacos}%
-        </td>
+        {!compact && (
+          <td className="py-2.5 px-3 text-right font-mono text-slate-700">
+            {adGroup.tacos}%
+          </td>
+        )}
         <td className="py-2.5 px-3 text-right font-mono text-slate-700">
           {adGroup.ctr}%
         </td>
@@ -2681,7 +2686,7 @@ function AdGroupRow({ adGroup, expanded, onToggle }) {
       </tr>
       {expanded && (
         <tr className="bg-slate-50/60">
-          <td colSpan={8} className="p-0">
+          <td colSpan={colSpan} className="p-0">
             <div className="px-9 py-3 border-b border-slate-100">
               <div className="flex items-center justify-between mb-2">
                 <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
@@ -2772,7 +2777,7 @@ function AdGroupRow({ adGroup, expanded, onToggle }) {
   );
 }
 
-function AdArchitectureTable() {
+function AdArchitectureTable({ panelWidth }) {
   const [expandedIds, setExpandedIds] = useState(() => new Set());
   const toggle = (id) => {
     setExpandedIds((prev) => {
@@ -2782,8 +2787,9 @@ function AdArchitectureTable() {
       return next;
     });
   };
+  const compact = typeof panelWidth === "number" && panelWidth < 540;
   const s = STRATEGY.adArchitecture.summary;
-  const colHeaders = [
+  const allHeaders = [
     { label: "Ad group · parent campaign", align: "left" },
     { label: "Targets", align: "right" },
     { label: "Daily $", align: "right" },
@@ -2793,6 +2799,11 @@ function AdArchitectureTable() {
     { label: "CTR", align: "right" },
     { label: "CR", align: "right" },
   ];
+  const colHeaders = compact
+    ? allHeaders.filter(
+        (h) => h.label !== "Spend 30d" && h.label !== "TACoS",
+      )
+    : allHeaders;
   return (
     <Card>
       <table className="w-full text-sm">
@@ -2817,6 +2828,7 @@ function AdArchitectureTable() {
               adGroup={ag}
               expanded={expandedIds.has(ag.id)}
               onToggle={() => toggle(ag.id)}
+              compact={compact}
             />
           ))}
         </tbody>
@@ -2831,15 +2843,19 @@ function AdArchitectureTable() {
             <td className="py-2.5 px-3 text-right font-mono text-slate-900 font-semibold">
               ${s.dailyBudget}
             </td>
-            <td className="py-2.5 px-3 text-right font-mono text-slate-700">
-              ${s.spend30d.toLocaleString()}
-            </td>
+            {!compact && (
+              <td className="py-2.5 px-3 text-right font-mono text-slate-700">
+                ${s.spend30d.toLocaleString()}
+              </td>
+            )}
             <td className="py-2.5 px-3 text-right font-mono text-slate-900 font-semibold">
               ${s.sales30d.toLocaleString()}
             </td>
-            <td className="py-2.5 px-3 text-right font-mono text-slate-700">
-              {s.tacos}%
-            </td>
+            {!compact && (
+              <td className="py-2.5 px-3 text-right font-mono text-slate-700">
+                {s.tacos}%
+              </td>
+            )}
             <td colSpan={2} />
           </tr>
         </tfoot>
@@ -7345,7 +7361,15 @@ function PulseDot() {
   );
 }
 
-function TopBar({ onOpenBrain, onOpenAdArch, locale, setLocale }) {
+function TopBar({
+  onToggleTab,
+  inspectorOpen,
+  inspectorTab,
+  locale,
+  setLocale,
+}) {
+  const adArchActive = inspectorOpen && inspectorTab === "ad-architecture";
+  const brainActive = inspectorOpen && inspectorTab === "company-brain";
   return (
     <header className="h-14 border-b border-slate-200 bg-white flex items-center px-4 gap-4 flex-shrink-0">
       <div className="flex items-center gap-2.5">
@@ -7390,21 +7414,45 @@ function TopBar({ onOpenBrain, onOpenAdArch, locale, setLocale }) {
         </div>
         <button
           type="button"
-          onClick={onOpenAdArch}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 border border-slate-200 hover:bg-slate-50 rounded-md"
+          onClick={() => onToggleTab("ad-architecture")}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${
+            adArchActive
+              ? "bg-slate-900 border border-slate-900"
+              : "border border-slate-200 hover:bg-slate-50"
+          }`}
         >
-          <ListTree className="w-3.5 h-3.5 text-slate-600" />
-          <span className="text-11 font-medium text-slate-700">
+          <ListTree
+            className={`w-3.5 h-3.5 ${
+              adArchActive ? "text-white" : "text-slate-600"
+            }`}
+          />
+          <span
+            className={`text-11 font-medium ${
+              adArchActive ? "text-white" : "text-slate-700"
+            }`}
+          >
             Ad architecture
           </span>
         </button>
         <button
           type="button"
-          onClick={onOpenBrain}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 border border-slate-200 hover:bg-slate-50 rounded-md"
+          onClick={() => onToggleTab("company-brain")}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${
+            brainActive
+              ? "bg-slate-900 border border-slate-900"
+              : "border border-slate-200 hover:bg-slate-50"
+          }`}
         >
-          <Brain className="w-3.5 h-3.5 text-slate-600" />
-          <span className="text-11 font-medium text-slate-700">
+          <Brain
+            className={`w-3.5 h-3.5 ${
+              brainActive ? "text-white" : "text-slate-600"
+            }`}
+          />
+          <span
+            className={`text-11 font-medium ${
+              brainActive ? "text-white" : "text-slate-700"
+            }`}
+          >
             Company Brain
           </span>
         </button>
@@ -7648,195 +7696,252 @@ function ThreadTurn({ turn, thread }) {
   );
 }
 
-function AdArchitectureDrawer({ open, onClose }) {
-  if (!open) return null;
+function AdArchitectureContent({ panelWidth }) {
   const s = STRATEGY.adArchitecture.summary;
+  const compact = typeof panelWidth === "number" && panelWidth < 540;
   return (
-    <div
-      className="fixed inset-0 z-50 flex justify-end bg-slate-900/40"
-      onClick={onClose}
-    >
+    <>
+      <div className="px-5 py-3 border-b border-slate-200 bg-slate-50/40 flex items-center gap-2 flex-shrink-0">
+        <ListTree className="w-4 h-4 text-slate-700" />
+        <span className="text-xs text-slate-600">SKU-A</span>
+        <Pill tone="slate">Live</Pill>
+      </div>
+
       <div
-        className="h-full bg-white border-l border-slate-200 shadow-xl flex flex-col"
-        style={{ width: "min(1040px, 78vw)" }}
-        onClick={(e) => e.stopPropagation()}
+        className={`px-5 py-3 border-b border-slate-200 grid gap-4 flex-shrink-0 ${
+          compact ? "grid-cols-3" : "grid-cols-6"
+        }`}
       >
-        {/* Header */}
-        <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <ListTree className="w-4 h-4 text-slate-700" />
-            <div className="text-sm font-semibold text-slate-900 tracking-tight">
-              Ad architecture
-            </div>
-            <span className="text-slate-300">·</span>
-            <span className="text-xs text-slate-600">SKU-A</span>
-            <Pill tone="slate">Live</Pill>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Ad groups
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-slate-500 hover:text-slate-900"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Summary stat strip */}
-        <div className="px-5 py-3 border-b border-slate-200 grid grid-cols-6 gap-4 flex-shrink-0">
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Ad groups
-            </div>
-            <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
-              {s.adGroupCount}
-            </div>
-          </div>
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Campaigns
-            </div>
-            <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
-              {s.campaignCount}
-            </div>
-          </div>
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Keywords
-            </div>
-            <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
-              {s.keywordCount}
-            </div>
-          </div>
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Daily budget
-            </div>
-            <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
-              ${s.dailyBudget}
-            </div>
-          </div>
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Sales 30d
-            </div>
-            <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
-              ${(s.sales30d / 1000).toFixed(0)}K
-            </div>
-          </div>
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              {wrapMetric("TACoS")}
-            </div>
-            <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
-              {s.tacos}%
-            </div>
+          <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
+            {s.adGroupCount}
           </div>
         </div>
-
-        {/* Description */}
-        <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/40 flex-shrink-0">
-          <div className="text-11 text-slate-600 leading-relaxed">
-            <span className="text-slate-900 font-medium">
-              Click any ad group
-            </span>{" "}
-            to see its top keywords / audiences with click and conversion data.
-            Rose-tinted rows are keywords flagged by{" "}
-            <span className="text-rose-700 font-medium">Insight #1</span>{" "}
-            (bedroom-context CTR gap).
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Campaigns
+          </div>
+          <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
+            {s.campaignCount}
           </div>
         </div>
-
-        {/* Table */}
-        <div className="flex-1 overflow-y-auto px-5 py-4">
-          <AdArchitectureTable />
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Keywords
+          </div>
+          <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
+            {s.keywordCount}
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Daily budget
+          </div>
+          <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
+            ${s.dailyBudget}
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Sales 30d
+          </div>
+          <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
+            ${(s.sales30d / 1000).toFixed(0)}K
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            {wrapMetric("TACoS")}
+          </div>
+          <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
+            {s.tacos}%
+          </div>
         </div>
       </div>
-    </div>
+
+      <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/40 flex-shrink-0">
+        <div className="text-11 text-slate-600 leading-relaxed">
+          <span className="text-slate-900 font-medium">
+            Click any ad group
+          </span>{" "}
+          to see its top keywords / audiences with click and conversion data.
+          Rose-tinted rows are keywords flagged by{" "}
+          <span className="text-rose-700 font-medium">Insight #1</span>{" "}
+          (bedroom-context CTR gap).
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        <AdArchitectureTable panelWidth={panelWidth} />
+      </div>
+    </>
   );
 }
 
-function CompanyBrainDrawer({ open, onClose }) {
-  if (!open) return null;
+function CompanyBrainContent() {
   return (
-    <div
-      className="fixed inset-0 z-50 flex justify-end bg-slate-900/40"
-      onClick={onClose}
-    >
-      <div
-        className="h-full bg-white border-l border-slate-200 shadow-xl flex flex-col"
-        style={{ width: "420px" }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Brain className="w-4 h-4 text-emerald-700" />
-            <div className="text-sm font-semibold text-slate-900 tracking-tight">
-              Company Brain
-            </div>
-            <Pill tone="slate">Read-only</Pill>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-slate-500 hover:text-slate-900"
-          >
-            <X className="w-4 h-4" />
-          </button>
+    <>
+      <div className="px-5 py-4 border-b border-slate-200 flex-shrink-0">
+        <div className="text-xs text-slate-600 leading-relaxed">
+          ABC Home Goods's accumulated operations methodology. Every
+          approved decision, captured pattern, and prior playbook is owned by
+          the brand and portable.
         </div>
+      </div>
 
-        <div className="px-5 py-4 border-b border-slate-200">
-          <div className="text-xs text-slate-600 leading-relaxed">
-            ABC Home Goods's accumulated operations methodology. Every
-            approved decision, captured pattern, and prior playbook is owned by
-            the brand and portable.
+      <div className="px-5 py-4 border-b border-slate-200 grid grid-cols-3 gap-3 flex-shrink-0">
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Decision classes
+          </div>
+          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
+            {COMPANY_BRAIN.decisionClasses}
           </div>
         </div>
-
-        <div className="px-5 py-4 border-b border-slate-200 grid grid-cols-3 gap-3">
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Decision classes
-            </div>
-            <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-              {COMPANY_BRAIN.decisionClasses}
-            </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Playbooks
           </div>
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Playbooks
-            </div>
-            <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-              {COMPANY_BRAIN.playbooks}
-            </div>
-          </div>
-          <div>
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Captured patterns
-            </div>
-            <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
-              {COMPANY_BRAIN.capturedPatterns}
-            </div>
+          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
+            {COMPANY_BRAIN.playbooks}
           </div>
         </div>
-
-        <div className="flex-1 overflow-y-auto px-5 py-4">
-          <SectionLabel>Recent entries</SectionLabel>
-          <div className="space-y-2">
-            {COMPANY_BRAIN.recentEntries.map((e, i) => (
-              <div
-                key={i}
-                className="border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 cursor-pointer"
-              >
-                <div className="text-sm font-medium text-slate-900">
-                  {e.name}
-                </div>
-                <div className="text-xs text-slate-500 mt-0.5">{e.added}</div>
-              </div>
-            ))}
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Captured patterns
+          </div>
+          <div className="text-xl font-mono font-semibold text-slate-900 mt-1">
+            {COMPANY_BRAIN.capturedPatterns}
           </div>
         </div>
       </div>
-    </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        <SectionLabel>Recent entries</SectionLabel>
+        <div className="space-y-2">
+          {COMPANY_BRAIN.recentEntries.map((e, i) => (
+            <div
+              key={i}
+              className="border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 cursor-pointer"
+            >
+              <div className="text-sm font-medium text-slate-900">
+                {e.name}
+              </div>
+              <div className="text-xs text-slate-500 mt-0.5">{e.added}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function InspectorDragHandle({ currentWidth, onWidthChange }) {
+  const startX = useRef(0);
+  const startWidth = useRef(0);
+  const moveRef = useRef(null);
+  const upRef = useRef(null);
+
+  const onMouseDown = (e) => {
+    e.preventDefault();
+    startX.current = e.clientX;
+    startWidth.current = currentWidth;
+    moveRef.current = (ev) => {
+      const delta = startX.current - ev.clientX;
+      const newWidth = Math.min(
+        720,
+        Math.max(360, startWidth.current + delta),
+      );
+      onWidthChange(newWidth);
+    };
+    upRef.current = () => {
+      document.removeEventListener("mousemove", moveRef.current);
+      document.removeEventListener("mouseup", upRef.current);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    };
+    document.addEventListener("mousemove", moveRef.current);
+    document.addEventListener("mouseup", upRef.current);
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
+
+  return (
+    <div
+      onMouseDown={onMouseDown}
+      className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize bg-slate-200 hover:bg-slate-400 z-10"
+    />
+  );
+}
+
+function InspectorPanel({
+  open,
+  tab,
+  onTabChange,
+  onClose,
+  width,
+  onWidthChange,
+}) {
+  if (!open) return null;
+  const tabs = [
+    { id: "ad-architecture", label: "Ad architecture" },
+    { id: "company-brain", label: "Company Brain" },
+  ];
+  return (
+    <aside
+      style={{ width: `${width}px` }}
+      className="flex flex-col border-l border-slate-200 bg-white flex-shrink-0 relative"
+    >
+      <InspectorDragHandle
+        currentWidth={width}
+        onWidthChange={onWidthChange}
+      />
+      <div className="flex items-center border-b border-slate-200 pl-1 pr-2 flex-shrink-0">
+        {tabs.map((t) => {
+          const active = tab === t.id;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => onTabChange(t.id)}
+              className={`text-sm font-medium px-3 py-2 border-b-2 -mb-px ${
+                active
+                  ? "bg-white text-slate-900 border-emerald-600 font-semibold"
+                  : "bg-slate-50 text-slate-600 border-transparent hover:bg-slate-100"
+              }`}
+            >
+              {t.label}
+            </button>
+          );
+        })}
+        <button
+          type="button"
+          disabled
+          title="More inspectors coming"
+          className="text-sm font-medium px-2 py-2 text-slate-400 cursor-not-allowed"
+        >
+          <Plus className="w-4 h-4" />
+        </button>
+        <div className="flex-1" />
+        <button
+          type="button"
+          onClick={onClose}
+          className="text-slate-500 hover:text-slate-900 p-1"
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+      <div className="flex-1 flex flex-col min-h-0">
+        {tab === "ad-architecture" ? (
+          <AdArchitectureContent panelWidth={width} />
+        ) : (
+          <CompanyBrainContent />
+        )}
+      </div>
+    </aside>
   );
 }
 
@@ -7872,8 +7977,20 @@ function PlaceholderCanvas({ kicker, title, part }) {
 
 export default function App({ locale, setLocale }) {
   const [activeId, setActiveId] = useState("strategy");
-  const [brainOpen, setBrainOpen] = useState(false);
-  const [adArchOpen, setAdArchOpen] = useState(false);
+  const [inspectorOpen, setInspectorOpen] = useState(false);
+  const [inspectorTab, setInspectorTab] = useState("ad-architecture");
+  const [inspectorWidth, setInspectorWidth] = useState(480);
+
+  function toggleInspectorTab(tab) {
+    if (!inspectorOpen) {
+      setInspectorOpen(true);
+      setInspectorTab(tab);
+    } else if (inspectorTab === tab) {
+      setInspectorOpen(false);
+    } else {
+      setInspectorTab(tab);
+    }
+  }
 
   useEffect(() => {
     if (
@@ -7926,8 +8043,9 @@ export default function App({ locale, setLocale }) {
       `}</style>
 
       <TopBar
-        onOpenBrain={() => setBrainOpen(true)}
-        onOpenAdArch={() => setAdArchOpen(true)}
+        onToggleTab={toggleInspectorTab}
+        inspectorOpen={inspectorOpen}
+        inspectorTab={inspectorTab}
         locale={locale}
         setLocale={setLocale}
       />
@@ -7942,16 +8060,15 @@ export default function App({ locale, setLocale }) {
             {canvas}
           </div>
         </main>
+        <InspectorPanel
+          open={inspectorOpen}
+          tab={inspectorTab}
+          onTabChange={setInspectorTab}
+          onClose={() => setInspectorOpen(false)}
+          width={inspectorWidth}
+          onWidthChange={setInspectorWidth}
+        />
       </div>
-
-      <CompanyBrainDrawer
-        open={brainOpen}
-        onClose={() => setBrainOpen(false)}
-      />
-      <AdArchitectureDrawer
-        open={adArchOpen}
-        onClose={() => setAdArchOpen(false)}
-      />
     </div>
   );
 }
