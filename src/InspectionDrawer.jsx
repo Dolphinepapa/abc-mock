@@ -9,6 +9,7 @@ export default function InspectionDrawer({
   tableRows = [],
   definitionsList,
   definitionsLabel = "Definitions",
+  footer,
 }) {
   if (!open) return null;
   return (
@@ -98,6 +99,12 @@ export default function InspectionDrawer({
             </div>
           )}
         </div>
+
+        {footer && (
+          <div className="border-t border-slate-200 px-5 py-4 bg-slate-50/50 flex-shrink-0">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

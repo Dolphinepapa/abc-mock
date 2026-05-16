@@ -1317,9 +1317,56 @@ function PerformanceStrip() {
   const p = STRATEGY.performance;
   const [activeSegment, setActiveSegment] = useState("all");
   const [clusteringOpen, setClusteringOpen] = useState(false);
+  const [modifyingCluster, setModifyingCluster] = useState(false);
   const gaps = p.gapsBySegment[activeSegment] || p.gapsBySegment.all;
   const breakdown = p.segmentBreakdown[activeSegment];
   const activeChip = p.segments.find((s) => s.id === activeSegment);
+  const closeClusteringDrawer = () => {
+    setClusteringOpen(false);
+    setModifyingCluster(false);
+  };
+  const clusterFooter = modifyingCluster ? (
+    <div className="space-y-3">
+      <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
+        Modify segmentation logic in plain language
+      </div>
+      <div className="flex gap-2">
+        <input
+          type="text"
+          placeholder="e.g., split outdoor terms into their own outdoor sub-category, or reclassify 'arc' from Generic to Style"
+          className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-md text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+        />
+        <button
+          type="button"
+          onClick={() => setModifyingCluster(false)}
+          className="px-3 py-2 text-xs font-medium text-slate-600 hover:text-slate-900"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-md"
+        >
+          <Send className="w-3.5 h-3.5" />
+          Send modification
+        </button>
+      </div>
+    </div>
+  ) : (
+    <div className="flex items-center justify-between gap-3">
+      <div className="text-11 text-slate-500 leading-relaxed">
+        Segmentation derived from the past 90 days of search-term data. Use plain language to adjust rules, add categories, or re-tag terms.
+      </div>
+      <button
+        type="button"
+        onClick={() => setModifyingCluster(true)}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-slate-300 bg-white hover:border-slate-400 rounded-md text-xs font-medium text-slate-700 flex-shrink-0"
+      >
+        <Edit3 className="w-3.5 h-3.5 text-slate-500" />
+        Modify logic
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -1402,13 +1449,14 @@ function PerformanceStrip() {
 
       <InspectionDrawer
         open={clusteringOpen}
-        onClose={() => setClusteringOpen(false)}
+        onClose={closeClusteringDrawer}
         title="Floor Lamp audience segmentation"
         methodologyDescription={FLOOR_LAMP_CLUSTERING.methodology}
         tableHeaders={FLOOR_LAMP_CLUSTERING.tableHeaders}
         tableRows={FLOOR_LAMP_CLUSTERING.rows}
         definitionsList={FLOOR_LAMP_CLUSTERING.rules}
         definitionsLabel="Word-type rules"
+        footer={clusterFooter}
       />
     </>
   );
