@@ -74,6 +74,7 @@ const METRIC_DEFINITIONS = {
     "在一组地区投放广告、在匹配的对照地区不投放,通过对比销售差异分离真实因果影响。",
   ctr: "Click-through Rate · 点击率 · 点击 ÷ 曝光。",
   cr: "Conversion Rate · 转化率 · 订单 ÷ 点击。",
+  roas: "Return on Ad Spend · 广告投资回报 · 广告归因销售额 ÷ 广告花费。ROAS 与 ACoS 互为倒数(ROAS = 1 / ACoS)。",
   impressions:
     "曝光 · 广告被展示的次数(不论用户是否注意)。月曝光 = 过去 30 天累计曝光。",
 };
@@ -733,6 +734,246 @@ const FLOOR_LAMP_CLUSTERING = {
   ],
 };
 
+/* Omnichannel budget allocation canvas — SKU-PB-A 移动充电宝 */
+const OMNICHANNEL = {
+  sku: "SKU-PB-A · 移动充电宝",
+  initiator: "Devon Park",
+  confirmedOn: "May 11",
+  budget: {
+    total: 100000,
+    current: { amazon: 35000, walmart: 18000, tiktok: 0 },
+    proposed: { amazon: 42160, walmart: 27840, tiktok: 12000 },
+    reserve: 18000,
+  },
+
+  amazon: {
+    headline: "扩量争取排名",
+    subhead: "季度目标 · BSR ≤ 5",
+    lifecycle: "成熟期 · 扩量阶段",
+    currentState: {
+      bsr: "#10",
+      monthlySales: "$42.4K",
+      tacos: "18.4%",
+      bsrHeldDays: 38,
+    },
+    quarterGoal: "90 天内进入 BSR ≤ 5",
+    gaps: [
+      {
+        kicker: "流量",
+        label: "月曝光",
+        currentValue: "1.62M",
+        currentNumeric: 1.62,
+        benchmarkValue: "3.84M",
+        benchmarkNumeric: 3.84,
+        gap: "−58%",
+        gapDetail: "−2.22M / 月 · 差距最大",
+        widest: true,
+      },
+      {
+        kicker: "点击",
+        label: "CTR",
+        currentValue: "1.8%",
+        currentNumeric: 1.8,
+        benchmarkValue: "2.4%",
+        benchmarkNumeric: 2.4,
+        gap: "−0.6pp",
+        gapDetail: "相对 −25%",
+      },
+      {
+        kicker: "转化",
+        label: "转化率",
+        currentValue: "9.4%",
+        currentNumeric: 9.4,
+        benchmarkValue: "10.1%",
+        benchmarkNumeric: 10.1,
+        gap: "−0.7pp",
+        gapDetail: "相对 −7% · 接近持平",
+      },
+    ],
+    insight: {
+      id: "amazon-rank-capture",
+      type: "executable",
+      title: "套用床架 SKU-117 的 #2 → #1 打法到移动充电宝 SKU-PB-A",
+      summary:
+        "床架 SKU-117 在 2025 Q4 用 SB 叠加层 + 14 天促销将 BSR 由 #12 推至 #3,7 周完成。移动充电宝 SKU-PB-A 在生命周期阶段与品类竞争烈度上匹配,但价格敏感度更高 — 信心由原打法的 81% 下调至 73%。",
+      reference: {
+        sku: "床架 · SKU-117",
+        period: "2025 Q4",
+        outcome: "7 周内 BSR #12 → #3",
+        method:
+          "4 周内 TACoS 临时由 19% 升至 31% + 在前 12 个核心关键词上叠加 SB 头条广告 + 14 天 15% 折扣促销。BS 标签上线后带动自然点击 +34%,抵消第 6–8 周广告下调。",
+      },
+      plan: {
+        phases: [
+          {
+            label: "1–4 周 · 激进扩量 · SB 叠加层 · 14 天促销",
+            actions: [
+              "Amazon 月预算 $35K → $42.16K(+20.5%)",
+              "前 10 个核心品类关键词叠加 SB 头条广告层",
+              "上线 14 天 12% 折扣券",
+            ],
+            tacos: 28.4,
+            sales: 62,
+          },
+          {
+            label: "5–8 周 · 架构维持 · BS 标签承接自然流量",
+            actions: [
+              "争取窗口期保持第 4 周架构",
+              "BS 标签预计带动自然点击 +22% 至 +36%",
+            ],
+            tacos: 24.6,
+            sales: 78,
+          },
+          {
+            label: "9–12 周 · 预算回调 · 自然 + 标签接管",
+            actions: [
+              "Amazon 月预算 $42.16K → $32K(−24%)",
+              "自然 + BS 标签预计跑赢广告下调",
+            ],
+            tacos: 18.2,
+            sales: 84,
+          },
+        ],
+        summary: {
+          cumulativeSalesLift: 96,
+          finalTacos: 18.2,
+          captureWindow: "第 6–8 周",
+        },
+      },
+      confidence: 73,
+      confidenceLabel: "8 个过往 BSR 争取案例 · 其中 6 个用此类打法 · 价格敏感品类下调 8pp",
+    },
+    recommendedSpend: 42160,
+  },
+
+  walmart: {
+    headline: "守住利润 · 效率优先",
+    subhead: "成熟期 · 价格锁定 · 只剩效率杠杆",
+    lifecycle: "成熟期 · 效率模式",
+    currentState: {
+      monthlySpend: "$18K",
+      tacos: "22.1%",
+      cr: "6.4%",
+    },
+    constraint:
+      "全渠道价格已锁定 — 不能用降价拉量,只能在广告效率上做文章。三个测试均围绕「同样的钱花得更准」。",
+    insights: [
+      {
+        id: "wm-creative-test",
+        title: "对比图主图 A/B 测试",
+        summary:
+          "Walmart 头部充电宝 3 个竞品中 3 个都把对比图当主图(vs 我们的产品独立图)。Walmart 受众对对比性视觉响应可能更强。",
+        treatment:
+          "control = 当前产品独立图;treatment = 加入「vs 竞品 / vs 自家其他容量」对比图。仅替换主图,详情页其余素材不变。",
+        sampleSize: "约 3,200 次 Walmart 曝光 / 组(5pp 提升检测)",
+        duration: "14 天",
+        successMetric: "Walmart Listing CR ≥ +1.5pp;Amazon 不退化(Walmart 主图独立,不影响 Amazon Listing)",
+        budget: "$0 增量(仅素材测试)",
+        confidence: 68,
+        confidenceLabel: "类似主图对比测试历史 · 中等可比性",
+      },
+      {
+        id: "wm-sb-expansion",
+        title: "Sponsored Brand 扩量",
+        summary:
+          "Walmart SB CPC 较 Amazon 同位置低 ~42%,但 SB 仅占 Walmart 广告花费 8% — 杠杆未充分利用。",
+        treatment: "Walmart SB 月预算 $1.4K → $3.0K,扩量前 8 个品牌词与 4 个核心品类词。",
+        sampleSize: "Walmart 月度 SB 曝光样本(无显式分组)",
+        duration: "4 周观察",
+        successMetric: "SB ROAS ≥ 3.2x · 品牌词 SOV 提升 ≥ +6pp",
+        budget: "+$1.6K / 月",
+        confidence: 76,
+        confidenceLabel: "Walmart SB 历史扩量 · 同位置 CPC 对比可信",
+      },
+      {
+        id: "wm-pdp-placement",
+        title: "商品页面广告(PDP placement)扩量",
+        summary:
+          "当前商品页面 placement 的 ROAS 比其他位置高 38%,但仅花 $1.8K/月 — 这是被低估的位置。",
+        treatment: "Top 8 详情页 placement 预算翻倍 + 加 placement modifier 提高出价权重。",
+        sampleSize: "Top 8 PDP · 月度独立曝光",
+        duration: "4 周",
+        successMetric: "增量 ROAS ≥ 4.0x",
+        budget: "+$2.0K / 月",
+        confidence: 72,
+        confidenceLabel: "类似 PDP placement 扩量历史 · 高 ROAS 起点更稳",
+      },
+    ],
+    recommendedSpend: 27840,
+  },
+
+  tiktok: {
+    headline: "验证增量贡献",
+    subhead: "测试阶段 · 无历史数据",
+    lifecycle: "上线 / 验证期",
+    currentState: {
+      spend: "$0",
+      history: "无历史数据",
+      status: "未启动",
+    },
+    explainer:
+      "TikTok 用户不是来直接买充电宝的 — TikTok 的价值在于通过场景化内容(露营 / 出差 / 演唱会等)扩大品类需求,下游被 Amazon / Walmart 收割。所以 TikTok 的 ROAS 不应只看当下 (in-period),要看是否带来下游 Amazon + Walmart 销售增量(即 incrementality)。",
+    biddingMechanisms: [
+      {
+        name: "Cost Cap bidding",
+        description:
+          "设定目标单次转化成本(例如 $15),平台尽量靠近此目标。达不到目标不退钱,算法只是自动停止低效流量。",
+      },
+      {
+        name: "Value-based bidding",
+        description:
+          "设定目标 ROAS,类似机制 — 平台优化向价值高的人群,而不是单纯压低 CPA。",
+      },
+      {
+        name: "Performance Plus",
+        description:
+          "全自动版本,平台自行优化全部参数(类似 Google Performance Max)。透明度最低,但起量最快。",
+      },
+    ],
+    recommendation:
+      "本次建议先用 Cost Cap 限制下行风险。目标 CPA $14,基于本品 LTV $42.80 反算(LTV ÷ 3.06x 目标回收倍数)。",
+    insight: {
+      id: "tiktok-geo-holdout",
+      title: "地区对照测试 · 验证 TikTok 增量",
+      summary:
+        "在 5 个测试 DMA 投 TikTok 8 周,5 个匹配对照 DMA 不投,对比两组下游 Amazon + Walmart 销售差异 — 隔离 TikTok 的真实因果贡献。",
+      hypothesis:
+        "TikTok 投放能为充电宝带来下游 Amazon + Walmart 销售增量(每 $1 TikTok 花费带来 ≥ $0.80 的 Amazon + Walmart 销售增量)。",
+      treatment:
+        "5 个测试 DMA(基线 Amazon + Walmart 销售匹配后选定)投 TikTok 视频广告,Cost Cap CPA $14;5 个对照 DMA 维持原状。",
+      sampleSize: "5 测试 DMA + 5 对照 DMA · 基线销售 ±8% 内匹配",
+      duration: "8 周",
+      budget: "$12K 测试预算 · 平均每周 $1.5K · 5 个 DMA 均分",
+      successMetric:
+        "测试 DMA Amazon + Walmart 销售增量 ÷ TikTok 花费 ≥ $0.80。若达标 → 扩至全国;若不达标 → 重分配至 Amazon SP。",
+      confidence: 67,
+      confidenceLabel: "4 个过往 DMA 对照测试 · 增量比率方差较大",
+    },
+    recommendedSpend: 12000,
+  },
+
+  crossChannel: {
+    totalProposed: 100000,
+    totalSummary: "Amazon $42,160 + Walmart $27,840 + TikTok $12,000 + 储备 $18,000 = $100,000",
+    reserveExplanation:
+      "$18K 中期调拨储备 — 第 2 周末根据 TikTok 前期信号与 Amazon CTR 表现重新分配。",
+    reviewCadence: "第 4 周末复盘 · 依据 TikTok 测试方向信号决定全国扩量 / 回流 Amazon。",
+    reasoning: {
+      chain: [
+        "三平台对 SKU-PB-A 的角色不同:Amazon 是规模渠道(BSR 争取),Walmart 是利润渠道(价格锁定下的效率),TikTok 是品类需求孵化渠道(增量未知)。所以分配不能按当前销售比例,而是按各自的生命周期阶段 + 边际收益最高的下一步动作。",
+        "Amazon 现 BSR #10、TACoS 18.4% — 距离 BSR ≤ 5 的季度目标主要差在流量(月曝光 −58%)。从公司大脑调出 8 个 BSR 争取案例,其中 6 个用了「SB 叠加层 + 14 天促销 + 临时拉高 TACoS」的打法。匹配最佳的是床架 SKU-117(2025 Q4)。",
+        "Walmart 价格已与 Amazon 锁死,不能用降价撬动 — 只能在广告效率上做文章。识别出 3 个低风险测试(主图对比、SB 扩量、PDP placement),增量 $9.84K 全部用于实验。",
+        "TikTok 此前未投。直接全国上线的风险在于:用户不是「到 TikTok 买充电宝」,而是「在 TikTok 被种草后去 Amazon 买」 — 这意味着 in-period ROAS 会非常难看,但真实价值在下游 incrementality。",
+        "用地区对照测试(Geographic holdout)分离这部分增量:5 测试 DMA vs 5 对照 DMA,8 周后看下游 Amazon + Walmart 销售差异。每 $1 TikTok 花费换 ≥ $0.80 的下游销售增量即视为成功。",
+        "储备 $18K 不是「闲置」,是为第 2 周末再分配预留 — Amazon CTR 若 14 天内未提升,部分储备转入 Walmart SB 加码;TikTok 测试若早期信号弱,部分储备退回 Amazon SP。",
+        "三平台合计 $82K(Amazon $42.16K + Walmart $27.84K + TikTok $12K)+ 储备 $18K = $100K。各平台分别有独立批准入口,允许逐平台决策。",
+      ],
+      accuracy: 71,
+      accuracyLabel: "多平台预算分配 · 季度复盘后保留率",
+    },
+  },
+};
+
 /* Peak season canvas */
 const PEAK = {
   trafficForecast: [
@@ -950,6 +1191,7 @@ function wrapMetric(label) {
     CR: METRIC_DEFINITIONS.cr,
     SOV: METRIC_DEFINITIONS.sov,
     LTV: METRIC_DEFINITIONS.ltv,
+    ROAS: METRIC_DEFINITIONS.roas,
     月曝光: METRIC_DEFINITIONS.impressions,
     转化率: METRIC_DEFINITIONS.cr,
   };
@@ -3041,6 +3283,807 @@ function LaunchCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Omnichannel canvas — SKU-PB-A 移动充电宝                                  */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function BudgetEnvelopeStrip({ budget }) {
+  const total = budget.total;
+  const a = budget.proposed.amazon;
+  const w = budget.proposed.walmart;
+  const t = budget.proposed.tiktok;
+  const r = budget.reserve;
+  const pct = (n) => ((n / total) * 100).toFixed(1);
+  return (
+    <div className="bg-slate-900 text-white rounded-lg px-5 py-4">
+      <div className="flex items-baseline justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <DollarSign className="w-4 h-4 text-emerald-400" />
+          <div className="text-11 uppercase tracking-wider text-slate-400 font-medium">
+            本月总预算
+          </div>
+          <div className="text-base font-mono font-semibold text-white">
+            ${total.toLocaleString()}
+          </div>
+        </div>
+        <div className="text-11 text-slate-400">
+          当前 Amazon ${budget.current.amazon.toLocaleString()} · Walmart $
+          {budget.current.walmart.toLocaleString()} · TikTok 未投放
+        </div>
+      </div>
+      <div className="flex h-2 rounded-full overflow-hidden bg-slate-800">
+        <div
+          className="bg-emerald-500"
+          style={{ width: `${pct(a)}%` }}
+          title={`Amazon $${a.toLocaleString()}`}
+        />
+        <div
+          className="bg-emerald-400"
+          style={{ width: `${pct(w)}%` }}
+          title={`Walmart $${w.toLocaleString()}`}
+        />
+        <div
+          className="bg-blue-400"
+          style={{ width: `${pct(t)}%` }}
+          title={`TikTok $${t.toLocaleString()}`}
+        />
+        <div
+          className="bg-slate-500"
+          style={{ width: `${pct(r)}%` }}
+          title={`储备 $${r.toLocaleString()}`}
+        />
+      </div>
+      <div className="mt-3 grid grid-cols-4 gap-3 text-11">
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              Amazon
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${a.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(a)}%</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-emerald-400 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              Walmart
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${w.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(w)}%</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-blue-400 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              TikTok
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${t.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(t)}%</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-slate-500 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              储备
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${r.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(r)}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChannelStatusRow({ entries }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-md">
+      {entries.map((e, i) => (
+        <div key={i} className="flex items-baseline gap-2">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            {e.label}
+          </span>
+          <span className="text-sm font-mono font-semibold text-slate-900">
+            {e.value}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChannelBlock({
+  index,
+  channel,
+  headline,
+  subhead,
+  lifecycle,
+  toneTag,
+  statusEntries,
+  recommendedSpend,
+  recommendedDelta,
+  approveLabel,
+  children,
+}) {
+  return (
+    <section className="border border-slate-200 rounded-lg overflow-hidden bg-white">
+      <div className="px-5 py-4 border-b border-slate-200 bg-white">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-md bg-slate-900 text-white flex items-center justify-center text-sm font-mono font-semibold flex-shrink-0">
+              {index}
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="text-11 uppercase tracking-wider text-emerald-700 font-semibold">
+                  {channel}
+                </div>
+                <span className="text-slate-300">·</span>
+                <span className="text-11 text-slate-500">{subhead}</span>
+              </div>
+              <div className="text-base font-semibold text-slate-900 tracking-tight">
+                {headline}
+              </div>
+              <div className="text-11 text-slate-500 mt-1">{lifecycle}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 pt-1">{toneTag}</div>
+        </div>
+      </div>
+
+      <div className="px-5 pt-4">
+        <ChannelStatusRow entries={statusEntries} />
+      </div>
+
+      <div className="px-5 pt-5 pb-5 space-y-5">{children}</div>
+
+      <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/40 flex items-center justify-between">
+        <div className="flex items-baseline gap-2">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            建议月度花费
+          </span>
+          <span className="text-base font-mono font-semibold text-slate-900">
+            ${recommendedSpend.toLocaleString()}
+          </span>
+          {recommendedDelta && (
+            <span className="text-11 text-slate-500">{recommendedDelta}</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md font-medium"
+          >
+            <X className="w-3.5 h-3.5" />
+            拒绝
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-md bg-white"
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            修改
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1.5 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            {approveLabel}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AmazonInsightCard({ insight }) {
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-4 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-8 h-8 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-4 h-4 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">Agent 可执行</Pill>
+            <span className="text-11 text-slate-500">参考先例 + 3 阶段计划</span>
+          </div>
+          <div className="text-sm font-medium text-slate-900">
+            {insight.title}
+          </div>
+          <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+            {insight.summary}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-4 border-b border-slate-100">
+        <SectionLabel>参考先例 · 公司大脑</SectionLabel>
+        <div className="bg-slate-900 text-white rounded-md px-4 py-3">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1.5">
+            <Brain className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="text-xs font-medium">{insight.reference.sku}</div>
+            <span className="text-11 text-slate-500">·</span>
+            <span className="text-11 text-slate-400 font-mono">
+              {insight.reference.period}
+            </span>
+            <span className="text-11 text-slate-500">·</span>
+            <span className="text-11 text-emerald-400 font-medium">
+              {insight.reference.outcome}
+            </span>
+          </div>
+          <div className="text-xs text-slate-300 leading-relaxed">
+            {insight.reference.method}
+          </div>
+          <div className="mt-2.5 pt-2.5 border-t border-slate-700">
+            <div className="inline-flex items-center gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-0.5 rounded">
+              <AlertCircle className="w-3 h-3" />
+              移动充电宝价格敏感度更高 — 信心由原 81% 下调至 73%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-4 border-b border-slate-100">
+        <SectionLabel kicker="3 阶段计划">建议方案</SectionLabel>
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-slate-200">
+              <th className="text-left text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
+                阶段
+              </th>
+              <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
+                预期 {wrapMetric("TACoS")}
+              </th>
+              <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
+                预期月销售额
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {insight.plan.phases.map((p, i) => (
+              <tr key={i} className="border-b border-slate-100 last:border-0">
+                <td className="py-3 px-2 align-top">
+                  <div className="text-sm text-slate-900 font-medium">
+                    {p.label}
+                  </div>
+                  <ul className="mt-1.5 space-y-1">
+                    {p.actions.map((a, j) => (
+                      <li
+                        key={j}
+                        className="flex items-start gap-1.5 text-xs text-slate-600"
+                      >
+                        <CornerDownRight className="w-3 h-3 text-slate-300 mt-0.5 flex-shrink-0" />
+                        <span>{a}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td className="py-3 px-2 text-right font-mono text-slate-700 align-top">
+                  {p.tacos}%
+                </td>
+                <td className="py-3 px-2 text-right font-mono text-slate-900 font-medium align-top">
+                  ${p.sales}K
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="px-5 py-3 grid grid-cols-3 gap-6">
+        <div>
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            累计销售额增量
+          </div>
+          <div className="text-base font-mono font-semibold text-emerald-700 mt-0.5">
+            +${insight.plan.summary.cumulativeSalesLift}K
+          </div>
+        </div>
+        <div>
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            最终 {wrapMetric("TACoS")}
+          </div>
+          <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
+            {insight.plan.summary.finalTacos}%
+          </div>
+        </div>
+        <div>
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            争取窗口
+          </div>
+          <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
+            {insight.plan.summary.captureWindow}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-2 border-t border-slate-100 bg-slate-50/40 flex items-center justify-end">
+        <div className="text-11 text-slate-500">
+          信心度{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {insight.confidence}%
+          </span>{" "}
+          · {insight.confidenceLabel}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function WalmartInsightCard({ insight, index }) {
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-3 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-7 h-7 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">实验 #{index}</Pill>
+            <span className="text-11 text-slate-500">Agent 可执行</span>
+          </div>
+          <div className="text-sm font-medium text-slate-900">
+            {insight.title}
+          </div>
+          <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+            {insight.summary}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 grid grid-cols-12 gap-x-4 gap-y-3 text-xs">
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            处理方式
+          </div>
+          <div className="text-slate-700 leading-relaxed">{insight.treatment}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            样本量
+          </div>
+          <div className="text-slate-700 font-mono">{insight.sampleSize}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            周期
+          </div>
+          <div className="text-slate-700 font-mono">{insight.duration}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            成功指标
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.successMetric}
+          </div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            预算增量
+          </div>
+          <div className="text-slate-900 font-mono font-semibold">
+            {insight.budget}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-2 border-t border-slate-100 bg-slate-50/40 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          信心度{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {insight.confidence}%
+          </span>{" "}
+          · {insight.confidenceLabel}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 px-2 py-1 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded font-medium"
+          >
+            <X className="w-3 h-3" />
+            拒绝
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-2 py-1 rounded bg-white"
+          >
+            <Edit3 className="w-3 h-3" />
+            修改
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded"
+          >
+            <Check className="w-3 h-3" />
+            批准实验
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function TikTokBiddingCard({ mechanisms, recommendation }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Card>
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-5 py-3 hover:bg-slate-50"
+      >
+        <div className="flex items-center gap-2">
+          {open ? (
+            <ChevronDown className="w-4 h-4 text-slate-500" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-slate-500" />
+          )}
+          <span className="text-sm font-medium text-slate-900">
+            TikTok 竞价机制 · 3 种主要策略
+          </span>
+        </div>
+        <span className="text-11 text-slate-500">
+          {open ? "收起" : "展开了解机制差异"}
+        </span>
+      </button>
+      {open && (
+        <div className="px-5 pb-4 pt-1 space-y-3 border-t border-slate-100">
+          {mechanisms.map((m, i) => {
+            const isCostCap = m.name === "Cost Cap bidding";
+            return (
+              <div
+                key={i}
+                className="border border-slate-200 rounded-md px-4 py-3"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="text-sm font-medium text-slate-900">
+                    {isCostCap ? (
+                      <MetricTerm definition={METRIC_DEFINITIONS.costCapBidding}>
+                        {m.name}
+                      </MetricTerm>
+                    ) : (
+                      m.name
+                    )}
+                  </div>
+                  {isCostCap && (
+                    <Pill tone="emerald">本次建议</Pill>
+                  )}
+                </div>
+                <div className="text-xs text-slate-600 leading-relaxed">
+                  {m.description}
+                </div>
+              </div>
+            );
+          })}
+          <div className="bg-slate-900 text-white rounded-md px-4 py-3">
+            <div className="text-11 uppercase tracking-wider text-emerald-400 font-medium mb-1">
+              Agent 建议
+            </div>
+            <div className="text-xs text-slate-200 leading-relaxed">
+              {recommendation}
+            </div>
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function TikTokInsightCard({ insight }) {
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-4 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-8 h-8 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-4 h-4 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">Agent 可执行</Pill>
+            <span className="text-11 text-slate-500">8 周地区对照测试</span>
+          </div>
+          <div className="text-sm font-medium text-slate-900">
+            {insight.title}
+          </div>
+          <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+            {insight.summary}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-4 grid grid-cols-12 gap-x-4 gap-y-3 text-xs">
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            假设
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.hypothesis}
+          </div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            处理方式 ·{" "}
+            <MetricTerm definition={METRIC_DEFINITIONS.geographicHoldoutTest}>
+              Geographic holdout test
+            </MetricTerm>
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.treatment}
+          </div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            样本量
+          </div>
+          <div className="text-slate-700 font-mono">{insight.sampleSize}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            周期
+          </div>
+          <div className="text-slate-700 font-mono">{insight.duration}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            成功指标
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.successMetric}
+          </div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            所需测试预算
+          </div>
+          <div className="text-slate-900 font-mono font-semibold">
+            {insight.budget}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-2 border-t border-slate-100 bg-slate-50/40 flex items-center justify-end">
+        <div className="text-11 text-slate-500">
+          信心度{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {insight.confidence}%
+          </span>{" "}
+          · {insight.confidenceLabel}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function OmnichannelCanvas() {
+  const O = OMNICHANNEL;
+  const amazonStatus = [
+    { label: "BSR", value: O.amazon.currentState.bsr },
+    { label: "月销售额", value: O.amazon.currentState.monthlySales },
+    {
+      label: "TACoS",
+      value: (
+        <>
+          {O.amazon.currentState.tacos.replace("%", "")}
+          <span className="text-slate-400 text-11 ml-0.5">%</span>
+        </>
+      ),
+    },
+    {
+      label: "已保持",
+      value: `${O.amazon.currentState.bsrHeldDays} 天`,
+    },
+  ];
+  const walmartStatus = [
+    { label: "Walmart 花费 / 月", value: O.walmart.currentState.monthlySpend },
+    {
+      label: "TACoS",
+      value: O.walmart.currentState.tacos,
+    },
+    {
+      label: "CR",
+      value: O.walmart.currentState.cr,
+    },
+  ];
+  const tiktokStatus = [
+    { label: "已花费", value: O.tiktok.currentState.spend },
+    { label: "历史数据", value: O.tiktok.currentState.history },
+    { label: "状态", value: O.tiktok.currentState.status },
+  ];
+
+  return (
+    <>
+      <CanvasHeader
+        kicker="全渠道 · 移动充电宝"
+        title="$100K 预算在 Amazon / Walmart / TikTok 三平台分配"
+        meta={
+          <>
+            <Pill tone="slate">
+              <Calendar className="w-3 h-3" />
+              本月 · 5 月
+            </Pill>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              由 {O.initiator} 于 {O.confirmedOn} 提出
+            </Pill>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-5">
+        <BudgetEnvelopeStrip budget={O.budget} />
+      </div>
+
+      <div className="px-6 pt-6 space-y-5">
+        <ChannelBlock
+          index="A"
+          channel="Amazon"
+          headline={O.amazon.headline}
+          subhead={O.amazon.subhead}
+          lifecycle={O.amazon.lifecycle}
+          toneTag={
+            <Pill tone="emerald">
+              <TrendingUp className="w-3 h-3" />
+              扩量
+            </Pill>
+          }
+          statusEntries={amazonStatus}
+          recommendedSpend={O.amazon.recommendedSpend}
+          recommendedDelta="较当前 $35K +20.5% · 占总预算 42.2%"
+          approveLabel="批准 Amazon 方案"
+        >
+          <div>
+            <SectionLabel kicker="季度目标 · BSR ≤ 5">
+              与 BSR #1 的差距
+            </SectionLabel>
+            <div className="grid grid-cols-3 gap-3">
+              {O.amazon.gaps.map((g, i) => (
+                <GapCard key={i} gap={g} />
+              ))}
+            </div>
+          </div>
+          <div>
+            <SectionLabel kicker="参考床架 SKU-117 打法">
+              Amazon 执行方案
+            </SectionLabel>
+            <AmazonInsightCard insight={O.amazon.insight} />
+          </div>
+        </ChannelBlock>
+
+        <ChannelBlock
+          index="B"
+          channel="Walmart"
+          headline={O.walmart.headline}
+          subhead={O.walmart.subhead}
+          lifecycle={O.walmart.lifecycle}
+          toneTag={
+            <Pill tone="blue">
+              <ShieldCheck className="w-3 h-3" />
+              效率优先
+            </Pill>
+          }
+          statusEntries={walmartStatus}
+          recommendedSpend={O.walmart.recommendedSpend}
+          recommendedDelta="较当前 $18K +$9.84K · 全部用于 3 项实验"
+          approveLabel="批准 Walmart 方案"
+        >
+          <div className="bg-rose-50 border border-rose-200 rounded-md px-4 py-3">
+            <div className="flex items-start gap-2.5">
+              <Lock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-0.5">
+                  约束 · 价格全渠道锁定
+                </div>
+                <div className="text-xs text-rose-900 leading-relaxed">
+                  {O.walmart.constraint}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <SectionLabel kicker="3 项独立实验 · 可逐项批准">
+              Walmart 实验方案
+            </SectionLabel>
+            <div className="space-y-3">
+              {O.walmart.insights.map((ins, i) => (
+                <WalmartInsightCard key={ins.id} insight={ins} index={i + 1} />
+              ))}
+            </div>
+          </div>
+        </ChannelBlock>
+
+        <ChannelBlock
+          index="C"
+          channel="TikTok"
+          headline={O.tiktok.headline}
+          subhead={O.tiktok.subhead}
+          lifecycle={O.tiktok.lifecycle}
+          toneTag={
+            <Pill tone="amber">
+              <AlertCircle className="w-3 h-3" />
+              验证阶段
+            </Pill>
+          }
+          statusEntries={tiktokStatus}
+          recommendedSpend={O.tiktok.recommendedSpend}
+          recommendedDelta="测试预算 · 占总预算 12% · 仅 8 周窗口"
+          approveLabel="批准 TikTok 测试"
+        >
+          <Card className="p-4">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+              TikTok 对本产品的作用
+            </div>
+            <div className="text-sm text-slate-700 leading-relaxed">
+              TikTok 用户不是来直接买充电宝的 — TikTok 的价值在于通过场景化内容(露营 / 出差 / 演唱会等)扩大品类需求,下游被 Amazon / Walmart 收割。所以 TikTok 的{" "}
+              {wrapMetric("ROAS")} 不应只看当下 (in-period),要看是否带来下游 Amazon + Walmart 销售增量(即{" "}
+              <MetricTerm definition={METRIC_DEFINITIONS.incrementality}>
+                incrementality
+              </MetricTerm>
+              )。
+            </div>
+          </Card>
+          <TikTokBiddingCard
+            mechanisms={O.tiktok.biddingMechanisms}
+            recommendation={O.tiktok.recommendation}
+          />
+          <div>
+            <SectionLabel kicker="测试 TikTok 的真实增量贡献">
+              TikTok 执行方案
+            </SectionLabel>
+            <TikTokInsightCard insight={O.tiktok.insight} />
+          </div>
+        </ChannelBlock>
+      </div>
+
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="$82K + 储备 $18K = $100K">
+          跨渠道汇总
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="text-sm font-mono text-slate-900 mb-3">
+            {O.crossChannel.totalSummary}
+          </div>
+          <div className="grid grid-cols-2 gap-4 text-xs">
+            <div>
+              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+                储备说明
+              </div>
+              <div className="text-slate-700 leading-relaxed">
+                {O.crossChannel.reserveExplanation}
+              </div>
+            </div>
+            <div>
+              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+                复盘节奏
+              </div>
+              <div className="text-slate-700 leading-relaxed">
+                {O.crossChannel.reviewCadence}
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="h-2" />
+      <ReasoningSection reasoning={O.crossChannel.reasoning} />
+      <ActionBar approveLabel="批准全部分配" />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  Chat panel + top bar + company brain drawer                               */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -3607,13 +4650,7 @@ export default function App({ locale, setLocale }) {
           />
         );
       case "omnichannel":
-        return (
-          <PlaceholderCanvas
-            kicker="全渠道 · 移动充电宝"
-            title="$100K 预算在 Amazon / Walmart / TikTok 分配"
-            part="Part 2"
-          />
-        );
+        return <OmnichannelCanvas />;
       case "razor-blade":
         return (
           <PlaceholderCanvas

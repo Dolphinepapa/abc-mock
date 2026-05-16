@@ -75,6 +75,7 @@ const METRIC_DEFINITIONS = {
     "Run ads in a set of regions while withholding in matched control regions, then compare sales to isolate true causal impact.",
   ctr: "Click-through rate · Clicks ÷ impressions.",
   cr: "Conversion rate · Orders ÷ clicks.",
+  roas: "Return on Ad Spend · Ad-attributed sales ÷ ad spend. ROAS is the reciprocal of ACoS (ROAS = 1 / ACoS).",
   impressions:
     "Number of times an ad is displayed — regardless of whether the user noticed it. Monthly impressions = past-30-day total.",
 };
@@ -733,6 +734,257 @@ const FLOOR_LAMP_CLUSTERING = {
   ],
 };
 
+/* Omnichannel budget allocation canvas — SKU-PB-A power bank */
+const OMNICHANNEL = {
+  sku: "SKU-PB-A · Power Bank",
+  initiator: "Devon Park",
+  confirmedOn: "May 11",
+  budget: {
+    total: 100000,
+    current: { amazon: 35000, walmart: 18000, tiktok: 0 },
+    proposed: { amazon: 42160, walmart: 27840, tiktok: 12000 },
+    reserve: 18000,
+  },
+
+  amazon: {
+    headline: "Scaling for rank",
+    subhead: "Quarter goal · BSR ≤ 5",
+    lifecycle: "Mature · scaling phase",
+    currentState: {
+      bsr: "#10",
+      monthlySales: "$42.4K",
+      tacos: "18.4%",
+      bsrHeldDays: 38,
+    },
+    quarterGoal: "BSR ≤ 5 within 90 days",
+    gaps: [
+      {
+        kicker: "Traffic",
+        label: "Monthly impressions",
+        currentValue: "1.62M",
+        currentNumeric: 1.62,
+        benchmarkValue: "3.84M",
+        benchmarkNumeric: 3.84,
+        gap: "−58%",
+        gapDetail: "−2.22M / month · widest gap",
+        widest: true,
+      },
+      {
+        kicker: "Click",
+        label: "CTR",
+        currentValue: "1.8%",
+        currentNumeric: 1.8,
+        benchmarkValue: "2.4%",
+        benchmarkNumeric: 2.4,
+        gap: "−0.6pp",
+        gapDetail: "−25% relative",
+      },
+      {
+        kicker: "Conversion",
+        label: "Conversion rate",
+        currentValue: "9.4%",
+        currentNumeric: 9.4,
+        benchmarkValue: "10.1%",
+        benchmarkNumeric: 10.1,
+        gap: "−0.7pp",
+        gapDetail: "−7% relative · near parity",
+      },
+    ],
+    insight: {
+      id: "amazon-rank-capture",
+      type: "executable",
+      title: "Adapt the SKU-117 BSR-capture playbook to power bank SKU-PB-A",
+      summary:
+        "Bed frame SKU-117 went BSR #12 → BSR #3 in Q4 2025 using SB-layer expansion + a 14-day promo over 7 weeks. SKU-PB-A matches on lifecycle stage and category intensity but is more price-sensitive — confidence revised from the original 81% down to 73%.",
+      reference: {
+        sku: "Bed frame · SKU-117",
+        period: "2025 Q4",
+        outcome: "BSR #12 → #3 in 7 weeks",
+        method:
+          "TACoS lifted from 19% → 31% over 4 weeks + a Sponsored Brand layer on the top 12 hero category keywords + a 14-day 15% coupon. BS badge boosted organic clicks +34%, absorbing ad pullback in weeks 6–8.",
+      },
+      plan: {
+        phases: [
+          {
+            label: "Weeks 1–4 · Aggressive lift · SB layer · 14-day promo",
+            actions: [
+              "Amazon monthly spend $35K → $42.16K (+20.5%)",
+              "Add SB headline layer on top 10 hero category keywords",
+              "Launch 14-day 12% coupon",
+            ],
+            tacos: 28.4,
+            sales: 62,
+          },
+          {
+            label: "Weeks 5–8 · Hold architecture · BS badge absorbs organic",
+            actions: [
+              "Hold the week-4 ad architecture through the capture window",
+              "BS badge projected to lift organic clicks +22% to +36%",
+            ],
+            tacos: 24.6,
+            sales: 78,
+          },
+          {
+            label: "Weeks 9–12 · Taper · organic + badge carry the line",
+            actions: [
+              "Amazon monthly spend $42.16K → $32K (−24%)",
+              "Organic + BS badge projected to offset ad pullback",
+            ],
+            tacos: 18.2,
+            sales: 84,
+          },
+        ],
+        summary: {
+          cumulativeSalesLift: 96,
+          finalTacos: 18.2,
+          captureWindow: "Weeks 6–8",
+        },
+      },
+      confidence: 73,
+      confidenceLabel:
+        "8 prior BSR captures · 6 used this playbook · 8pp confidence cut for price-sensitive category",
+    },
+    recommendedSpend: 42160,
+  },
+
+  walmart: {
+    headline: "Defending margin · efficiency first",
+    subhead: "Mature · price locked · efficiency is the only lever",
+    lifecycle: "Mature · efficiency mode",
+    currentState: {
+      monthlySpend: "$18K",
+      tacos: "22.1%",
+      cr: "6.4%",
+    },
+    constraint:
+      "Price is locked across platforms — we can't trade price for volume. The only lever is ad efficiency. All three tests are about spending the same dollars more precisely.",
+    insights: [
+      {
+        id: "wm-creative-test",
+        title: "Creative test · comparison hero image",
+        summary:
+          "All 3 top-selling power bank competitors on Walmart use a comparison image as their hero (vs our isolated product shot). Walmart shoppers may respond more strongly to comparative visuals.",
+        treatment:
+          "Control = current isolated product image; treatment = comparison hero (vs competitors / vs other capacity tiers). Hero image swap only — rest of the detail page unchanged.",
+        sampleSize: "~3,200 Walmart impressions / arm (5pp lift detection)",
+        duration: "14 days",
+        successMetric:
+          "Walmart listing CR ≥ +1.5pp; no degradation on Amazon (Walmart hero is independent — won't affect Amazon listing)",
+        budget: "$0 incremental (creative-only test)",
+        confidence: 68,
+        confidenceLabel:
+          "Comparable hero-image A/B tests historically · moderate transferability",
+      },
+      {
+        id: "wm-sb-expansion",
+        title: "Sponsored Brand expansion",
+        summary:
+          "Walmart SB CPC runs ~42% below Amazon for the same slot, yet SB is only 8% of Walmart ad spend today — an underused lever.",
+        treatment:
+          "Walmart SB monthly budget $1.4K → $3.0K. Expand coverage onto 8 brand keywords + 4 hero category keywords.",
+        sampleSize: "Walmart monthly SB impression sample (no explicit arms)",
+        duration: "4-week observation",
+        successMetric: "SB ROAS ≥ 3.2x · brand-keyword SOV +6pp",
+        budget: "+$1.6K / month",
+        confidence: 76,
+        confidenceLabel:
+          "Prior Walmart SB expansions · same-slot CPC comparison is reliable",
+      },
+      {
+        id: "wm-pdp-placement",
+        title: "Product-detail-page placement scale-up",
+        summary:
+          "Current PDP placement ROAS runs 38% above other placements but only consumes $1.8K/mo — a clearly underweighted placement.",
+        treatment:
+          "Double placement budget on top 8 PDPs + add placement modifiers to weight bids upward.",
+        sampleSize: "Top 8 PDPs · monthly independent impressions",
+        duration: "4 weeks",
+        successMetric: "Incremental ROAS ≥ 4.0x",
+        budget: "+$2.0K / month",
+        confidence: 72,
+        confidenceLabel:
+          "Historical PDP placement scale-ups · high-ROAS starting points hold up",
+      },
+    ],
+    recommendedSpend: 27840,
+  },
+
+  tiktok: {
+    headline: "Validating incrementality",
+    subhead: "Test phase · no historical data",
+    lifecycle: "Launch / validation",
+    currentState: {
+      spend: "$0",
+      history: "no historical data",
+      status: "not launched",
+    },
+    explainer:
+      "TikTok shoppers don't come to TikTok to buy power banks — TikTok's value is expanding category demand via contextual content (camping / business travel / concerts / etc.) where Amazon and Walmart capture the downstream purchase. So TikTok's ROAS shouldn't be judged in-period alone; the real question is whether it lifts downstream Amazon + Walmart sales (i.e., incrementality).",
+    biddingMechanisms: [
+      {
+        name: "Cost Cap bidding",
+        description:
+          "Set a target cost-per-action (e.g., $15) and the platform optimizes to stay near it. Missing the target isn't refunded — the algorithm just auto-pauses inefficient traffic.",
+      },
+      {
+        name: "Value-based bidding",
+        description:
+          "Set a target ROAS — similar mechanism, but the platform optimizes toward high-value audiences rather than pure CPA suppression.",
+      },
+      {
+        name: "Performance Plus",
+        description:
+          "Fully automated — the platform tunes every parameter itself (similar in spirit to Google Performance Max). Lowest transparency, fastest spin-up.",
+      },
+    ],
+    recommendation:
+      "For this test, start with Cost Cap to bound downside risk. Target CPA $14, back-solved from this product's LTV of $42.80 (LTV ÷ 3.06x target payback multiple).",
+    insight: {
+      id: "tiktok-geo-holdout",
+      title: "Geographic holdout test · validating TikTok's incremental lift",
+      summary:
+        "Run TikTok in 5 test DMAs for 8 weeks while withholding in 5 matched control DMAs, then compare downstream Amazon + Walmart sales between the two groups to isolate TikTok's true causal contribution.",
+      hypothesis:
+        "TikTok activation lifts downstream Amazon + Walmart sales for the power bank (≥ $0.80 in downstream sales per $1 of TikTok spend).",
+      treatment:
+        "5 test DMAs (matched on baseline Amazon + Walmart sales) receive TikTok video ads with Cost Cap CPA $14; 5 matched control DMAs receive no TikTok activity.",
+      sampleSize:
+        "5 test DMAs + 5 control DMAs · matched within ±8% on baseline sales",
+      duration: "8 weeks",
+      budget: "$12K test budget · ~$1.5K / week · split evenly across 5 DMAs",
+      successMetric:
+        "Incremental Amazon + Walmart sales in test DMAs ÷ TikTok spend ≥ $0.80. If yes → scale to national rollout. If no → reallocate to Amazon SP.",
+      confidence: 67,
+      confidenceLabel:
+        "4 prior DMA holdout tests · incremental ratio has wide variance",
+    },
+    recommendedSpend: 12000,
+  },
+
+  crossChannel: {
+    totalProposed: 100000,
+    totalSummary:
+      "Amazon $42,160 + Walmart $27,840 + TikTok $12,000 + Reserve $18,000 = $100,000",
+    reserveExplanation:
+      "$18K mid-month reallocation buffer — to be rebalanced at end of week 2 based on TikTok's early signal and Amazon CTR trajectory.",
+    reviewCadence:
+      "Full re-balance at end of week 4 based on TikTok holdout direction signal — decides national rollout vs reallocation back to Amazon.",
+    reasoning: {
+      chain: [
+        "The three channels play different roles for SKU-PB-A: Amazon is the scale channel (BSR capture), Walmart is the margin channel (efficiency under a locked price), and TikTok is the category-demand seeding channel (incrementality unproven). So the allocation can't follow current sales mix — it follows each channel's lifecycle stage and the next highest-marginal-return action.",
+        "Amazon today sits at BSR #10 with TACoS 18.4%. The gap to BSR ≤ 5 is almost entirely a traffic gap (monthly impressions −58% vs the #1). Company Brain returned 8 prior BSR captures; 6 used SB-layer + 14-day promo + a temporary TACoS lift. Best match is bed frame SKU-117 (Q4 2025).",
+        "Walmart price is locked to Amazon — we can't trade price for volume, only ad efficiency. Three low-risk tests were identified (comparison hero, SB expansion, PDP placement scale-up). The full $9.84K increment goes to fund these tests.",
+        "TikTok has never been activated on this SKU. Going straight to national rollout is risky because users don't come to TikTok to buy a power bank — they get seeded on TikTok and convert on Amazon. That means in-period TikTok ROAS will look poor; the real value sits downstream.",
+        "A geographic holdout test isolates that downstream lift: 5 test DMAs vs 5 control DMAs over 8 weeks, comparing downstream Amazon + Walmart sales. ≥ $0.80 in downstream sales per $1 of TikTok spend is the gate to scale.",
+        "The $18K reserve isn't idle — it's earmarked for a week-2 re-balance. If Amazon CTR hasn't moved in 14 days, part of reserve shifts into Walmart SB; if TikTok's early signal is weak, part of reserve flows back into Amazon SP.",
+        "Three channels total $82K (Amazon $42.16K + Walmart $27.84K + TikTok $12K) + $18K reserve = $100K. Each channel has its own approval entry so the reviewer can slice the decision per channel.",
+      ],
+      accuracy: 71,
+      accuracyLabel: "multi-channel budget allocations · post-quarter retention",
+    },
+  },
+};
+
 /* Peak season canvas */
 const PEAK = {
   trafficForecast: [
@@ -950,6 +1202,7 @@ function wrapMetric(label) {
     CR: METRIC_DEFINITIONS.cr,
     SOV: METRIC_DEFINITIONS.sov,
     LTV: METRIC_DEFINITIONS.ltv,
+    ROAS: METRIC_DEFINITIONS.roas,
     "Monthly impressions": METRIC_DEFINITIONS.impressions,
     "Conversion rate": METRIC_DEFINITIONS.cr,
   };
@@ -3045,6 +3298,812 @@ function LaunchCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
+/*  Omnichannel canvas — SKU-PB-A power bank                                  */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+function BudgetEnvelopeStrip({ budget }) {
+  const total = budget.total;
+  const a = budget.proposed.amazon;
+  const w = budget.proposed.walmart;
+  const t = budget.proposed.tiktok;
+  const r = budget.reserve;
+  const pct = (n) => ((n / total) * 100).toFixed(1);
+  return (
+    <div className="bg-slate-900 text-white rounded-lg px-5 py-4">
+      <div className="flex items-baseline justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <DollarSign className="w-4 h-4 text-emerald-400" />
+          <div className="text-11 uppercase tracking-wider text-slate-400 font-medium">
+            Monthly budget
+          </div>
+          <div className="text-base font-mono font-semibold text-white">
+            ${total.toLocaleString()}
+          </div>
+        </div>
+        <div className="text-11 text-slate-400">
+          Today: Amazon ${budget.current.amazon.toLocaleString()} · Walmart $
+          {budget.current.walmart.toLocaleString()} · TikTok untested
+        </div>
+      </div>
+      <div className="flex h-2 rounded-full overflow-hidden bg-slate-800">
+        <div
+          className="bg-emerald-500"
+          style={{ width: `${pct(a)}%` }}
+          title={`Amazon $${a.toLocaleString()}`}
+        />
+        <div
+          className="bg-emerald-400"
+          style={{ width: `${pct(w)}%` }}
+          title={`Walmart $${w.toLocaleString()}`}
+        />
+        <div
+          className="bg-blue-400"
+          style={{ width: `${pct(t)}%` }}
+          title={`TikTok $${t.toLocaleString()}`}
+        />
+        <div
+          className="bg-slate-500"
+          style={{ width: `${pct(r)}%` }}
+          title={`Reserve $${r.toLocaleString()}`}
+        />
+      </div>
+      <div className="mt-3 grid grid-cols-4 gap-3 text-11">
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              Amazon
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${a.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(a)}%</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-emerald-400 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              Walmart
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${w.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(w)}%</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-blue-400 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              TikTok
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${t.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(t)}%</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <div className="w-2 h-2 rounded-full bg-slate-500 mt-1 flex-shrink-0" />
+          <div>
+            <div className="text-slate-400 uppercase tracking-wider font-medium">
+              Reserve
+            </div>
+            <div className="font-mono text-white font-semibold mt-0.5">
+              ${r.toLocaleString()}{" "}
+              <span className="text-slate-400 font-normal">· {pct(r)}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ChannelStatusRow({ entries }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 bg-slate-50 border border-slate-200 rounded-md">
+      {entries.map((e, i) => (
+        <div key={i} className="flex items-baseline gap-2">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            {e.label}
+          </span>
+          <span className="text-sm font-mono font-semibold text-slate-900">
+            {e.value}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChannelBlock({
+  index,
+  channel,
+  headline,
+  subhead,
+  lifecycle,
+  toneTag,
+  statusEntries,
+  recommendedSpend,
+  recommendedDelta,
+  approveLabel,
+  children,
+}) {
+  return (
+    <section className="border border-slate-200 rounded-lg overflow-hidden bg-white">
+      <div className="px-5 py-4 border-b border-slate-200 bg-white">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-md bg-slate-900 text-white flex items-center justify-center text-sm font-mono font-semibold flex-shrink-0">
+              {index}
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="text-11 uppercase tracking-wider text-emerald-700 font-semibold">
+                  {channel}
+                </div>
+                <span className="text-slate-300">·</span>
+                <span className="text-11 text-slate-500">{subhead}</span>
+              </div>
+              <div className="text-base font-semibold text-slate-900 tracking-tight">
+                {headline}
+              </div>
+              <div className="text-11 text-slate-500 mt-1">{lifecycle}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 pt-1">{toneTag}</div>
+        </div>
+      </div>
+
+      <div className="px-5 pt-4">
+        <ChannelStatusRow entries={statusEntries} />
+      </div>
+
+      <div className="px-5 pt-5 pb-5 space-y-5">{children}</div>
+
+      <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/40 flex items-center justify-between">
+        <div className="flex items-baseline gap-2">
+          <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            Recommended monthly spend
+          </span>
+          <span className="text-base font-mono font-semibold text-slate-900">
+            ${recommendedSpend.toLocaleString()}
+          </span>
+          {recommendedDelta && (
+            <span className="text-11 text-slate-500">{recommendedDelta}</span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md font-medium"
+          >
+            <X className="w-3.5 h-3.5" />
+            Decline
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-2.5 py-1.5 rounded-md bg-white"
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            Modify
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1.5 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            {approveLabel}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AmazonInsightCard({ insight }) {
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-4 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-8 h-8 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-4 h-4 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">Agent-executable</Pill>
+            <span className="text-11 text-slate-500">
+              reference precedent + 3-phase plan
+            </span>
+          </div>
+          <div className="text-sm font-medium text-slate-900">
+            {insight.title}
+          </div>
+          <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+            {insight.summary}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-4 border-b border-slate-100">
+        <SectionLabel>Reference precedent · Company Brain</SectionLabel>
+        <div className="bg-slate-900 text-white rounded-md px-4 py-3">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1.5">
+            <Brain className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="text-xs font-medium">{insight.reference.sku}</div>
+            <span className="text-11 text-slate-500">·</span>
+            <span className="text-11 text-slate-400 font-mono">
+              {insight.reference.period}
+            </span>
+            <span className="text-11 text-slate-500">·</span>
+            <span className="text-11 text-emerald-400 font-medium">
+              {insight.reference.outcome}
+            </span>
+          </div>
+          <div className="text-xs text-slate-300 leading-relaxed">
+            {insight.reference.method}
+          </div>
+          <div className="mt-2.5 pt-2.5 border-t border-slate-700">
+            <div className="inline-flex items-center gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-0.5 rounded">
+              <AlertCircle className="w-3 h-3" />
+              Power bank is more price-sensitive than bed frame — confidence
+              revised from 81% down to 73%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-4 border-b border-slate-100">
+        <SectionLabel kicker="3-phase plan">Proposed plan</SectionLabel>
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-slate-200">
+              <th className="text-left text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
+                Phase
+              </th>
+              <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
+                Exp. {wrapMetric("TACoS")}
+              </th>
+              <th className="text-right text-11 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">
+                Exp. monthly sales
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {insight.plan.phases.map((p, i) => (
+              <tr key={i} className="border-b border-slate-100 last:border-0">
+                <td className="py-3 px-2 align-top">
+                  <div className="text-sm text-slate-900 font-medium">
+                    {p.label}
+                  </div>
+                  <ul className="mt-1.5 space-y-1">
+                    {p.actions.map((a, j) => (
+                      <li
+                        key={j}
+                        className="flex items-start gap-1.5 text-xs text-slate-600"
+                      >
+                        <CornerDownRight className="w-3 h-3 text-slate-300 mt-0.5 flex-shrink-0" />
+                        <span>{a}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td className="py-3 px-2 text-right font-mono text-slate-700 align-top">
+                  {p.tacos}%
+                </td>
+                <td className="py-3 px-2 text-right font-mono text-slate-900 font-medium align-top">
+                  ${p.sales}K
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="px-5 py-3 grid grid-cols-3 gap-6">
+        <div>
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            Cumulative sales lift
+          </div>
+          <div className="text-base font-mono font-semibold text-emerald-700 mt-0.5">
+            +${insight.plan.summary.cumulativeSalesLift}K
+          </div>
+        </div>
+        <div>
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            Final {wrapMetric("TACoS")}
+          </div>
+          <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
+            {insight.plan.summary.finalTacos}%
+          </div>
+        </div>
+        <div>
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
+            Capture window
+          </div>
+          <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
+            {insight.plan.summary.captureWindow}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-2 border-t border-slate-100 bg-slate-50/40 flex items-center justify-end">
+        <div className="text-11 text-slate-500">
+          Confidence{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {insight.confidence}%
+          </span>{" "}
+          · {insight.confidenceLabel}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function WalmartInsightCard({ insight, index }) {
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-3 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-7 h-7 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">Experiment #{index}</Pill>
+            <span className="text-11 text-slate-500">Agent-executable</span>
+          </div>
+          <div className="text-sm font-medium text-slate-900">
+            {insight.title}
+          </div>
+          <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+            {insight.summary}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-3 grid grid-cols-12 gap-x-4 gap-y-3 text-xs">
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Treatment
+          </div>
+          <div className="text-slate-700 leading-relaxed">{insight.treatment}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Sample size
+          </div>
+          <div className="text-slate-700 font-mono">{insight.sampleSize}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Duration
+          </div>
+          <div className="text-slate-700 font-mono">{insight.duration}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Success metric
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.successMetric}
+          </div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Budget delta
+          </div>
+          <div className="text-slate-900 font-mono font-semibold">
+            {insight.budget}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-2 border-t border-slate-100 bg-slate-50/40 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          Confidence{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {insight.confidence}%
+          </span>{" "}
+          · {insight.confidenceLabel}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 px-2 py-1 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded font-medium"
+          >
+            <X className="w-3 h-3" />
+            Decline
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-slate-700 border border-slate-300 hover:bg-slate-50 px-2 py-1 rounded bg-white"
+          >
+            <Edit3 className="w-3 h-3" />
+            Modify
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 px-2 py-1 rounded"
+          >
+            <Check className="w-3 h-3" />
+            Approve experiment
+          </button>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function TikTokBiddingCard({ mechanisms, recommendation }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <Card>
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between px-5 py-3 hover:bg-slate-50"
+      >
+        <div className="flex items-center gap-2">
+          {open ? (
+            <ChevronDown className="w-4 h-4 text-slate-500" />
+          ) : (
+            <ChevronRight className="w-4 h-4 text-slate-500" />
+          )}
+          <span className="text-sm font-medium text-slate-900">
+            TikTok bidding mechanisms · 3 main strategies
+          </span>
+        </div>
+        <span className="text-11 text-slate-500">
+          {open ? "Collapse" : "Expand to compare mechanisms"}
+        </span>
+      </button>
+      {open && (
+        <div className="px-5 pb-4 pt-1 space-y-3 border-t border-slate-100">
+          {mechanisms.map((m, i) => {
+            const isCostCap = m.name === "Cost Cap bidding";
+            return (
+              <div
+                key={i}
+                className="border border-slate-200 rounded-md px-4 py-3"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="text-sm font-medium text-slate-900">
+                    {isCostCap ? (
+                      <MetricTerm definition={METRIC_DEFINITIONS.costCapBidding}>
+                        {m.name}
+                      </MetricTerm>
+                    ) : (
+                      m.name
+                    )}
+                  </div>
+                  {isCostCap && (
+                    <Pill tone="emerald">Recommended for this test</Pill>
+                  )}
+                </div>
+                <div className="text-xs text-slate-600 leading-relaxed">
+                  {m.description}
+                </div>
+              </div>
+            );
+          })}
+          <div className="bg-slate-900 text-white rounded-md px-4 py-3">
+            <div className="text-11 uppercase tracking-wider text-emerald-400 font-medium mb-1">
+              Agent recommendation
+            </div>
+            <div className="text-xs text-slate-200 leading-relaxed">
+              {recommendation}
+            </div>
+          </div>
+        </div>
+      )}
+    </Card>
+  );
+}
+
+function TikTokInsightCard({ insight }) {
+  return (
+    <Card className="border-emerald-200 overflow-hidden">
+      <div className="px-5 py-4 border-b border-emerald-100 bg-emerald-50/40 flex items-start gap-3">
+        <div className="w-8 h-8 rounded-md bg-emerald-100 border border-emerald-200 flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-4 h-4 text-emerald-700" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <Pill tone="emerald">Agent-executable</Pill>
+            <span className="text-11 text-slate-500">
+              8-week geographic holdout
+            </span>
+          </div>
+          <div className="text-sm font-medium text-slate-900">
+            {insight.title}
+          </div>
+          <div className="text-xs text-slate-600 mt-1 leading-relaxed">
+            {insight.summary}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-4 grid grid-cols-12 gap-x-4 gap-y-3 text-xs">
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Hypothesis
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.hypothesis}
+          </div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Treatment ·{" "}
+            <MetricTerm definition={METRIC_DEFINITIONS.geographicHoldoutTest}>
+              Geographic holdout test
+            </MetricTerm>
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.treatment}
+          </div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Sample size
+          </div>
+          <div className="text-slate-700 font-mono">{insight.sampleSize}</div>
+        </div>
+        <div className="col-span-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Duration
+          </div>
+          <div className="text-slate-700 font-mono">{insight.duration}</div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Success metric
+          </div>
+          <div className="text-slate-700 leading-relaxed">
+            {insight.successMetric}
+          </div>
+        </div>
+        <div className="col-span-12">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Required test budget
+          </div>
+          <div className="text-slate-900 font-mono font-semibold">
+            {insight.budget}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 py-2 border-t border-slate-100 bg-slate-50/40 flex items-center justify-end">
+        <div className="text-11 text-slate-500">
+          Confidence{" "}
+          <span className="font-mono text-slate-900 font-medium">
+            {insight.confidence}%
+          </span>{" "}
+          · {insight.confidenceLabel}
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function OmnichannelCanvas() {
+  const O = OMNICHANNEL;
+  const amazonStatus = [
+    { label: "BSR", value: O.amazon.currentState.bsr },
+    { label: "Monthly sales", value: O.amazon.currentState.monthlySales },
+    {
+      label: "TACoS",
+      value: O.amazon.currentState.tacos,
+    },
+    {
+      label: "Held",
+      value: `${O.amazon.currentState.bsrHeldDays} days`,
+    },
+  ];
+  const walmartStatus = [
+    { label: "Walmart spend / mo", value: O.walmart.currentState.monthlySpend },
+    {
+      label: "TACoS",
+      value: O.walmart.currentState.tacos,
+    },
+    {
+      label: "CR",
+      value: O.walmart.currentState.cr,
+    },
+  ];
+  const tiktokStatus = [
+    { label: "Spent", value: O.tiktok.currentState.spend },
+    { label: "History", value: O.tiktok.currentState.history },
+    { label: "Status", value: O.tiktok.currentState.status },
+  ];
+
+  return (
+    <>
+      <CanvasHeader
+        kicker="Omnichannel · power bank"
+        title="$100K budget across Amazon · Walmart · TikTok"
+        meta={
+          <>
+            <Pill tone="slate">
+              <Calendar className="w-3 h-3" />
+              May · current month
+            </Pill>
+            <Pill tone="emerald">
+              <ShieldCheck className="w-3 h-3" />
+              Raised by {O.initiator} on {O.confirmedOn}
+            </Pill>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-5">
+        <BudgetEnvelopeStrip budget={O.budget} />
+      </div>
+
+      <div className="px-6 pt-6 space-y-5">
+        <ChannelBlock
+          index="A"
+          channel="Amazon"
+          headline={O.amazon.headline}
+          subhead={O.amazon.subhead}
+          lifecycle={O.amazon.lifecycle}
+          toneTag={
+            <Pill tone="emerald">
+              <TrendingUp className="w-3 h-3" />
+              Scaling
+            </Pill>
+          }
+          statusEntries={amazonStatus}
+          recommendedSpend={O.amazon.recommendedSpend}
+          recommendedDelta="vs current $35K · +20.5% · 42.2% of total budget"
+          approveLabel="Approve Amazon plan"
+        >
+          <div>
+            <SectionLabel kicker="Quarter goal · BSR ≤ 5">
+              Gap to BSR #1
+            </SectionLabel>
+            <div className="grid grid-cols-3 gap-3">
+              {O.amazon.gaps.map((g, i) => (
+                <GapCard key={i} gap={g} />
+              ))}
+            </div>
+          </div>
+          <div>
+            <SectionLabel kicker="Adapted from bed frame SKU-117">
+              Amazon execution plan
+            </SectionLabel>
+            <AmazonInsightCard insight={O.amazon.insight} />
+          </div>
+        </ChannelBlock>
+
+        <ChannelBlock
+          index="B"
+          channel="Walmart"
+          headline={O.walmart.headline}
+          subhead={O.walmart.subhead}
+          lifecycle={O.walmart.lifecycle}
+          toneTag={
+            <Pill tone="blue">
+              <ShieldCheck className="w-3 h-3" />
+              Efficiency first
+            </Pill>
+          }
+          statusEntries={walmartStatus}
+          recommendedSpend={O.walmart.recommendedSpend}
+          recommendedDelta="vs current $18K · +$9.84K · funds 3 experiments"
+          approveLabel="Approve Walmart plan"
+        >
+          <div className="bg-rose-50 border border-rose-200 rounded-md px-4 py-3">
+            <div className="flex items-start gap-2.5">
+              <Lock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-0.5">
+                  Constraint · price locked across platforms
+                </div>
+                <div className="text-xs text-rose-900 leading-relaxed">
+                  {O.walmart.constraint}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <SectionLabel kicker="3 independent experiments · approve per item">
+              Walmart experiments
+            </SectionLabel>
+            <div className="space-y-3">
+              {O.walmart.insights.map((ins, i) => (
+                <WalmartInsightCard key={ins.id} insight={ins} index={i + 1} />
+              ))}
+            </div>
+          </div>
+        </ChannelBlock>
+
+        <ChannelBlock
+          index="C"
+          channel="TikTok"
+          headline={O.tiktok.headline}
+          subhead={O.tiktok.subhead}
+          lifecycle={O.tiktok.lifecycle}
+          toneTag={
+            <Pill tone="amber">
+              <AlertCircle className="w-3 h-3" />
+              Validation phase
+            </Pill>
+          }
+          statusEntries={tiktokStatus}
+          recommendedSpend={O.tiktok.recommendedSpend}
+          recommendedDelta="test budget · 12% of total · 8-week window"
+          approveLabel="Approve TikTok test"
+        >
+          <Card className="p-4">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+              What TikTok does for this product
+            </div>
+            <div className="text-sm text-slate-700 leading-relaxed">
+              TikTok shoppers don't come to TikTok to buy power banks —
+              TikTok's value is expanding category demand via contextual
+              content (camping / business travel / concerts / etc.) where
+              Amazon and Walmart capture the downstream purchase. So TikTok's{" "}
+              {wrapMetric("ROAS")} shouldn't be judged in-period alone; the real
+              question is whether it lifts downstream Amazon + Walmart sales
+              (i.e.,{" "}
+              <MetricTerm definition={METRIC_DEFINITIONS.incrementality}>
+                incrementality
+              </MetricTerm>
+              ).
+            </div>
+          </Card>
+          <TikTokBiddingCard
+            mechanisms={O.tiktok.biddingMechanisms}
+            recommendation={O.tiktok.recommendation}
+          />
+          <div>
+            <SectionLabel kicker="Isolating TikTok's true causal lift">
+              TikTok execution plan
+            </SectionLabel>
+            <TikTokInsightCard insight={O.tiktok.insight} />
+          </div>
+        </ChannelBlock>
+      </div>
+
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="$82K + $18K reserve = $100K">
+          Cross-channel summary
+        </SectionLabel>
+        <Card className="p-5">
+          <div className="text-sm font-mono text-slate-900 mb-3">
+            {O.crossChannel.totalSummary}
+          </div>
+          <div className="grid grid-cols-2 gap-4 text-xs">
+            <div>
+              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+                Reserve explanation
+              </div>
+              <div className="text-slate-700 leading-relaxed">
+                {O.crossChannel.reserveExplanation}
+              </div>
+            </div>
+            <div>
+              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+                Review cadence
+              </div>
+              <div className="text-slate-700 leading-relaxed">
+                {O.crossChannel.reviewCadence}
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="h-2" />
+      <ReasoningSection reasoning={O.crossChannel.reasoning} />
+      <ActionBar approveLabel="Approve full allocation" />
+    </>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
 /*  Chat panel + top bar + company brain drawer                               */
 /* ────────────────────────────────────────────────────────────────────────── */
 
@@ -3612,13 +4671,7 @@ export default function App({ locale, setLocale }) {
           />
         );
       case "omnichannel":
-        return (
-          <PlaceholderCanvas
-            kicker="Omnichannel · power bank"
-            title="$100K budget across Amazon / Walmart / TikTok"
-            part="Part 2"
-          />
-        );
+        return <OmnichannelCanvas />;
       case "razor-blade":
         return (
           <PlaceholderCanvas
