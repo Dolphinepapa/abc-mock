@@ -2773,9 +2773,16 @@ function TopBar({ onOpenBrain, onOpenAdArch, locale, setLocale }) {
         </div>
         <span className="text-slate-300">/</span>
         <div className="text-sm text-slate-600">ABC Home Goods</div>
-        <Pill tone="slate" className="ml-1">
-          落地灯
-        </Pill>
+        <div className="flex items-center gap-2 ml-1 text-11 text-slate-600">
+          <span className="text-slate-400">昨日(PDT)</span>
+          <span className="text-slate-300">·</span>
+          <span className="font-mono font-medium text-slate-900">$28,420</span>
+          <span className="text-slate-300">·</span>
+          <span>
+            TACoS{" "}
+            <span className="font-mono font-medium text-slate-900">19.4%</span>
+          </span>
+        </div>
       </div>
 
       <div className="flex-1 flex items-center justify-center gap-2 text-xs text-slate-600">
