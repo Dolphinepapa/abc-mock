@@ -740,10 +740,40 @@ const OMNICHANNEL = {
   initiator: "Devon Park",
   confirmedOn: "May 11",
   budget: {
-    total: 100000,
-    current: { amazon: 35000, walmart: 18000, tiktok: 0 },
-    proposed: { amazon: 42160, walmart: 27840, tiktok: 12000 },
-    reserve: 18000,
+    current: {
+      amazon: 35000,
+      walmart: 18000,
+      tiktok: 0,
+      total: 53000,
+    },
+    incremental: 100000,
+    combinedTotal: 153000,
+    allocation: [
+      {
+        channel: "Walmart",
+        amount: 32000,
+        tag: "Steep · marginal ROAS est 4.2x",
+        color: "emerald",
+      },
+      {
+        channel: "TikTok",
+        amount: 28000,
+        tag: "Validation · testing incremental value",
+        color: "blue",
+      },
+      {
+        channel: "Amazon",
+        amount: 24000,
+        tag: "Saturation 78% · still has headroom",
+        color: "slate",
+      },
+      {
+        channel: "Reserve",
+        amount: 16000,
+        tag: "Allocate after week-4 review",
+        color: "muted",
+      },
+    ],
   },
 
   amazon: {
@@ -844,7 +874,8 @@ const OMNICHANNEL = {
       confidenceLabel:
         "8 prior BSR captures · 6 used this playbook · 8pp confidence cut for price-sensitive category",
     },
-    recommendedSpend: 42160,
+    recommendedIncremental: 24000,
+    combinedAfter: 59000,
   },
 
   walmart: {
@@ -906,7 +937,8 @@ const OMNICHANNEL = {
           "Historical PDP placement scale-ups · high-ROAS starting points hold up",
       },
     ],
-    recommendedSpend: 27840,
+    recommendedIncremental: 32000,
+    combinedAfter: 50000,
   },
 
   tiktok: {
@@ -958,26 +990,29 @@ const OMNICHANNEL = {
       confidenceLabel:
         "4 prior DMA holdout tests · incremental ratio has wide variance",
     },
-    recommendedSpend: 12000,
+    recommendedIncremental: 28000,
+    combinedAfter: 28000,
   },
 
   crossChannel: {
-    totalProposed: 100000,
+    totalIncremental: 100000,
+    currentTotal: 53000,
+    combinedTotal: 153000,
     totalSummary:
-      "Amazon $42,160 + Walmart $27,840 + TikTok $12,000 + Reserve $18,000 = $100,000",
+      "Incremental allocation: Walmart +$32K · TikTok +$28K · Amazon +$24K · Reserve +$16K = +$100K · Combined monthly spend grows from $53K to $153K",
     reserveExplanation:
-      "$18K mid-month reallocation buffer — to be rebalanced at end of week 2 based on TikTok's early signal and Amazon CTR trajectory.",
+      "$16K reserve not locked to any channel — week-4 reallocation based on TikTok holdout early signal + Amazon SB-layer CTR response.",
     reviewCadence:
-      "Full re-balance at end of week 4 based on TikTok holdout direction signal — decides national rollout vs reallocation back to Amazon.",
+      "Re-balance at week 4 based on TikTok holdout signal direction — scale nationally or redirect to Amazon.",
     reasoning: {
       chain: [
-        "The three channels play different roles for SKU-PB-A: Amazon is the scale channel (BSR capture), Walmart is the margin channel (efficiency under a locked price), and TikTok is the category-demand seeding channel (incrementality unproven). So the allocation can't follow current sales mix — it follows each channel's lifecycle stage and the next highest-marginal-return action.",
-        "Amazon today sits at BSR #10 with TACoS 18.4%. The gap to BSR ≤ 5 is almost entirely a traffic gap (monthly impressions −58% vs the #1). Company Brain returned 8 prior BSR captures; 6 used SB-layer + 14-day promo + a temporary TACoS lift. Best match is bed frame SKU-117 (Q4 2025).",
-        "Walmart price is locked to Amazon — we can't trade price for volume, only ad efficiency. Three low-risk tests were identified (comparison hero, SB expansion, PDP placement scale-up). The full $9.84K increment goes to fund these tests.",
-        "TikTok has never been activated on this SKU. Going straight to national rollout is risky because users don't come to TikTok to buy a power bank — they get seeded on TikTok and convert on Amazon. That means in-period TikTok ROAS will look poor; the real value sits downstream.",
-        "A geographic holdout test isolates that downstream lift: 5 test DMAs vs 5 control DMAs over 8 weeks, comparing downstream Amazon + Walmart sales. ≥ $0.80 in downstream sales per $1 of TikTok spend is the gate to scale.",
-        "The $18K reserve isn't idle — it's earmarked for a week-2 re-balance. If Amazon CTR hasn't moved in 14 days, part of reserve shifts into Walmart SB; if TikTok's early signal is weak, part of reserve flows back into Amazon SP.",
-        "Three channels total $82K (Amazon $42.16K + Walmart $27.84K + TikTok $12K) + $18K reserve = $100K. Each channel has its own approval entry so the reviewer can slice the decision per channel.",
+        "The customer has $100K of incremental budget on top of existing spend. The allocation logic isn't proportional to current spend (Amazon $35K · Walmart $18K · TikTok $0 = $53K) — it follows each channel's marginal-return curve and strategic role.",
+        "Amazon today is the largest channel but near saturation (78% keyword coverage, SOV stable inside category) — marginal returns diminish. +$24K is sized just to fund SB-layer + 14-day promo to close the CTR gap; larger amounts wouldn't produce linear returns.",
+        "Walmart is the smallest channel today but has the most structural headroom: CPC 42% below Amazon, SB share only 8% of Walmart ad spend, PDP placement ROAS 38% higher than other slots but underspent — the steepest marginal curve. +$32K fully funds 3 independent experiments.",
+        "TikTok is a validation investment. Users don't come to TikTok to buy a power bank — they get seeded there and convert on Amazon / Walmart. That means in-period ROAS will look poor; real value sits in downstream incrementality.",
+        "First give it +$28K for an 8-week geographic holdout (5 test DMAs vs 5 control DMAs) to verify ≥ $0.80 downstream Amazon + Walmart revenue per TikTok dollar. Pass → scale nationally; fail → redirect to Amazon SP.",
+        "Reserve +$16K is unallocated until week 4 — if Amazon CTR hasn't moved in 14 days, part shifts to Walmart SB; if TikTok early signal is weak, part returns to Amazon SP.",
+        "Walmart +$32K + TikTok +$28K + Amazon +$24K + Reserve +$16K = $100K incremental. Each channel has its own approval entry. Combined monthly spend lands at $153K (if reserve is fully deployed); revisit at Q3 budget review.",
       ],
       accuracy: 71,
       accuracyLabel: "multi-channel budget allocations · post-quarter retention",
@@ -3302,100 +3337,103 @@ function LaunchCanvas() {
 /* ────────────────────────────────────────────────────────────────────────── */
 
 function BudgetEnvelopeStrip({ budget }) {
-  const total = budget.total;
-  const a = budget.proposed.amazon;
-  const w = budget.proposed.walmart;
-  const t = budget.proposed.tiktok;
-  const r = budget.reserve;
-  const pct = (n) => ((n / total) * 100).toFixed(1);
+  const cur = budget.current;
+  const inc = budget.incremental;
+  const alloc = budget.allocation;
+  const pct = (n) => ((n / inc) * 100).toFixed(1);
+  const barColor = {
+    emerald: "bg-emerald-500",
+    blue: "bg-blue-500",
+    slate: "bg-slate-500",
+    muted: "bg-slate-700",
+  };
+  const dotColor = {
+    emerald: "bg-emerald-500",
+    blue: "bg-blue-500",
+    slate: "bg-slate-500",
+    muted: "bg-slate-600",
+  };
   return (
     <div className="bg-slate-900 text-white rounded-lg px-5 py-4">
-      <div className="flex items-baseline justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <DollarSign className="w-4 h-4 text-emerald-400" />
-          <div className="text-11 uppercase tracking-wider text-slate-400 font-medium">
-            Monthly budget
-          </div>
-          <div className="text-base font-mono font-semibold text-white">
-            ${total.toLocaleString()}
-          </div>
+      {/* Top layer: existing monthly ad spend */}
+      <div className="flex items-baseline justify-between mb-2">
+        <div className="text-11 uppercase tracking-wider text-slate-400 font-medium">
+          Existing monthly ad spend
         </div>
         <div className="text-11 text-slate-400">
-          Today: Amazon ${budget.current.amazon.toLocaleString()} · Walmart $
-          {budget.current.walmart.toLocaleString()} · TikTok untested
+          Total{" "}
+          <span className="font-mono text-white font-semibold">
+            ${cur.total.toLocaleString()}
+          </span>{" "}
+          · current state
         </div>
       </div>
-      <div className="flex h-2 rounded-full overflow-hidden bg-slate-800">
-        <div
-          className="bg-emerald-500"
-          style={{ width: `${pct(a)}%` }}
-          title={`Amazon $${a.toLocaleString()}`}
-        />
-        <div
-          className="bg-emerald-400"
-          style={{ width: `${pct(w)}%` }}
-          title={`Walmart $${w.toLocaleString()}`}
-        />
-        <div
-          className="bg-blue-400"
-          style={{ width: `${pct(t)}%` }}
-          title={`TikTok $${t.toLocaleString()}`}
-        />
-        <div
-          className="bg-slate-500"
-          style={{ width: `${pct(r)}%` }}
-          title={`Reserve $${r.toLocaleString()}`}
-        />
+      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs">
+        <div>
+          <span className="text-slate-400">Amazon </span>
+          <span className="font-mono text-white">
+            ${cur.amazon.toLocaleString()}
+          </span>
+        </div>
+        <div>
+          <span className="text-slate-400">Walmart </span>
+          <span className="font-mono text-white">
+            ${cur.walmart.toLocaleString()}
+          </span>
+        </div>
+        <div>
+          <span className="text-slate-400">TikTok </span>
+          <span className="font-mono text-slate-500 italic">not active</span>
+        </div>
       </div>
-      <div className="mt-3 grid grid-cols-4 gap-3 text-11">
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              Amazon
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${a.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(a)}%</span>
+
+      {/* Dashed divider */}
+      <div className="border-t border-dashed border-slate-700 my-4" />
+
+      {/* Bottom layer: incremental allocation */}
+      <div className="flex items-baseline gap-2 mb-3 flex-wrap">
+        <DollarSign className="w-4 h-4 text-emerald-400 self-center" />
+        <span className="text-11 uppercase tracking-wider text-emerald-400 font-medium">
+          + Incremental budget
+        </span>
+        <span className="text-base font-mono font-semibold text-white">
+          ${inc.toLocaleString()}
+        </span>
+        <span className="text-11 text-slate-400">
+          · Proposed allocation (by marginal return)
+        </span>
+      </div>
+      <div className="flex h-2 rounded-full overflow-hidden bg-slate-800 mb-3">
+        {alloc.map((a, i) => (
+          <div
+            key={i}
+            className={barColor[a.color]}
+            style={{ width: `${pct(a.amount)}%` }}
+            title={`${a.channel} +$${a.amount.toLocaleString()}`}
+          />
+        ))}
+      </div>
+      <div className="grid grid-cols-4 gap-3 text-11">
+        {alloc.map((a, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <div
+              className={`w-2 h-2 rounded-full ${
+                dotColor[a.color]
+              } mt-1 flex-shrink-0`}
+            />
+            <div className="min-w-0">
+              <div className="text-slate-400 uppercase tracking-wider font-medium">
+                {a.channel}
+              </div>
+              <div className="font-mono text-white font-semibold mt-0.5">
+                +${a.amount.toLocaleString()}
+              </div>
+              <div className="text-10 text-slate-400 mt-0.5 leading-snug">
+                {a.tag}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              Walmart
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${w.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(w)}%</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-blue-400 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              TikTok
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${t.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(t)}%</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-slate-500 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              Reserve
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${r.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(r)}%</span>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -3426,7 +3464,7 @@ function ChannelBlock({
   lifecycle,
   toneTag,
   statusEntries,
-  recommendedSpend,
+  recommendedIncremental,
   recommendedDelta,
   approveLabel,
   children,
@@ -3466,10 +3504,10 @@ function ChannelBlock({
       <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/40 flex items-center justify-between">
         <div className="flex items-baseline gap-2">
           <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            Recommended monthly spend
+            Recommended incremental
           </span>
-          <span className="text-base font-mono font-semibold text-slate-900">
-            ${recommendedSpend.toLocaleString()}
+          <span className="text-base font-mono font-semibold text-emerald-700">
+            +${recommendedIncremental.toLocaleString()}
           </span>
           {recommendedDelta && (
             <span className="text-11 text-slate-500">{recommendedDelta}</span>
@@ -3955,8 +3993,8 @@ function OmnichannelCanvas() {
             </Pill>
           }
           statusEntries={amazonStatus}
-          recommendedSpend={O.amazon.recommendedSpend}
-          recommendedDelta="vs current $35K · +20.5% · 42.2% of total budget"
+          recommendedIncremental={O.amazon.recommendedIncremental}
+          recommendedDelta={`was $35K · combined $${(O.amazon.combinedAfter / 1000).toFixed(0)}K`}
           approveLabel="Approve Amazon plan"
         >
           <div>
@@ -3990,8 +4028,8 @@ function OmnichannelCanvas() {
             </Pill>
           }
           statusEntries={walmartStatus}
-          recommendedSpend={O.walmart.recommendedSpend}
-          recommendedDelta="vs current $18K · +$9.84K · funds 3 experiments"
+          recommendedIncremental={O.walmart.recommendedIncremental}
+          recommendedDelta={`was $18K · combined $${(O.walmart.combinedAfter / 1000).toFixed(0)}K · funds 3 experiments`}
           approveLabel="Approve Walmart plan"
         >
           <div className="bg-rose-50 border border-rose-200 rounded-md px-4 py-3">
@@ -4032,8 +4070,8 @@ function OmnichannelCanvas() {
             </Pill>
           }
           statusEntries={tiktokStatus}
-          recommendedSpend={O.tiktok.recommendedSpend}
-          recommendedDelta="test budget · 12% of total · 8-week window"
+          recommendedIncremental={O.tiktok.recommendedIncremental}
+          recommendedDelta="from zero · test budget · 8-week holdout window"
           approveLabel="Approve TikTok test"
         >
           <Card className="p-4">
@@ -4068,7 +4106,7 @@ function OmnichannelCanvas() {
       </div>
 
       <div className="px-6 pt-6">
-        <SectionLabel kicker="$82K + $18K reserve = $100K">
+        <SectionLabel kicker="+$100K incremental · combined $153K monthly">
           Cross-channel summary
         </SectionLabel>
         <Card className="p-5">

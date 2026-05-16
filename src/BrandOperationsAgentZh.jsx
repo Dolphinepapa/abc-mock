@@ -740,10 +740,40 @@ const OMNICHANNEL = {
   initiator: "Devon Park",
   confirmedOn: "May 11",
   budget: {
-    total: 100000,
-    current: { amazon: 35000, walmart: 18000, tiktok: 0 },
-    proposed: { amazon: 42160, walmart: 27840, tiktok: 12000 },
-    reserve: 18000,
+    current: {
+      amazon: 35000,
+      walmart: 18000,
+      tiktok: 0,
+      total: 53000,
+    },
+    incremental: 100000,
+    combinedTotal: 153000,
+    allocation: [
+      {
+        channel: "Walmart",
+        amount: 32000,
+        tag: "陡峭段 · 边际 ROAS 估 4.2x",
+        color: "emerald",
+      },
+      {
+        channel: "TikTok",
+        amount: 28000,
+        tag: "验证段 · 测增量价值",
+        color: "blue",
+      },
+      {
+        channel: "Amazon",
+        amount: 24000,
+        tag: "饱和度 78% · 仍有空间",
+        color: "slate",
+      },
+      {
+        channel: "储备",
+        amount: 16000,
+        tag: "4 周复盘后分配",
+        color: "muted",
+      },
+    ],
   },
 
   amazon: {
@@ -843,7 +873,8 @@ const OMNICHANNEL = {
       confidence: 73,
       confidenceLabel: "8 个过往 BSR 争取案例 · 其中 6 个用此类打法 · 价格敏感品类下调 8pp",
     },
-    recommendedSpend: 42160,
+    recommendedIncremental: 24000,
+    combinedAfter: 59000,
   },
 
   walmart: {
@@ -899,7 +930,8 @@ const OMNICHANNEL = {
         confidenceLabel: "类似 PDP placement 扩量历史 · 高 ROAS 起点更稳",
       },
     ],
-    recommendedSpend: 27840,
+    recommendedIncremental: 32000,
+    combinedAfter: 50000,
   },
 
   tiktok: {
@@ -949,24 +981,28 @@ const OMNICHANNEL = {
       confidence: 67,
       confidenceLabel: "4 个过往 DMA 对照测试 · 增量比率方差较大",
     },
-    recommendedSpend: 12000,
+    recommendedIncremental: 28000,
+    combinedAfter: 28000,
   },
 
   crossChannel: {
-    totalProposed: 100000,
-    totalSummary: "Amazon $42,160 + Walmart $27,840 + TikTok $12,000 + 储备 $18,000 = $100,000",
+    totalIncremental: 100000,
+    currentTotal: 53000,
+    combinedTotal: 153000,
+    totalSummary:
+      "增量分配:Walmart +$32K · TikTok +$28K · Amazon +$24K · 储备 +$16K = +$100K · 合并后月度总投入由 $53K 升至 $153K",
     reserveExplanation:
-      "$18K 中期调拨储备 — 第 2 周末根据 TikTok 前期信号与 Amazon CTR 表现重新分配。",
-    reviewCadence: "第 4 周末复盘 · 依据 TikTok 测试方向信号决定全国扩量 / 回流 Amazon。",
+      "$16K 储备不锁定到平台 — 第 4 周末根据 TikTok holdout 早期信号 + Amazon SB 层 CTR 反应决定流向。",
+    reviewCadence: "第 4 周末复盘 · 依据 TikTok holdout 信号方向决定全国扩量 / 回流 Amazon。",
     reasoning: {
       chain: [
-        "三平台对 SKU-PB-A 的角色不同:Amazon 是规模渠道(BSR 争取),Walmart 是利润渠道(价格锁定下的效率),TikTok 是品类需求孵化渠道(增量未知)。所以分配不能按当前销售比例,而是按各自的生命周期阶段 + 边际收益最高的下一步动作。",
-        "Amazon 现 BSR #10、TACoS 18.4% — 距离 BSR ≤ 5 的季度目标主要差在流量(月曝光 −58%)。从公司大脑调出 8 个 BSR 争取案例,其中 6 个用了「SB 叠加层 + 14 天促销 + 临时拉高 TACoS」的打法。匹配最佳的是床架 SKU-117(2025 Q4)。",
-        "Walmart 价格已与 Amazon 锁死,不能用降价撬动 — 只能在广告效率上做文章。识别出 3 个低风险测试(主图对比、SB 扩量、PDP placement),增量 $9.84K 全部用于实验。",
-        "TikTok 此前未投。直接全国上线的风险在于:用户不是「到 TikTok 买充电宝」,而是「在 TikTok 被种草后去 Amazon 买」 — 这意味着 in-period ROAS 会非常难看,但真实价值在下游 incrementality。",
-        "用地区对照测试(Geographic holdout)分离这部分增量:5 测试 DMA vs 5 对照 DMA,8 周后看下游 Amazon + Walmart 销售差异。每 $1 TikTok 花费换 ≥ $0.80 的下游销售增量即视为成功。",
-        "储备 $18K 不是「闲置」,是为第 2 周末再分配预留 — Amazon CTR 若 14 天内未提升,部分储备转入 Walmart SB 加码;TikTok 测试若早期信号弱,部分储备退回 Amazon SP。",
-        "三平台合计 $82K(Amazon $42.16K + Walmart $27.84K + TikTok $12K)+ 储备 $18K = $100K。各平台分别有独立批准入口,允许逐平台决策。",
+        "客户多出 $100K 增量预算。分配的核心逻辑不是按现状比例切分(Amazon $35K · Walmart $18K · TikTok $0 = $53K),而是看每个平台的边际回报曲线 + 战略价值。",
+        "Amazon 现状最大但接近饱和(关键词覆盖率 78%、品类内 SOV 已稳定),增量回报递减 — 给 +$24K 主要用于 SB 叠加层 + 14 天促销补 CTR 缺口,无法在更大量级带来线性回报。",
+        "Walmart 现状最小,但结构性空间最大:CPC 较 Amazon 低 42%、品牌广告占比仅 8%、PDP placement ROAS 较其他位置高 38% 但被低估 — 边际最陡,给 +$32K 全部用于 3 项独立实验。",
+        "TikTok 是验证投资。用户不是「到 TikTok 买充电宝」,而是「在 TikTok 被种草后去 Amazon / Walmart 买」 — 这意味着 in-period ROAS 会很难看,真实价值在下游 incrementality。",
+        "先给 +$28K 做 8 周地区对照测试(5 测试 DMA vs 5 对照 DMA),验证每 $1 TikTok 花费能否换 ≥ $0.80 的下游 Amazon + Walmart 销售增量。验证通过 → 全国扩量;不通过 → 回流 Amazon SP。",
+        "储备 +$16K 不锁定到平台,第 4 周末再分配 — Amazon CTR 14 天内未提升 → 部分转入 Walmart SB 加码;TikTok 早期信号弱 → 部分退回 Amazon SP。",
+        "Walmart +$32K + TikTok +$28K + Amazon +$24K + 储备 +$16K = $100K 增量。各平台独立批准入口。合并后月度总投入 $153K(若储备全用),Q3 预算审议前可调整。",
       ],
       accuracy: 71,
       accuracyLabel: "多平台预算分配 · 季度复盘后保留率",
@@ -3287,100 +3323,103 @@ function LaunchCanvas() {
 /* ────────────────────────────────────────────────────────────────────────── */
 
 function BudgetEnvelopeStrip({ budget }) {
-  const total = budget.total;
-  const a = budget.proposed.amazon;
-  const w = budget.proposed.walmart;
-  const t = budget.proposed.tiktok;
-  const r = budget.reserve;
-  const pct = (n) => ((n / total) * 100).toFixed(1);
+  const cur = budget.current;
+  const inc = budget.incremental;
+  const alloc = budget.allocation;
+  const pct = (n) => ((n / inc) * 100).toFixed(1);
+  const barColor = {
+    emerald: "bg-emerald-500",
+    blue: "bg-blue-500",
+    slate: "bg-slate-500",
+    muted: "bg-slate-700",
+  };
+  const dotColor = {
+    emerald: "bg-emerald-500",
+    blue: "bg-blue-500",
+    slate: "bg-slate-500",
+    muted: "bg-slate-600",
+  };
   return (
     <div className="bg-slate-900 text-white rounded-lg px-5 py-4">
-      <div className="flex items-baseline justify-between mb-3">
-        <div className="flex items-center gap-2.5">
-          <DollarSign className="w-4 h-4 text-emerald-400" />
-          <div className="text-11 uppercase tracking-wider text-slate-400 font-medium">
-            本月总预算
-          </div>
-          <div className="text-base font-mono font-semibold text-white">
-            ${total.toLocaleString()}
-          </div>
+      {/* Top layer: existing monthly ad spend */}
+      <div className="flex items-baseline justify-between mb-2">
+        <div className="text-11 uppercase tracking-wider text-slate-400 font-medium">
+          现有月度广告投入
         </div>
         <div className="text-11 text-slate-400">
-          当前 Amazon ${budget.current.amazon.toLocaleString()} · Walmart $
-          {budget.current.walmart.toLocaleString()} · TikTok 未投放
+          合计{" "}
+          <span className="font-mono text-white font-semibold">
+            ${cur.total.toLocaleString()}
+          </span>{" "}
+          · 现状
         </div>
       </div>
-      <div className="flex h-2 rounded-full overflow-hidden bg-slate-800">
-        <div
-          className="bg-emerald-500"
-          style={{ width: `${pct(a)}%` }}
-          title={`Amazon $${a.toLocaleString()}`}
-        />
-        <div
-          className="bg-emerald-400"
-          style={{ width: `${pct(w)}%` }}
-          title={`Walmart $${w.toLocaleString()}`}
-        />
-        <div
-          className="bg-blue-400"
-          style={{ width: `${pct(t)}%` }}
-          title={`TikTok $${t.toLocaleString()}`}
-        />
-        <div
-          className="bg-slate-500"
-          style={{ width: `${pct(r)}%` }}
-          title={`储备 $${r.toLocaleString()}`}
-        />
+      <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs">
+        <div>
+          <span className="text-slate-400">Amazon </span>
+          <span className="font-mono text-white">
+            ${cur.amazon.toLocaleString()}
+          </span>
+        </div>
+        <div>
+          <span className="text-slate-400">Walmart </span>
+          <span className="font-mono text-white">
+            ${cur.walmart.toLocaleString()}
+          </span>
+        </div>
+        <div>
+          <span className="text-slate-400">TikTok </span>
+          <span className="font-mono text-slate-500 italic">未投放</span>
+        </div>
       </div>
-      <div className="mt-3 grid grid-cols-4 gap-3 text-11">
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              Amazon
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${a.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(a)}%</span>
+
+      {/* Dashed divider */}
+      <div className="border-t border-dashed border-slate-700 my-4" />
+
+      {/* Bottom layer: incremental allocation */}
+      <div className="flex items-baseline gap-2 mb-3 flex-wrap">
+        <DollarSign className="w-4 h-4 text-emerald-400 self-center" />
+        <span className="text-11 uppercase tracking-wider text-emerald-400 font-medium">
+          + 增量预算
+        </span>
+        <span className="text-base font-mono font-semibold text-white">
+          ${inc.toLocaleString()}
+        </span>
+        <span className="text-11 text-slate-400">
+          · 推荐分配(按边际回报)
+        </span>
+      </div>
+      <div className="flex h-2 rounded-full overflow-hidden bg-slate-800 mb-3">
+        {alloc.map((a, i) => (
+          <div
+            key={i}
+            className={barColor[a.color]}
+            style={{ width: `${pct(a.amount)}%` }}
+            title={`${a.channel} +$${a.amount.toLocaleString()}`}
+          />
+        ))}
+      </div>
+      <div className="grid grid-cols-4 gap-3 text-11">
+        {alloc.map((a, i) => (
+          <div key={i} className="flex items-start gap-2">
+            <div
+              className={`w-2 h-2 rounded-full ${
+                dotColor[a.color]
+              } mt-1 flex-shrink-0`}
+            />
+            <div className="min-w-0">
+              <div className="text-slate-400 uppercase tracking-wider font-medium">
+                {a.channel}
+              </div>
+              <div className="font-mono text-white font-semibold mt-0.5">
+                +${a.amount.toLocaleString()}
+              </div>
+              <div className="text-10 text-slate-400 mt-0.5 leading-snug">
+                {a.tag}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              Walmart
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${w.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(w)}%</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-blue-400 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              TikTok
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${t.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(t)}%</span>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-start gap-2">
-          <div className="w-2 h-2 rounded-full bg-slate-500 mt-1 flex-shrink-0" />
-          <div>
-            <div className="text-slate-400 uppercase tracking-wider font-medium">
-              储备
-            </div>
-            <div className="font-mono text-white font-semibold mt-0.5">
-              ${r.toLocaleString()}{" "}
-              <span className="text-slate-400 font-normal">· {pct(r)}%</span>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
@@ -3411,7 +3450,7 @@ function ChannelBlock({
   lifecycle,
   toneTag,
   statusEntries,
-  recommendedSpend,
+  recommendedIncremental,
   recommendedDelta,
   approveLabel,
   children,
@@ -3451,10 +3490,10 @@ function ChannelBlock({
       <div className="px-5 py-3 border-t border-slate-200 bg-slate-50/40 flex items-center justify-between">
         <div className="flex items-baseline gap-2">
           <span className="text-11 uppercase tracking-wider text-slate-500 font-medium">
-            建议月度花费
+            推荐增量投入
           </span>
-          <span className="text-base font-mono font-semibold text-slate-900">
-            ${recommendedSpend.toLocaleString()}
+          <span className="text-base font-mono font-semibold text-emerald-700">
+            +${recommendedIncremental.toLocaleString()}
           </span>
           {recommendedDelta && (
             <span className="text-11 text-slate-500">{recommendedDelta}</span>
@@ -3940,8 +3979,8 @@ function OmnichannelCanvas() {
             </Pill>
           }
           statusEntries={amazonStatus}
-          recommendedSpend={O.amazon.recommendedSpend}
-          recommendedDelta="较当前 $35K +20.5% · 占总预算 42.2%"
+          recommendedIncremental={O.amazon.recommendedIncremental}
+          recommendedDelta={`现状 $35K → 共 $${(O.amazon.combinedAfter / 1000).toFixed(0)}K`}
           approveLabel="批准 Amazon 方案"
         >
           <div>
@@ -3975,8 +4014,8 @@ function OmnichannelCanvas() {
             </Pill>
           }
           statusEntries={walmartStatus}
-          recommendedSpend={O.walmart.recommendedSpend}
-          recommendedDelta="较当前 $18K +$9.84K · 全部用于 3 项实验"
+          recommendedIncremental={O.walmart.recommendedIncremental}
+          recommendedDelta={`现状 $18K → 共 $${(O.walmart.combinedAfter / 1000).toFixed(0)}K · 全部用于 3 项实验`}
           approveLabel="批准 Walmart 方案"
         >
           <div className="bg-rose-50 border border-rose-200 rounded-md px-4 py-3">
@@ -4017,8 +4056,8 @@ function OmnichannelCanvas() {
             </Pill>
           }
           statusEntries={tiktokStatus}
-          recommendedSpend={O.tiktok.recommendedSpend}
-          recommendedDelta="测试预算 · 占总预算 12% · 仅 8 周窗口"
+          recommendedIncremental={O.tiktok.recommendedIncremental}
+          recommendedDelta="从 0 启动 · 测试预算 · 8 周 holdout 窗口"
           approveLabel="批准 TikTok 测试"
         >
           <Card className="p-4">
@@ -4048,7 +4087,7 @@ function OmnichannelCanvas() {
       </div>
 
       <div className="px-6 pt-6">
-        <SectionLabel kicker="$82K + 储备 $18K = $100K">
+        <SectionLabel kicker="+$100K 增量 · 合并后总月度 $153K">
           跨渠道汇总
         </SectionLabel>
         <Card className="p-5">
