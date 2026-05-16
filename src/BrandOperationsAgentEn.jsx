@@ -446,7 +446,7 @@ const STRATEGY = {
         period: "Q4 2025",
         outcome: "#2 → #1 in 7 weeks",
         method:
-          "4 weeks of TACoS lifted 19% → 31% (temporary) + 14-day 15%-off promo. Captured #1 in week 6. Through the 6-week taper that followed, sales held +18% above pre-campaign baseline — best-seller halo carried organic clicks +34% and offset the ad-spend reduction.",
+          "4 weeks of TACoS lifted 19% → 31% (temporary) + 14-day 15%-off promo. Captured #1 in week 6. Through the 6-week taper that followed, sales held +18% above pre-campaign baseline — best-seller badge carried organic clicks +34% and offset the ad-spend reduction.",
       },
       plan: {
         phases: [
@@ -461,19 +461,19 @@ const STRATEGY = {
             sales: 172,
           },
           {
-            label: "Weeks 5–8 · Hold architecture · halo lifts organic",
+            label: "Weeks 5–8 · Hold architecture · badge lifts organic",
             actions: [
               "Maintain week-4 architecture through capture window",
-              "Best-seller halo expected to lift organic clicks +28% to +42%",
+              "Best-seller badge expected to lift organic clicks +28% to +42%",
             ],
             tacos: 28.6,
             sales: 196,
           },
           {
-            label: "Weeks 9–12 · Budget −35% · organic + halo carry",
+            label: "Weeks 9–12 · Budget −35% · organic + BS badge carry",
             actions: [
               "Daily ad budget $1,420 → $920 (−35%)",
-              "Organic + halo expected to outpace ad reduction · sales hold or modestly grow",
+              "Organic + BS badge expected to outpace ad reduction · sales hold or modestly grow",
             ],
             tacos: 17.8,
             sales: 204,
@@ -533,7 +533,7 @@ const STRATEGY = {
       "Audited current ad architecture (5 campaigns, $848/d combined). No structural inefficiency detected at the campaign level.",
       "Scanned listing for pockets of weakness. Identified bedroom-context search terms as the highest-impact CTR gap — but resolution requires listing-content edits, which fall outside agent execution scope (surfaced as Insight #1).",
       "Pulled 9 prior #2 → #1 captures from Company Brain. 7 of 9 used a short-term budget lift + promo playbook. Best similarity match: bed frame SKU-117 in Q4 2025 (same lifecycle stage, comparable competitive intensity, adjacent price band).",
-      "Drafted 3-phase plan from that playbook (Insight #2). Best-seller halo and taper outcomes modeled from observed prior outcome.",
+      "Drafted 3-phase plan from that playbook (Insight #2). Best-seller badge and taper outcomes modeled from observed prior outcome.",
       "Composed sequential milestone path: listing fix (team) + short-term budget lift (agent) → #1 capture → return to target TACoS.",
       "Confidence on 90-day timeline: 81%.",
     ],
