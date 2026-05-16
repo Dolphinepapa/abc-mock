@@ -194,13 +194,22 @@ This is more credible than overclaiming.
 
 ### Team
 
-The team that appears as conversation initiators:
+The team that appears as conversation initiators AND as responders in
+agent-initiated threads:
 
-- **Maya Chen** — VP, eCommerce (MC)
-- **Devon Park** — Sr. Growth Manager (DP)
-- **Sara Lin** — Portfolio Lead (SL)
-- **Jamal Hassan** — Ops Manager (JH)
+- Maya Chen — VP, eCommerce (MC)
+- Devon Park — Sr. Growth Manager (DP)
+- Sara Lin — Portfolio Lead (SL)
+- Jamal Hassan — Ops Manager (JH)
 
+Don't invent new team members or generic roles like "品牌运营助手" or 
+"运营人员". When agent-initiated threads need a human responder, pick 
+the team member whose role fits the case:
+
+- BSR / strategy / VP-level approvals → Maya
+- Growth ops / paid media tactics → Devon  
+- Portfolio / pricing / LTV strategy → Sara
+- Launch / new SKU operations → Jamal
 ### Numbers — non-round
 
 Never use round demo numbers. Bad: 25%, $100K, 100 keywords. Good: 37.4%, $1.04M, 94 keywords.
