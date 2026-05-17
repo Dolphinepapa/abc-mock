@@ -4771,11 +4771,25 @@ function MilestonePath() {
 }
 
 function StrategyCanvas() {
+  const [heroLightbox, setHeroLightbox] = useState(false);
+  const skuAImages = [
+    "/sku-a-hero.png",
+    "/sku-a-gallery-1.png",
+    "/sku-a-gallery-2.png",
+    "/sku-a-gallery-3.png",
+    "/sku-a-gallery-4.png",
+    "/sku-a-gallery-5.png",
+  ];
   return (
     <>
       <CanvasHeader
         kicker="策略 · BS 路径"
         title="SKU-A 在落地灯品类的 BS 路径"
+        heroImage={{
+          src: "/sku-a-hero.png",
+          alt: "我方 SKU-A · 弧形落地灯 · 点击查看 6 张主图",
+          onClick: () => setHeroLightbox(true),
+        }}
         meta={
           <>
             <Pill tone="slate">
@@ -4790,21 +4804,11 @@ function StrategyCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/sku-a-hero.png",
-            caption: "我方 SKU-A · 弧形落地灯主图",
-            fallbackText: "等待上传 · 我方 SKU-A 主图",
-            gallery: [
-              "/sku-a-gallery-1.png",
-              "/sku-a-gallery-2.png",
-              "/sku-a-gallery-3.png",
-              "/sku-a-gallery-4.png",
-              "/sku-a-gallery-5.png",
-            ],
-          },
-        ]}
+      <GalleryLightbox
+        open={heroLightbox}
+        onClose={() => setHeroLightbox(false)}
+        title="我方 SKU-A · 弧形落地灯"
+        images={skuAImages}
       />
 
       {/* Goal strip */}
@@ -6952,11 +6956,17 @@ function RazorBladeCanvas() {
   const R = RAZOR_BLADE;
   const [competitorSourcesOpen, setCompetitorSourcesOpen] = useState(false);
   const [precedentSourcesOpen, setPrecedentSourcesOpen] = useState(false);
+  const [heroLightbox, setHeroLightbox] = useState(false);
   return (
     <>
       <CanvasHeader
         kicker="刮胡刀 + 刀头"
         title={R.sku}
+        heroImage={{
+          src: "/razor-blade-hero.png",
+          alt: "我方刀身 + 刀头主图 · 点击放大",
+          onClick: () => setHeroLightbox(true),
+        }}
         meta={
           <>
             <Pill tone="slate">
@@ -6975,14 +6985,11 @@ function RazorBladeCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/razor-blade-hero.png",
-            caption: "我方刀身 + 刀头主图",
-            fallbackText: "等待上传 · 刀身 + 刀头主图",
-          },
-        ]}
+      <GalleryLightbox
+        open={heroLightbox}
+        onClose={() => setHeroLightbox(false)}
+        title="我方刀身 + 刀头主图"
+        images={["/razor-blade-hero.png"]}
       />
 
       <div className="px-6 pt-6 space-y-5">

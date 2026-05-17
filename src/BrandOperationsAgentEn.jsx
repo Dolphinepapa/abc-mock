@@ -4704,11 +4704,25 @@ function MilestonePath() {
 }
 
 function StrategyCanvas() {
+  const [heroLightbox, setHeroLightbox] = useState(false);
+  const skuAImages = [
+    "/sku-a-hero.png",
+    "/sku-a-gallery-1.png",
+    "/sku-a-gallery-2.png",
+    "/sku-a-gallery-3.png",
+    "/sku-a-gallery-4.png",
+    "/sku-a-gallery-5.png",
+  ];
   return (
     <>
       <CanvasHeader
         kicker="Strategy · best-seller path"
         title="SKU-A path to best seller in Floor Lamps"
+        heroImage={{
+          src: "/sku-a-hero.png",
+          alt: "Our SKU-A · Arc Floor Lamp · click to view 6 images",
+          onClick: () => setHeroLightbox(true),
+        }}
         meta={
           <>
             <Pill tone="slate">
@@ -4723,21 +4737,11 @@ function StrategyCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/sku-a-hero.png",
-            caption: "Our SKU-A · Arc Floor Lamp hero",
-            fallbackText: "Pending upload · our SKU-A hero",
-            gallery: [
-              "/sku-a-gallery-1.png",
-              "/sku-a-gallery-2.png",
-              "/sku-a-gallery-3.png",
-              "/sku-a-gallery-4.png",
-              "/sku-a-gallery-5.png",
-            ],
-          },
-        ]}
+      <GalleryLightbox
+        open={heroLightbox}
+        onClose={() => setHeroLightbox(false)}
+        title="Our SKU-A · Arc Floor Lamp"
+        images={skuAImages}
       />
 
       {/* Goal strip */}
@@ -6906,11 +6910,17 @@ function RazorBladeCanvas() {
   const R = RAZOR_BLADE;
   const [competitorSourcesOpen, setCompetitorSourcesOpen] = useState(false);
   const [precedentSourcesOpen, setPrecedentSourcesOpen] = useState(false);
+  const [heroLightbox, setHeroLightbox] = useState(false);
   return (
     <>
       <CanvasHeader
         kicker="Razor + blade"
         title={R.sku}
+        heroImage={{
+          src: "/razor-blade-hero.png",
+          alt: "Our razor + blade hero · click to enlarge",
+          onClick: () => setHeroLightbox(true),
+        }}
         meta={
           <>
             <Pill tone="slate">
@@ -6929,14 +6939,11 @@ function RazorBladeCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/razor-blade-hero.png",
-            caption: "Our razor + blade hero",
-            fallbackText: "Pending upload · razor + blade hero",
-          },
-        ]}
+      <GalleryLightbox
+        open={heroLightbox}
+        onClose={() => setHeroLightbox(false)}
+        title="Our razor + blade hero"
+        images={["/razor-blade-hero.png"]}
       />
 
       <div className="px-6 pt-6 space-y-5">
