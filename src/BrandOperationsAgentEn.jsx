@@ -7585,6 +7585,23 @@ function LaunchCRCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: "/tire-inflator-hero.png",
+            caption: "Our SKU-TI-A · tire inflator hero",
+            fallbackText: "Pending upload · our SKU-TI-A hero",
+            descriptor: "Our hero (use-case set: SUV · motorcycle · sedan · basketball)",
+          },
+          {
+            src: null,
+            caption: "Top competitor · tire inflator hero",
+            fallbackText: "Pending upload · competitor hero",
+            descriptor: "Top competitor hero (pickup-context positioning)",
+          },
+        ]}
+      />
+
       {/* Constraint callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">

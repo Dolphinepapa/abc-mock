@@ -7634,6 +7634,23 @@ function LaunchCRCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: "/tire-inflator-hero.png",
+            caption: "我方 SKU-TI-A · 轮胎充气泵主图",
+            fallbackText: "等待上传 · 我方 SKU-TI-A 主图",
+            descriptor: "我方主图(应用场景图:SUV · 摩托 · 轿车 · 篮球)",
+          },
+          {
+            src: null,
+            caption: "头部竞品 · 轮胎充气泵主图",
+            fallbackText: "等待上传 · 竞品主图",
+            descriptor: "头部竞品主图(对位皮卡市场)",
+          },
+        ]}
+      />
+
       {/* Constraint callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
