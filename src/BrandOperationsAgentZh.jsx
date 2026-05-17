@@ -3459,6 +3459,32 @@ function wrapMetric(label) {
   return label;
 }
 
+function tacosColorClass(value) {
+  if (value < 20)  return "text-emerald-600";
+  if (value <= 40) return "text-amber-600";
+  return "text-rose-600";
+}
+
+function tacosBgClass(value) {
+  if (value < 20)  return "bg-emerald-50 text-emerald-700 border-emerald-200";
+  if (value <= 40) return "bg-amber-50 text-amber-700 border-amber-200";
+  return "bg-rose-50 text-rose-700 border-rose-200";
+}
+
+function TacosValue({ value, size = "md" }) {
+  const colorCls = tacosColorClass(value);
+  const sizeCls =
+    size === "lg" ? "text-2xl" :
+    size === "sm" ? "text-xs"  : "text-sm";
+  return (
+    <span
+      className={`${colorCls} ${sizeCls} font-mono tabular-nums font-semibold`}
+    >
+      {value.toFixed(1)}%
+    </span>
+  );
+}
+
 function Card({ children, className = "" }) {
   return (
     <div
@@ -3882,7 +3908,7 @@ function PerformanceStrip() {
             ${(p.salesLast30d / 1000).toFixed(0)}K / 月
           </span>{" "}
           · 综合 {wrapMetric("TACoS")}{" "}
-          <span className="font-mono text-slate-700">{p.tacos}%</span>
+          <TacosValue value={p.tacos} size="sm" />
         </span>
       </div>
 
@@ -4010,8 +4036,8 @@ function AdGroupRow({ adGroup, expanded, onToggle, compact }) {
           ${adGroup.sales30d.toLocaleString()}
         </td>
         {!compact && (
-          <td className="py-2.5 px-3 text-right font-mono text-slate-700">
-            {adGroup.tacos}%
+          <td className="py-2.5 px-3 text-right">
+            <TacosValue value={adGroup.tacos} size="sm" />
           </td>
         )}
         <td className="py-2.5 px-3 text-right font-mono text-slate-700">
@@ -4189,8 +4215,8 @@ function AdArchitectureTable({ panelWidth }) {
               ${s.sales30d.toLocaleString()}
             </td>
             {!compact && (
-              <td className="py-2.5 px-3 text-right font-mono text-slate-700">
-                {s.tacos}%
+              <td className="py-2.5 px-3 text-right">
+                <TacosValue value={s.tacos} size="sm" />
               </td>
             )}
             <td colSpan={2} />
@@ -4429,8 +4455,8 @@ function ExecutableInsightCard({ insight }) {
                     ))}
                   </ul>
                 </td>
-                <td className="py-3 px-2 text-right font-mono text-slate-700 align-top">
-                  {p.tacos}%
+                <td className="py-3 px-2 text-right align-top">
+                  <TacosValue value={p.tacos} size="sm" />
                 </td>
                 <td className="py-3 px-2 text-right font-mono text-slate-900 font-medium align-top">
                   ${p.sales}K
@@ -4455,8 +4481,8 @@ function ExecutableInsightCard({ insight }) {
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
             最终 {wrapMetric("TACoS")}
           </div>
-          <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
-            {insight.plan.summary.finalTacos}%
+          <div className="mt-0.5">
+            <TacosValue value={insight.plan.summary.finalTacos} size="md" />
           </div>
         </div>
         <div>
@@ -5847,8 +5873,8 @@ function AmazonInsightCard({ insight }) {
                     ))}
                   </ul>
                 </td>
-                <td className="py-3 px-2 text-right font-mono text-slate-700 align-top">
-                  {p.tacos}%
+                <td className="py-3 px-2 text-right align-top">
+                  <TacosValue value={p.tacos} size="sm" />
                 </td>
                 <td className="py-3 px-2 text-right font-mono text-slate-900 font-medium align-top">
                   ${p.sales}K
@@ -5872,8 +5898,8 @@ function AmazonInsightCard({ insight }) {
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium">
             最终 {wrapMetric("TACoS")}
           </div>
-          <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
-            {insight.plan.summary.finalTacos}%
+          <div className="mt-0.5">
+            <TacosValue value={insight.plan.summary.finalTacos} size="md" />
           </div>
         </div>
         <div>
@@ -6150,12 +6176,7 @@ function OmnichannelCanvas() {
     { label: "月销售额", value: O.amazon.currentState.monthlySales },
     {
       label: "TACoS",
-      value: (
-        <>
-          {O.amazon.currentState.tacos.replace("%", "")}
-          <span className="text-slate-400 text-11 ml-0.5">%</span>
-        </>
-      ),
+      value: <TacosValue value={parseFloat(O.amazon.currentState.tacos)} size="sm" />,
     },
     {
       label: "已保持",
@@ -6166,7 +6187,7 @@ function OmnichannelCanvas() {
     { label: "Walmart 花费 / 月", value: O.walmart.currentState.monthlySpend },
     {
       label: "TACoS",
-      value: O.walmart.currentState.tacos,
+      value: <TacosValue value={parseFloat(O.walmart.currentState.tacos)} size="sm" />,
     },
     {
       label: "CR",
@@ -8669,8 +8690,8 @@ function DefenseCanvas() {
             <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
               {wrapMetric("TACoS")}
             </div>
-            <div className="mt-1 text-xl font-mono font-semibold text-emerald-700">
-              {D.currentState.ourTacos}%
+            <div className="mt-1">
+              <TacosValue value={D.currentState.ourTacos} size="lg" />
             </div>
             <div className="text-11 text-slate-500 mt-1">
               日广告 <span className="font-mono">${D.currentState.ourDailyAdSpend}</span>
@@ -8956,8 +8977,7 @@ function TopBar({
           </span>
           <span className="text-slate-300">·</span>
           <span>
-            TACoS{" "}
-            <span className="font-mono font-medium text-slate-900">19.4%</span>
+            TACoS <TacosValue value={19.4} size="sm" />
           </span>
         </div>
       </div>
@@ -9352,8 +9372,8 @@ function AdArchitectureContent({ panelWidth }) {
           <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
             {wrapMetric("TACoS")}
           </div>
-          <div className="text-lg font-mono font-semibold text-slate-900 mt-0.5">
-            {s.tacos}%
+          <div className="mt-0.5">
+            <TacosValue value={s.tacos} size="lg" />
           </div>
         </div>
       </div>
