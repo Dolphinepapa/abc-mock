@@ -104,6 +104,7 @@ const THREADS = [
     initialTimestamp: "2 小时前",
     lastActivityTimestamp: "2 小时前",
     unread: true,
+    timeSensitive: { window: "今天/明天" },
     title: "防御警报 · 床架 SKU-117",
     turns: [
       {
@@ -1755,6 +1756,13 @@ const DEFENSE = {
     framing:
       "我们的反击如果今天上,能正面对位 5 天。如果拖到周三才上,实际只剩 2 天对位,然后他们促销结束,但他们抢到的份额已经留下了。",
   },
+  productCompare: [
+    { label: "售价",    ours: "$199.99",  attacker: "$179.99",  attackerNote: "比我方便宜 $20" },
+    { label: "Coupon", ours: "无券",      attacker: "18% off",  attackerNote: "已挂 9 天 · 预计还剩 5 天" },
+    { label: "评分",    ours: "★ 4.6",    attacker: "★ 4.4",    attackerNote: null },
+    { label: "评论数",  ours: "1,847",    attacker: "2,134",    attackerNote: "近 30 天评论增速 1.8× 我方" },
+    { label: "类目 BSR", ours: "#2",      attacker: "#5",       attackerNote: "近 30 天 #11 → #5" },
+  ],
   currentState: {
     ourBsr: "#2",
     ourBsrHeldDays: 27,
@@ -1806,12 +1814,12 @@ const DEFENSE = {
     },
   ],
   competitorTrend: [
-    { day: "H-36", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
-    { day: "H-24", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
-    { day: "H-12", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
-    { day: "H-0",  adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
+    { day: "36h前", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
+    { day: "24h前", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
+    { day: "12h前", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
+    { day: "现在",  adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
   ],
-  trendChartTitle: "NightFox 36 小时势能轨迹",
+  trendChartTitle: "回顾 · NightFox 过去 36 小时在我方 7 个核心词上做了什么",
   projection: {
     headline: "床架 SKU-117 预计 14 天内跌到 BSR #4-5",
     body:
@@ -8810,6 +8818,44 @@ function DefenseCanvas() {
         ]}
       />
 
+      {/* Listing 规格对比 */}
+      <div className="px-6 pt-4">
+        <div className="border border-slate-200 rounded-md overflow-hidden">
+          <div className="grid grid-cols-3 bg-slate-50 border-b border-slate-200 px-4 py-2">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              对比项
+            </div>
+            <div className="text-10 uppercase tracking-wider text-slate-700 font-semibold">
+              我方 SKU-117
+            </div>
+            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+              NightFox
+            </div>
+          </div>
+          {D.productCompare.map((row, i) => (
+            <div
+              key={row.label}
+              className={`grid grid-cols-3 px-4 py-2.5 items-baseline ${
+                i < D.productCompare.length - 1 ? "border-b border-slate-100" : ""
+              }`}
+            >
+              <div className="text-11 text-slate-500">{row.label}</div>
+              <div className="text-xs font-mono text-slate-900 font-medium">
+                {row.ours}
+              </div>
+              <div className="text-xs font-mono text-rose-700 font-medium">
+                {row.attacker}
+                {row.attackerNote && (
+                  <span className="block text-10 text-rose-600 font-sans font-normal mt-0.5 leading-snug">
+                    {row.attackerNote}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Time-sensitive constraint callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
@@ -8896,7 +8942,7 @@ function DefenseCanvas() {
         </div>
 
         <div>
-          <SectionLabel kicker="过去 36 小时 · 数字越靠左越早">
+          <SectionLabel kicker="回顾 · 左端 = 36 小时前 · 右端 = 现在">
             {D.trendChartTitle}
           </SectionLabel>
           <CompetitorTrendChart data={D.competitorTrend} />
@@ -9422,9 +9468,17 @@ function ThreadCard({ thread, active, onSelect, tone }) {
               {thread.initiatorName} · {thread.initiatorRole}
             </div>
             {isAgent && (
-              <div className="mt-1.5 inline-flex items-center gap-1 text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-1.5 py-0.5 font-medium">
-                <Sparkles className="w-2.5 h-2.5" />
-                Agent 标记 · 监控警报
+              <div className="mt-1.5 flex flex-wrap items-center gap-1">
+                <div className="inline-flex items-center gap-1 text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-1.5 py-0.5 font-medium">
+                  <Sparkles className="w-2.5 h-2.5" />
+                  Agent 标记 · 监控警报
+                </div>
+                {thread.timeSensitive && (
+                  <div className="inline-flex items-center gap-1 text-10 text-rose-700 bg-rose-50 border border-rose-200 rounded-md px-1.5 py-0.5 font-medium">
+                    <Clock className="w-2.5 h-2.5" />
+                    时间敏感 · {thread.timeSensitive.window}决策
+                  </div>
+                )}
               </div>
             )}
             {!active && (

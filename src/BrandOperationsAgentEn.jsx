@@ -105,6 +105,7 @@ const THREADS = [
     initialTimestamp: "2 hours ago",
     lastActivityTimestamp: "2 hours ago",
     unread: true,
+    timeSensitive: { window: "today/tomorrow" },
     title: "Defense alert · Bed frame SKU-117",
     turns: [
       {
@@ -1764,6 +1765,13 @@ const DEFENSE = {
     framing:
       "If our counter goes live today, we get 5 full days head-to-head. If it slips to Wednesday, we only get 2 days, then their promo ends but the share they grabbed is already in their pocket.",
   },
+  productCompare: [
+    { label: "Price",        ours: "$199.99",  attacker: "$179.99",  attackerNote: "$20 below us" },
+    { label: "Coupon",       ours: "None",      attacker: "18% off",  attackerNote: "running 9 days · ~5 days left" },
+    { label: "Rating",       ours: "★ 4.6",    attacker: "★ 4.4",    attackerNote: null },
+    { label: "Reviews",      ours: "1,847",    attacker: "2,134",    attackerNote: "1.8× our 30-day review velocity" },
+    { label: "Category BSR", ours: "#2",       attacker: "#5",       attackerNote: "30-day climb #11 → #5" },
+  ],
   currentState: {
     ourBsr: "#2",
     ourBsrHeldDays: 27,
@@ -1815,12 +1823,12 @@ const DEFENSE = {
     },
   ],
   competitorTrend: [
-    { day: "H-36", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
-    { day: "H-24", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
-    { day: "H-12", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
-    { day: "H-0",  adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
+    { day: "36h ago", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
+    { day: "24h ago", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
+    { day: "12h ago", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
+    { day: "now",     adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
   ],
-  trendChartTitle: "NightFox · 36-hour momentum trajectory",
+  trendChartTitle: "Recap · what NightFox did on our 7 hero terms over the past 36 hours",
   projection: {
     headline: "Bed frame SKU-117 projected to drop to BSR #4-5 within 14 days",
     body:
@@ -8770,6 +8778,44 @@ function DefenseCanvas() {
         ]}
       />
 
+      {/* Listing spec comparison */}
+      <div className="px-6 pt-4">
+        <div className="border border-slate-200 rounded-md overflow-hidden">
+          <div className="grid grid-cols-3 bg-slate-50 border-b border-slate-200 px-4 py-2">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Spec
+            </div>
+            <div className="text-10 uppercase tracking-wider text-slate-700 font-semibold">
+              Our SKU-117
+            </div>
+            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+              NightFox
+            </div>
+          </div>
+          {D.productCompare.map((row, i) => (
+            <div
+              key={row.label}
+              className={`grid grid-cols-3 px-4 py-2.5 items-baseline ${
+                i < D.productCompare.length - 1 ? "border-b border-slate-100" : ""
+              }`}
+            >
+              <div className="text-11 text-slate-500">{row.label}</div>
+              <div className="text-xs font-mono text-slate-900 font-medium">
+                {row.ours}
+              </div>
+              <div className="text-xs font-mono text-rose-700 font-medium">
+                {row.attacker}
+                {row.attackerNote && (
+                  <span className="block text-10 text-rose-600 font-sans font-normal mt-0.5 leading-snug">
+                    {row.attackerNote}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Time-sensitive constraint callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
@@ -8856,7 +8902,7 @@ function DefenseCanvas() {
         </div>
 
         <div>
-          <SectionLabel kicker="Past 36 hours · leftmost is earliest">
+          <SectionLabel kicker="Recap · left = 36h ago · right = now">
             {D.trendChartTitle}
           </SectionLabel>
           <CompetitorTrendChart data={D.competitorTrend} />
@@ -9382,9 +9428,17 @@ function ThreadCard({ thread, active, onSelect, tone }) {
               {thread.initiatorName} · {thread.initiatorRole}
             </div>
             {isAgent && (
-              <div className="mt-1.5 inline-flex items-center gap-1 text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-1.5 py-0.5 font-medium">
-                <Sparkles className="w-2.5 h-2.5" />
-                Flagged by agent · monitoring alert
+              <div className="mt-1.5 flex flex-wrap items-center gap-1">
+                <div className="inline-flex items-center gap-1 text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-1.5 py-0.5 font-medium">
+                  <Sparkles className="w-2.5 h-2.5" />
+                  Flagged by agent · monitoring alert
+                </div>
+                {thread.timeSensitive && (
+                  <div className="inline-flex items-center gap-1 text-10 text-rose-700 bg-rose-50 border border-rose-200 rounded-md px-1.5 py-0.5 font-medium">
+                    <Clock className="w-2.5 h-2.5" />
+                    Time-sensitive · decide {thread.timeSensitive.window}
+                  </div>
+                )}
               </div>
             )}
             {!active && (
