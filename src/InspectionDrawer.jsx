@@ -4,6 +4,7 @@ export default function InspectionDrawer({
   open,
   onClose,
   title,
+  headerMeta,
   methodologyDescription,
   tableHeaders = [],
   tableRows = [],
@@ -25,14 +26,21 @@ export default function InspectionDrawer({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
-          <div className="text-sm font-semibold text-slate-900 tracking-tight">
-            {title}
+        <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between gap-3 flex-shrink-0">
+          <div className="flex items-baseline gap-3 flex-1 min-w-0">
+            <div className="text-sm font-semibold text-slate-900 tracking-tight flex-shrink-0">
+              {title}
+            </div>
+            {headerMeta && (
+              <div className="text-11 text-slate-500 min-w-0 truncate flex items-center gap-2">
+                {headerMeta}
+              </div>
+            )}
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-500 hover:text-slate-900"
+            className="text-slate-500 hover:text-slate-900 flex-shrink-0"
           >
             <X className="w-4 h-4" />
           </button>

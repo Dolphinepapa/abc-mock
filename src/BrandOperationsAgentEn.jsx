@@ -2200,6 +2200,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["Omnichannel Amazon plan", "Omnichannel Walmart SB expansion"],
         definition: "When brand-ad spend sustains for 8+ weeks at 2x baseline, CPC trends down as relevance-driven impressions replace bid-driven ones.",
       },
+      story: {
+        context:
+          "Starting Q3 2024 we noticed that across several steady-state SKUs (BSR 5-15 band), branded-keyword CPC was stuck at $0.80-1.00 while our branded-keyword SOV sat at only 12-18%. Most of the brand search traffic was getting picked up by competitor SB headline placements.",
+        problem:
+          "We wanted to grow branded-keyword SOV without looking like we were 'burning money on our own terms.' The test we needed to run: does sustained brand-ad investment make CPC drift down on its own?",
+        action:
+          "Ran the test on 12 SKUs in waves, 6 weeks each. For each SKU, lifted brand-ad monthly budget from $3-5K to $12-18K, held it flat for the first 4 weeks, just watched.",
+        results:
+          "11 of 12 runs saw CPC drift down 4-6 weeks in — average drop 18.4%. The one failure was a window where the competitor scaled brand-ads at the same time.",
+        takeaway:
+          "When I see a steady-state SKU with SOV < 20% and budget headroom, I proactively suggest '4-6 weeks of sustained brand-ad investment' as the lever — not a price cut, not an SP bid raise. If I detect a competitor scaling brand-ads in the same window, I drop confidence from 76% to 55%.",
+      },
     },
     {
       id: "act-extract-q4",
@@ -9362,6 +9374,130 @@ function RecentActivityList({ entries, onSelect, activeClearance }) {
   );
 }
 
+function StorySection({ title, body }) {
+  return (
+    <div>
+      <div className="text-sm font-semibold text-slate-900 mb-1.5">
+        {title}
+      </div>
+      <div
+        className="text-slate-700 leading-relaxed"
+        style={{ fontSize: "13px" }}
+      >
+        {body}
+      </div>
+    </div>
+  );
+}
+
+function StoryTakeawaySection({ title, body }) {
+  return (
+    <div className="bg-slate-50 border-l-2 border-emerald-500 pl-4 py-3 pr-4">
+      <div className="text-sm font-semibold text-slate-900 mb-1.5">
+        {title}
+      </div>
+      <div
+        className="text-slate-700 leading-relaxed"
+        style={{ fontSize: "13px" }}
+      >
+        {body}
+      </div>
+    </div>
+  );
+}
+
+function ActivityStoryBody({ entry }) {
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  if (!entry?.story) return null;
+  const s = entry.story;
+  return (
+    <div>
+      <div className="space-y-5">
+        <StorySection title="Context" body={s.context} />
+        <StorySection title="Problem to solve" body={s.problem} />
+        <StorySection title="What we did" body={s.action} />
+        <StorySection title="Results" body={s.results} />
+        <StoryTakeawaySection title="Agent takeaway" body={s.takeaway} />
+      </div>
+
+      <div className="mt-6 border-t border-slate-200 pt-4">
+        <button
+          type="button"
+          onClick={() => setDetailsOpen(!detailsOpen)}
+          className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900 font-medium"
+        >
+          {detailsOpen ? (
+            <ChevronDown className="w-3 h-3" />
+          ) : (
+            <ChevronRight className="w-3 h-3" />
+          )}
+          View detailed fields
+          {!detailsOpen && (
+            <ArrowUpRight className="w-3 h-3 text-slate-400 ml-0.5" />
+          )}
+        </button>
+        {detailsOpen && (
+          <div className="mt-3 space-y-3">
+            <div className="text-11 text-slate-600 leading-relaxed bg-slate-50/60 border border-slate-200 rounded-md px-3 py-2">
+              {entry.summary}. {entry.detail.sourceNote}
+            </div>
+            <table className="w-full text-xs">
+              <tbody>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium w-32">
+                    Source count
+                  </td>
+                  <td className="py-2 text-slate-700 font-mono tabular-nums">
+                    {entry.detail.sourceCount}
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    Confidence
+                  </td>
+                  <td className="py-2 text-slate-700 font-mono tabular-nums">
+                    {entry.detail.confidencePct}%
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    Applied in
+                  </td>
+                  <td className="py-2 text-slate-700">
+                    {entry.detail.appliedIn.join(", ")}
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    Sensitivity
+                  </td>
+                  <td className="py-2 text-slate-700">{entry.sensitivity}</td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    Recorded
+                  </td>
+                  <td className="py-2 text-slate-700 font-mono tabular-nums">
+                    {entry.addedAt}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="text-xs">
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+                What this entry means
+              </div>
+              <div className="text-slate-700 leading-relaxed">
+                {entry.detail.definition}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const CONNECTOR_SCOPES = {
   "cn-amazon-ads": [
     "advertising::campaign_management",
@@ -10442,21 +10578,53 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
         open={!!openActivity}
         onClose={() => setOpenActivity(null)}
         title={openActivity?.title}
+        headerMeta={
+          openActivity ? (
+            <>
+              <Pill tone={SENSITIVITY_TONE[openActivity.sensitivity] || "slate"}>
+                {openActivity.sensitivity}
+              </Pill>
+              <span className="text-slate-300">·</span>
+              <span>
+                Confidence{" "}
+                <span className="font-mono text-slate-700 tabular-nums">
+                  {openActivity.detail.confidencePct}%
+                </span>
+              </span>
+              <span className="text-slate-300">·</span>
+              <span>Recorded {openActivity.addedAt}</span>
+              {openActivity.detail.appliedIn.length > 0 && (
+                <>
+                  <span className="text-slate-300">·</span>
+                  <span>
+                    Applied in{" "}
+                    <span className="font-mono text-slate-700 tabular-nums">
+                      {openActivity.detail.appliedIn.length}
+                    </span>{" "}
+                    plans
+                  </span>
+                </>
+              )}
+            </>
+          ) : null
+        }
         methodologyDescription={
-          openActivity
+          openActivity && !openActivity.story
             ? `${openActivity.summary}. ${openActivity.detail.sourceNote}`
             : undefined
         }
-        tableHeaders={["Field", "Value"]}
-        tableRows={drawerRows}
-        columnWidths={["40%", "60%"]}
+        tableHeaders={openActivity && !openActivity.story ? ["Field", "Value"] : []}
+        tableRows={openActivity && !openActivity.story ? drawerRows : []}
+        columnWidths={openActivity && !openActivity.story ? ["40%", "60%"] : undefined}
         bodyOverride={
           openActivity && !canView(activeClearance, openActivity.sensitivity) ? (
             <MaskedItem tag={openActivity.sensitivity} layout="card" />
+          ) : openActivity?.story ? (
+            <ActivityStoryBody entry={openActivity} />
           ) : undefined
         }
         definitionsList={
-          openActivity
+          openActivity && !openActivity.story
             ? [
                 {
                   term: "What this entry means",

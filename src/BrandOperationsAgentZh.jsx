@@ -2188,6 +2188,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["全渠道 Amazon 计划", "全渠道 Walmart SB 扩量"],
         definition: "品牌广告在 2 倍基线水平持续投放 8 周以上时,CPC 随相关性驱动的曝光替代竞价驱动的曝光而下行。",
       },
+      story: {
+        context:
+          "2024 Q3 起,我们注意到几个稳态产品(BSR 5-15 段)的品牌词 CPC 一直在 $0.80-1.00 区间,但品牌词曝光份额只有 12-18%,大量品牌搜索流量被竞品 SB 头位接走。",
+        problem:
+          "想拉品牌词曝光份额,但又不想被认为是「烧钱抢自己的词」。需要测试:持续投品牌广告会不会让 CPC 自然下降。",
+        action:
+          "在 12 个 SKU 上分批做了这个测试,每次 6 周。每个 SKU 把品牌广告月预算从 $3-5K 拉到 $12-18K,前 4 周不调,只观察。",
+        results:
+          "12 次里 11 次 CPC 在 4-6 周后自然下行,平均降幅 18.4%。1 次失败是因为同期竞品也加注品牌广告。",
+        takeaway:
+          "看到稳态产品 SOV < 20% 且预算有余,会主动提「4-6 周品牌广告持续投放」作为执行选项,不会直接推降价或加 SP 出价。如果监控到竞品同期加品牌广告,会标注信心度从 76% 降到 55%。",
+      },
     },
     {
       id: "act-extract-q4",
@@ -9415,6 +9427,132 @@ function RecentActivityList({ entries, onSelect, activeClearance }) {
   );
 }
 
+function StorySection({ title, body }) {
+  return (
+    <div>
+      <div className="text-sm font-semibold text-slate-900 mb-1.5">
+        「{title}」
+      </div>
+      <div
+        className="text-slate-700 leading-relaxed"
+        style={{ fontSize: "13px" }}
+      >
+        {body}
+      </div>
+    </div>
+  );
+}
+
+function StoryTakeawaySection({ title, body }) {
+  return (
+    <div className="bg-slate-50 border-l-2 border-emerald-500 pl-4 py-3 pr-4">
+      <div className="text-sm font-semibold text-slate-900 mb-1.5">
+        「{title}」
+      </div>
+      <div
+        className="text-slate-700 leading-relaxed"
+        style={{ fontSize: "13px" }}
+      >
+        {body}
+      </div>
+    </div>
+  );
+}
+
+function ActivityStoryBody({ entry }) {
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  if (!entry?.story) return null;
+  const s = entry.story;
+  return (
+    <div>
+      <div className="space-y-5">
+        <StorySection title="背景" body={s.context} />
+        <StorySection title="要解决的问题" body={s.problem} />
+        <StorySection title="做了什么" body={s.action} />
+        <StorySection title="结果" body={s.results} />
+        <StoryTakeawaySection title="Agent 沉淀" body={s.takeaway} />
+      </div>
+
+      <div className="mt-6 border-t border-slate-200 pt-4">
+        <button
+          type="button"
+          onClick={() => setDetailsOpen(!detailsOpen)}
+          className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900 font-medium"
+        >
+          {detailsOpen ? (
+            <ChevronDown className="w-3 h-3" />
+          ) : (
+            <ChevronRight className="w-3 h-3" />
+          )}
+          查看详细字段
+          {!detailsOpen && (
+            <ArrowUpRight className="w-3 h-3 text-slate-400 ml-0.5" />
+          )}
+        </button>
+        {detailsOpen && (
+          <div className="mt-3 space-y-3">
+            <div className="text-11 text-slate-600 leading-relaxed bg-slate-50/60 border border-slate-200 rounded-md px-3 py-2">
+              {entry.summary}。{entry.detail.sourceNote}
+            </div>
+            <table className="w-full text-xs">
+              <tbody>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium w-32">
+                    源数量
+                  </td>
+                  <td className="py-2 text-slate-700 font-mono tabular-nums">
+                    {entry.detail.sourceCount}
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    置信度
+                  </td>
+                  <td className="py-2 text-slate-700 font-mono tabular-nums">
+                    {entry.detail.confidencePct}%
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    已应用于
+                  </td>
+                  <td className="py-2 text-slate-700">
+                    {entry.detail.appliedIn.join("、")}
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    敏感度
+                  </td>
+                  <td className="py-2 text-slate-700">
+                    {entry.sensitivityLabel || entry.sensitivity}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-3 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                    记录时间
+                  </td>
+                  <td className="py-2 text-slate-700 font-mono tabular-nums">
+                    {entry.addedAt}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div className="text-xs">
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+                这条记录的含义
+              </div>
+              <div className="text-slate-700 leading-relaxed">
+                {entry.detail.definition}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 const CONNECTOR_SCOPES = {
   "cn-amazon-ads": [
     "advertising::campaign_management",
@@ -10496,21 +10634,54 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
         open={!!openActivity}
         onClose={() => setOpenActivity(null)}
         title={openActivity?.title}
+        headerMeta={
+          openActivity ? (
+            <>
+              <Pill tone={SENSITIVITY_TONE[openActivity.sensitivity] || "slate"}>
+                {openActivity.sensitivityLabel ||
+                  SENSITIVITY_LABEL_ZH[openActivity.sensitivity]}
+              </Pill>
+              <span className="text-slate-300">·</span>
+              <span>
+                置信度{" "}
+                <span className="font-mono text-slate-700 tabular-nums">
+                  {openActivity.detail.confidencePct}%
+                </span>
+              </span>
+              <span className="text-slate-300">·</span>
+              <span>记录于 {openActivity.addedAt}</span>
+              {openActivity.detail.appliedIn.length > 0 && (
+                <>
+                  <span className="text-slate-300">·</span>
+                  <span>
+                    已应用于{" "}
+                    <span className="font-mono text-slate-700 tabular-nums">
+                      {openActivity.detail.appliedIn.length}
+                    </span>{" "}
+                    个计划
+                  </span>
+                </>
+              )}
+            </>
+          ) : null
+        }
         methodologyDescription={
-          openActivity
+          openActivity && !openActivity.story
             ? `${openActivity.summary}。${openActivity.detail.sourceNote}`
             : undefined
         }
-        tableHeaders={["字段", "取值"]}
-        tableRows={drawerRows}
-        columnWidths={["40%", "60%"]}
+        tableHeaders={openActivity && !openActivity.story ? ["字段", "取值"] : []}
+        tableRows={openActivity && !openActivity.story ? drawerRows : []}
+        columnWidths={openActivity && !openActivity.story ? ["40%", "60%"] : undefined}
         bodyOverride={
           openActivity && !canView(activeClearance, openActivity.sensitivity) ? (
             <MaskedItem tag={openActivity.sensitivity} layout="card" />
+          ) : openActivity?.story ? (
+            <ActivityStoryBody entry={openActivity} />
           ) : undefined
         }
         definitionsList={
-          openActivity
+          openActivity && !openActivity.story
             ? [
                 {
                   term: "这条记录的含义",
