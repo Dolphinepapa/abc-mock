@@ -2205,16 +2205,28 @@ const COMPANY_BRAIN = {
       id: "act-extract-q4",
       kind: "extraction",
       title: "Q4-2025-Retrospective.pdf 提炼出 3 个新模式",
-      summary: "razor-blade 方法、旺季 SOV 防御、饱和 IS 的 dayparting 三个模式被沉淀",
+      summary: "razor-blade 方法、旺季 SOV 防御、库存耦合 BS 光环三个模式被沉淀",
       addedAt: "May 12, 09:47",
       sensitivity: "Sensitive",
       sensitivityLabel: "敏感",
       detail: {
         sourceCount: 1,
         confidencePct: 72,
-        sourceNote: "来源:Q4-2025-Retrospective.pdf · 38 页 · 由 Maya Chen 上传。",
+        sourceNote: "来源:Q4-2025-Retrospective.pdf · 47 页 · 由 Maya Chen 上传。",
         appliedIn: ["razor-blade 计划 · SKU-A 套装", "旺季 SOV 防御打法"],
         definition: "三个模式各自由文档内 4 个以上历史 SKU 结果支撑。",
+      },
+      story: {
+        context:
+          "2026 Q1,团队对 razor-blade 定价机制(怎么定刀头复购价、能撑多大降价区间)的判断主要靠 Sara 个人经验,品牌大脑里没有系统化的 pattern。Maya 把 Q4 2025 的内部复盘 PDF 上传过来,要求 agent 提炼方法学,而不是让人一页页看。",
+        problem:
+          "47 页的复盘文档,人读 3-4 小时,中间有大量项目背景和 SKU 名单。需要从里面把「可复用的操作决策」挑出来,剩下的背景 / 现状描述忽略掉。",
+        action:
+          "解析 47 页(138K tokens 文本 + 12 张表 + 4 张图)。识别出 8 页含真正的操作学习,其余 39 页是项目背景。把 finding 跟现有 pattern 库交叉比对 — 3 段产出新 pattern,2 段给现有 playbook 加了强化。",
+        results:
+          "3 个新 pattern,信心度 68-74%:razor-blade 12 天促销窗口的 attach 提升(74%)、节日驱动的品类宽匹配 CR 膨胀(68%)、库存耦合对 BS 光环持续时间的影响(71%)。2 个 playbook 更新:「BS 争取 #2 → #1」加了上线前库存预检 phase,「旺季 SOV 防御」信心度 71% → 78%。",
+        takeaway:
+          "碰到团队复盘类 PDF,会先标「真操作学习页面」的比例(这次 8/47 = 17%,postmortem 类一般 15-25%)。低于 10% 我会建议团队先精简再上传,信噪比太低提炼出来的 pattern 不可靠。给现有 playbook 加新案例时,我会显示信心度变化 + 文档哪几页支撑了这次更新,让团队能审。",
       },
     },
     {

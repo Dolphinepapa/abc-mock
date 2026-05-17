@@ -2217,15 +2217,27 @@ const COMPANY_BRAIN = {
       id: "act-extract-q4",
       kind: "extraction",
       title: "Q4-2025-Retrospective.pdf — extracted 3 new patterns",
-      summary: "Razor-blade methodology, peak-season SOV defense, and dayparting-on-saturation patterns distilled",
+      summary: "Razor-blade methodology, peak-season SOV defense, inventory-coupling halo — three patterns distilled",
       addedAt: "May 12, 09:47",
       sensitivity: "Sensitive",
       detail: {
         sourceCount: 1,
         confidencePct: 72,
-        sourceNote: "Source: Q4-2025-Retrospective.pdf · 38 pages · uploaded by Maya Chen.",
+        sourceNote: "Source: Q4-2025-Retrospective.pdf · 47 pages · uploaded by Maya Chen.",
         appliedIn: ["Razor-blade plan · SKU-A bundle", "Peak SOV defense playbook"],
         definition: "Three discrete patterns extracted, each backed by at least 4 prior SKU outcomes within the doc.",
+      },
+      story: {
+        context:
+          "Going into Q1 2026, the team's judgment on razor-blade pricing mechanics (how to price blade refills, how much discount headroom is safe) lived mostly in Sara's head — no systematic pattern in the brain. Maya uploaded the Q4 2025 internal retrospective PDF and asked me to distill the methodology rather than read it page by page.",
+        problem:
+          "47-page retrospective. Reading it cover to cover takes 3-4 hours, and most of the document is project context + SKU listings. The job: surface 'reusable operational decisions' from inside the noise and ignore the rest.",
+        action:
+          "Parsed all 47 pages (138K tokens of text + 12 tables + 4 charts). Identified 8 pages as carrying actual operational learnings; the other 39 are project context. Cross-referenced findings against existing patterns in brain — 3 sections produced new patterns, 2 sections strengthened existing playbooks.",
+        results:
+          "3 new patterns, confidence 68-74%: razor-blade attach lift via 12-day promo window (74%), holiday-driven CR inflation on category-broad keywords (68%), inventory-coupling effect on best-seller halo duration (71%). 2 playbook updates: 'Best-seller capture #2 → #1' got a pre-launch inventory check phase; 'Peak-season SOV defense' moved from 71% → 78% confidence.",
+        takeaway:
+          "For internal-retrospective PDFs, I now flag the 'actual operational learning page' ratio first (here: 8/47 = 17% — postmortems usually run 15-25%). Below 10% I'll ask the team to trim the doc before uploading because signal-to-noise gets too low to extract reliable patterns. When I update an existing playbook with a new case, I always show the confidence delta + which pages supported the change so the team can audit.",
       },
     },
     {
