@@ -8553,6 +8553,13 @@ function DefenseCanvas() {
             caption: "NightFox bed frame hero",
             fallbackText: "Pending upload · NightFox hero",
             descriptor: "NightFox hero (grey linen headboard · modern bedroom scene)",
+            gallery: [
+              "/nightfox-gallery-1.png",
+              "/nightfox-gallery-2.png",
+              "/nightfox-gallery-3.png",
+              "/nightfox-gallery-4.png",
+              "/nightfox-gallery-5.png",
+            ],
           },
         ]}
       />

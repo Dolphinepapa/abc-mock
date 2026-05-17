@@ -8596,6 +8596,13 @@ function DefenseCanvas() {
             caption: "NightFox 床架主图",
             fallbackText: "等待上传 · NightFox 主图",
             descriptor: "NightFox 主图(灰色亚麻床头板 + 现代卧室实景)",
+            gallery: [
+              "/nightfox-gallery-1.png",
+              "/nightfox-gallery-2.png",
+              "/nightfox-gallery-3.png",
+              "/nightfox-gallery-4.png",
+              "/nightfox-gallery-5.png",
+            ],
           },
         ]}
       />
