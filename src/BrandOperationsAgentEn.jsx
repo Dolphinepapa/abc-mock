@@ -148,6 +148,33 @@ const THREADS = [
     ],
   },
   {
+    id: "daily-report",
+    canvasId: "daily-report",
+    initiator: "agent",
+    initiatorName: "12 delegated listings",
+    initiatorRole: "Maya Chen",
+    initialTimestamp: "today 7:00",
+    lastActivityTimestamp: "today 7:00",
+    unread: false,
+    threadType: "report-feed",
+    title: "Daily ops report · pushed every morning",
+    reports: {
+      historical: [
+        { id: "rpt-2026-05-08", type: "daily", date: "5/8 Fri", time: "7:00", summary: { rev: "$56,180", tacos: "17.4%", anomalies: 0 } },
+        { id: "rpt-2026-05-09", type: "daily", date: "5/9 Sat", time: "7:00", summary: { rev: "$48,240", tacos: "16.8%", anomalies: 1 } },
+        { id: "rpt-2026-05-10", type: "daily", date: "5/10 Sun", time: "7:00", summary: { rev: "$44,720", tacos: "16.5%", anomalies: 0 } },
+      ],
+      current: [
+        { id: "rpt-weekly-w19", type: "weekly", date: "5/12 Mon", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$402,180", tacos: "17.6%", note: "3 listings showing trend shifts" } },
+        { id: "rpt-2026-05-12", type: "daily", date: "5/12 Mon", time: "7:30", summary: { rev: "$54,240", tacos: "18.2%", anomalies: 1 } },
+        { id: "rpt-2026-05-13", type: "daily", date: "5/13 Tue", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
+        { id: "rpt-2026-05-14", type: "daily", date: "5/14 Wed", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
+        { id: "rpt-2026-05-15", type: "daily", date: "5/15 Thu", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
+        { id: "rpt-2026-05-16", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isToday: true },
+      ],
+    },
+  },
+  {
     id: "strategy",
     canvasId: "strategy",
     initiator: "user",
@@ -9599,11 +9626,123 @@ function ChatPanel({ activeId, onSelect }) {
   );
 }
 
+function ReportCard({ report, selected, onClick }) {
+  const isWeekly = report.type === "weekly";
+  const isToday = report.isToday;
+  const containerClass = isToday
+    ? "border-2 border-emerald-500 bg-emerald-50/40"
+    : isWeekly
+      ? "border-2 border-emerald-300 bg-white hover:border-emerald-400"
+      : selected
+        ? "border border-slate-400 bg-white"
+        : "border border-slate-200 bg-white hover:border-slate-300";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`w-full text-left rounded-md px-3 py-2.5 transition-colors ${containerClass}`}
+    >
+      <div className="flex items-baseline justify-between gap-2 mb-1">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          {isWeekly && (
+            <span className="text-10 text-emerald-700 bg-emerald-100 border border-emerald-300 rounded px-1 font-semibold flex-shrink-0">
+              Weekly
+            </span>
+          )}
+          <span className="text-10 text-slate-500 font-mono truncate">
+            Agent · {report.date} · {report.time}
+          </span>
+        </div>
+        {isToday && (
+          <span className="text-10 text-emerald-700 font-semibold flex-shrink-0">
+            Today
+          </span>
+        )}
+      </div>
+      <div className="text-xs font-semibold text-slate-900 mb-1">
+        {isWeekly
+          ? `Week recap · ${report.coverRange}`
+          : `Daily · ${report.date}`}
+      </div>
+      <div className="text-11 text-slate-600 leading-relaxed">
+        {isWeekly
+          ? `Weekly sales ${report.summary.rev} · weekly TACoS ${report.summary.tacos}`
+          : `Sales ${report.summary.rev} · TACoS ${report.summary.tacos} · ${report.summary.anomalies} anomal${report.summary.anomalies === 1 ? "y" : "ies"}`}
+      </div>
+      {report.summary.note && (
+        <div className="text-11 text-slate-500 mt-1 leading-relaxed">
+          {report.summary.note}
+        </div>
+      )}
+      <div className={`mt-1.5 text-10 font-medium ${isToday ? "text-emerald-700" : "text-slate-500"}`}>
+        {isToday ? "Details on canvas →" : "[Open]"}
+      </div>
+    </button>
+  );
+}
+
+function ReportFeedExpanded({ thread }) {
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [selectedReportId, setSelectedReportId] = useState(
+    thread.reports.current[thread.reports.current.length - 1].id,
+  );
+  return (
+    <div className="px-3 py-3">
+      <div className="text-11 text-slate-500 mb-3 leading-relaxed px-1">
+        Auto-pushed at 7:00 every day · no notifications
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setHistoryOpen(!historyOpen)}
+        className="w-full text-11 text-slate-500 hover:text-slate-700 mb-2 flex items-center justify-center gap-1 py-1.5 border-y border-dashed border-slate-200"
+      >
+        {historyOpen ? (
+          <ChevronDown className="w-3 h-3" />
+        ) : (
+          <ChevronRight className="w-3 h-3" />
+        )}
+        Older reports ({thread.reports.historical.length})
+      </button>
+
+      {historyOpen && (
+        <div className="space-y-2 mb-2">
+          {thread.reports.historical.map((rpt) => (
+            <ReportCard
+              key={rpt.id}
+              report={rpt}
+              selected={selectedReportId === rpt.id}
+              onClick={() => setSelectedReportId(rpt.id)}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="space-y-2">
+        {thread.reports.current.map((rpt) => (
+          <ReportCard
+            key={rpt.id}
+            report={rpt}
+            selected={selectedReportId === rpt.id}
+            onClick={() => setSelectedReportId(rpt.id)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ThreadCard({ thread, active, onSelect, tone }) {
   const isAgent = thread.initiator === "agent";
   const isBrainOps = tone === "brain-ops";
-  const lastTurn = thread.turns[thread.turns.length - 1];
-  const previewBody = lastTurn?.body || "";
+  const isReportFeed = thread.threadType === "report-feed";
+  const lastTurn = thread.turns ? thread.turns[thread.turns.length - 1] : null;
+  const latestReport = isReportFeed
+    ? thread.reports.current[thread.reports.current.length - 1]
+    : null;
+  const previewBody = isReportFeed
+    ? `Today sales ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · ${latestReport.summary.anomalies} anomal${latestReport.summary.anomalies === 1 ? "y" : "ies"}`
+    : lastTurn?.body || "";
 
   return (
     <div
@@ -9649,7 +9788,7 @@ function ThreadCard({ thread, active, onSelect, tone }) {
               <div className="mt-1.5 flex flex-wrap items-center gap-1">
                 <div className="inline-flex items-center gap-1 text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-md px-1.5 py-0.5 font-medium">
                   <Sparkles className="w-2.5 h-2.5" />
-                  Flagged by agent · monitoring alert
+                  {isReportFeed ? "Agent · daily push" : "Flagged by agent · monitoring alert"}
                 </div>
                 {thread.timeSensitive && (
                   <div className="inline-flex items-center gap-1 text-10 text-rose-700 bg-rose-50 border border-rose-200 rounded-md px-1.5 py-0.5 font-medium">
@@ -9670,27 +9809,33 @@ function ThreadCard({ thread, active, onSelect, tone }) {
 
       {active && (
         <div className="border-t border-slate-200">
-          <div className="px-3 py-3 space-y-3">
-            {thread.turns.map((turn, i) => (
-              <ThreadTurn key={i} turn={turn} thread={thread} />
-            ))}
-          </div>
-          <div className="border-t border-slate-100 px-3 py-2.5 bg-slate-50/60">
-            <div className="relative">
-              <input
-                type="text"
-                disabled
-                placeholder="Reply…"
-                className="w-full pl-3 pr-14 py-2 text-11 bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
-              />
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                <Lock className="w-2.5 h-2.5 text-slate-400" />
-                <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
-                  Locked
-                </span>
+          {isReportFeed ? (
+            <ReportFeedExpanded thread={thread} />
+          ) : (
+            <>
+              <div className="px-3 py-3 space-y-3">
+                {thread.turns.map((turn, i) => (
+                  <ThreadTurn key={i} turn={turn} thread={thread} />
+                ))}
               </div>
-            </div>
-          </div>
+              <div className="border-t border-slate-100 px-3 py-2.5 bg-slate-50/60">
+                <div className="relative">
+                  <input
+                    type="text"
+                    disabled
+                    placeholder="Reply…"
+                    className="w-full pl-3 pr-14 py-2 text-11 bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
+                  />
+                  <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                    <Lock className="w-2.5 h-2.5 text-slate-400" />
+                    <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
+                      Locked
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>
@@ -13333,6 +13478,44 @@ function QACanvas({ activeClearance }) {
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
+function DailyReportCanvas() {
+  return (
+    <>
+      <CanvasHeader
+        kicker="Daily ops report"
+        title="Daily report · Fri 5/16"
+        meta={
+          <>
+            <Pill tone="slate">
+              <FileText className="w-3 h-3" />
+              Export PDF · demo-locked
+            </Pill>
+            <Pill tone="slate">
+              <Calendar className="w-3 h-3" />
+              5/16 ⌄
+            </Pill>
+          </>
+        }
+      />
+      <div className="px-6 py-16">
+        <div className="max-w-md mx-auto text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 mb-4">
+            <FileText className="w-5 h-5 text-slate-500" />
+          </div>
+          <div className="text-sm font-semibold text-slate-900 mb-2">
+            Report canvas — next step
+          </div>
+          <div className="text-11 text-slate-500 leading-relaxed">
+            Step 1 covered the sidebar thread + history-card collapse.
+            Step 2 onward fills in the 4 report sections (data, insights,
+            actions, outlook).
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function EmptyCanvas() {
   return (
     <div className="px-6 py-24 flex items-start justify-center">
@@ -13397,6 +13580,8 @@ export default function App({ locale, setLocale }) {
         return <StrategyCanvas />;
       case "defense":
         return <DefenseCanvas />;
+      case "daily-report":
+        return <DailyReportCanvas />;
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
