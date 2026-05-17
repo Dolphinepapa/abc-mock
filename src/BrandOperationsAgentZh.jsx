@@ -8590,6 +8590,13 @@ function DefenseCanvas() {
             caption: "我方 SKU-117 床架主图",
             fallbackText: "等待上传 · 我方 SKU-117 主图",
             descriptor: "我方主图(深灰亚麻 · 三层条纹床头板)",
+            gallery: [
+              "/sku-117-gallery-1.png",
+              "/sku-117-gallery-2.png",
+              "/sku-117-gallery-3.png",
+              "/sku-117-gallery-4.png",
+              "/sku-117-gallery-5.png",
+            ],
           },
           {
             src: "/nightfox-hero.png",

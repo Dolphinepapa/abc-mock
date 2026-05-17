@@ -8547,6 +8547,13 @@ function DefenseCanvas() {
             caption: "Our SKU-117 bed frame hero",
             fallbackText: "Pending upload · our SKU-117 hero",
             descriptor: "Our hero (dark grey linen · 3-bar tufted headboard)",
+            gallery: [
+              "/sku-117-gallery-1.png",
+              "/sku-117-gallery-2.png",
+              "/sku-117-gallery-3.png",
+              "/sku-117-gallery-4.png",
+              "/sku-117-gallery-5.png",
+            ],
           },
           {
             src: "/nightfox-hero.png",
