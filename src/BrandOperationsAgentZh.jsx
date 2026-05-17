@@ -2244,6 +2244,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["全渠道 Walmart SB 扩量", "Walmart 出价节奏基线"],
         definition: "12,400 个事件已规范化到与 Amazon Ads 数据相同的 schema,可用的部分按 ASIN / GTIN 进行 join。",
       },
+      story: {
+        context:
+          "落地灯线在 Walmart 上的广告投入做了一年多,但品牌大脑里关于 Walmart 的数据一直是第三方 scrape(精度 ±20%),没有第一方接入。Cross-platform 分析(Amazon vs Walmart 同一 SKU)只能基于估算。",
+        problem:
+          "Devon 在 5 月 10 日通过 chat 发起 connect。要让品牌大脑能从 Walmart 第一方拉数据:campaigns、关键词表现、SB 创意、search terms、销售对应,过去 90 天历史 + 之后每 15 分钟实时同步。",
+        action:
+          "Maya 授权 OAuth(4 项 read scope)。Agent 从授权完成到第一条数据落库花了 12 分钟 — 8 个 Walmart 表 backfill 90 天,12,400 条历史事件被索引。建立了跨平台 SKU 映射(Amazon ASIN ↔ Walmart Item ID)。",
+        results:
+          "现在能跑跨平台分析(见 Devon 的全渠道方案画布,Walmart $36K 增量基于真实 CPC,不是 scrape 估值)。Walmart 广告架构在 Ad architecture inspector 自动多了一个 tab。30 天后会自动触发一次跨平台 attribution 模型重训。",
+        takeaway:
+          "现在我能比较 Amazon 和 Walmart 真实 CPC 时,我会主动指出 Walmart 上的结构性扩量空间(本案例发现 CPC 低 42%、SB 占比仅 8%)— 这种洞察在没有第一方数据时只能猜。如果未来 sync 失败超过 6 小时,我会在画布顶部红色 callout 提示数据可能滞后,避免基于过时数据做决策。",
+      },
     },
     {
       id: "act-revoke-dayparting",

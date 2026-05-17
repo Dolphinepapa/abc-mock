@@ -2254,6 +2254,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["Omnichannel Walmart SB expansion", "Walmart bid-pacing baseline"],
         definition: "12,400 events normalized to the same schema as Amazon Ads data, joined on ASIN / GTIN where available.",
       },
+      story: {
+        context:
+          "We'd been spending on Walmart ads for the Floor Lamps line for over a year, but the brain's Walmart data was all third-party scrape (~±20% precision) — no first-party access. Cross-platform analysis (same SKU on Amazon vs Walmart) ran on estimates.",
+        problem:
+          "Devon initiated the connect via chat on May 10. The brain needed first-party Walmart data — campaigns, keyword performance, SB creatives, search terms, conversion attribution — past 90 days backfilled and 15-minute live sync going forward.",
+        action:
+          "Maya authorized OAuth (4 read scopes). 12 minutes from auth-complete to first row indexed — 8 Walmart tables backfilled 90 days, 12,400 historical events indexed. Built the cross-platform SKU mapping (Amazon ASIN ↔ Walmart Item ID).",
+        results:
+          "Cross-platform analysis is now live (see Devon's omnichannel canvas — Walmart's +$36K incremental allocation is grounded in real Walmart CPC, not scrape estimates). Walmart now appears as its own tab in the Ad architecture inspector. After 30 days I'll auto-retrigger the cross-platform attribution model.",
+        takeaway:
+          "When I can compare Amazon vs Walmart actuals, I proactively flag structural headroom on Walmart (this case: CPC 42% below Amazon, SB share only 8%) — that kind of read isn't possible from scrape data. If sync fails for more than 6 hours, I'll surface a rose callout at the top of any canvas referencing Walmart data so the team doesn't make decisions on stale numbers.",
+      },
     },
     {
       id: "act-revoke-dayparting",
