@@ -14,6 +14,7 @@ import {
   Clock,
   Sparkles,
   AlertCircle,
+  AlertTriangle,
   CircleDot,
   ArrowRight,
   ArrowUpRight,
@@ -99,16 +100,16 @@ const THREADS = [
     initiator: "agent",
     initiatorName: "品牌运营助手",
     initiatorRole: "监控警报",
-    initialTimestamp: "2 分钟前",
-    lastActivityTimestamp: "2 分钟前",
+    initialTimestamp: "2 小时前",
+    lastActivityTimestamp: "2 小时前",
     unread: true,
-    title: "防御警报 · SKU-A",
+    title: "防御警报 · 床架 SKU-117",
     turns: [
       {
         speaker: "agent",
-        timestamp: "2 分钟前",
+        timestamp: "2 小时前",
         body:
-          "SKU-A 的 BSR #2 位置正在受到主动攻击。竞品 SKU-X 过去 96 小时内在 7 个核心关键词上加大出价,平均广告位由 #5 升至 #2;SKU-X 自然排名也由 #14 升至 #8。若当前趋势延续,SKU-A 预计 14 天内跌至 BSR #4-5。",
+          "昨天 NightFox Bedding 开始在我们床架的 7 个核心词上集中抬 bid。今天监控了一天,势头没回落,这不是临时促销引流。加上他们刚挂了 18% 折扣券,我判断这是有组织的份额抢占。建议今天就反应,等不到明天。",
         canvasLink: false,
       },
       {
@@ -117,14 +118,14 @@ const THREADS = [
         initials: "DP",
         role: "高级增长经理",
         timestamp: "刚刚",
-        body: "推荐怎么应对?",
+        body: "给我看下方案。",
         canvasLink: false,
       },
       {
         speaker: "agent",
         timestamp: "刚刚",
         body:
-          "已起草防御方案,提供 3 种应对姿态供选择。打开画布查看 — 推荐姿态已高亮。",
+          "已起草 3 种应对姿态。这次的关键是看懂他们的意图,他们不是抢这周订单,是抢旺季前的自然位。打开画布,推荐姿态已高亮。",
         canvasLink: true,
       },
     ],
@@ -1741,32 +1742,47 @@ const LAUNCH_CR = {
 
 /* Defense canvas — agent-initiated, time-sensitive */
 const DEFENSE = {
-  sku: "SKU-A · 弧形落地灯",
+  sku: "SKU-117 · 床架",
+  attacker: "NightFox Bedding",
   initiator: "品牌运营助手",
   initiatorRole: "实时监控警报",
-  detectedAt: "2 分钟前",
-  attackerSku: "SKU-X",
+  detectedAt: "2 小时前",
   timeSensitive: {
-    window: "48 小时",
-    expiresIn: "约 5 天",
-    reason: "竞品 18% 折扣券预计 5 天后到期 — 决策窗口正在收窄",
+    window: "今天/明天",
+    expiresIn: "5 天",
+    reason: "NightFox 18% 折扣券大概还能打 5 天就结束",
+    framing:
+      "我们的反击如果今天上,能正面对位 5 天。如果拖到周三才上,实际只剩 2 天对位,然后他们促销结束,但他们抢到的份额已经留下了。",
   },
   currentState: {
     ourBsr: "#2",
     ourBsrHeldDays: 27,
-    ourSales: "$138K / 月",
-    ourTacos: 18.1,
-    ourDailyAdSpend: "$620",
-    bsrCategory: "落地灯",
+    ourSales: "$184K / 月",
+    ourTacos: 17.4,
+    ourDailyAdSpend: 980,
+    attackerName: "NightFox",
+    keywordCount: 7,
+  },
+  context: {
+    headline: "这不是普通攻击",
+    body:
+      "公司大脑显示:床架品类即将进入返校 + 秋季促销旺季(历史 6-8 月品类搜索量 +180-220%)。NightFox 选这个时间点在我们核心词上集中加投,意图明显是抢自然排名,不是抢眼前订单。旺季时,自然位 #1-3 拿到的免费流量是平时的 3-4 倍。\n\n他在用现在的广告费,买未来 8 周的免费流量。\n\n这种攻击不能用 TACoS 算账。要按「自然位失守一个季度的总流量损失」算。",
+    inlinePrecedent: {
+      sku: "厨房刀具 SKU-K22",
+      period: "2024 Q3",
+      summary:
+        "竞品在旺季前 6 周抢自然位,我方初期按 TACoS 看觉得不亏所以没动。旺季时对方占 #1,我方掉到 #4,Q4 整季多花 $89K 广告才拉回 #3。",
+      lesson: "教训:旺季前 1-2 个月看到这种 pattern,要守 BSR,不要算 TACoS。",
+    },
   },
   attackSignals: [
     {
-      id: "bidding",
+      id: "bids",
       title: "出价拉得很猛",
       icon: "DollarSign",
       lines: [
-        "SKU-X 在 7 个核心词上的 CPC 过去 96 小时累计 +180%(来源:bid-loss 报表)。",
-        "估算 SKU-X 日广告花费 $1,400 vs 我方 $620 — 在这 7 个词上是我们 2.3 倍。",
+        "NightFox 在 7 个核心词上的 CPC 过去 36 小时累计 +180%(来源:bid-loss 报表)。",
+        "估算 NightFox 日广告花费 $1,400 vs 我方 $620 · 在这 7 个词上是我们 2.3 倍。",
       ],
     },
     {
@@ -1774,58 +1790,57 @@ const DEFENSE = {
       title: "自然势能在堆积",
       icon: "TrendingUp",
       lines: [
-        "SKU-X 过去 30 天评论增速 2.3x 我方 · 12 天前上了新 A+ 内容。",
+        "NightFox 过去 7 天评论增速 1.8x 我方 · 5 天前上了新 A+ 内容。",
         "Listing 转化率从 6.4% 爬到 8.9% · 不是只在买流量,详情页本身也在赢。",
       ],
     },
     {
       id: "promo",
-      title: "促销信号 · 这是个有期限的攻击",
+      title: "促销信号 · 这是有期限的攻击",
       icon: "Clock",
       lines: [
-        "SKU-X 18% off 折扣券已挂 9 天 · 典型 14 天周期。",
-        "我推算还剩 ~5 天到期。窗口一关,他们的势能多半要回落。",
+        "NightFox 18% off 折扣券已挂 9 天 · 典型 14 天周期。",
+        "我推算还剩 ~5 天到期。窗口一关,他们的势能多半要回落,但自然位已经被抢走。",
       ],
     },
   ],
   competitorTrend: [
-    { day: "D-6", adPosition: 4.8, organicRank: 14, estDailySales: 1820 },
-    { day: "D-5", adPosition: 4.2, organicRank: 13, estDailySales: 1960 },
-    { day: "D-4", adPosition: 3.6, organicRank: 12, estDailySales: 2240 },
-    { day: "D-3", adPosition: 3.1, organicRank: 11, estDailySales: 2480 },
-    { day: "D-2", adPosition: 2.6, organicRank: 10, estDailySales: 2810 },
-    { day: "D-1", adPosition: 2.2, organicRank: 9,  estDailySales: 3140 },
-    { day: "D-0", adPosition: 2.0, organicRank: 8,  estDailySales: 3380 },
+    { day: "H-36", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
+    { day: "H-24", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
+    { day: "H-12", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
+    { day: "H-0",  adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
   ],
+  trendChartTitle: "NightFox 36 小时势能轨迹",
   projection: {
-    headline: "SKU-A 预计 14 天内跌到 BSR #4-5",
-    detail:
-      "按 SKU-X 当前势头线性延伸 · 我们若不动,7 个核心词的曝光份额会被他们继续吃。组合广告 + 自然 + 促销三条线一起咬,我们的 #2 撑不住。",
-    revenueLoss: "$42K / 14 天",
-    revenueLossNote: "按当前流量被夺份额 × 我方 $34.99 ASP 估算 · 不含后续 BSR 滑落带来的连锁效应",
+    headline: "床架 SKU-117 预计 14 天内跌到 BSR #4-5",
+    body:
+      "按 NightFox 当前势头线性延伸:我们若不动,7 个核心词的曝光份额会被他们继续吃。组合广告 + 自然 + 促销三条线一起咬,我们的 #2 撑不住。",
+    revenueLoss: "$58K / 14 天",
+    revenueLossNote: "按当前流量被夺份额 × 我方 ASP 估算 · 不含后续 BSR 滑落带来的连锁效应",
     confidence: 78,
-    confidenceLabel: "基于过去 12 次同类型攻击的轨迹回放",
+    confidenceNote: "基于过去 12 次同类型攻击的轨迹回放",
+    assumption: "NightFox 当前势能延续,我方不主动响应",
   },
   postures: [
     {
-      id: "defend-all",
-      name: "硬刚到底",
-      kind: "aggressive",
+      id: "defend-frontal",
+      name: "正面顶住 · 守自然位",
+      kind: "frontal",
       tone: "blue",
       recommended: false,
-      tagline: "在他们最强的 7 个词上全部跟价",
+      tagline: "在他们最强的 7 个词上跟齐出价",
       approach:
-        "在 7 个核心词上跟齐 SKU-X 的出价 · SB 叠加层日预算 +80% · 14 天匹配券(15% off)。把战场摆在他们最强的地方。",
+        "在 7 核心词上跟齐 NightFox 的出价 · SB 叠加层日预算 +80% · 14 天匹配券 (15% off)。把战场摆在他们最强的地方。",
       cost: "+$11.4K 广告 / 14 天 · 贡献毛利 -3.2pp",
       risk: "出价战会再升级 · 竞品大概率追加跟进 · 14 天窗口结束后 CPC 难回落",
       outcomeProbability: "78% 概率 BSR 守住 ≤ #3",
-      recommendedWhen: "BSR #1-3 的长期 LTV 足够厚,值得短期吃毛利",
+      recommendedWhen: "旺季在即,BSR #1-3 的自然流量价值远超短期毛利让利",
       confidence: 73,
       confidenceLabel: "硬刚是熟悉打法 · 但代价压在我方毛利上",
     },
     {
-      id: "wait",
-      name: "按兵不动",
+      id: "wait-it-out",
+      name: "赌他们短期撤",
       kind: "patient",
       tone: "slate",
       recommended: false,
@@ -1833,154 +1848,163 @@ const DEFENSE = {
       approach:
         "广告花费保持现状 · 高频监控 BSR 与流量份额 · 准备一个反击方案放抽屉里 · 真跌到 #4 再启动。",
       cost: "$0 额外投入",
-      risk: "BSR 大概率短暂掉到 #4-5 · 14 天估算流失 $42K · 万一 SKU-X 不只是促销驱动,我们追回来更贵",
-      outcomeProbability: "65% 概率促销到期后指标回落 · 我们守住中位",
-      recommendedWhen: "判断这波攻击 90% 是促销驱动且时限内会结束",
-      confidence: 58,
-      confidenceLabel: "信心比较薄 — 我没法确认 SKU-X 后面有没有第二波弹药",
+      risk:
+        "如果 NightFox 不撤(他在抢旺季流量,促销结束他可能转打长期),我们旺季时 BSR 在 #4-5,损失放大 2-3 倍",
+      outcomeProbability:
+        "65% 概率促销到期后 NightFox 撤,但自然位他已经先吃走一部分",
+      recommendedWhen: "判断这波 90% 是促销驱动 + 现金流紧张需要保毛利",
+      confidence: 52,
+      confidenceLabel: "旺季背景下信心很薄 · 故意低于平时 65% 的底线",
     },
     {
-      id: "counter-attack",
-      name: "打他们薄的地方",
+      id: "asymmetric",
+      name: "不正面碰 · 抢他们后路",
       kind: "asymmetric",
       tone: "emerald",
       recommended: true,
-      tagline: "12 个 SKU-X 弱词 + 对比型促销",
+      tagline: "12 个 NightFox 弱词 + 对比型促销",
       approach:
-        "我们别在他们最强的 7 个词上硬刚。去他们弱的 12 个词上扩量,同时上一个对比型促销(买 2 件减 $18,不打折扣率)— 和他们的 18% off 不正面碰。",
-      cost: "+$7.8K 广告 / 14 天 · 贡献毛利 -1.8pp(主要来自买 2 件减价)",
-      risk: "12 个弱词里有 3 个流量基数偏小,实际拉动可能比模型小;对比型促销执行需要 Listing 团队 36 小时上线",
-      outcomeProbability: "71% 概率 BSR 守住 ≤ #3 · 同时 23% 概率在 SKU-X 弱词上反向抢份额",
-      recommendedWhen: "竞品有明显短板 · 且我方 LTV 数学撑得起非对称打法",
+        "我们别在他们最强的 7 个词上硬刚。去他们弱的 12 个词上扩量,同时上一个对比型促销 (买 2 件减 $18,不打折扣率),和他们的 18% off 不正面碰。",
+      cost: "+$7.8K 广告 / 14 天 · 贡献毛利 -1.8pp (主要来自买 2 件减价)",
+      risk:
+        "12 个弱词里有 3 个流量基数偏小,实际拉动可能比模型小 · 对比型促销执行需要 Listing 团队 36 小时上线",
+      outcomeProbability:
+        "71% 概率 BSR 守住 ≤ #3 · 同时 23% 概率在 NightFox 弱词上反向抢份额",
+      recommendedWhen: "竞品促销有期限,我们用非促销手段建持续优势 · 旺季前抢长尾词的自然位",
       confidence: 71,
-      confidenceLabel: "三个选项里信心最高 · 来自公司大脑 SKU-117 的同形态先例",
+      confidenceLabel: "三个选项里信心最高 · 来自公司大脑 SKU-117 自身先例",
       reference: {
         sku: "床架 · SKU-117",
-        period: "2025 Q3",
+        period: "2024 Q2",
         outcome: "攻击窗口内 BSR #2 全程守住",
         method:
           "竞品 SKU-Y 在 5 个核心词上拉高 CPC + 上促销 · 我方避开正面战场,在 SKU-Y 弱的 9 个长尾词上加注,叠加买赠促销。攻击窗口结束后 SKU-Y 占有率回落,我方还多了 2 个 BSR 子类 #1。",
         confidencePct: 71,
         compatibilityNote:
-          "结构匹配 · 同样是「促销驱动 + 集中核心词」的攻击形态 · 同样有可识别的弱词。差异:落地灯的促销杠杆是「买 2 件减」(SKU-117 当时是买赠) — 杠杆类型可比但不一样,所以信心没拉到 80%。",
+          "结构匹配 · 同样是「促销驱动 + 集中核心词」的攻击形态,同样有可识别的弱词。差异: 床架的促销杠杆是「买 2 件减」(SKU-117 当时是买赠),杠杆类型可比但不一样,所以信心没拉到 80%。",
       },
     },
   ],
   deepDive: {
-    "counter-attack": {
-      kicker: "扩 SKU-X 弱词 12 个 · 对比型促销 · 不在他们最强的地方耗",
+    asymmetric: {
+      kicker: "扩 NightFox 弱词 12 个 · 对比型促销 · 不在他们最强的地方耗",
       targetKeywords: [
-        { keyword: "arc floor lamp",                ourAdPosition: "#3", skuxAdPosition: "#7",  ourCr: "9.4%", projectedImpact: "+$2.1K / 14 天" },
-        { keyword: "tall arc lamp living room",     ourAdPosition: "#4", skuxAdPosition: "#9",  ourCr: "8.8%", projectedImpact: "+$1.8K / 14 天" },
-        { keyword: "modern arc floor lamp",         ourAdPosition: "#3", skuxAdPosition: "#8",  ourCr: "9.1%", projectedImpact: "+$1.6K / 14 天" },
-        { keyword: "arc floor lamp gold",           ourAdPosition: "#5", skuxAdPosition: "#11", ourCr: "8.6%", projectedImpact: "+$0.9K / 14 天" },
-        { keyword: "arc lamp for sectional",        ourAdPosition: "#4", skuxAdPosition: "#10", ourCr: "9.7%", projectedImpact: "+$0.8K / 14 天" },
-        { keyword: "arc floor lamp black",          ourAdPosition: "#6", skuxAdPosition: "#12", ourCr: "7.9%", projectedImpact: "+$0.7K / 14 天" },
-        { keyword: "mid century arc floor lamp",    ourAdPosition: "#4", skuxAdPosition: "#9",  ourCr: "8.4%", projectedImpact: "+$0.6K / 14 天" },
-        { keyword: "arc lamp over couch",           ourAdPosition: "#5", skuxAdPosition: "#13", ourCr: "9.2%", projectedImpact: "+$0.6K / 14 天" },
-        { keyword: "tall floor lamp for high ceiling", ourAdPosition: "#6", skuxAdPosition: "#10", ourCr: "8.1%", projectedImpact: "+$0.5K / 14 天" },
-        { keyword: "arc lamp marble base",          ourAdPosition: "#5", skuxAdPosition: "#14", ourCr: "8.9%", projectedImpact: "+$0.4K / 14 天" },
-        { keyword: "curved floor lamp",             ourAdPosition: "#7", skuxAdPosition: "#11", ourCr: "7.6%", projectedImpact: "+$0.4K / 14 天" },
-        { keyword: "arc reading lamp",              ourAdPosition: "#6", skuxAdPosition: "#12", ourCr: "8.2%", projectedImpact: "+$0.3K / 14 天" },
+        { keyword: "platform bed frame queen storage",      ourAdPosition: "#18", competitorAdPosition: "#42", ourCr: "5.4%", projectedImpact: "+$2.6K / 14 天" },
+        { keyword: "wooden bed frame king with headboard",  ourAdPosition: "#15", competitorAdPosition: "#38", ourCr: "5.9%", projectedImpact: "+$2.2K / 14 天" },
+        { keyword: "rustic farmhouse bed frame queen",      ourAdPosition: "#22", competitorAdPosition: "#48", ourCr: "5.1%", projectedImpact: "+$1.7K / 14 天" },
+        { keyword: "metal bed frame full no box spring",    ourAdPosition: "#19", competitorAdPosition: "#36", ourCr: "5.6%", projectedImpact: "+$1.5K / 14 天" },
+        { keyword: "bed frame queen low profile",           ourAdPosition: "#16", competitorAdPosition: "#34", ourCr: "6.2%", projectedImpact: "+$1.4K / 14 天" },
+        { keyword: "upholstered bed frame king tufted",     ourAdPosition: "#21", competitorAdPosition: "#52", ourCr: "5.0%", projectedImpact: "+$1.1K / 14 天" },
+        { keyword: "bed frame with drawers full size",      ourAdPosition: "#24", competitorAdPosition: "#41", ourCr: "4.8%", projectedImpact: "+$0.9K / 14 天" },
+        { keyword: "modern bed frame queen wood",           ourAdPosition: "#17", competitorAdPosition: "#33", ourCr: "5.7%", projectedImpact: "+$0.8K / 14 天" },
+        { keyword: "low height bed frame twin",             ourAdPosition: "#27", competitorAdPosition: "#54", ourCr: "4.6%", projectedImpact: "+$0.6K / 14 天" },
+        { keyword: "bed frame king upholstered grey",       ourAdPosition: "#23", competitorAdPosition: "#46", ourCr: "5.2%", projectedImpact: "+$0.5K / 14 天" },
+        { keyword: "japanese platform bed frame queen",     ourAdPosition: "#29", competitorAdPosition: "#58", ourCr: "4.4%", projectedImpact: "+$0.4K / 14 天" },
+        { keyword: "bed frame full with usb ports",         ourAdPosition: "#26", competitorAdPosition: "#49", ourCr: "4.9%", projectedImpact: "+$0.3K / 14 天" },
       ],
       bidChanges: [
-        { keyword: "arc floor lamp",                currentBid: "$1.84", proposedBid: "$2.40", dailyDelta: "+$84" },
-        { keyword: "tall arc lamp living room",     currentBid: "$1.62", proposedBid: "$2.20", dailyDelta: "+$72" },
-        { keyword: "modern arc floor lamp",         currentBid: "$1.78", proposedBid: "$2.30", dailyDelta: "+$68" },
-        { keyword: "arc floor lamp gold",           currentBid: "$1.42", proposedBid: "$1.95", dailyDelta: "+$48" },
-        { keyword: "arc lamp for sectional",        currentBid: "$1.36", proposedBid: "$1.90", dailyDelta: "+$44" },
-        { keyword: "arc floor lamp black",          currentBid: "$1.48", proposedBid: "$1.95", dailyDelta: "+$38" },
-        { keyword: "其他 6 个长尾词(并入)",         currentBid: "—",    proposedBid: "—",     dailyDelta: "+$204" },
+        { keyword: "platform bed frame queen storage",     currentBid: "$1.94", proposedBid: "$2.48", dailyDelta: "+$78" },
+        { keyword: "wooden bed frame king with headboard", currentBid: "$1.86", proposedBid: "$2.36", dailyDelta: "+$68" },
+        { keyword: "rustic farmhouse bed frame queen",     currentBid: "$1.42", proposedBid: "$1.92", dailyDelta: "+$56" },
+        { keyword: "metal bed frame full no box spring",   currentBid: "$1.54", proposedBid: "$2.04", dailyDelta: "+$52" },
+        { keyword: "bed frame queen low profile",          currentBid: "$1.62", proposedBid: "$2.14", dailyDelta: "+$48" },
+        { keyword: "upholstered bed frame king tufted",    currentBid: "$1.38", proposedBid: "$1.88", dailyDelta: "+$42" },
+        { keyword: "其他 6 个长尾词(并入)",                currentBid: "—",    proposedBid: "—",     dailyDelta: "+$214" },
       ],
       bidChangesTotal: "+$558 / 天 · +$7.8K / 14 天",
       promo: {
         type: "对比型促销 · 买 2 件减 $18",
         structure:
-          "买 2 件弧形落地灯立减 $18(等效约 9% off,但落到「立减金额」而不是「折扣率」上) — 故意不和 SKU-X 的 18% off 在同一个维度比较。",
+          "买 2 件床架立减 $18 (等效约 9% off,但落到「立减金额」而不是「折扣率」上),故意不和 NightFox 的 18% off 在同一个维度比较。",
         rationale:
-          "SKU-X 在打折扣率战 · 我们直接撤出这个战场,把促销拍在「金额」上 · 看起来不像在跟随,买 2 件还把 ASP 拉上去,客单价 +37%。",
+          "NightFox 在打折扣率战 · 我们直接撤出这个战场,把促销拍在「金额」上 · 看起来不像在跟随,买 2 件还把 ASP 拉上去,客单价 +37%。",
         marginImpact: "贡献毛利 -1.8pp · 14 天预计 ~520 单买 2 件捆绑",
-        executionGate: "Listing 团队 36 小时内上线 · 我方负责广告同步 · 库存验证 ≥ 2,400 件",
+        executionGate: "对比型促销执行需要 Listing 团队 36 小时上线 · 我方负责广告同步 · 库存验证 ≥ 2,400 件",
+        listingBrief: "对比型促销执行需要 Listing 团队 36 小时上线",
       },
-      milestones: [
-        {
-          day: "D+1",
-          window: "今天 → 明天",
-          action: "12 个弱词上调出价 · 监控告警上线 · 促销页面 brief 发给 Listing 团队",
-          gate: "出价更新生效率 ≥ 95% · brief 已签收",
-        },
-        {
-          day: "D+3",
-          window: "本周内",
-          action: "买 2 件减 $18 促销上线 · 同步广告活动 promo 标签",
-          gate: "促销页面上线 · 当日订单中买 2 件占比 ≥ 8%",
-        },
-        {
-          day: "D+7",
-          window: "下周一",
-          action: "第一节点复盘 · 12 个弱词曝光份额 + 我方 BSR 维持情况",
-          gate: "12 词加权曝光份额 +18pp · BSR 维持 ≤ #3",
-        },
-        {
-          day: "D+14",
-          window: "两周末尾",
-          action: "竞品促销窗口预计到期 · 评估是否撤回部分出价上调",
-          gate: "BSR 守在 ≤ #3 · 14 天累计净影响接近 +$8-10K(扣除广告成本)",
-        },
-      ],
-      milestonesTradeoff:
-        "D+1 到 D+3 是关键 — 出价和促销得同步打才有效。Listing 团队 36 小时是这个方案的硬约束,如果他们排不进来,我们要降级到「只调出价、不上促销」的备选。",
     },
-    "defend-all": {
+    "defend-frontal": {
       kicker: "跟价到底 + 匹配促销 · 战场摆在他们最强的地方",
       costBreakdown: [
-        { line: "7 核心词 CPC 跟齐 SKU-X",          dailyDelta: "+$640", note: "把我方平均 CPC 从 $1.82 拉到 ~$2.95" },
+        { line: "7 核心词 CPC 跟齐 NightFox",       dailyDelta: "+$640", note: "把我方平均 CPC 从 $1.82 拉到 ~$2.95" },
         { line: "SB 叠加层日预算 +80%",             dailyDelta: "+$180", note: "强化 SERP 顶部位置抢占" },
         { line: "14 天匹配券(15% off)毛利让利",   dailyDelta: "—",     note: "贡献毛利 -3.2pp · 14 天 ~1,180 单受影响" },
       ],
       costTotal: "+$11.4K 广告 / 14 天 · 贡献毛利 -3.2pp",
-      milestones: [
-        { day: "D+1",  window: "今天 → 明天", action: "7 词出价跟齐 · 匹配券预约 14 天",  gate: "出价生效率 ≥ 95% · 券预约成功" },
-        { day: "D+3",  window: "本周内",     action: "首次出价对线复盘 · 看 SKU-X 是否再加价", gate: "我方在 7 词中 ≥ 5 词重回 ad position ≤ #2" },
-        { day: "D+7",  window: "下周一",     action: "中期复盘 · 评估是否值得再加注",     gate: "BSR 维持 ≤ #3 · 14 天到期前 TACoS ≤ 24%" },
-        { day: "D+14", window: "两周末尾",   action: "促销窗口结束 · 撤回券 · 出价分阶段下调", gate: "BSR 守在 ≤ #3 · 出价下调路径已定" },
-      ],
     },
-    wait: {
+    "wait-it-out": {
       kicker: "不动 · 把监控密度拉满 · 准备好反击但不启动",
       monitoringPlan: [
-        { item: "BSR 实时监控",     frequency: "每 4 小时",  trigger: "BSR 跌到 #4 触发警报 → 自动通知 Maya + Devon" },
-        { item: "7 核心词流量份额", frequency: "每日",      trigger: "我方份额下降 ≥ 15% 触发反击方案 brief" },
-        { item: "SKU-X 促销页",     frequency: "每日",      trigger: "促销下架信号 = 主动收信号,准备防御撤离" },
+        { item: "BSR 实时监控",        frequency: "每 4 小时", trigger: "BSR 跌到 #4 触发警报 → 自动通知 Maya + Devon" },
+        { item: "7 核心词流量份额",    frequency: "每日",     trigger: "我方份额下降 ≥ 15% 触发反击方案 brief" },
+        { item: "NightFox 促销页",     frequency: "每日",     trigger: "促销下架信号 = 主动收信号,准备防御撤离" },
+        { item: "自然位 #1-3 流量份额", frequency: "每日",     trigger: "我方自然位流量份额下滑 ≥ 8% → 触发切换到非对称方案" },
       ],
       readyResponse:
-        "反击方案预先起草好 · 如果 BSR 真跌到 #4,我们 6 小时内能切到「打他们薄的地方」方案。代价是先吃掉 ~$15-18K 流失 + BSR 修复需要额外 7-10 天。",
-      milestones: [
-        { day: "D+1",  window: "今天 → 明天", action: "监控警报参数上线 · 反击方案放抽屉里",   gate: "3 项监控全部生效 · 反击 brief 已就位" },
-        { day: "D+3",  window: "本周内",     action: "中期评估 · 看趋势是否符合「促销驱动」假设", gate: "SKU-X 自然势能拐头 → 假设成立" },
-        { day: "D+7",  window: "下周一",     action: "BSR 第一节点检查 · 决定是否启动反击",   gate: "BSR 仍 ≤ #3 → 继续等待;= #4 → 触发切换" },
-        { day: "D+14", window: "两周末尾",   action: "促销窗口预计到期 · 验证假设",          gate: "促销下架 + 指标回落 = 方案成功;否则补救" },
-      ],
+        "反击方案预先起草好 · 如果 BSR 真跌到 #4,我们 6 小时内能切到「不正面碰 · 抢他们后路」方案。代价是先吃掉 ~$15-18K 流失 + BSR 修复需要额外 7-10 天。",
     },
   },
+  milestones: {
+    asymmetric: [
+      {
+        day: "D+1",
+        window: "今天 → 明天",
+        action: "弱词扩量配置完成 · 对比促销文案 brief 发给 Listing 团队",
+        gate: "出价更新生效率 ≥ 95% · brief 已签收",
+      },
+      {
+        day: "D+3",
+        window: "本周内",
+        action: "买 2 件减 $18 促销上线 · 同步广告活动 promo 标签",
+        gate: "促销页面上线 · 当日订单中买 2 件占比 ≥ 8%",
+      },
+      {
+        day: "D+7",
+        window: "下周一",
+        action: "第一节点复盘 · 12 个弱词曝光份额 + 我方 BSR 维持情况",
+        gate: "12 词加权曝光份额 +18pp · BSR 维持 ≤ #3",
+      },
+      {
+        day: "D+14",
+        window: "两周末尾",
+        action: "促销窗口结束 · NightFox 撤了没 · 关键转折点:他撤了我们赢,他不撤我们要立刻跟进 Phase 2",
+        gate: "BSR 守在 ≤ #3 · 14 天累计净影响接近 +$8-10K(扣除广告成本)",
+      },
+    ],
+    "defend-frontal": [
+      { day: "D+1",  window: "今天 → 明天", action: "7 词出价跟齐 · 匹配券预约 14 天",                  gate: "出价生效率 ≥ 95% · 券预约成功" },
+      { day: "D+3",  window: "本周内",     action: "首次出价对线复盘 · 看 NightFox 是否再加价",        gate: "我方在 7 词中 ≥ 5 词重回 ad position ≤ #2" },
+      { day: "D+7",  window: "下周一",     action: "中期复盘 · 评估是否值得再加注 · 首次看到 organic 影响", gate: "BSR 维持 ≤ #3 · 14 天到期前 TACoS ≤ 24%" },
+      { day: "D+14", window: "两周末尾",   action: "促销窗口结束 · NightFox 撤了没 · 关键转折点:他撤了我们赢,他不撤我们要立刻跟进 Phase 2", gate: "BSR 守在 ≤ #3 · 出价下调路径已定" },
+    ],
+    "wait-it-out": [
+      { day: "D+1",  window: "今天 → 明天", action: "监控警报参数上线 · 反击方案放抽屉里",     gate: "4 项监控全部生效 · 反击 brief 已就位" },
+      { day: "D+3",  window: "本周内",     action: "中期评估 · 看趋势是否符合「促销驱动」假设", gate: "NightFox 自然势能拐头 → 假设成立" },
+      { day: "D+7",  window: "下周一",     action: "BSR 第一节点检查 · 决定是否启动反击",     gate: "BSR 仍 ≤ #3 → 继续等待;= #4 → 触发切换" },
+      { day: "D+14", window: "两周末尾",   action: "促销窗口预计到期 · 验证假设",            gate: "促销下架 + 指标回落 = 方案成功;否则补救" },
+    ],
+  },
+  milestonesTradeoff:
+    "D+1 到 D+3 是关键 · 出价和促销得同步打才有效。Listing 团队 36 小时是这个方案的硬约束,如果他们排不进来,我们要降级到「只调出价、不上促销」的备选。",
   reasoning: {
     chain: [
-      "监控信号触发:SKU-X 在 7 个核心词上的 CPC 24 小时滚动均值 4 小时前突破 +120% 阈值 · 触发竞品攻击检测器。",
-      "横截面比对:SKU-X 同期自然排名 14 → 8、Listing 转化率 6.4% → 8.9%、评论增速 2.3x — 三条独立信号说明这不是单点波动。",
-      "促销窗口检测:SKU-X 18% off 券已挂 9 天 · 典型 14 天周期 · 推算剩余 5 天 — 攻击是有期限的,这决定了我们的策略地形。",
-      "从公司大脑筛选先例:7 个匹配「促销驱动 + 核心词攻击」形态的案例 · 其中 4 个采取硬刚、2 个观望、3 个非对称应对(注:有重叠)。结果对比:非对称应对组 14 天后 BSR 维持率 71% · 硬刚组 64% · 观望组 38%。",
-      "对当前情境再过滤:核心词上 SKU-X 出价已经领先 · 我方跟价边际收益递减。同时 SKU-X 在 12 个弱词上 ad position ≥ #8 · 这是可利用的不对称结构。",
-      "评估促销杠杆兼容性:SKU-X 在打折扣率战 · 直接跟「15% off」会进入价格战螺旋。买 2 件立减 $18 是对比型杠杆 · 不进入同维度比较 · 客单价 +37% 还能部分对冲毛利损失。",
-      "风险测算:非对称方案 71% 信心来自先例的结构匹配,扣 9pp 来自杠杆类型差异(SKU-117 当时是买赠不是减价)— 信心没拉到 80%。",
-      "时间敏感性约束:促销窗口预计 5 天后关闭 · 48 小时决策窗反映「等到 D+3 启动 → 实际响应窗口只剩 6 天 · 启动太晚买不回 BSR」。",
+      "监控到 NightFox 在 7 核心词 36 小时内 CPC +180%",
+      "排除单点波动可能性 · 趋势在 24-36 小时窗口持续",
+      "拉公司大脑 · 床架品类历史 6-8 月旺季搜索量数据",
+      "匹配到「旺季前自然位抢占」攻击 pattern · 历史 12 次",
+      "评估三种应对姿态的 cost / outcome 概率",
+      "对比公司大脑里 SKU-117 自身 2024 Q2 同类案例 (71% 守住)",
+      "加权评估:正面顶住 73% · 按兵不动 52% (旺季背景下) · 非对称 71%",
+      "推荐非对称 · 因为代价低 + 同时获得旺季前抢长尾自然位的副作用",
     ],
     accuracy: 74,
     accuracyLabel: "同类竞品攻击场景",
   },
   approval: {
-    primaryLabel: "批准推荐姿态(打他们薄的地方)",
-    secondaryLabel: "选择其他姿态",
-    timeSensitiveLabel: "时间敏感 · 48 小时决策窗",
+    note: "时间敏感 · 今天/明天决策窗口 · NightFox 折扣券约 5 天后到期",
+    primaryLabel: "批准「不正面碰 · 抢他们后路」",
+    secondaryLabel: "选择其他姿态 →",
+    timeSensitiveLabel: "时间敏感 · 今天/明天决策窗口",
   },
 };
 
@@ -7940,31 +7964,31 @@ function ThreatSignalCard({ signal }) {
 function CompetitorTrendChart({ data }) {
   const charts = [
     {
-      label: "SKU-X 广告位置",
+      label: "NightFox 广告位置",
       dataKey: "adPosition",
-      kicker: "数字越小越靠前 · 一周内由 ~#5 升到 #2",
+      kicker: "数字越小越靠前 · 36 小时内由 #5 升到 #2",
       reversed: true,
       domain: [1, 6],
       stroke: "#e11d48",
       format: (v) => `#${v.toFixed(1)}`,
     },
     {
-      label: "SKU-X 自然排名",
+      label: "NightFox 自然排名",
       dataKey: "organicRank",
-      kicker: "数字越小越靠前 · 由 #14 升到 #8",
+      kicker: "数字越小越靠前 · 由 #14 升到 #11",
       reversed: true,
-      domain: [6, 16],
+      domain: [10, 16],
       stroke: "#b45309",
       format: (v) => `#${Math.round(v)}`,
     },
     {
-      label: "SKU-X 估算日销",
+      label: "NightFox 估算日销",
       dataKey: "estDailySales",
-      kicker: "$ / 天 · 由 ~$1.8K 涨到 ~$3.4K",
+      kicker: "$K / 天 · 由 ~$1.8K 涨到 ~$3.4K",
       reversed: false,
-      domain: [1500, 3600],
+      domain: [1.5, 3.8],
       stroke: "#0f766e",
-      format: (v) => `$${(v / 1000).toFixed(1)}K`,
+      format: (v) => `$${v.toFixed(1)}K`,
     },
   ];
   return (
@@ -8043,7 +8067,7 @@ function PostureCard({ posture, selected, onSelect }) {
               Agent 推荐
             </Pill>
           )}
-          <Pill tone={posture.tone}>{posture.kind === "aggressive" ? "硬碰硬" : posture.kind === "patient" ? "耐心型" : "非对称"}</Pill>
+          <Pill tone={posture.tone}>{posture.kind === "frontal" ? "正面顶" : posture.kind === "patient" ? "等一下" : "非对称"}</Pill>
           {selected && !isRecommended && (
             <span className="text-10 text-slate-500 font-medium">已选中</span>
           )}
@@ -8150,7 +8174,7 @@ function PostureCard({ posture, selected, onSelect }) {
 }
 
 function PostureDeepDive({ posture, deepDive }) {
-  if (posture.id === "counter-attack") {
+  if (posture.id === "asymmetric") {
     const d = deepDive;
     return (
       <Card className="p-5">
@@ -8160,7 +8184,7 @@ function PostureDeepDive({ posture, deepDive }) {
 
         <div className="mb-5">
           <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
-            12 个目标关键词 · 我方位置较强 · SKU-X 较弱
+            12 个目标长尾词 · 我方位置较强 · NightFox 较弱
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
@@ -8168,7 +8192,7 @@ function PostureDeepDive({ posture, deepDive }) {
                 <tr className="border-b border-slate-200">
                   <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">关键词</th>
                   <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">我方广告位</th>
-                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">SKU-X 广告位</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">NightFox 广告位</th>
                   <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">我方 {wrapMetric("CR")}</th>
                   <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">预计影响</th>
                 </tr>
@@ -8178,7 +8202,7 @@ function PostureDeepDive({ posture, deepDive }) {
                   <tr key={i} className="border-b border-slate-100 last:border-0">
                     <td className="py-2 px-2 text-slate-900 font-mono">{kw.keyword}</td>
                     <td className="py-2 px-2 text-right font-mono text-slate-700">{kw.ourAdPosition}</td>
-                    <td className="py-2 px-2 text-right font-mono text-slate-500">{kw.skuxAdPosition}</td>
+                    <td className="py-2 px-2 text-right font-mono text-slate-500">{kw.competitorAdPosition}</td>
                     <td className="py-2 px-2 text-right font-mono text-slate-700">{kw.ourCr}</td>
                     <td className="py-2 px-2 text-right font-mono text-emerald-700 font-medium">{kw.projectedImpact}</td>
                   </tr>
@@ -8255,7 +8279,7 @@ function PostureDeepDive({ posture, deepDive }) {
     );
   }
 
-  if (posture.id === "defend-all") {
+  if (posture.id === "defend-frontal") {
     const d = deepDive;
     return (
       <Card className="p-5">
@@ -8293,7 +8317,7 @@ function PostureDeepDive({ posture, deepDive }) {
     );
   }
 
-  // wait
+  // wait-it-out
   const d = deepDive;
   return (
     <Card className="p-5">
@@ -8301,7 +8325,7 @@ function PostureDeepDive({ posture, deepDive }) {
         {d.kicker}
       </div>
       <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
-        监控方案 · 触发即切换到反击
+        监控方案 · 触发即切到非对称反击
       </div>
       <div className="overflow-x-auto mb-4">
         <table className="w-full text-xs">
@@ -8364,19 +8388,63 @@ function DefenseMilestoneTimeline({ milestones }) {
   );
 }
 
+function HeroImageStrip({ images }) {
+  return (
+    <div className="px-6 pt-5">
+      <div
+        className={`grid ${
+          images.length === 1
+            ? "grid-cols-1 max-w-xs"
+            : "grid-cols-2 gap-4 max-w-2xl"
+        } mx-auto`}
+      >
+        {images.map((img, i) => (
+          <div key={i}>
+            <div
+              className="rounded-md border border-slate-200 bg-slate-100 flex items-center justify-center text-11 text-slate-500 text-center px-4 mx-auto"
+              style={{ width: "280px", height: "280px" }}
+            >
+              {img.src ? (
+                <img
+                  src={img.src}
+                  alt={img.caption}
+                  className="w-full h-full object-cover rounded-md"
+                />
+              ) : (
+                <span>{img.fallbackText}</span>
+              )}
+            </div>
+            <div
+              className="mt-2 text-11 text-slate-600 text-center mx-auto"
+              style={{ width: "280px" }}
+            >
+              {img.caption}
+            </div>
+          </div>
+        ))}
+      </div>
+      {images.length === 2 && (
+        <div className="mt-3 text-11 text-slate-600 text-center max-w-2xl mx-auto">
+          {images[0].descriptor} · {images[1].descriptor}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DefenseCanvas() {
   const D = DEFENSE;
-  const [selectedPostureId, setSelectedPostureId] = useState("counter-attack");
+  const [selectedPostureId, setSelectedPostureId] = useState("asymmetric");
   const selectedPosture = D.postures.find((p) => p.id === selectedPostureId);
   const selectedDeepDive = D.deepDive[selectedPostureId];
-  const selectedMilestones = selectedDeepDive.milestones;
+  const selectedMilestones = D.milestones[selectedPostureId];
   const recommendedPosture = D.postures.find((p) => p.recommended);
 
   return (
     <>
       <CanvasHeader
         kicker="防御 · BSR 守卫"
-        title={`${D.sku} 受到 ${D.attackerSku} 攻击`}
+        title={`${D.sku} 受到 ${D.attacker} 攻击`}
         meta={
           <>
             <Pill tone="rose">
@@ -8395,6 +8463,23 @@ function DefenseCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: null,
+            caption: "我方 SKU-117 床架主图",
+            fallbackText: "等待上传 · 我方 SKU-117 主图",
+            descriptor: "我方主图 (中性背景 · 产品独立展示)",
+          },
+          {
+            src: null,
+            caption: "NightFox 床架主图",
+            fallbackText: "等待上传 · NightFox 主图",
+            descriptor: "NightFox 主图 (灰色亚麻床头板 + 卧室实景)",
+          },
+        ]}
+      />
+
       {/* Time-sensitive constraint callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
@@ -8402,10 +8487,10 @@ function DefenseCanvas() {
             <Clock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
-                时间敏感 · 建议 {D.timeSensitive.window}内决策
+                时间敏感 · 建议{D.timeSensitive.window}决策
               </div>
               <div className="text-sm text-rose-900 leading-relaxed">
-                {D.timeSensitive.reason} · 等到 D+3 启动,实际响应窗口只剩 ~6 天。
+                {D.timeSensitive.framing}
               </div>
             </div>
           </div>
@@ -8414,14 +8499,14 @@ function DefenseCanvas() {
 
       {/* 1. 现状 */}
       <div className="px-6">
-        <SectionLabel kicker={`SKU-A 当前 BSR ${D.currentState.ourBsr} · 守了 ${D.currentState.ourBsrHeldDays} 天`}>
+        <SectionLabel kicker={`SKU-117 当前 BSR ${D.currentState.ourBsr} · 守了 ${D.currentState.ourBsrHeldDays} 天`}>
           1. 现状 · Current state
         </SectionLabel>
 
-        <div className="grid grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-4 gap-3 mb-5">
           <Card className="p-4">
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              我方 BSR · {D.currentState.bsrCategory}
+              我方 BSR · 床架
             </div>
             <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
               {D.currentState.ourBsr}
@@ -8440,14 +8525,14 @@ function DefenseCanvas() {
             <div className="text-11 text-slate-500 mt-1">参考基准</div>
           </Card>
           <Card className="p-4">
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
               {wrapMetric("TACoS")}
             </div>
-            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+            <div className="mt-1 text-xl font-mono font-semibold text-emerald-700">
               {D.currentState.ourTacos}%
             </div>
             <div className="text-11 text-slate-500 mt-1">
-              日广告 <span className="font-mono">{D.currentState.ourDailyAdSpend}</span>
+              日广告 <span className="font-mono">${D.currentState.ourDailyAdSpend}</span>
             </div>
           </Card>
           <Card className="p-4 border-rose-300">
@@ -8455,40 +8540,71 @@ function DefenseCanvas() {
               攻击方
             </div>
             <div className="mt-1 text-xl font-mono font-semibold text-rose-700">
-              {D.attackerSku}
+              {D.currentState.attackerName}
             </div>
             <div className="text-11 text-rose-700 mt-1">
-              7 核心词上的主要威胁
+              {D.currentState.keywordCount} 核心词上的主要威胁
             </div>
           </Card>
         </div>
+      </div>
 
-        <div className="mb-4">
-          <SectionLabel kicker="3 条独立信号 · 都指向同一个方向">
-            攻击信号
-          </SectionLabel>
-          <div className="grid grid-cols-3 gap-3">
-            {D.attackSignals.map((s) => (
-              <ThreatSignalCard key={s.id} signal={s} />
-            ))}
+      {/* 2. 背景 · CONTEXT (NEW) */}
+      <div className="px-6 pt-2">
+        <SectionLabel kicker="为什么这次值得反应 · 不是普通促销引流">
+          2. 背景 · Context
+        </SectionLabel>
+
+        <div className="bg-slate-900 rounded-lg px-5 py-5 text-white">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="w-8 h-8 rounded-md bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
+              <Brain className="w-4 h-4 text-emerald-400" strokeWidth={1.75} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1">
+                公司大脑 · 上下文
+              </div>
+              <div className="text-base font-semibold text-white leading-snug">
+                {D.context.headline}
+              </div>
+            </div>
           </div>
-        </div>
+          <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-line mb-4">
+            {D.context.body}
+          </div>
 
-        <div>
-          <SectionLabel kicker="过去 7 天 · 数字越靠左越早">
-            SKU-X 7 天势能轨迹
-          </SectionLabel>
-          <CompetitorTrendChart data={D.competitorTrend} />
+          <div className="rounded-md bg-slate-800/70 border border-slate-700 px-4 py-3">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1">
+              <Brain className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+              <span className="text-11 font-medium text-white">公司大脑 · 同形态先例</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1.5">
+              <span className="text-11 font-medium text-white">
+                {D.context.inlinePrecedent.sku}
+              </span>
+              <span className="text-10 text-slate-500">·</span>
+              <span className="text-10 text-slate-400 font-mono">
+                {D.context.inlinePrecedent.period}
+              </span>
+            </div>
+            <div className="text-11 text-slate-300 leading-relaxed mb-2">
+              {D.context.inlinePrecedent.summary}
+            </div>
+            <div className="flex items-start gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-1 rounded leading-relaxed">
+              <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+              <span>{D.context.inlinePrecedent.lesson}</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 2. 具体问题 */}
+      {/* 3. 具体问题 */}
       <div className="px-6 pt-6">
         <SectionLabel kicker="若不动 · 14 天内的预测">
-          2. 具体问题 · Specific problem
+          3. 具体问题 · Specific problem
         </SectionLabel>
 
-        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4">
+        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-md bg-rose-100 border border-rose-200 flex items-center justify-center flex-shrink-0">
               <TrendingUp className="w-4 h-4 text-rose-700" />
@@ -8501,7 +8617,7 @@ function DefenseCanvas() {
                 {D.projection.headline}
               </div>
               <div className="text-xs text-rose-900 leading-relaxed mb-3">
-                {D.projection.detail}
+                {D.projection.body}
               </div>
               <div className="grid grid-cols-3 gap-3 pt-3 border-t border-rose-200">
                 <div>
@@ -8523,7 +8639,7 @@ function DefenseCanvas() {
                     {D.projection.confidence}%
                   </div>
                   <div className="text-11 text-rose-700 mt-0.5 leading-relaxed">
-                    {D.projection.confidenceLabel}
+                    {D.projection.confidenceNote}
                   </div>
                 </div>
                 <div>
@@ -8531,19 +8647,37 @@ function DefenseCanvas() {
                     关键假设
                   </div>
                   <div className="text-11 text-rose-900 leading-relaxed">
-                    SKU-X 当前势能延续 · 我方不主动响应
+                    {D.projection.assumption}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <div className="mb-5">
+          <SectionLabel kicker="3 条独立信号 · 都指向同一个方向">
+            攻击信号
+          </SectionLabel>
+          <div className="grid grid-cols-3 gap-3">
+            {D.attackSignals.map((s) => (
+              <ThreatSignalCard key={s.id} signal={s} />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <SectionLabel kicker="过去 36 小时 · 数字越靠左越早">
+            {D.trendChartTitle}
+          </SectionLabel>
+          <CompetitorTrendChart data={D.competitorTrend} />
+        </div>
       </div>
 
-      {/* 3. 具体建议 */}
+      {/* 4. 具体建议 */}
       <div className="px-6 pt-6">
         <SectionLabel kicker="3 个姿态 · 点击切换深拆 · 推荐项已高亮">
-          3. 具体建议 · Recommendation
+          4. 具体建议 · Recommendation
         </SectionLabel>
         <div className="grid grid-cols-3 gap-3 items-stretch">
           {D.postures.map((p) => (
@@ -8564,15 +8698,15 @@ function DefenseCanvas() {
         </div>
       </div>
 
-      {/* 4. 里程碑 */}
+      {/* 5. 里程碑 */}
       <div className="px-6 pt-6">
         <SectionLabel kicker={`W1-2 日程 · ${selectedPosture.name}`}>
-          4. 里程碑 · Milestones
+          5. 里程碑 · Milestones
         </SectionLabel>
         <DefenseMilestoneTimeline milestones={selectedMilestones} />
-        {selectedPostureId === "counter-attack" && (
+        {selectedPostureId === "asymmetric" && (
           <div className="mt-3 text-11 text-slate-500 leading-relaxed italic">
-            {D.deepDive["counter-attack"].milestonesTradeoff}
+            {D.milestonesTradeoff}
           </div>
         )}
       </div>
@@ -8583,20 +8717,20 @@ function DefenseCanvas() {
 
       {/* Time-sensitive approval bar */}
       <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
-        <div className="flex items-center gap-1.5 mb-3">
-          <Clock className="w-3.5 h-3.5 text-rose-700" />
-          <span className="text-11 uppercase tracking-wider text-rose-700 font-semibold">
-            {D.approval.timeSensitiveLabel}
-          </span>
-          <span className="text-11 text-slate-500">
-            · 竞品折扣券约 {D.timeSensitive.expiresIn}后到期
-          </span>
+        <div className="flex items-start gap-2 mb-3 bg-rose-50 border border-rose-200 rounded-md px-3 py-2">
+          <Clock className="w-3.5 h-3.5 text-rose-700 mt-0.5 flex-shrink-0" />
+          <div className="flex-1 text-11 text-rose-900 leading-relaxed">
+            <span className="uppercase tracking-wider text-rose-700 font-semibold mr-1.5">
+              {D.approval.timeSensitiveLabel}
+            </span>
+            <span className="text-rose-800">· NightFox 折扣券约 {D.timeSensitive.expiresIn}后到期</span>
+          </div>
         </div>
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="min-w-0 max-w-xl text-xs text-slate-700 leading-relaxed">
             当前选中:<span className="font-medium text-slate-900">{selectedPosture.name}</span>{" "}
             · 信心度 <span className="font-mono">{selectedPosture.confidence}%</span>
-            {selectedPostureId !== "counter-attack" && (
+            {selectedPostureId !== "asymmetric" && (
               <span className="text-slate-500">
                 {" "}· Agent 推荐切回「{recommendedPosture.name}」
               </span>
@@ -8628,7 +8762,7 @@ function DefenseCanvas() {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
             >
               <Check className="w-3.5 h-3.5" />
-              {selectedPostureId === "counter-attack"
+              {selectedPostureId === "asymmetric"
                 ? D.approval.primaryLabel
                 : `批准「${selectedPosture.name}」`}
             </button>

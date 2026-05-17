@@ -14,6 +14,7 @@ import {
   Clock,
   Sparkles,
   AlertCircle,
+  AlertTriangle,
   CircleDot,
   ArrowRight,
   ArrowUpRight,
@@ -100,16 +101,16 @@ const THREADS = [
     initiator: "agent",
     initiatorName: "Brand Ops Agent",
     initiatorRole: "monitoring alert",
-    initialTimestamp: "2 min ago",
-    lastActivityTimestamp: "2 min ago",
+    initialTimestamp: "2 hours ago",
+    lastActivityTimestamp: "2 hours ago",
     unread: true,
-    title: "Defense alert · SKU-A",
+    title: "Defense alert · Bed frame SKU-117",
     turns: [
       {
         speaker: "agent",
-        timestamp: "2 min ago",
+        timestamp: "2 hours ago",
         body:
-          "SKU-A's #2 BSR position is under active attack. Competitor SKU-X has bid aggressively on 7 hero keywords for the past 96 hours; average ad position improved from #5 to #2 and SKU-X's organic rank climbed from #14 to #8. If the trend holds, I project SKU-A drops to BSR #4-5 within 14 days.",
+          "Yesterday, NightFox Bedding started concentrating bid raises on 7 of our hero bed-frame keywords. I've watched it for a full day and the trend hasn't pulled back, this isn't a short promo-driven push. Combined with the 18%-off coupon they just launched, I'm reading this as organized share grabbing. Recommend reacting today, not tomorrow.",
         canvasLink: false,
       },
       {
@@ -118,14 +119,14 @@ const THREADS = [
         initials: "DP",
         role: "Sr. Growth Manager",
         timestamp: "just now",
-        body: "What's the recommended response?",
+        body: "Show me the plan.",
         canvasLink: false,
       },
       {
         speaker: "agent",
         timestamp: "just now",
         body:
-          "Drafted a defense plan with three response postures. Opening the canvas — recommended posture is highlighted.",
+          "Drafted 3 response postures. The real read here is their intent, they're not after this week's orders, they're after the pre-peak-season organic rank. Opening the canvas, recommended posture is highlighted.",
         canvasLink: true,
       },
     ],
@@ -1750,93 +1751,108 @@ const LAUNCH_CR = {
 
 /* Defense canvas — agent-initiated, time-sensitive */
 const DEFENSE = {
-  sku: "SKU-A · Arc Floor Lamp",
+  sku: "SKU-117 · Bed frame",
+  attacker: "NightFox Bedding",
   initiator: "Brand Ops Agent",
   initiatorRole: "real-time monitoring alert",
-  detectedAt: "2 min ago",
-  attackerSku: "SKU-X",
+  detectedAt: "2 hours ago",
   timeSensitive: {
-    window: "48 hours",
-    expiresIn: "~5 days",
-    reason:
-      "competitor's 18%-off coupon expires in ~5 days — the decision window is closing",
+    window: "today / tomorrow",
+    expiresIn: "5 days",
+    reason: "NightFox 18%-off coupon has roughly 5 days remaining",
+    framing:
+      "If our counter goes live today, we get 5 full days head-to-head. If it slips to Wednesday, we only get 2 days, then their promo ends but the share they grabbed is already in their pocket.",
   },
   currentState: {
     ourBsr: "#2",
     ourBsrHeldDays: 27,
-    ourSales: "$138K / mo",
-    ourTacos: 18.1,
-    ourDailyAdSpend: "$620",
-    bsrCategory: "Floor Lamps",
+    ourSales: "$184K / mo",
+    ourTacos: 17.4,
+    ourDailyAdSpend: 980,
+    attackerName: "NightFox",
+    keywordCount: 7,
+  },
+  context: {
+    headline: "This isn't an ordinary attack",
+    body:
+      "Company Brain flag: bed-frame category is about to enter back-to-school + fall-promo peak (historical Jun-Aug category search volume +180-220%). NightFox concentrating spend on our hero terms at this exact moment is going after pre-peak organic rank, not this week's orders. In peak, the free traffic that lands on organic #1-3 is 3-4x the normal level.\n\nThey're spending ad dollars now to buy 8 weeks of free traffic later.\n\nYou can't argue with this attack via TACoS. The right denominator is 'a full quarter of organic traffic if the rank slips'.",
+    inlinePrecedent: {
+      sku: "Kitchen knives SKU-K22",
+      period: "2024 Q3",
+      summary:
+        "Competitor grabbed organic rank 6 weeks before peak. We looked at TACoS early on, didn't see a loss, didn't move. In peak they held #1 and we slipped to #4. Q4 cost us an extra $89K in ads just to pull back to #3.",
+      lesson: "Lesson: when you see this pattern 1-2 months before peak, defend BSR. Don't argue with TACoS.",
+    },
   },
   attackSignals: [
     {
-      id: "bidding",
-      title: "Bidding is aggressive",
+      id: "bids",
+      title: "Bids ramped fast",
       icon: "DollarSign",
       lines: [
-        "SKU-X's CPC on our 7 hero keywords is up +180% over the past 96 hours (source: bid-loss reports).",
-        "Estimated SKU-X daily ad spend $1,400 vs our $620 — 2.3x ours on these 7 terms.",
+        "NightFox's CPC on our 7 hero terms is up +180% over the past 36 hours (source: bid-loss reports).",
+        "Estimated NightFox daily ad spend $1,400 vs our $620 · 2.3x ours on these 7 terms.",
       ],
     },
     {
       id: "organic",
-      title: "Organic momentum is stacking",
+      title: "Organic momentum piling up",
       icon: "TrendingUp",
       lines: [
-        "SKU-X review velocity is 2.3x ours over the past 30 days · new A+ content launched 12 days ago.",
-        "Listing CR climbed 6.4% → 8.9% — they're not just buying traffic, the detail page is winning too.",
+        "NightFox review velocity is 1.8x ours over the past 7 days · new A+ content launched 5 days ago.",
+        "Listing CR climbed 6.4% → 8.9% · they're not just buying traffic, the detail page is winning too.",
       ],
     },
     {
       id: "promo",
-      title: "Promo signal · this attack has a clock",
+      title: "Promo signal · attack has an expiry",
       icon: "Clock",
       lines: [
-        "SKU-X has been running an 18%-off coupon for 9 days · typical 14-day window.",
-        "I estimate ~5 days left. When the coupon drops, their momentum likely fades.",
+        "NightFox 18%-off coupon has been live for 9 days · typical 14-day window.",
+        "I estimate ~5 days left. When the coupon drops, their momentum likely fades, but the organic rank they grabbed stays grabbed.",
       ],
     },
   ],
   competitorTrend: [
-    { day: "D-6", adPosition: 4.8, organicRank: 14, estDailySales: 1820 },
-    { day: "D-5", adPosition: 4.2, organicRank: 13, estDailySales: 1960 },
-    { day: "D-4", adPosition: 3.6, organicRank: 12, estDailySales: 2240 },
-    { day: "D-3", adPosition: 3.1, organicRank: 11, estDailySales: 2480 },
-    { day: "D-2", adPosition: 2.6, organicRank: 10, estDailySales: 2810 },
-    { day: "D-1", adPosition: 2.2, organicRank: 9,  estDailySales: 3140 },
-    { day: "D-0", adPosition: 2.0, organicRank: 8,  estDailySales: 3380 },
+    { day: "H-36", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
+    { day: "H-24", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
+    { day: "H-12", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
+    { day: "H-0",  adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
   ],
+  trendChartTitle: "NightFox · 36-hour momentum trajectory",
   projection: {
-    headline: "SKU-A is projected to drop to BSR #4-5 within 14 days",
-    detail:
-      "Extending SKU-X's current trajectory linearly · if we don't move, they keep eating impression share on the 7 hero terms. Ads + organic + promo all biting together — our #2 doesn't hold.",
-    revenueLoss: "$42K / 14 days",
+    headline: "Bed frame SKU-117 projected to drop to BSR #4-5 within 14 days",
+    body:
+      "Extending NightFox's current trajectory linearly: if we don't move, they keep eating impression share on the 7 hero terms. Ads + organic + promo biting together · our #2 doesn't hold.",
+    revenueLoss: "$58K / 14 days",
     revenueLossNote:
-      "Estimated from current traffic share lost × our $34.99 ASP · doesn't include downstream BSR-slide effects",
+      "Estimated from current traffic share lost × our ASP · doesn't include downstream BSR-slide effects",
     confidence: 78,
-    confidenceLabel: "Based on 12 prior attack trajectories of this shape",
+    confidenceNote: "Based on 12 prior playbacks of attacks with this profile",
+    assumption: "NightFox momentum continues, we don't respond",
   },
   postures: [
     {
-      id: "defend-all",
-      name: "Defend at all costs",
-      kind: "aggressive",
+      id: "defend-frontal",
+      name: "Hold the line · defend organic rank",
+      kind: "frontal",
       tone: "blue",
       recommended: false,
       tagline: "Match bids on their strongest 7 terms",
       approach:
-        "Match SKU-X bids on all 7 hero keywords · increase SB-layer daily budget +80% · run a 14-day matching coupon (15% off). Fight on their strongest ground.",
+        "Match NightFox bids on all 7 hero keywords · SB-layer daily budget +80% · 14-day matching coupon (15% off). Fight on their strongest ground.",
       cost: "+$11.4K ad spend / 14 days · contribution margin -3.2pp",
-      risk: "Bidding war re-escalates · competitor likely counters · CPC stays elevated after the 14-day window closes",
-      outcomeProbability: "78% probability of holding BSR ≤ #3",
-      recommendedWhen: "Long-term LTV at BSR #1-3 justifies the short-term margin hit",
+      risk:
+        "Bidding war re-escalates · NightFox likely counters · CPC stays elevated after the 14-day window closes",
+      outcomeProbability: "78% chance of holding BSR ≤ #3",
+      recommendedWhen:
+        "Peak season is close, the free traffic from BSR #1-3 outweighs the short-term margin sacrifice",
       confidence: 73,
       confidenceLabel: "Familiar playbook · but the cost lands on our margin",
     },
     {
-      id: "wait",
-      name: "Wait it out",
+      id: "wait-it-out",
+      name: "Bet they pull back soon",
       kind: "patient",
       tone: "slate",
       recommended: false,
@@ -1844,156 +1860,167 @@ const DEFENSE = {
       approach:
         "Hold ad spend at current level · monitor BSR + traffic share at high frequency · keep a counter-plan drafted · launch only if rank drops to #4.",
       cost: "$0 incremental",
-      risk: "BSR likely dips to #4-5 short-term · estimated $42K revenue impact over 14 days · if SKU-X isn't purely promo-driven, the recovery costs more",
-      outcomeProbability: "65% probability metrics revert after coupon expires · we hold mid-position",
-      recommendedWhen: "We're confident this attack is ~90% promo-driven and time-bound",
-      confidence: 58,
-      confidenceLabel: "Lower confidence — I can't confirm SKU-X doesn't have a second wave",
+      risk:
+        "If NightFox doesn't pull back (they're after peak traffic; coupon ends but they may pivot to a long game), peak finds us at BSR #4-5 and the loss compounds 2-3x",
+      outcomeProbability:
+        "65% chance NightFox pulls back when the coupon ends, but organic rank is already partially gone",
+      recommendedWhen:
+        "We're convinced this is ~90% promo-driven AND cash flow forces us to protect margin",
+      confidence: 52,
+      confidenceLabel: "Low confidence in peak context · intentionally below our usual 65% floor",
     },
     {
-      id: "counter-attack",
-      name: "Counter-attack on weaknesses",
+      id: "asymmetric",
+      name: "Don't fight head-on · take their flanks",
       kind: "asymmetric",
       tone: "emerald",
       recommended: true,
-      tagline: "12 SKU-X weak terms + a contrasting promo",
+      tagline: "12 NightFox-weak terms + a contrasting promo",
       approach:
-        "Don't fight on their strongest 7. Go to the 12 keywords where SKU-X is weak (lower ad position, lower CR) and expand share there + run a contrasting promo (buy-2-save-$18, dollar amount not percent) — don't collide with their 18%-off head-on.",
-      cost: "+$7.8K ad spend / 14 days · contribution margin -1.8pp (mostly from buy-2 discount)",
-      risk: "3 of the 12 weak terms have thin traffic — lift may underperform model; the contrasting promo needs the listing team ~36 hrs to ship",
-      outcomeProbability: "71% probability of holding BSR ≤ #3 · plus 23% probability of gaining share on SKU-X's weak terms",
-      recommendedWhen: "Competitor has identifiable weak spots AND our LTV math supports the asymmetric play",
+        "Don't fight on their strongest 7. Go to the 12 keywords where NightFox is weak (lower ad position, lower CR) and expand share there + run a contrasting promo (buy-2-save-$18, dollar amount not percent), so we don't collide with their 18%-off head-on.",
+      cost: "+$7.8K ad spend / 14 days · contribution margin -1.8pp (mostly from the buy-2 discount)",
+      risk:
+        "3 of the 12 weak terms have thin traffic · lift may underperform the model · the contrasting promo needs Listing ~36 hrs to ship",
+      outcomeProbability:
+        "71% chance of holding BSR ≤ #3 · plus 23% chance of gaining share on NightFox's weak terms",
+      recommendedWhen:
+        "Competitor's promo has an expiry and we use non-promo levers to build durable advantage · grab pre-peak long-tail organic rank",
       confidence: 71,
-      confidenceLabel: "Highest of the three · backed by SKU-117's same-shape precedent",
+      confidenceLabel: "Highest of the three · backed by SKU-117's own prior playbook",
       reference: {
         sku: "Bed frame · SKU-117",
-        period: "2025 Q3",
-        outcome: "Held BSR #2 throughout the entire attack window",
+        period: "2024 Q2",
+        outcome: "Held BSR #2 throughout the attack window",
         method:
           "Competitor SKU-Y attacked with high CPC on 5 hero terms + promo · we avoided the head-on fight and bid up on 9 long-tail terms where SKU-Y was weak, plus a buy-1-get-1 bundle. After the attack window closed, SKU-Y's share dropped back and we picked up 2 BSR sub-category #1 slots.",
         confidencePct: 71,
         compatibilityNote:
-          "Structural match · same 'promo-driven + concentrated hero terms' attack shape · same identifiable weak terms. Difference: floor-lamp lever is 'buy 2 save $18' (SKU-117 used buy-1-get-1) — lever type is comparable but not identical, which is why confidence isn't 80%.",
+          "Structural match · same 'promo-driven + concentrated hero terms' attack shape · same identifiable weak terms. Difference: current lever is 'buy 2, save $18' (SKU-117 used buy-1-get-1), lever type is comparable but not identical, which is why confidence isn't 80%.",
       },
     },
   ],
   deepDive: {
-    "counter-attack": {
+    asymmetric: {
       kicker:
-        "Expand on 12 SKU-X weak terms · contrasting promo · don't burn cash on their strongest ground",
+        "Expand on 12 NightFox-weak long-tail terms · contrasting promo · don't burn cash on their strongest ground",
       targetKeywords: [
-        { keyword: "arc floor lamp",                ourAdPosition: "#3", skuxAdPosition: "#7",  ourCr: "9.4%", projectedImpact: "+$2.1K / 14 days" },
-        { keyword: "tall arc lamp living room",     ourAdPosition: "#4", skuxAdPosition: "#9",  ourCr: "8.8%", projectedImpact: "+$1.8K / 14 days" },
-        { keyword: "modern arc floor lamp",         ourAdPosition: "#3", skuxAdPosition: "#8",  ourCr: "9.1%", projectedImpact: "+$1.6K / 14 days" },
-        { keyword: "arc floor lamp gold",           ourAdPosition: "#5", skuxAdPosition: "#11", ourCr: "8.6%", projectedImpact: "+$0.9K / 14 days" },
-        { keyword: "arc lamp for sectional",        ourAdPosition: "#4", skuxAdPosition: "#10", ourCr: "9.7%", projectedImpact: "+$0.8K / 14 days" },
-        { keyword: "arc floor lamp black",          ourAdPosition: "#6", skuxAdPosition: "#12", ourCr: "7.9%", projectedImpact: "+$0.7K / 14 days" },
-        { keyword: "mid century arc floor lamp",    ourAdPosition: "#4", skuxAdPosition: "#9",  ourCr: "8.4%", projectedImpact: "+$0.6K / 14 days" },
-        { keyword: "arc lamp over couch",           ourAdPosition: "#5", skuxAdPosition: "#13", ourCr: "9.2%", projectedImpact: "+$0.6K / 14 days" },
-        { keyword: "tall floor lamp for high ceiling", ourAdPosition: "#6", skuxAdPosition: "#10", ourCr: "8.1%", projectedImpact: "+$0.5K / 14 days" },
-        { keyword: "arc lamp marble base",          ourAdPosition: "#5", skuxAdPosition: "#14", ourCr: "8.9%", projectedImpact: "+$0.4K / 14 days" },
-        { keyword: "curved floor lamp",             ourAdPosition: "#7", skuxAdPosition: "#11", ourCr: "7.6%", projectedImpact: "+$0.4K / 14 days" },
-        { keyword: "arc reading lamp",              ourAdPosition: "#6", skuxAdPosition: "#12", ourCr: "8.2%", projectedImpact: "+$0.3K / 14 days" },
+        { keyword: "platform bed frame queen storage",      ourAdPosition: "#18", competitorAdPosition: "#42", ourCr: "5.4%", projectedImpact: "+$2.6K / 14 days" },
+        { keyword: "wooden bed frame king with headboard",  ourAdPosition: "#15", competitorAdPosition: "#38", ourCr: "5.9%", projectedImpact: "+$2.2K / 14 days" },
+        { keyword: "rustic farmhouse bed frame queen",      ourAdPosition: "#22", competitorAdPosition: "#48", ourCr: "5.1%", projectedImpact: "+$1.7K / 14 days" },
+        { keyword: "metal bed frame full no box spring",    ourAdPosition: "#19", competitorAdPosition: "#36", ourCr: "5.6%", projectedImpact: "+$1.5K / 14 days" },
+        { keyword: "bed frame queen low profile",           ourAdPosition: "#16", competitorAdPosition: "#34", ourCr: "6.2%", projectedImpact: "+$1.4K / 14 days" },
+        { keyword: "upholstered bed frame king tufted",     ourAdPosition: "#21", competitorAdPosition: "#52", ourCr: "5.0%", projectedImpact: "+$1.1K / 14 days" },
+        { keyword: "bed frame with drawers full size",      ourAdPosition: "#24", competitorAdPosition: "#41", ourCr: "4.8%", projectedImpact: "+$0.9K / 14 days" },
+        { keyword: "modern bed frame queen wood",           ourAdPosition: "#17", competitorAdPosition: "#33", ourCr: "5.7%", projectedImpact: "+$0.8K / 14 days" },
+        { keyword: "low height bed frame twin",             ourAdPosition: "#27", competitorAdPosition: "#54", ourCr: "4.6%", projectedImpact: "+$0.6K / 14 days" },
+        { keyword: "bed frame king upholstered grey",       ourAdPosition: "#23", competitorAdPosition: "#46", ourCr: "5.2%", projectedImpact: "+$0.5K / 14 days" },
+        { keyword: "japanese platform bed frame queen",     ourAdPosition: "#29", competitorAdPosition: "#58", ourCr: "4.4%", projectedImpact: "+$0.4K / 14 days" },
+        { keyword: "bed frame full with usb ports",         ourAdPosition: "#26", competitorAdPosition: "#49", ourCr: "4.9%", projectedImpact: "+$0.3K / 14 days" },
       ],
       bidChanges: [
-        { keyword: "arc floor lamp",                currentBid: "$1.84", proposedBid: "$2.40", dailyDelta: "+$84" },
-        { keyword: "tall arc lamp living room",     currentBid: "$1.62", proposedBid: "$2.20", dailyDelta: "+$72" },
-        { keyword: "modern arc floor lamp",         currentBid: "$1.78", proposedBid: "$2.30", dailyDelta: "+$68" },
-        { keyword: "arc floor lamp gold",           currentBid: "$1.42", proposedBid: "$1.95", dailyDelta: "+$48" },
-        { keyword: "arc lamp for sectional",        currentBid: "$1.36", proposedBid: "$1.90", dailyDelta: "+$44" },
-        { keyword: "arc floor lamp black",          currentBid: "$1.48", proposedBid: "$1.95", dailyDelta: "+$38" },
-        { keyword: "Other 6 long-tail terms (rolled up)", currentBid: "—", proposedBid: "—",   dailyDelta: "+$204" },
+        { keyword: "platform bed frame queen storage",     currentBid: "$1.94", proposedBid: "$2.48", dailyDelta: "+$78" },
+        { keyword: "wooden bed frame king with headboard", currentBid: "$1.86", proposedBid: "$2.36", dailyDelta: "+$68" },
+        { keyword: "rustic farmhouse bed frame queen",     currentBid: "$1.42", proposedBid: "$1.92", dailyDelta: "+$56" },
+        { keyword: "metal bed frame full no box spring",   currentBid: "$1.54", proposedBid: "$2.04", dailyDelta: "+$52" },
+        { keyword: "bed frame queen low profile",          currentBid: "$1.62", proposedBid: "$2.14", dailyDelta: "+$48" },
+        { keyword: "upholstered bed frame king tufted",    currentBid: "$1.38", proposedBid: "$1.88", dailyDelta: "+$42" },
+        { keyword: "Other 6 long-tail terms (rolled up)",  currentBid: "—",     proposedBid: "—",     dailyDelta: "+$214" },
       ],
       bidChangesTotal: "+$558 / day · +$7.8K / 14 days",
       promo: {
-        type: "Contrasting promo · buy 2, save $18",
+        type: "Buy 2, save $18 (dollar-amount, not %)",
         structure:
-          "Buy 2 arc floor lamps, save $18 (≈ 9% off equivalent, but expressed as a flat dollar amount, not a percent) — deliberately on a different dimension than SKU-X's 18% off.",
+          "Buy 2 bed frames, save $18 (≈ 9% off equivalent, expressed as a flat dollar amount, not a percent), deliberately on a different dimension than NightFox's 18% off.",
         rationale:
-          "SKU-X is fighting on percent-off · we step out of that comparison entirely and put our promo on dollar amount · doesn't read as a follow, and the buy-2 push pulls average order value up 37%.",
+          "NightFox is fighting on percent-off · we step out of that comparison entirely and put our promo on dollar amount · doesn't read as a follow, and the buy-2 push pulls AOV up 37%.",
         marginImpact: "Contribution margin -1.8pp · ~520 buy-2 orders projected over 14 days",
         executionGate:
-          "Listing team ships in ≤ 36 hrs · I sync ad campaigns · inventory check ≥ 2,400 units",
+          "Listing team needs 36 hours to launch the contrasting promo · I sync ad campaigns · inventory check ≥ 2,400 units",
+        listingBrief: "Listing team needs 36 hours to launch the contrasting promo",
       },
-      milestones: [
-        {
-          day: "D+1",
-          window: "Today → tomorrow",
-          action: "Raise bids on the 12 weak terms · alerts go live · promo brief sent to Listing team",
-          gate: "Bid-update fill rate ≥ 95% · brief acknowledged",
-        },
-        {
-          day: "D+3",
-          window: "This week",
-          action: "Buy-2-save-$18 promo goes live · ad campaigns tagged with promo",
-          gate: "Promo page live · buy-2 orders ≥ 8% of daily order mix",
-        },
-        {
-          day: "D+7",
-          window: "Next Monday",
-          action: "First checkpoint review · weak-term impression share + our BSR hold",
-          gate: "12-term weighted impression share +18pp · BSR held ≤ #3",
-        },
-        {
-          day: "D+14",
-          window: "End of window",
-          action: "Competitor promo window expected to expire · evaluate scaling bids back",
-          gate: "BSR held ≤ #3 · 14-day net impact tracking to +$8-10K (after ad cost)",
-        },
-      ],
-      milestonesTradeoff:
-        "D+1 to D+3 is the critical stretch — bids and promo need to land together to work. The 36-hour Listing-team gate is the hard constraint; if they can't slot it, we degrade to a 'bids only, no promo' fallback.",
     },
-    "defend-all": {
+    "defend-frontal": {
       kicker: "Match bids and run a matching coupon · fight where they're strongest",
       costBreakdown: [
-        { line: "Match SKU-X CPC on 7 hero terms",       dailyDelta: "+$640", note: "Pulls our average CPC from $1.82 to ~$2.95" },
-        { line: "SB-layer daily budget +80%",            dailyDelta: "+$180", note: "Reinforces top-of-SERP slot capture" },
-        { line: "14-day matching coupon (15% off) margin sacrifice", dailyDelta: "—", note: "Contribution margin -3.2pp · ~1,180 orders affected over 14 days" },
+        { line: "Match NightFox CPC on 7 hero terms",                dailyDelta: "+$640", note: "Pulls our average CPC from $1.82 to ~$2.95" },
+        { line: "SB-layer daily budget +80%",                        dailyDelta: "+$180", note: "Reinforces top-of-SERP slot capture" },
+        { line: "14-day matching coupon (15% off) margin sacrifice", dailyDelta: "—",     note: "Contribution margin -3.2pp · ~1,180 orders affected over 14 days" },
       ],
       costTotal: "+$11.4K ad spend / 14 days · contribution margin -3.2pp",
-      milestones: [
-        { day: "D+1",  window: "Today → tomorrow", action: "Match bids on 7 terms · schedule matching coupon for 14 days", gate: "Bid-update fill rate ≥ 95% · coupon scheduled" },
-        { day: "D+3",  window: "This week",        action: "First bid-war review · check whether SKU-X re-bids again",      gate: "≥ 5 of 7 terms back at ad position ≤ #2" },
-        { day: "D+7",  window: "Next Monday",      action: "Mid-window review · decide whether to double down",             gate: "BSR held ≤ #3 · TACoS ≤ 24% before coupon ends" },
-        { day: "D+14", window: "End of window",    action: "Coupon ends · roll bids back in stages",                       gate: "BSR held ≤ #3 · roll-back path locked in" },
-      ],
     },
-    wait: {
+    "wait-it-out": {
       kicker: "Don't engage · turn up monitoring · keep the counter ready but holstered",
       monitoringPlan: [
-        { item: "BSR live monitoring",     frequency: "Every 4 hours",  trigger: "BSR drops to #4 → alert fires → notify Maya + Devon" },
-        { item: "7 hero-term traffic share", frequency: "Daily",          trigger: "Our share down ≥ 15% → kick off counter-plan brief" },
-        { item: "SKU-X promo page",        frequency: "Daily",          trigger: "Promo de-listed = take the win, prep retreat from defensive posture" },
+        { item: "BSR live monitoring",         frequency: "Every 4 hours", trigger: "BSR drops to #4 → alert fires → notify Maya + Devon" },
+        { item: "7 hero-term traffic share",   frequency: "Daily",         trigger: "Our share down ≥ 15% → kick off counter-plan brief" },
+        { item: "NightFox promo page",         frequency: "Daily",         trigger: "Promo de-listed = take the win, prep retreat from defensive posture" },
+        { item: "Organic #1-3 traffic share",  frequency: "Daily",         trigger: "Our organic share drops ≥ 8% → switch to asymmetric posture" },
       ],
       readyResponse:
-        "Counter-plan drafted in advance · if BSR actually drops to #4, we switch to 'counter-attack on weaknesses' within 6 hours. Cost is eating ~$15-18K in losses first + BSR recovery takes another 7-10 days.",
-      milestones: [
-        { day: "D+1",  window: "Today → tomorrow", action: "Monitoring alert parameters live · counter-plan brief in the drawer",         gate: "All 3 monitors active · brief ready" },
-        { day: "D+3",  window: "This week",        action: "Mid-check · does trend match the 'promo-driven' assumption?",                  gate: "SKU-X organic momentum starting to turn → assumption holds" },
-        { day: "D+7",  window: "Next Monday",      action: "First BSR checkpoint · decide whether to trigger counter",                    gate: "BSR still ≤ #3 → keep waiting; BSR = #4 → trigger switch" },
-        { day: "D+14", window: "End of window",    action: "Competitor promo window expected to expire · verify the assumption",          gate: "Promo de-listed + metrics revert = plan worked; otherwise damage control" },
-      ],
+        "Counter-plan drafted in advance · if BSR actually drops to #4, we switch to 'Don't fight head-on · take their flanks' within 6 hours. Cost is eating ~$15-18K in losses first + BSR recovery takes another 7-10 days.",
     },
   },
+  milestones: {
+    asymmetric: [
+      {
+        day: "D+1",
+        window: "Today → tomorrow",
+        action: "Weak-term bid setup complete · contrasting-promo brief delivered to Listing",
+        gate: "Bid-update fill rate ≥ 95% · brief acknowledged",
+      },
+      {
+        day: "D+3",
+        window: "This week",
+        action: "Buy-2-save-$18 promo goes live · ad campaigns tagged with promo",
+        gate: "Promo page live · buy-2 orders ≥ 8% of daily order mix",
+      },
+      {
+        day: "D+7",
+        window: "Next Monday",
+        action: "First checkpoint review · 12 weak-term impression share + our BSR hold",
+        gate: "12-term weighted impression share +18pp · BSR held ≤ #3",
+      },
+      {
+        day: "D+14",
+        window: "End of window",
+        action: "Promo window closes · did NightFox pull back · key fork: if yes we win, if no we trigger Phase 2 immediately",
+        gate: "BSR held ≤ #3 · 14-day net impact tracking to +$8-10K (after ad cost)",
+      },
+    ],
+    "defend-frontal": [
+      { day: "D+1",  window: "Today → tomorrow", action: "Match bids on 7 terms · schedule matching coupon for 14 days",                          gate: "Bid-update fill rate ≥ 95% · coupon scheduled" },
+      { day: "D+3",  window: "This week",        action: "First bid-war review · check whether NightFox re-bids again",                           gate: "≥ 5 of 7 terms back at ad position ≤ #2" },
+      { day: "D+7",  window: "Next Monday",      action: "Mid-window review · decide whether to double down · first read on organic impact",     gate: "BSR held ≤ #3 · TACoS ≤ 24% before coupon ends" },
+      { day: "D+14", window: "End of window",    action: "Promo window closes · did NightFox pull back · key fork: if yes we win, if no we trigger Phase 2 immediately", gate: "BSR held ≤ #3 · roll-back path locked in" },
+    ],
+    "wait-it-out": [
+      { day: "D+1",  window: "Today → tomorrow", action: "Monitoring alert parameters live · counter-plan brief in the drawer",     gate: "All 4 monitors active · brief ready" },
+      { day: "D+3",  window: "This week",        action: "Mid-check · does trend match the 'promo-driven' assumption?",              gate: "NightFox organic momentum starting to turn → assumption holds" },
+      { day: "D+7",  window: "Next Monday",      action: "First BSR checkpoint · decide whether to trigger counter",                 gate: "BSR still ≤ #3 → keep waiting; BSR = #4 → trigger switch" },
+      { day: "D+14", window: "End of window",    action: "Competitor promo window expected to expire · verify the assumption",       gate: "Promo de-listed + metrics revert = plan worked; otherwise damage control" },
+    ],
+  },
+  milestonesTradeoff:
+    "D+1 to D+3 is the critical stretch · bids and promo need to land together to work. The 36-hour Listing-team gate is the hard constraint; if they can't slot it, we degrade to a 'bids only, no promo' fallback.",
   reasoning: {
     chain: [
-      "Monitoring signal fired: SKU-X's 24-hour rolling-average CPC on our 7 hero terms crossed the +120% threshold 4 hours ago · competitor-attack detector triggered.",
-      "Cross-section check: SKU-X organic rank 14 → 8 over the same window, listing CR 6.4% → 8.9%, review velocity 2.3x — three independent signals say this isn't a single-point spike.",
-      "Promo window detection: SKU-X's 18%-off coupon has been live for 9 days · typical cycle 14 days · estimated 5 days remaining — the attack is time-bound, which sets the strategic terrain.",
-      "Filter Company Brain for precedents: 7 cases match the 'promo-driven + hero-term attack' shape · 4 chose defend-all, 2 chose wait, 3 chose asymmetric (overlap). Result spread: asymmetric BSR-hold rate at 14 days = 71%, defend-all = 64%, wait = 38%.",
-      "Re-filter against current context: SKU-X is already ahead on hero-term CPC · marginal returns on us matching are thin. SKU-X is at ad position ≥ #8 on 12 weak terms · that's an exploitable asymmetric structure.",
-      "Evaluate lever compatibility: SKU-X is fighting on percent-off · matching with 15% off pulls us into a price-war spiral. Buy-2-save-$18 is a contrasting lever · different dimension · +37% AOV partially offsets the margin sacrifice.",
-      "Risk math: 71% confidence on the asymmetric play comes from precedent structural match · I subtract 9pp for lever-type difference (SKU-117 used buy-1-get-1, not dollar-amount) — confidence doesn't reach 80%.",
-      "Time-sensitivity constraint: promo window expected to close in 5 days · the 48-hour decision window reflects 'wait until D+3 to launch → effective response window collapses to 6 days · too late to buy BSR back'.",
+      "Detected NightFox's CPC +180% on 7 hero keywords in 36 hours",
+      "Ruled out single-point spike · trend held across the 24-36 hour window",
+      "Pulled Company Brain · historical Jun-Aug bed-frame category search volume",
+      "Matched against 'pre-peak organic land grab' attack pattern · 12 prior cases",
+      "Evaluated cost / outcome probability for all three response postures",
+      "Cross-checked against SKU-117's own 2024 Q2 case (71% holds)",
+      "Weighted assessment: hold the line 73% · wait it out 52% (in peak-season context) · asymmetric 71%",
+      "Recommended asymmetric · low cost AND a side effect of grabbing pre-peak long-tail organic rank",
     ],
     accuracy: 74,
-    accuracyLabel: "comparable competitor-attack cases",
+    accuracyLabel: "Similar competitor-attack cases",
   },
   approval: {
-    primaryLabel: "Approve recommended posture (Counter-attack on weaknesses)",
-    secondaryLabel: "Choose different posture",
-    timeSensitiveLabel: "Time-sensitive · 48-hour decision window",
+    note: "Time-sensitive · today/tomorrow decision window · NightFox coupon expires in ~5 days",
+    primaryLabel: "Approve 'Don't fight head-on · take their flanks'",
+    secondaryLabel: "Choose different posture →",
+    timeSensitiveLabel: "Time-sensitive · today/tomorrow decision window",
   },
 };
 
@@ -7888,31 +7915,31 @@ function ThreatSignalCard({ signal }) {
 function CompetitorTrendChart({ data }) {
   const charts = [
     {
-      label: "SKU-X ad position",
+      label: "NightFox ad position",
       dataKey: "adPosition",
-      kicker: "Lower number = higher slot · climbed from ~#5 to #2 in a week",
+      kicker: "Lower number = higher slot · climbed from #5 to #2 in 36 hours",
       reversed: true,
       domain: [1, 6],
       stroke: "#e11d48",
       format: (v) => `#${v.toFixed(1)}`,
     },
     {
-      label: "SKU-X organic rank",
+      label: "NightFox organic rank",
       dataKey: "organicRank",
-      kicker: "Lower number = higher rank · climbed from #14 to #8",
+      kicker: "Lower number = higher rank · climbed from #14 to #11",
       reversed: true,
-      domain: [6, 16],
+      domain: [10, 16],
       stroke: "#b45309",
       format: (v) => `#${Math.round(v)}`,
     },
     {
-      label: "SKU-X estimated daily sales",
+      label: "NightFox estimated daily sales",
       dataKey: "estDailySales",
-      kicker: "$ / day · rose from ~$1.8K to ~$3.4K",
+      kicker: "$K / day · rose from ~$1.8K to ~$3.4K",
       reversed: false,
-      domain: [1500, 3600],
+      domain: [1.5, 3.8],
       stroke: "#0f766e",
-      format: (v) => `$${(v / 1000).toFixed(1)}K`,
+      format: (v) => `$${v.toFixed(1)}K`,
     },
   ];
   return (
@@ -7978,7 +8005,7 @@ function PostureCard({ posture, selected, onSelect }) {
     ? "border-slate-400 border-2"
     : "border-slate-200";
   const kindLabel =
-    posture.kind === "aggressive"
+    posture.kind === "frontal"
       ? "Head-on"
       : posture.kind === "patient"
       ? "Patient"
@@ -8104,7 +8131,7 @@ function PostureCard({ posture, selected, onSelect }) {
 }
 
 function PostureDeepDive({ posture, deepDive }) {
-  if (posture.id === "counter-attack") {
+  if (posture.id === "asymmetric") {
     const d = deepDive;
     return (
       <Card className="p-5">
@@ -8114,7 +8141,7 @@ function PostureDeepDive({ posture, deepDive }) {
 
         <div className="mb-5">
           <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
-            12 target keywords · we're stronger · SKU-X is weaker
+            12 long-tail target keywords · we're stronger · NightFox is weaker
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
@@ -8122,7 +8149,7 @@ function PostureDeepDive({ posture, deepDive }) {
                 <tr className="border-b border-slate-200">
                   <th className="text-left text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Keyword</th>
                   <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Our ad pos.</th>
-                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">SKU-X ad pos.</th>
+                  <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">NightFox ad pos.</th>
                   <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Our {wrapMetric("CR")}</th>
                   <th className="text-right text-10 uppercase tracking-wider text-slate-500 font-medium py-2 px-2">Projected impact</th>
                 </tr>
@@ -8132,7 +8159,7 @@ function PostureDeepDive({ posture, deepDive }) {
                   <tr key={i} className="border-b border-slate-100 last:border-0">
                     <td className="py-2 px-2 text-slate-900 font-mono">{kw.keyword}</td>
                     <td className="py-2 px-2 text-right font-mono text-slate-700">{kw.ourAdPosition}</td>
-                    <td className="py-2 px-2 text-right font-mono text-slate-500">{kw.skuxAdPosition}</td>
+                    <td className="py-2 px-2 text-right font-mono text-slate-500">{kw.competitorAdPosition}</td>
                     <td className="py-2 px-2 text-right font-mono text-slate-700">{kw.ourCr}</td>
                     <td className="py-2 px-2 text-right font-mono text-emerald-700 font-medium">{kw.projectedImpact}</td>
                   </tr>
@@ -8209,7 +8236,7 @@ function PostureDeepDive({ posture, deepDive }) {
     );
   }
 
-  if (posture.id === "defend-all") {
+  if (posture.id === "defend-frontal") {
     const d = deepDive;
     return (
       <Card className="p-5">
@@ -8247,7 +8274,7 @@ function PostureDeepDive({ posture, deepDive }) {
     );
   }
 
-  // wait
+  // wait-it-out
   const d = deepDive;
   return (
     <Card className="p-5">
@@ -8255,7 +8282,7 @@ function PostureDeepDive({ posture, deepDive }) {
         {d.kicker}
       </div>
       <div className="text-10 uppercase tracking-wider text-slate-500 font-semibold mb-2">
-        Monitoring plan · triggers switch us to counter-attack
+        Monitoring plan · triggers flip us to the asymmetric counter
       </div>
       <div className="overflow-x-auto mb-4">
         <table className="w-full text-xs">
@@ -8318,19 +8345,63 @@ function DefenseMilestoneTimeline({ milestones }) {
   );
 }
 
+function HeroImageStrip({ images }) {
+  return (
+    <div className="px-6 pt-5">
+      <div
+        className={`grid ${
+          images.length === 1
+            ? "grid-cols-1 max-w-xs"
+            : "grid-cols-2 gap-4 max-w-2xl"
+        } mx-auto`}
+      >
+        {images.map((img, i) => (
+          <div key={i}>
+            <div
+              className="rounded-md border border-slate-200 bg-slate-100 flex items-center justify-center text-11 text-slate-500 text-center px-4 mx-auto"
+              style={{ width: "280px", height: "280px" }}
+            >
+              {img.src ? (
+                <img
+                  src={img.src}
+                  alt={img.caption}
+                  className="w-full h-full object-cover rounded-md"
+                />
+              ) : (
+                <span>{img.fallbackText}</span>
+              )}
+            </div>
+            <div
+              className="mt-2 text-11 text-slate-600 text-center mx-auto"
+              style={{ width: "280px" }}
+            >
+              {img.caption}
+            </div>
+          </div>
+        ))}
+      </div>
+      {images.length === 2 && (
+        <div className="mt-3 text-11 text-slate-600 text-center max-w-2xl mx-auto">
+          {images[0].descriptor} · {images[1].descriptor}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DefenseCanvas() {
   const D = DEFENSE;
-  const [selectedPostureId, setSelectedPostureId] = useState("counter-attack");
+  const [selectedPostureId, setSelectedPostureId] = useState("asymmetric");
   const selectedPosture = D.postures.find((p) => p.id === selectedPostureId);
   const selectedDeepDive = D.deepDive[selectedPostureId];
-  const selectedMilestones = selectedDeepDive.milestones;
+  const selectedMilestones = D.milestones[selectedPostureId];
   const recommendedPosture = D.postures.find((p) => p.recommended);
 
   return (
     <>
       <CanvasHeader
         kicker="Defense · BSR guard"
-        title={`${D.sku} under attack from ${D.attackerSku}`}
+        title={`${D.sku} under attack from ${D.attacker}`}
         meta={
           <>
             <Pill tone="rose">
@@ -8349,6 +8420,23 @@ function DefenseCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: null,
+            caption: "Our SKU-117 bed frame hero",
+            fallbackText: "Pending upload · our SKU-117 hero",
+            descriptor: "Our hero (neutral background · product isolated)",
+          },
+          {
+            src: null,
+            caption: "NightFox bed frame hero",
+            fallbackText: "Pending upload · NightFox hero",
+            descriptor: "NightFox hero (grey linen headboard · bedroom scene)",
+          },
+        ]}
+      />
+
       {/* Time-sensitive constraint callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
@@ -8356,10 +8444,10 @@ function DefenseCanvas() {
             <Clock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
-                Time-sensitive · recommend decision within {D.timeSensitive.window}
+                Time-sensitive · decide {D.timeSensitive.window}
               </div>
               <div className="text-sm text-rose-900 leading-relaxed">
-                {D.timeSensitive.reason} · waiting until D+3 leaves an effective response window of ~6 days.
+                {D.timeSensitive.framing}
               </div>
             </div>
           </div>
@@ -8368,14 +8456,14 @@ function DefenseCanvas() {
 
       {/* 1. Current state */}
       <div className="px-6">
-        <SectionLabel kicker={`SKU-A currently BSR ${D.currentState.ourBsr} · held for ${D.currentState.ourBsrHeldDays} days`}>
+        <SectionLabel kicker={`SKU-117 currently BSR ${D.currentState.ourBsr} · held for ${D.currentState.ourBsrHeldDays} days`}>
           1. Current state · 现状
         </SectionLabel>
 
-        <div className="grid grid-cols-4 gap-3 mb-4">
+        <div className="grid grid-cols-4 gap-3 mb-5">
           <Card className="p-4">
             <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Our BSR · {D.currentState.bsrCategory}
+              Our BSR · Bed frames
             </div>
             <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
               {D.currentState.ourBsr}
@@ -8394,14 +8482,14 @@ function DefenseCanvas() {
             <div className="text-11 text-slate-500 mt-1">Reference baseline</div>
           </Card>
           <Card className="p-4">
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
               {wrapMetric("TACoS")}
             </div>
-            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+            <div className="mt-1 text-xl font-mono font-semibold text-emerald-700">
               {D.currentState.ourTacos}%
             </div>
             <div className="text-11 text-slate-500 mt-1">
-              Daily ad spend <span className="font-mono">{D.currentState.ourDailyAdSpend}</span>
+              Daily ad spend <span className="font-mono">${D.currentState.ourDailyAdSpend}</span>
             </div>
           </Card>
           <Card className="p-4 border-rose-300">
@@ -8409,40 +8497,71 @@ function DefenseCanvas() {
               Attacker
             </div>
             <div className="mt-1 text-xl font-mono font-semibold text-rose-700">
-              {D.attackerSku}
+              {D.currentState.attackerName}
             </div>
             <div className="text-11 text-rose-700 mt-1">
-              Primary threat on 7 hero terms
+              Primary threat on {D.currentState.keywordCount} hero terms
             </div>
           </Card>
         </div>
+      </div>
 
-        <div className="mb-4">
-          <SectionLabel kicker="3 independent signals · all pointing the same way">
-            Attack signals
-          </SectionLabel>
-          <div className="grid grid-cols-3 gap-3">
-            {D.attackSignals.map((s) => (
-              <ThreatSignalCard key={s.id} signal={s} />
-            ))}
+      {/* 2. Context (NEW) */}
+      <div className="px-6 pt-2">
+        <SectionLabel kicker="Why this attack needs a response · not normal promo traffic">
+          2. Context · 背景
+        </SectionLabel>
+
+        <div className="bg-slate-900 rounded-lg px-5 py-5 text-white">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="w-8 h-8 rounded-md bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
+              <Brain className="w-4 h-4 text-emerald-400" strokeWidth={1.75} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1">
+                Company Brain · context
+              </div>
+              <div className="text-base font-semibold text-white leading-snug">
+                {D.context.headline}
+              </div>
+            </div>
           </div>
-        </div>
+          <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-line mb-4">
+            {D.context.body}
+          </div>
 
-        <div>
-          <SectionLabel kicker="Past 7 days · leftmost is earliest">
-            SKU-X 7-day momentum trace
-          </SectionLabel>
-          <CompetitorTrendChart data={D.competitorTrend} />
+          <div className="rounded-md bg-slate-800/70 border border-slate-700 px-4 py-3">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1">
+              <Brain className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+              <span className="text-11 font-medium text-white">Company Brain · same-shape precedent</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1.5">
+              <span className="text-11 font-medium text-white">
+                {D.context.inlinePrecedent.sku}
+              </span>
+              <span className="text-10 text-slate-500">·</span>
+              <span className="text-10 text-slate-400 font-mono">
+                {D.context.inlinePrecedent.period}
+              </span>
+            </div>
+            <div className="text-11 text-slate-300 leading-relaxed mb-2">
+              {D.context.inlinePrecedent.summary}
+            </div>
+            <div className="flex items-start gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-1 rounded leading-relaxed">
+              <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+              <span>{D.context.inlinePrecedent.lesson}</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 2. Specific problem */}
+      {/* 3. Specific problem */}
       <div className="px-6 pt-6">
         <SectionLabel kicker="What happens if we don't move · 14-day projection">
-          2. Specific problem · 具体问题
+          3. Specific problem · 具体问题
         </SectionLabel>
 
-        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4">
+        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-md bg-rose-100 border border-rose-200 flex items-center justify-center flex-shrink-0">
               <TrendingUp className="w-4 h-4 text-rose-700" />
@@ -8455,7 +8574,7 @@ function DefenseCanvas() {
                 {D.projection.headline}
               </div>
               <div className="text-xs text-rose-900 leading-relaxed mb-3">
-                {D.projection.detail}
+                {D.projection.body}
               </div>
               <div className="grid grid-cols-3 gap-3 pt-3 border-t border-rose-200">
                 <div>
@@ -8477,7 +8596,7 @@ function DefenseCanvas() {
                     {D.projection.confidence}%
                   </div>
                   <div className="text-11 text-rose-700 mt-0.5 leading-relaxed">
-                    {D.projection.confidenceLabel}
+                    {D.projection.confidenceNote}
                   </div>
                 </div>
                 <div>
@@ -8485,19 +8604,37 @@ function DefenseCanvas() {
                     Key assumption
                   </div>
                   <div className="text-11 text-rose-900 leading-relaxed">
-                    SKU-X's current momentum continues · we don't respond
+                    {D.projection.assumption}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <div className="mb-5">
+          <SectionLabel kicker="3 independent signals · all pointing the same way">
+            Attack signals
+          </SectionLabel>
+          <div className="grid grid-cols-3 gap-3">
+            {D.attackSignals.map((s) => (
+              <ThreatSignalCard key={s.id} signal={s} />
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <SectionLabel kicker="Past 36 hours · leftmost is earliest">
+            {D.trendChartTitle}
+          </SectionLabel>
+          <CompetitorTrendChart data={D.competitorTrend} />
+        </div>
       </div>
 
-      {/* 3. Recommendation */}
+      {/* 4. Recommendation */}
       <div className="px-6 pt-6">
         <SectionLabel kicker="3 postures · click to switch deep-dive · recommended is highlighted">
-          3. Recommendation · 具体建议
+          4. Recommendation · 具体建议
         </SectionLabel>
         <div className="grid grid-cols-3 gap-3 items-stretch">
           {D.postures.map((p) => (
@@ -8518,15 +8655,15 @@ function DefenseCanvas() {
         </div>
       </div>
 
-      {/* 4. Milestones */}
+      {/* 5. Milestones */}
       <div className="px-6 pt-6">
         <SectionLabel kicker={`W1-2 schedule · ${selectedPosture.name}`}>
-          4. Milestones · 里程碑
+          5. Milestones · 里程碑
         </SectionLabel>
         <DefenseMilestoneTimeline milestones={selectedMilestones} />
-        {selectedPostureId === "counter-attack" && (
+        {selectedPostureId === "asymmetric" && (
           <div className="mt-3 text-11 text-slate-500 leading-relaxed italic">
-            {D.deepDive["counter-attack"].milestonesTradeoff}
+            {D.milestonesTradeoff}
           </div>
         )}
       </div>
@@ -8537,20 +8674,20 @@ function DefenseCanvas() {
 
       {/* Time-sensitive approval bar */}
       <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
-        <div className="flex items-center gap-1.5 mb-3">
-          <Clock className="w-3.5 h-3.5 text-rose-700" />
-          <span className="text-11 uppercase tracking-wider text-rose-700 font-semibold">
-            {D.approval.timeSensitiveLabel}
-          </span>
-          <span className="text-11 text-slate-500">
-            · competitor coupon expires in {D.timeSensitive.expiresIn}
-          </span>
+        <div className="flex items-start gap-2 mb-3 bg-rose-50 border border-rose-200 rounded-md px-3 py-2">
+          <Clock className="w-3.5 h-3.5 text-rose-700 mt-0.5 flex-shrink-0" />
+          <div className="flex-1 text-11 text-rose-900 leading-relaxed">
+            <span className="uppercase tracking-wider text-rose-700 font-semibold mr-1.5">
+              {D.approval.timeSensitiveLabel}
+            </span>
+            <span className="text-rose-800">· NightFox coupon expires in ~{D.timeSensitive.expiresIn}</span>
+          </div>
         </div>
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div className="min-w-0 max-w-xl text-xs text-slate-700 leading-relaxed">
             Currently selected: <span className="font-medium text-slate-900">{selectedPosture.name}</span>{" "}
             · confidence <span className="font-mono">{selectedPosture.confidence}%</span>
-            {selectedPostureId !== "counter-attack" && (
+            {selectedPostureId !== "asymmetric" && (
               <span className="text-slate-500">
                 {" "}· Agent recommends switching back to "{recommendedPosture.name}"
               </span>
@@ -8582,7 +8719,7 @@ function DefenseCanvas() {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
             >
               <Check className="w-3.5 h-3.5" />
-              {selectedPostureId === "counter-attack"
+              {selectedPostureId === "asymmetric"
                 ? D.approval.primaryLabel
                 : `Approve "${selectedPosture.name}"`}
             </button>
