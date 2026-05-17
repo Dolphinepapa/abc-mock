@@ -7647,6 +7647,13 @@ function LaunchCRCanvas() {
             caption: "头部竞品 · 轮胎充气泵主图",
             fallbackText: "等待上传 · 竞品主图",
             descriptor: "竞品主图(皮卡越野胎 · F-150 + Jeep · 容量数字 + US Patent)",
+            gallery: [
+              "/tire-inflator-competitor-gallery-1.png",
+              "/tire-inflator-competitor-gallery-2.png",
+              "/tire-inflator-competitor-gallery-3.png",
+              "/tire-inflator-competitor-gallery-4.png",
+              "/tire-inflator-competitor-gallery-5.png",
+            ],
           },
         ]}
       />

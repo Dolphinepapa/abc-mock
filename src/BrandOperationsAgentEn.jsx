@@ -7598,6 +7598,13 @@ function LaunchCRCanvas() {
             caption: "Top competitor · tire inflator hero",
             fallbackText: "Pending upload · competitor hero",
             descriptor: "Competitor hero (pickup off-road tire · F-150 + Jeep · capacity claims + US Patent)",
+            gallery: [
+              "/tire-inflator-competitor-gallery-1.png",
+              "/tire-inflator-competitor-gallery-2.png",
+              "/tire-inflator-competitor-gallery-3.png",
+              "/tire-inflator-competitor-gallery-4.png",
+              "/tire-inflator-competitor-gallery-5.png",
+            ],
           },
         ]}
       />
