@@ -2839,132 +2839,219 @@ const COMPANY_BRAIN = {
     },
   ],
 
-  decisionClassesDetail: [
-    {
-      id: "dc-bid-raise",
-      name: "Bid raise within 15%",
-      definition: "Auto-raise bid by up to 15% when keyword CR exceeds target for 48 consecutive hours.",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Jan 10",
-      thresholdSummary: "≤15% delta · trigger: CR > target 48hr",
-      recentInvocations: 38,
-      lastInvoked: "May 14, 03:18",
-      sensitivity: "Internal",
-      revoked: false,
-    },
-    {
-      id: "dc-bid-lower",
-      name: "Bid lower within 15%",
-      definition: "Auto-lower bid by up to 15% when keyword ACoS exceeds target for 72 consecutive hours.",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Jan 10",
-      thresholdSummary: "≤15% delta · trigger: ACoS > target 72hr",
-      recentInvocations: 22,
-      lastInvoked: "May 13, 21:42",
-      sensitivity: "Internal",
-      revoked: false,
-    },
-    {
-      id: "dc-negkw",
-      name: "Negative keyword harvest · zero-conv > 14d",
-      definition: "Keywords with 0 conversions and ≥84 clicks over rolling 14d get auto-added to campaign negative list.",
-      delegatedBy: "Devon Park",
-      delegatedAt: "Jan 14",
-      thresholdSummary: "0 conv · ≥84 clicks · 14d window",
-      recentInvocations: 22,
-      lastInvoked: "May 12, 11:08",
-      sensitivity: "Internal",
-      revoked: false,
-    },
-    {
-      id: "dc-budget-realloc",
-      name: "Budget reallocation within campaign · ≤20%",
-      definition: "Move up to 20% of budget between ad groups inside a campaign when CR signal supports it.",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Feb 14",
-      thresholdSummary: "≤20% delta · within-campaign only",
-      recentInvocations: 9,
-      lastInvoked: "May 11, 16:30",
-      sensitivity: "Internal",
-      revoked: false,
-    },
-    {
-      id: "dc-dayparting",
-      name: "Dayparting on saturated impression share",
-      definition: "Cut bids during low-CR hours when impression share is >85% — only on SKUs with stable IS.",
-      delegatedBy: "Devon Park",
-      delegatedAt: "Feb 22",
-      thresholdSummary: "IS > 85% · low-CR hours only",
-      recentInvocations: 4,
-      lastInvoked: "May 6, 09:14",
-      sensitivity: "Internal",
-      revoked: false,
-    },
-    {
-      id: "dc-match-consol",
-      name: "Match-type consolidation · CR > 7%",
-      definition: "Consolidate broad/phrase matches to exact when exact-match CR exceeds 7%.",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Mar 4",
-      thresholdSummary: "Exact CR > 7% · auto-consolidate",
-      recentInvocations: 6,
-      lastInvoked: "May 9, 14:22",
-      sensitivity: "Internal",
-      revoked: false,
-    },
-    {
-      id: "dc-pause-underperf",
-      name: "Pause underperforming ad group · contribution < $X for 11d",
-      definition: "Pause ad group when 11d rolling contribution dollars fall below SKU-level floor.",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Mar 18",
-      thresholdSummary: "Contribution < floor · 11d window",
-      recentInvocations: 3,
-      lastInvoked: "May 4, 08:55",
-      sensitivity: "Internal",
-      revoked: false,
-    },
-    {
-      id: "dc-brand-defense",
-      name: "Brand-defense bid raise · new entrant on brand terms",
-      definition: "Auto-raise bid on brand keywords when a new competitor ad appears on brand-term search results.",
-      delegatedBy: "Sara Lin",
-      delegatedAt: "Apr 2",
-      thresholdSummary: "New entrant detected · brand-terms only",
-      recentInvocations: 2,
-      lastInvoked: "May 10, 19:48",
-      sensitivity: "Sensitive",
-      revoked: false,
-    },
-    {
-      id: "dc-revoked-auto-kw",
-      name: "Auto-launch new keyword from search-term report",
-      definition: "Previously: auto-promote search terms with strong CR to exact-match keywords without review.",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Dec 8",
-      thresholdSummary: "Revoked Mar 28 by Maya · 1 false-positive case",
-      recentInvocations: 12,
-      lastInvoked: "Mar 26 (before revoke)",
-      sensitivity: "Sensitive",
-      revoked: true,
-      revokedAt: "Mar 28",
-      revokedBy: "Maya Chen",
-    },
-    {
-      id: "dc-revoked-auto-pause",
-      name: "Auto-pause low-CR keyword without manual review",
-      definition: "Previously: auto-pause keywords with sustained low CR — found edge case in launch SKUs (early CR is noisy).",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Nov 14",
-      thresholdSummary: "Revoked Feb 14 by Maya · edge case in launch SKUs",
-      recentInvocations: 8,
-      lastInvoked: "Feb 12 (before revoke)",
-      sensitivity: "Internal",
-      revoked: true,
-      revokedAt: "Feb 14",
-      revokedBy: "Maya Chen",
-    },
-  ],
+  decisionClassesDetail: {
+    delegated: [
+      {
+        id: "dc-bid-raise",
+        name: "Bid raise within 15%",
+        definition: "Auto-raise bid by up to 15% when keyword CR exceeds target for 48 consecutive hours.",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "Mar 22",
+        graduatedAt: "Mar 22",
+        thresholdSummary: "≤15% delta · trigger: CR > target 48hr",
+        recentInvocations: 38,
+        lastInvoked: "May 14, 03:18",
+        sensitivity: "Internal",
+        postGradStats: {
+          executions: 38,
+          onOutcomeRate: 94.7,
+          exceptions: 2,
+          exceptionsNote: "both correct",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 37, startDate: "Feb 13", endDate: "Mar 22" },
+          preGradStats: { totalRecs: 47, approved: 44, modified: 2, declined: 1, approvalRate: 94 },
+          preGradWeeklyApprovalRate: [86, 90, 93, 96, 100],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "Mar 22, 2026",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "Class executes autonomously; agent surfaces exceptions (outcomes > 1.5σ from prediction)",
+          postGradOutcomeAccuracy: [94, 96, 95, 93, 95, 94, 96, 94, 95, 94, 95, 95],
+          postGradExceptions: { count: 2, note: "Both correct — class behaved as expected; exceptions were unrelated category shocks." },
+        },
+      },
+      {
+        id: "dc-bid-lower",
+        name: "Bid lower within 15%",
+        definition: "Auto-lower bid by up to 15% when keyword ACoS exceeds target for 72 consecutive hours.",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "Feb 14",
+        graduatedAt: "Feb 14",
+        thresholdSummary: "≤15% delta · trigger: ACoS > target 72hr",
+        recentInvocations: 22,
+        lastInvoked: "May 13, 21:42",
+        sensitivity: "Internal",
+        postGradStats: {
+          executions: 22,
+          onOutcomeRate: 92.3,
+          exceptions: 1,
+          exceptionsNote: "investigated, no rule change",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 34, startDate: "Jan 11", endDate: "Feb 14" },
+          preGradStats: { totalRecs: 41, approved: 38, modified: 2, declined: 1, approvalRate: 93 },
+          preGradWeeklyApprovalRate: [84, 88, 91, 94, 98],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "Feb 14, 2026",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "Class executes autonomously; agent surfaces exceptions (outcomes > 1.5σ from prediction)",
+          postGradOutcomeAccuracy: [91, 93, 92, 94, 91, 93, 92, 90, 93, 92, 94, 93],
+          postGradExceptions: { count: 1, note: "1 outcome flagged in 30d. Investigated and confirmed unrelated supplier delay, not class behavior." },
+        },
+      },
+      {
+        id: "dc-negkw",
+        name: "Negative keyword harvest · zero-conv > 14d",
+        definition: "Keywords with 0 conversions and ≥84 clicks over rolling 14d get auto-added to campaign negative list.",
+        delegatedBy: "Devon Park",
+        delegatedAt: "Feb 4",
+        graduatedAt: "Feb 4",
+        thresholdSummary: "0 conv · ≥84 clicks · 14d window",
+        recentInvocations: 22,
+        lastInvoked: "May 12, 11:08",
+        sensitivity: "Internal",
+        postGradStats: {
+          executions: 22,
+          onOutcomeRate: 96.4,
+          exceptions: 0,
+          exceptionsNote: "none raised",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 42, startDate: "Dec 24", endDate: "Feb 4" },
+          preGradStats: { totalRecs: 52, approved: 49, modified: 3, declined: 0, approvalRate: 94 },
+          preGradWeeklyApprovalRate: [88, 91, 93, 95, 98, 100],
+          graduatedBy: "Devon Park",
+          graduatedByRole: "Sr. Growth",
+          graduatedDate: "Feb 4, 2026",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "Class executes autonomously; agent surfaces exceptions (outcomes > 1.5σ from prediction)",
+          postGradOutcomeAccuracy: [95, 96, 97, 96, 95, 97, 96, 95, 96, 97, 96, 97],
+          postGradExceptions: { count: 0, note: "No exceptions raised in 30d. Class is the most stable in the portfolio." },
+        },
+      },
+      {
+        id: "dc-budget-realloc",
+        name: "Budget reallocation within campaign · ≤20%",
+        definition: "Move up to 20% of budget between ad groups inside a campaign when CR signal supports it.",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "Apr 8",
+        graduatedAt: "Apr 8",
+        thresholdSummary: "≤20% delta · within-campaign only",
+        recentInvocations: 9,
+        lastInvoked: "May 11, 16:30",
+        sensitivity: "Internal",
+        postGradStats: {
+          executions: 9,
+          onOutcomeRate: 95.0,
+          exceptions: 0,
+          exceptionsNote: "none raised",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 33, startDate: "Mar 6", endDate: "Apr 8" },
+          preGradStats: { totalRecs: 38, approved: 36, modified: 2, declined: 0, approvalRate: 95 },
+          preGradWeeklyApprovalRate: [89, 92, 95, 97, 100],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "Apr 8, 2026",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "Class executes autonomously; agent surfaces exceptions (outcomes > 1.5σ from prediction)",
+          postGradOutcomeAccuracy: [94, 96, 95, 95, 94, 96, 95, 94, 96, 95, 95, 96],
+          postGradExceptions: { count: 0, note: "No exceptions raised since graduation. Recent class — track record still building." },
+        },
+      },
+      {
+        id: "dc-match-consol",
+        name: "Match-type consolidation · CR > 7%",
+        definition: "Consolidate broad/phrase matches to exact when exact-match CR exceeds 7%.",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "Mar 30",
+        graduatedAt: "Mar 30",
+        thresholdSummary: "Exact CR > 7% · auto-consolidate",
+        recentInvocations: 6,
+        lastInvoked: "May 9, 14:22",
+        sensitivity: "Internal",
+        postGradStats: {
+          executions: 6,
+          onOutcomeRate: 93.8,
+          exceptions: 0,
+          exceptionsNote: "none raised",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 35, startDate: "Feb 23", endDate: "Mar 30" },
+          preGradStats: { totalRecs: 36, approved: 33, modified: 2, declined: 1, approvalRate: 92 },
+          preGradWeeklyApprovalRate: [83, 88, 91, 95, 98],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "Mar 30, 2026",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "Class executes autonomously; agent surfaces exceptions (outcomes > 1.5σ from prediction)",
+          postGradOutcomeAccuracy: [92, 94, 93, 94, 93, 95, 94, 93, 94, 94, 95, 94],
+          postGradExceptions: { count: 0, note: "No exceptions raised in 30d. Lower invocation volume because the rule rarely triggers." },
+        },
+      },
+    ],
+    inTraining: [
+      {
+        id: "in-train-bid-velocity",
+        name: "Bid raise on velocity-positive SKUs",
+        definition: "Raise bid on SKUs whose unit velocity ≥ 1.4× category median for 14+ days · cap 12%",
+        progress: { decisions: 24, threshold: 30 },
+        approval: { approved: 26, modified: 2, declined: 0, total: 28, rate: 93 },
+        eligibilityNote: "Eligible for graduation review in ~6 more decisions",
+        sensitivity: "Internal",
+      },
+      {
+        id: "in-train-inv-pause",
+        name: "Inventory-aware budget pause",
+        definition: "Auto-pause campaign when forecast stock-out window < 7d AND current TACoS < target",
+        progress: { decisions: 18, threshold: 30 },
+        approval: { approved: 26, modified: 1, declined: 1, total: 28, rate: 89 },
+        eligibilityNote: "1 declined decision: team felt the pause was premature given upcoming promo. Agent integrated the rule.",
+        sensitivity: "Internal",
+      },
+      {
+        id: "in-train-dsp-audience",
+        name: "DSP audience expansion",
+        definition: "Expand DSP audience by adjacent lookalike when current segment CTR > category benchmark + 10%",
+        progress: { decisions: 8, threshold: 30 },
+        approval: { approved: 7, modified: 1, declined: 0, total: 8, rate: 88 },
+        eligibilityNote: "Early phase — too few decisions to assess",
+        sensitivity: "Sensitive",
+      },
+    ],
+    recentlyRevoked: [
+      {
+        id: "dc-revoked-auto-kw",
+        name: "Auto-launch new keyword from search-term report",
+        definition: "Previously: auto-promote search terms with strong CR to exact-match keywords without review.",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "Dec 8",
+        thresholdSummary: "Revoked Mar 28 by Maya · 1 false-positive case",
+        recentInvocations: 12,
+        lastInvoked: "Mar 26 (before revoke)",
+        sensitivity: "Sensitive",
+        revoked: true,
+        revokedAt: "Mar 28",
+        revokedBy: "Maya Chen",
+      },
+      {
+        id: "dc-revoked-auto-pause",
+        name: "Auto-pause low-CR keyword without manual review",
+        definition: "Previously: auto-pause keywords with sustained low CR — found edge case in launch SKUs (early CR is noisy).",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "Nov 14",
+        thresholdSummary: "Revoked Feb 14 by Maya · edge case in launch SKUs",
+        recentInvocations: 8,
+        lastInvoked: "Feb 12 (before revoke)",
+        sensitivity: "Internal",
+        revoked: true,
+        revokedAt: "Feb 14",
+        revokedBy: "Maya Chen",
+      },
+    ],
+  },
 
   brandDefaults: [
     {
@@ -9472,8 +9559,12 @@ function countRestrictedItems(activeClearance, brain) {
   (brain.uploadedDocs || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
   (brain.patterns || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
   (brain.playbookList || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
-  (brain.decisionClassesDetail || []).forEach(
-    (x) => !x.revoked && x.sensitivity && check(x.sensitivity) && n++,
+  const dcd = brain.decisionClassesDetail || {};
+  (dcd.delegated || []).forEach(
+    (x) => x.sensitivity && check(x.sensitivity) && n++,
+  );
+  (dcd.inTraining || []).forEach(
+    (x) => x.sensitivity && check(x.sensitivity) && n++,
   );
   (brain.recentQueries || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
   return n;
@@ -10470,25 +10561,418 @@ function PlaybookList({ playbooks, query, activeClearance }) {
   );
 }
 
-function DecisionClassList({ classes, query, activeClearance }) {
+function Sparkline({ data, width = 160, height = 32, color = "emerald" }) {
+  if (!data || data.length === 0) return null;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const step = data.length > 1 ? width / (data.length - 1) : 0;
+  const points = data
+    .map((d, i) => {
+      const x = i * step;
+      const y = height - ((d - min) / range) * height;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+  const strokeCls =
+    color === "rose"
+      ? "stroke-rose-500"
+      : color === "slate"
+        ? "stroke-slate-400"
+        : "stroke-emerald-500";
+  return (
+    <svg
+      width={width}
+      height={height}
+      className="overflow-visible"
+      aria-hidden="true"
+    >
+      <polyline
+        points={points}
+        fill="none"
+        className={strokeCls}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function DelegatedClassCard({ dc, activeClearance, onRevoke, isConfirming, onConfirm, onCancelConfirm }) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = canView(activeClearance, dc.sensitivity);
+  const trail = dc.graduationTrail;
+  const post = dc.postGradStats;
+  return (
+    <div className="border border-slate-200 rounded-md px-3 py-2.5 bg-white">
+      <div className="flex items-start gap-2">
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-medium text-slate-900 leading-snug">
+            {dc.name}
+          </div>
+          <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+            <Pill tone="emerald">Delegated · graduated {dc.graduatedAt}</Pill>
+            <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+              {dc.sensitivity}
+            </Pill>
+          </div>
+          {visible ? (
+            <>
+              <div className="text-11 text-slate-600 mt-2 leading-snug">
+                {dc.definition}
+              </div>
+              <div className="mt-2">
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  Track record since graduation
+                </div>
+                <div className="text-11 text-slate-700 mt-1 leading-snug">
+                  <span className="font-mono tabular-nums">{post.executions}</span>{" "}
+                  autonomous executions ·{" "}
+                  <span className="font-mono tabular-nums">{post.onOutcomeRate}%</span>{" "}
+                  on outcome
+                </div>
+                <div className="text-11 text-slate-600 mt-0.5 leading-snug">
+                  <span className="font-mono tabular-nums">{post.exceptions}</span>{" "}
+                  exceptions raised in 30d ({post.exceptionsNote})
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="mt-2">
+              <MaskedItem tag={dc.sensitivity} layout="inline" />
+            </div>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => onRevoke(dc.id)}
+          className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
+        >
+          <Trash2 className="w-3 h-3" />
+          Revoke
+        </button>
+      </div>
+
+      {visible && (
+        <div className="mt-2 pt-2 border-t border-slate-100">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+          >
+            {expanded ? "Hide graduation trail" : "View graduation trail"}
+            <ArrowUpRight className="w-3 h-3" />
+          </button>
+        </div>
+      )}
+
+      {expanded && visible && trail && (
+        <div className="mt-3 pt-3 border-t border-slate-100 space-y-4">
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Pre-graduation track record ({trail.preGradPeriod.days} days ·{" "}
+              {trail.preGradPeriod.startDate} → {trail.preGradPeriod.endDate})
+            </div>
+            <div className="mt-2">
+              <Sparkline data={trail.preGradWeeklyApprovalRate} color="emerald" />
+            </div>
+            <ul className="mt-2 space-y-0.5 text-11 text-slate-700 leading-snug">
+              <li>
+                <span className="font-mono tabular-nums">{trail.preGradStats.totalRecs}</span>{" "}
+                agent recommendations in this class
+              </li>
+              <li>
+                <span className="font-mono tabular-nums">{trail.preGradStats.approved}</span>{" "}
+                approved by team (
+                <span className="font-mono tabular-nums">
+                  {Math.round((trail.preGradStats.approved / trail.preGradStats.totalRecs) * 100)}%
+                </span>
+                )
+              </li>
+              <li>
+                <span className="font-mono tabular-nums">{trail.preGradStats.modified}</span>{" "}
+                modified (
+                <span className="font-mono tabular-nums">
+                  {Math.round((trail.preGradStats.modified / trail.preGradStats.totalRecs) * 100)}%
+                </span>
+                )
+              </li>
+              <li>
+                <span className="font-mono tabular-nums">{trail.preGradStats.declined}</span>{" "}
+                declined (
+                <span className="font-mono tabular-nums">
+                  {Math.round((trail.preGradStats.declined / trail.preGradStats.totalRecs) * 100)}%
+                </span>
+                )
+              </li>
+              <li className="text-slate-600">
+                Trending: approval rate moved from{" "}
+                <span className="font-mono tabular-nums">
+                  {trail.preGradWeeklyApprovalRate[0]}%
+                </span>{" "}
+                (week 1) to{" "}
+                <span className="font-mono tabular-nums">
+                  {trail.preGradWeeklyApprovalRate[trail.preGradWeeklyApprovalRate.length - 1]}%
+                </span>{" "}
+                (week {trail.preGradWeeklyApprovalRate.length})
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Graduation
+            </div>
+            <div className="mt-1 text-11 text-slate-700 leading-snug space-y-0.5">
+              <div>
+                <span className="text-slate-500">Approved by:</span>{" "}
+                <span className="text-slate-900 font-medium">{trail.graduatedBy}</span>{" "}
+                <span className="text-slate-500">({trail.graduatedByRole})</span> on{" "}
+                {trail.graduatedDate}
+              </div>
+              <div>
+                <span className="text-slate-500">Threshold met:</span> ≥{" "}
+                <span className="font-mono tabular-nums">{trail.threshold.decisions}</span>{" "}
+                consistent approvals + ≥{" "}
+                <span className="font-mono tabular-nums">{trail.threshold.approvalRate}%</span>{" "}
+                approval rate
+              </div>
+              <div>
+                <span className="text-slate-500">Authority granted:</span>{" "}
+                {trail.authority}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Post-graduation outcome
+            </div>
+            <div className="mt-2">
+              <Sparkline data={trail.postGradOutcomeAccuracy} color="emerald" />
+            </div>
+            <ul className="mt-2 space-y-0.5 text-11 text-slate-700 leading-snug">
+              <li>
+                <span className="font-mono tabular-nums">{post.executions}</span>{" "}
+                autonomous executions
+              </li>
+              <li>
+                <span className="font-mono tabular-nums">
+                  {Math.round((post.onOutcomeRate / 100) * post.executions)}
+                </span>{" "}
+                outcomes within prediction interval (
+                <span className="font-mono tabular-nums">{post.onOutcomeRate}%</span>)
+              </li>
+              <li className="text-slate-600">
+                <span className="font-mono tabular-nums">
+                  {trail.postGradExceptions.count}
+                </span>{" "}
+                outcomes flagged as exceptions — {trail.postGradExceptions.note}
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {isConfirming && (
+        <div className="mt-2 border-t border-slate-200 pt-2">
+          <div className="text-11 text-slate-700 leading-snug">
+            Revoke "{dc.name}"? Agent will require explicit approval for these
+            actions going forward.
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onCancelConfirm}
+              className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => onConfirm(dc.id)}
+              className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
+            >
+              Confirm revoke
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TrainingClassCard({ dc, activeClearance }) {
+  const visible = canView(activeClearance, dc.sensitivity);
+  const pct = Math.min(100, Math.round((dc.progress.decisions / dc.progress.threshold) * 100));
+  const eligible = dc.progress.decisions >= dc.progress.threshold && dc.approval.rate >= 92;
+  const belowApprovalFloor = dc.approval.rate < 80;
+  const barColor = belowApprovalFloor ? "bg-rose-400" : "bg-emerald-500";
+  return (
+    <div className="border border-slate-200 rounded-md px-3 py-2.5 bg-white">
+      <div className="text-sm font-medium text-slate-900 leading-snug">
+        {dc.name}
+      </div>
+      <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+        <Pill tone="blue">
+          In training ·{" "}
+          <span className="font-mono tabular-nums">{dc.progress.decisions}</span>{" "}
+          of{" "}
+          <span className="font-mono tabular-nums">{dc.progress.threshold}</span>{" "}
+          toward graduation
+        </Pill>
+        <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+          {dc.sensitivity}
+        </Pill>
+      </div>
+
+      {visible ? (
+        <>
+          <div className="text-11 text-slate-600 mt-2 leading-snug">
+            {dc.definition}
+          </div>
+
+          <div className="mt-3">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              Progress
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${barColor} rounded-full`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <span className="text-10 font-mono tabular-nums text-slate-700 flex-shrink-0">
+                {dc.progress.decisions}/{dc.progress.threshold}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              Recent record
+            </div>
+            <div className="text-11 text-slate-700 mt-1 leading-snug">
+              <span className="font-mono tabular-nums">{dc.approval.total}</span>{" "}
+              agent recommendations ·{" "}
+              <span className="font-mono tabular-nums">{dc.approval.approved}</span>{" "}
+              approved (
+              <span className="font-mono tabular-nums">{dc.approval.rate}%</span>)
+            </div>
+            <div className="text-11 text-slate-600 mt-0.5 leading-snug">
+              <span className="font-mono tabular-nums">{dc.approval.modified}</span>{" "}
+              modified ·{" "}
+              <span className="font-mono tabular-nums">{dc.approval.declined}</span>{" "}
+              declined
+            </div>
+            {dc.eligibilityNote && (
+              <div className="text-11 text-slate-500 mt-1.5 leading-snug">
+                {dc.eligibilityNote}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-3 flex items-center justify-between gap-2 flex-wrap">
+            <span
+              className="inline-flex items-center gap-1 text-11 text-slate-600 cursor-help"
+              title="Full decision log in next iteration"
+            >
+              View recent decisions
+              <ArrowUpRight className="w-3 h-3" />
+            </span>
+            {eligible ? (
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+              >
+                <Check className="w-3 h-3" />
+                Approve graduation
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-11 font-medium text-slate-500 bg-slate-100 border border-slate-200 rounded-md cursor-not-allowed"
+              >
+                Approve graduation — eligible in ~
+                {Math.max(0, dc.progress.threshold - dc.progress.decisions)} decisions
+              </button>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="mt-2">
+          <MaskedItem tag={dc.sensitivity} layout="inline" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GraduationExplainerBody() {
+  return (
+    <div className="text-xs text-slate-700 leading-relaxed space-y-3">
+      <p>
+        Every recommendation the agent makes is annotated with a decision class
+        (bid_raise, negative_keyword_harvest, etc.). The agent tracks how the
+        team responds to each class: approve / modify / decline.
+      </p>
+      <p>
+        A class becomes eligible for autonomous execution when two thresholds
+        are met:
+      </p>
+      <ul className="list-disc pl-5 space-y-1">
+        <li>At least 30 consistent decisions in the class</li>
+        <li>At least 92% approval rate</li>
+      </ul>
+      <p>
+        When eligible, the team can review the track record and approve
+        graduation. Once graduated, the agent executes the class autonomously,
+        surfacing only exceptions (outcomes that deviate &gt; 1.5σ from
+        prediction) for team review.
+      </p>
+      <p>
+        The team retains revocation authority at any time. Revoking a class
+        returns it to per-decision approval immediately.
+      </p>
+      <p>
+        Graduation criteria are tunable per class — high-stakes classes (e.g.,
+        DSP budget changes &gt; $5K/day) carry stricter thresholds. See Brand
+        defaults for current thresholds.
+      </p>
+      <p>
+        Once a listing has its dominant decision classes graduated, the team
+        typically delegates the listing fully — which switches billing from
+        subscription to outcome bonus.
+      </p>
+    </div>
+  );
+}
+
+function DecisionClassList({ data, query, activeClearance, onTabChange }) {
   const [revokedIds, setRevokedIds] = useState(new Set());
   const [confirmingId, setConfirmingId] = useState(null);
+  const [explainerOpen, setExplainerOpen] = useState(false);
   const q = (query || "").trim().toLowerCase();
   const matches = (c) => !q || c.name.toLowerCase().includes(q);
 
   const isJustRevoked = (id) => revokedIds.has(id);
-  const active = classes.filter(
-    (c) => !c.revoked && !isJustRevoked(c.id) && matches(c),
+  const delegated = (data.delegated || []).filter(
+    (c) => !isJustRevoked(c.id) && matches(c),
   );
-  const justRevoked = classes.filter(
-    (c) => !c.revoked && isJustRevoked(c.id) && matches(c),
+  const justRevoked = (data.delegated || []).filter(
+    (c) => isJustRevoked(c.id) && matches(c),
   );
-  const historicallyRevoked = classes.filter((c) => c.revoked && matches(c));
+  const inTraining = (data.inTraining || []).filter(matches);
+  const recentlyRevoked = (data.recentlyRevoked || []).filter(matches);
   const noResults =
     q &&
-    active.length === 0 &&
+    delegated.length === 0 &&
     justRevoked.length === 0 &&
-    historicallyRevoked.length === 0;
+    inTraining.length === 0 &&
+    recentlyRevoked.length === 0;
 
   const onConfirm = (id) => {
     setRevokedIds((s) => {
@@ -10504,102 +10988,49 @@ function DecisionClassList({ classes, query, activeClearance }) {
   }
 
   return (
-    <div className="space-y-4">
-      {active.length > 0 && (
+    <div className="space-y-5">
+      {delegated.length > 0 && (
         <div>
           <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            Active classes
+            Currently delegated ({delegated.length})
           </div>
           <div className="space-y-2">
-            {active.map((dc) => {
-              const visible = canView(activeClearance, dc.sensitivity);
-              return (
-              <div
+            {delegated.map((dc) => (
+              <DelegatedClassCard
                 key={dc.id}
-                className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-              >
-                <div className="flex items-start gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-slate-900 leading-snug">
-                      {dc.name}
-                    </div>
-                    {visible ? (
-                      <>
-                        <div className="text-11 text-slate-600 mt-1 leading-snug">
-                          {dc.definition}
-                        </div>
-                        <div className="text-10 text-slate-500 mt-1">
-                          {dc.thresholdSummary}
-                        </div>
-                      </>
-                    ) : (
-                      <div className="mt-1.5">
-                        <MaskedItem tag={dc.sensitivity} layout="inline" />
-                      </div>
-                    )}
-                    <div className="text-10 text-slate-500 mt-1">
-                      Invocations 30d:{" "}
-                      <span className="font-mono tabular-nums text-slate-700">
-                        {dc.recentInvocations}
-                      </span>{" "}
-                      · last{" "}
-                      <span className="font-mono tabular-nums text-slate-700">
-                        {dc.lastInvoked}
-                      </span>
-                    </div>
-                    <div className="mt-1.5 flex items-center gap-2">
-                      <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
-                        {dc.sensitivity}
-                      </Pill>
-                      <span className="text-10 text-slate-500">
-                        delegated by {dc.delegatedBy} · {dc.delegatedAt}
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setConfirmingId(dc.id)}
-                    className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                    Revoke
-                  </button>
-                </div>
-                {confirmingId === dc.id && (
-                  <div className="mt-2 border-t border-slate-200 pt-2">
-                    <div className="text-11 text-slate-700 leading-snug">
-                      Revoke "{dc.name}"? Agent will require explicit approval for
-                      these actions going forward.
-                    </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setConfirmingId(null)}
-                        className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onConfirm(dc.id)}
-                        className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
-                      >
-                        Confirm revoke
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-            })}
+                dc={dc}
+                activeClearance={activeClearance}
+                onRevoke={(id) => setConfirmingId(id)}
+                isConfirming={confirmingId === dc.id}
+                onConfirm={onConfirm}
+                onCancelConfirm={() => setConfirmingId(null)}
+              />
+            ))}
           </div>
         </div>
       )}
 
-      {(justRevoked.length > 0 || historicallyRevoked.length > 0) && (
+      {inTraining.length > 0 && (
         <div>
           <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            Recently revoked
+            In training ({inTraining.length})
+          </div>
+          <div className="space-y-2">
+            {inTraining.map((dc) => (
+              <TrainingClassCard
+                key={dc.id}
+                dc={dc}
+                activeClearance={activeClearance}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {(justRevoked.length > 0 || recentlyRevoked.length > 0) && (
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            Recently revoked ({justRevoked.length + recentlyRevoked.length})
           </div>
           <div className="space-y-2">
             {justRevoked.map((dc) => (
@@ -10614,21 +11045,11 @@ function DecisionClassList({ classes, query, activeClearance }) {
                   {dc.definition}
                 </div>
                 <div className="text-10 text-slate-500 mt-1">
-                  {dc.thresholdSummary}
-                </div>
-                <div className="text-10 text-slate-500 mt-1">
-                  Invoked{" "}
-                  <span className="font-mono tabular-nums text-slate-700">
-                    {dc.recentInvocations}
-                  </span>{" "}
-                  times before revoke · last {dc.lastInvoked}
-                </div>
-                <div className="text-10 text-slate-500 mt-1">
-                  revoked just now
+                  Graduated {dc.graduatedAt} · revoked just now
                 </div>
               </div>
             ))}
-            {historicallyRevoked.map((dc) => (
+            {recentlyRevoked.map((dc) => (
               <div
                 key={dc.id}
                 className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
@@ -10654,6 +11075,42 @@ function DecisionClassList({ classes, query, activeClearance }) {
           </div>
         </div>
       )}
+
+      <div className="pt-2 border-t border-slate-100">
+        <button
+          type="button"
+          onClick={() => setExplainerOpen(true)}
+          className="inline-flex items-center gap-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+        >
+          How does graduation work?
+          <ArrowUpRight className="w-3 h-3" />
+        </button>
+      </div>
+
+      <InspectionDrawer
+        open={explainerOpen}
+        onClose={() => setExplainerOpen(false)}
+        title="How graduation works"
+        headerMeta={
+          <Pill tone="emerald">Authority graduation · methodology</Pill>
+        }
+        bodyOverride={<GraduationExplainerBody />}
+        footer={
+          onTabChange ? (
+            <button
+              type="button"
+              onClick={() => {
+                setExplainerOpen(false);
+                onTabChange("outcomes");
+              }}
+              className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+            >
+              See Outcomes tab for current delegation status per listing
+              <ChevronRight className="w-3 h-3" />
+            </button>
+          ) : null
+        }
+      />
     </div>
   );
 }
@@ -10801,7 +11258,7 @@ function RecentQueriesList({ queries, activeUser, query, onOpenThread, threadIds
   );
 }
 
-function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
+function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread, onTabChange }) {
   const [openActivity, setOpenActivity] = useState(null);
   const [openPattern, setOpenPattern] = useState(null);
   const [query, setQuery] = useState("");
@@ -10924,13 +11381,17 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
         <BrainSection
           id="decision-classes"
           title="Decision classes"
-          count={COMPANY_BRAIN.decisionClassesDetail.filter((c) => !c.revoked).length}
+          count={
+            (COMPANY_BRAIN.decisionClassesDetail.delegated || []).length +
+            (COMPANY_BRAIN.decisionClassesDetail.inTraining || []).length
+          }
           defaultOpen={!!query}
         >
           <DecisionClassList
-            classes={COMPANY_BRAIN.decisionClassesDetail}
+            data={COMPANY_BRAIN.decisionClassesDetail}
             query={query}
             activeClearance={activeClearance}
+            onTabChange={onTabChange}
           />
         </BrainSection>
         <BrainSection
@@ -11657,6 +12118,7 @@ function InspectorPanel({
             activeUserId={activeUserId}
             onSwitchUser={onSwitchUser}
             onOpenThread={onOpenThread}
+            onTabChange={onTabChange}
           />
         ) : (
           <OutcomesContent

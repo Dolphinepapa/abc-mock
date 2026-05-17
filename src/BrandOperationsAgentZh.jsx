@@ -2861,142 +2861,229 @@ const COMPANY_BRAIN = {
     },
   ],
 
-  decisionClassesDetail: [
-    {
-      id: "dc-bid-raise",
-      name: "出价上调 ≤15%",
-      definition: "关键词 CR 连续 48 小时超过目标时,自动上调出价 ≤15%。",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Jan 10",
-      thresholdSummary: "调幅 ≤15% · 触发:CR > 目标 48 小时",
-      recentInvocations: 38,
-      lastInvoked: "5 月 14 日 03:18",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: false,
-    },
-    {
-      id: "dc-bid-lower",
-      name: "出价下调 ≤15%",
-      definition: "关键词 ACoS 连续 72 小时超过目标时,自动下调出价 ≤15%。",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Jan 10",
-      thresholdSummary: "调幅 ≤15% · 触发:ACoS > 目标 72 小时",
-      recentInvocations: 22,
-      lastInvoked: "5 月 13 日 21:42",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: false,
-    },
-    {
-      id: "dc-negkw",
-      name: "否定词抓取 · 14 天零转化",
-      definition: "滚动 14 天 0 转化 + ≥84 次点击的关键词,自动加入广告组否定词列表。",
-      delegatedBy: "Devon Park",
-      delegatedAt: "Jan 14",
-      thresholdSummary: "0 转化 · ≥84 次点击 · 14 天窗口",
-      recentInvocations: 22,
-      lastInvoked: "5 月 12 日 11:08",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: false,
-    },
-    {
-      id: "dc-budget-realloc",
-      name: "campaign 内预算重分配 · ≤20%",
-      definition: "CR 信号支持时,在同一 campaign 内的广告组间移动最多 20% 预算。",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Feb 14",
-      thresholdSummary: "调幅 ≤20% · 仅 campaign 内",
-      recentInvocations: 9,
-      lastInvoked: "5 月 11 日 16:30",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: false,
-    },
-    {
-      id: "dc-dayparting",
-      name: "饱和曝光份额上的 dayparting",
-      definition: "曝光份额 > 85% 时,在低 CR 时段下调出价 — 仅限曝光份额稳定的 SKU。",
-      delegatedBy: "Devon Park",
-      delegatedAt: "Feb 22",
-      thresholdSummary: "曝光份额 > 85% · 仅低 CR 时段",
-      recentInvocations: 4,
-      lastInvoked: "5 月 6 日 09:14",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: false,
-    },
-    {
-      id: "dc-match-consol",
-      name: "匹配类型合并 · CR > 7%",
-      definition: "精准匹配 CR 超过 7% 时,把广泛 / 词组匹配合并到精准。",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Mar 4",
-      thresholdSummary: "精准 CR > 7% · 自动合并",
-      recentInvocations: 6,
-      lastInvoked: "5 月 9 日 14:22",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: false,
-    },
-    {
-      id: "dc-pause-underperf",
-      name: "暂停低效广告组 · 11 天贡献毛利 < $X",
-      definition: "广告组 11 天滚动贡献毛利低于 SKU 下限时暂停。",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Mar 18",
-      thresholdSummary: "贡献毛利 < 下限 · 11 天窗口",
-      recentInvocations: 3,
-      lastInvoked: "5 月 4 日 08:55",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: false,
-    },
-    {
-      id: "dc-brand-defense",
-      name: "品牌防御出价上调 · 品牌词上出现新进入者",
-      definition: "品牌词搜索结果上出现新竞品广告时,自动上调品牌关键词出价。",
-      delegatedBy: "Sara Lin",
-      delegatedAt: "Apr 2",
-      thresholdSummary: "检测到新进入者 · 仅品牌词",
-      recentInvocations: 2,
-      lastInvoked: "5 月 10 日 19:48",
-      sensitivity: "Sensitive",
-      sensitivityLabel: "敏感",
-      revoked: false,
-    },
-    {
-      id: "dc-revoked-auto-kw",
-      name: "搜索词报告自动上新关键词",
-      definition: "原:CR 强的搜索词自动升级到精准匹配,无人工复核。",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Dec 8",
-      thresholdSummary: "3 月 28 日 Maya 撤回 · 1 次误报",
-      recentInvocations: 12,
-      lastInvoked: "3 月 26 日(撤回前)",
-      sensitivity: "Sensitive",
-      sensitivityLabel: "敏感",
-      revoked: true,
-      revokedAt: "Mar 28",
-      revokedBy: "Maya Chen",
-    },
-    {
-      id: "dc-revoked-auto-pause",
-      name: "低 CR 关键词无复核自动暂停",
-      definition: "原:CR 持续偏低的关键词自动暂停 — 发现上新 SKU 早期 CR 噪声大,有边界案例。",
-      delegatedBy: "Maya Chen",
-      delegatedAt: "Nov 14",
-      thresholdSummary: "2 月 14 日 Maya 撤回 · 上新 SKU 边界案例",
-      recentInvocations: 8,
-      lastInvoked: "2 月 12 日(撤回前)",
-      sensitivity: "Internal",
-      sensitivityLabel: "内部",
-      revoked: true,
-      revokedAt: "Feb 14",
-      revokedBy: "Maya Chen",
-    },
-  ],
+  decisionClassesDetail: {
+    delegated: [
+      {
+        id: "dc-bid-raise",
+        name: "出价上调 ≤15%",
+        definition: "关键词 CR 连续 48 小时超过目标时,自动上调出价 ≤15%。",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "3 月 22 日",
+        graduatedAt: "3 月 22 日",
+        thresholdSummary: "调幅 ≤15% · 触发:CR > 目标 48 小时",
+        recentInvocations: 38,
+        lastInvoked: "5 月 14 日 03:18",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+        postGradStats: {
+          executions: 38,
+          onOutcomeRate: 94.7,
+          exceptions: 2,
+          exceptionsNote: "都对",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 37, startDate: "2 月 13 日", endDate: "3 月 22 日" },
+          preGradStats: { totalRecs: 47, approved: 44, modified: 2, declined: 1, approvalRate: 94 },
+          preGradWeeklyApprovalRate: [86, 90, 93, 96, 100],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "2026 年 3 月 22 日",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "该 class 自主执行;agent 只把异常(outcome 偏离预测 > 1.5σ)提给团队",
+          postGradOutcomeAccuracy: [94, 96, 95, 93, 95, 94, 96, 94, 95, 94, 95, 95],
+          postGradExceptions: { count: 2, note: "都对 — class 表现符合预期,异常是不相关的品类冲击。" },
+        },
+      },
+      {
+        id: "dc-bid-lower",
+        name: "出价下调 ≤15%",
+        definition: "关键词 ACoS 连续 72 小时超过目标时,自动下调出价 ≤15%。",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "2 月 14 日",
+        graduatedAt: "2 月 14 日",
+        thresholdSummary: "调幅 ≤15% · 触发:ACoS > 目标 72 小时",
+        recentInvocations: 22,
+        lastInvoked: "5 月 13 日 21:42",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+        postGradStats: {
+          executions: 22,
+          onOutcomeRate: 92.3,
+          exceptions: 1,
+          exceptionsNote: "已查,未改规则",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 34, startDate: "1 月 11 日", endDate: "2 月 14 日" },
+          preGradStats: { totalRecs: 41, approved: 38, modified: 2, declined: 1, approvalRate: 93 },
+          preGradWeeklyApprovalRate: [84, 88, 91, 94, 98],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "2026 年 2 月 14 日",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "该 class 自主执行;agent 只把异常(outcome 偏离预测 > 1.5σ)提给团队",
+          postGradOutcomeAccuracy: [91, 93, 92, 94, 91, 93, 92, 90, 93, 92, 94, 93],
+          postGradExceptions: { count: 1, note: "30 天内 1 次异常。已查,确认是不相关的供应商延迟,不是 class 行为问题。" },
+        },
+      },
+      {
+        id: "dc-negkw",
+        name: "否定词抓取 · 14 天零转化",
+        definition: "滚动 14 天 0 转化 + ≥84 次点击的关键词,自动加入广告组否定词列表。",
+        delegatedBy: "Devon Park",
+        delegatedAt: "2 月 4 日",
+        graduatedAt: "2 月 4 日",
+        thresholdSummary: "0 转化 · ≥84 次点击 · 14 天窗口",
+        recentInvocations: 22,
+        lastInvoked: "5 月 12 日 11:08",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+        postGradStats: {
+          executions: 22,
+          onOutcomeRate: 96.4,
+          exceptions: 0,
+          exceptionsNote: "无",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 42, startDate: "12 月 24 日", endDate: "2 月 4 日" },
+          preGradStats: { totalRecs: 52, approved: 49, modified: 3, declined: 0, approvalRate: 94 },
+          preGradWeeklyApprovalRate: [88, 91, 93, 95, 98, 100],
+          graduatedBy: "Devon Park",
+          graduatedByRole: "Sr. Growth",
+          graduatedDate: "2026 年 2 月 4 日",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "该 class 自主执行;agent 只把异常(outcome 偏离预测 > 1.5σ)提给团队",
+          postGradOutcomeAccuracy: [95, 96, 97, 96, 95, 97, 96, 95, 96, 97, 96, 97],
+          postGradExceptions: { count: 0, note: "30 天内无异常。是组合里最稳的 class。" },
+        },
+      },
+      {
+        id: "dc-budget-realloc",
+        name: "campaign 内预算重分配 · ≤20%",
+        definition: "CR 信号支持时,在同一 campaign 内的广告组间移动最多 20% 预算。",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "4 月 8 日",
+        graduatedAt: "4 月 8 日",
+        thresholdSummary: "调幅 ≤20% · 仅 campaign 内",
+        recentInvocations: 9,
+        lastInvoked: "5 月 11 日 16:30",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+        postGradStats: {
+          executions: 9,
+          onOutcomeRate: 95.0,
+          exceptions: 0,
+          exceptionsNote: "无",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 33, startDate: "3 月 6 日", endDate: "4 月 8 日" },
+          preGradStats: { totalRecs: 38, approved: 36, modified: 2, declined: 0, approvalRate: 95 },
+          preGradWeeklyApprovalRate: [89, 92, 95, 97, 100],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "2026 年 4 月 8 日",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "该 class 自主执行;agent 只把异常(outcome 偏离预测 > 1.5σ)提给团队",
+          postGradOutcomeAccuracy: [94, 96, 95, 95, 94, 96, 95, 94, 96, 95, 95, 96],
+          postGradExceptions: { count: 0, note: "毕业后无异常。最近毕业的 class — 记录还在累积。" },
+        },
+      },
+      {
+        id: "dc-match-consol",
+        name: "匹配类型合并 · CR > 7%",
+        definition: "精准匹配 CR 超过 7% 时,把广泛 / 词组匹配合并到精准。",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "3 月 30 日",
+        graduatedAt: "3 月 30 日",
+        thresholdSummary: "精准 CR > 7% · 自动合并",
+        recentInvocations: 6,
+        lastInvoked: "5 月 9 日 14:22",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+        postGradStats: {
+          executions: 6,
+          onOutcomeRate: 93.8,
+          exceptions: 0,
+          exceptionsNote: "无",
+        },
+        graduationTrail: {
+          preGradPeriod: { days: 35, startDate: "2 月 23 日", endDate: "3 月 30 日" },
+          preGradStats: { totalRecs: 36, approved: 33, modified: 2, declined: 1, approvalRate: 92 },
+          preGradWeeklyApprovalRate: [83, 88, 91, 95, 98],
+          graduatedBy: "Maya Chen",
+          graduatedByRole: "VP, eCommerce",
+          graduatedDate: "2026 年 3 月 30 日",
+          threshold: { decisions: 30, approvalRate: 92 },
+          authority: "该 class 自主执行;agent 只把异常(outcome 偏离预测 > 1.5σ)提给团队",
+          postGradOutcomeAccuracy: [92, 94, 93, 94, 93, 95, 94, 93, 94, 94, 95, 94],
+          postGradExceptions: { count: 0, note: "30 天内无异常。调用次数较少,是因为规则较少触发。" },
+        },
+      },
+    ],
+    inTraining: [
+      {
+        id: "in-train-bid-velocity",
+        name: "高速增长 SKU 的出价提升",
+        definition: "对单位速度 ≥ 品类中位 1.4× 持续 14+ 天的 SKU 提高出价 · 上限 12%",
+        progress: { decisions: 24, threshold: 30 },
+        approval: { approved: 26, modified: 2, declined: 0, total: 28, rate: 93 },
+        eligibilityNote: "再 ~6 个决策后可申请毕业评审",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+      },
+      {
+        id: "in-train-inv-pause",
+        name: "库存感知预算暂停",
+        definition: "当预测断货窗口 < 7 天且当前 TACoS < 目标时,自动暂停广告活动",
+        progress: { decisions: 18, threshold: 30 },
+        approval: { approved: 26, modified: 1, declined: 1, total: 28, rate: 89 },
+        eligibilityNote: "1 次拒绝:团队认为考虑到即将到来的促销,暂停过早。Agent 已把规则消化进去。",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+      },
+      {
+        id: "in-train-dsp-audience",
+        name: "DSP 受众扩量",
+        definition: "当前细分 CTR > 品类基准 + 10% 时,通过相邻 lookalike 扩展 DSP 受众",
+        progress: { decisions: 8, threshold: 30 },
+        approval: { approved: 7, modified: 1, declined: 0, total: 8, rate: 88 },
+        eligibilityNote: "早期阶段 — 决策数太少,无法评估",
+        sensitivity: "Sensitive",
+        sensitivityLabel: "敏感",
+      },
+    ],
+    recentlyRevoked: [
+      {
+        id: "dc-revoked-auto-kw",
+        name: "搜索词报告自动上新关键词",
+        definition: "原:CR 强的搜索词自动升级到精准匹配,无人工复核。",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "12 月 8 日",
+        thresholdSummary: "3 月 28 日 Maya 撤回 · 1 次误报",
+        recentInvocations: 12,
+        lastInvoked: "3 月 26 日(撤回前)",
+        sensitivity: "Sensitive",
+        sensitivityLabel: "敏感",
+        revoked: true,
+        revokedAt: "3 月 28 日",
+        revokedBy: "Maya Chen",
+      },
+      {
+        id: "dc-revoked-auto-pause",
+        name: "低 CR 关键词无复核自动暂停",
+        definition: "原:CR 持续偏低的关键词自动暂停 — 发现上新 SKU 早期 CR 噪声大,有边界案例。",
+        delegatedBy: "Maya Chen",
+        delegatedAt: "11 月 14 日",
+        thresholdSummary: "2 月 14 日 Maya 撤回 · 上新 SKU 边界案例",
+        recentInvocations: 8,
+        lastInvoked: "2 月 12 日(撤回前)",
+        sensitivity: "Internal",
+        sensitivityLabel: "内部",
+        revoked: true,
+        revokedAt: "2 月 14 日",
+        revokedBy: "Maya Chen",
+      },
+    ],
+  },
 
   brandDefaults: [
     {
@@ -9517,8 +9604,12 @@ function countRestrictedItems(activeClearance, brain) {
   (brain.uploadedDocs || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
   (brain.patterns || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
   (brain.playbookList || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
-  (brain.decisionClassesDetail || []).forEach(
-    (x) => !x.revoked && x.sensitivity && check(x.sensitivity) && n++,
+  const dcd = brain.decisionClassesDetail || {};
+  (dcd.delegated || []).forEach(
+    (x) => x.sensitivity && check(x.sensitivity) && n++,
+  );
+  (dcd.inTraining || []).forEach(
+    (x) => x.sensitivity && check(x.sensitivity) && n++,
   );
   (brain.recentQueries || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
   return n;
@@ -10519,25 +10610,416 @@ function PlaybookList({ playbooks, query, activeClearance }) {
   );
 }
 
-function DecisionClassList({ classes, query, activeClearance }) {
+function Sparkline({ data, width = 160, height = 32, color = "emerald" }) {
+  if (!data || data.length === 0) return null;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const step = data.length > 1 ? width / (data.length - 1) : 0;
+  const points = data
+    .map((d, i) => {
+      const x = i * step;
+      const y = height - ((d - min) / range) * height;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+  const strokeCls =
+    color === "rose"
+      ? "stroke-rose-500"
+      : color === "slate"
+        ? "stroke-slate-400"
+        : "stroke-emerald-500";
+  return (
+    <svg
+      width={width}
+      height={height}
+      className="overflow-visible"
+      aria-hidden="true"
+    >
+      <polyline
+        points={points}
+        fill="none"
+        className={strokeCls}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function DelegatedClassCard({ dc, activeClearance, onRevoke, isConfirming, onConfirm, onCancelConfirm }) {
+  const [expanded, setExpanded] = useState(false);
+  const visible = canView(activeClearance, dc.sensitivity);
+  const trail = dc.graduationTrail;
+  const post = dc.postGradStats;
+  return (
+    <div className="border border-slate-200 rounded-md px-3 py-2.5 bg-white">
+      <div className="flex items-start gap-2">
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-medium text-slate-900 leading-snug">
+            {dc.name}
+          </div>
+          <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+            <Pill tone="emerald">已委托 · {dc.graduatedAt} 毕业</Pill>
+            <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+              {dc.sensitivityLabel || SENSITIVITY_LABEL_ZH[dc.sensitivity]}
+            </Pill>
+          </div>
+          {visible ? (
+            <>
+              <div className="text-11 text-slate-600 mt-2 leading-snug">
+                {dc.definition}
+              </div>
+              <div className="mt-2">
+                <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  毕业后表现
+                </div>
+                <div className="text-11 text-slate-700 mt-1 leading-snug">
+                  <span className="font-mono tabular-nums">{post.executions}</span>{" "}
+                  次自主执行 ·{" "}
+                  <span className="font-mono tabular-nums">{post.onOutcomeRate}%</span>{" "}
+                  符合预期
+                </div>
+                <div className="text-11 text-slate-600 mt-0.5 leading-snug">
+                  30 天内提了{" "}
+                  <span className="font-mono tabular-nums">{post.exceptions}</span>{" "}
+                  次异常({post.exceptionsNote})
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="mt-2">
+              <MaskedItem tag={dc.sensitivity} layout="inline" />
+            </div>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => onRevoke(dc.id)}
+          className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
+        >
+          <Trash2 className="w-3 h-3" />
+          撤回
+        </button>
+      </div>
+
+      {visible && (
+        <div className="mt-2 pt-2 border-t border-slate-100">
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+          >
+            {expanded ? "收起毕业轨迹" : "查看毕业轨迹"}
+            <ArrowUpRight className="w-3 h-3" />
+          </button>
+        </div>
+      )}
+
+      {expanded && visible && trail && (
+        <div className="mt-3 pt-3 border-t border-slate-100 space-y-4">
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              毕业前表现({trail.preGradPeriod.days} 天 ·{" "}
+              {trail.preGradPeriod.startDate} → {trail.preGradPeriod.endDate})
+            </div>
+            <div className="mt-2">
+              <Sparkline data={trail.preGradWeeklyApprovalRate} color="emerald" />
+            </div>
+            <ul className="mt-2 space-y-0.5 text-11 text-slate-700 leading-snug">
+              <li>
+                该 class 累计{" "}
+                <span className="font-mono tabular-nums">{trail.preGradStats.totalRecs}</span>{" "}
+                条 agent 建议
+              </li>
+              <li>
+                团队批准{" "}
+                <span className="font-mono tabular-nums">{trail.preGradStats.approved}</span>{" "}
+                次(
+                <span className="font-mono tabular-nums">
+                  {Math.round((trail.preGradStats.approved / trail.preGradStats.totalRecs) * 100)}%
+                </span>
+                )
+              </li>
+              <li>
+                修改{" "}
+                <span className="font-mono tabular-nums">{trail.preGradStats.modified}</span>{" "}
+                次(
+                <span className="font-mono tabular-nums">
+                  {Math.round((trail.preGradStats.modified / trail.preGradStats.totalRecs) * 100)}%
+                </span>
+                )
+              </li>
+              <li>
+                拒绝{" "}
+                <span className="font-mono tabular-nums">{trail.preGradStats.declined}</span>{" "}
+                次(
+                <span className="font-mono tabular-nums">
+                  {Math.round((trail.preGradStats.declined / trail.preGradStats.totalRecs) * 100)}%
+                </span>
+                )
+              </li>
+              <li className="text-slate-600">
+                趋势:批准率从{" "}
+                <span className="font-mono tabular-nums">
+                  {trail.preGradWeeklyApprovalRate[0]}%
+                </span>{" "}
+                (第 1 周)升到{" "}
+                <span className="font-mono tabular-nums">
+                  {trail.preGradWeeklyApprovalRate[trail.preGradWeeklyApprovalRate.length - 1]}%
+                </span>{" "}
+                (第 {trail.preGradWeeklyApprovalRate.length} 周)
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              毕业
+            </div>
+            <div className="mt-1 text-11 text-slate-700 leading-snug space-y-0.5">
+              <div>
+                <span className="text-slate-500">批准人:</span>{" "}
+                <span className="text-slate-900 font-medium">{trail.graduatedBy}</span>{" "}
+                <span className="text-slate-500">({trail.graduatedByRole})</span>,
+                {trail.graduatedDate}
+              </div>
+              <div>
+                <span className="text-slate-500">门槛已达:</span> ≥{" "}
+                <span className="font-mono tabular-nums">{trail.threshold.decisions}</span>{" "}
+                次连续批准 + ≥{" "}
+                <span className="font-mono tabular-nums">{trail.threshold.approvalRate}%</span>{" "}
+                批准率
+              </div>
+              <div>
+                <span className="text-slate-500">已授权:</span>{" "}
+                {trail.authority}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              毕业后结果
+            </div>
+            <div className="mt-2">
+              <Sparkline data={trail.postGradOutcomeAccuracy} color="emerald" />
+            </div>
+            <ul className="mt-2 space-y-0.5 text-11 text-slate-700 leading-snug">
+              <li>
+                <span className="font-mono tabular-nums">{post.executions}</span>{" "}
+                次自主执行
+              </li>
+              <li>
+                <span className="font-mono tabular-nums">
+                  {Math.round((post.onOutcomeRate / 100) * post.executions)}
+                </span>{" "}
+                次 outcome 落在预测区间内(
+                <span className="font-mono tabular-nums">{post.onOutcomeRate}%</span>)
+              </li>
+              <li className="text-slate-600">
+                <span className="font-mono tabular-nums">
+                  {trail.postGradExceptions.count}
+                </span>{" "}
+                次 outcome 标记为异常 — {trail.postGradExceptions.note}
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {isConfirming && (
+        <div className="mt-2 border-t border-slate-200 pt-2">
+          <div className="text-11 text-slate-700 leading-snug">
+            撤回 "{dc.name}"?今后 agent 执行这类动作前需要明确批准。
+          </div>
+          <div className="mt-2 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onCancelConfirm}
+              className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+            >
+              取消
+            </button>
+            <button
+              type="button"
+              onClick={() => onConfirm(dc.id)}
+              className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
+            >
+              确认撤回
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TrainingClassCard({ dc, activeClearance }) {
+  const visible = canView(activeClearance, dc.sensitivity);
+  const pct = Math.min(100, Math.round((dc.progress.decisions / dc.progress.threshold) * 100));
+  const eligible = dc.progress.decisions >= dc.progress.threshold && dc.approval.rate >= 92;
+  const belowApprovalFloor = dc.approval.rate < 80;
+  const barColor = belowApprovalFloor ? "bg-rose-400" : "bg-emerald-500";
+  return (
+    <div className="border border-slate-200 rounded-md px-3 py-2.5 bg-white">
+      <div className="text-sm font-medium text-slate-900 leading-snug">
+        {dc.name}
+      </div>
+      <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+        <Pill tone="blue">
+          培训中 ·{" "}
+          <span className="font-mono tabular-nums">{dc.progress.decisions}</span>
+          /
+          <span className="font-mono tabular-nums">{dc.progress.threshold}</span>
+          (向毕业靠近)
+        </Pill>
+        <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+          {dc.sensitivityLabel || SENSITIVITY_LABEL_ZH[dc.sensitivity]}
+        </Pill>
+      </div>
+
+      {visible ? (
+        <>
+          <div className="text-11 text-slate-600 mt-2 leading-snug">
+            {dc.definition}
+          </div>
+
+          <div className="mt-3">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+              进度
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${barColor} rounded-full`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <span className="text-10 font-mono tabular-nums text-slate-700 flex-shrink-0">
+                {dc.progress.decisions}/{dc.progress.threshold}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              近期表现
+            </div>
+            <div className="text-11 text-slate-700 mt-1 leading-snug">
+              <span className="font-mono tabular-nums">{dc.approval.total}</span>{" "}
+              条 agent 建议 · 批准{" "}
+              <span className="font-mono tabular-nums">{dc.approval.approved}</span>{" "}
+              次(
+              <span className="font-mono tabular-nums">{dc.approval.rate}%</span>)
+            </div>
+            <div className="text-11 text-slate-600 mt-0.5 leading-snug">
+              修改{" "}
+              <span className="font-mono tabular-nums">{dc.approval.modified}</span>{" "}
+              次 · 拒绝{" "}
+              <span className="font-mono tabular-nums">{dc.approval.declined}</span>{" "}
+              次
+            </div>
+            {dc.eligibilityNote && (
+              <div className="text-11 text-slate-500 mt-1.5 leading-snug">
+                {dc.eligibilityNote}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-3 flex items-center justify-between gap-2 flex-wrap">
+            <span
+              className="inline-flex items-center gap-1 text-11 text-slate-600 cursor-help"
+              title="完整决策日志在后续迭代中提供"
+            >
+              查看近期决策
+              <ArrowUpRight className="w-3 h-3" />
+            </span>
+            {eligible ? (
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-11 font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+              >
+                <Check className="w-3 h-3" />
+                批准毕业
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-11 font-medium text-slate-500 bg-slate-100 border border-slate-200 rounded-md cursor-not-allowed"
+              >
+                申请毕业 — 再 ~
+                {Math.max(0, dc.progress.threshold - dc.progress.decisions)}{" "}
+                个决策后可申请
+              </button>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="mt-2">
+          <MaskedItem tag={dc.sensitivity} layout="inline" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GraduationExplainerBody() {
+  return (
+    <div className="text-xs text-slate-700 leading-relaxed space-y-3">
+      <p>
+        Agent 提的每条建议都会带一个 decision class
+        标签(出价提升、否定词收集等等)。Agent 追踪团队对每个 class
+        的响应:批准 / 修改 / 拒绝。
+      </p>
+      <p>一个 class 满足两个门槛后,会获得自主执行资格:</p>
+      <ul className="list-disc pl-5 space-y-1">
+        <li>至少 30 次连续决策</li>
+        <li>至少 92% 批准率</li>
+      </ul>
+      <p>
+        满足后,团队可以审过往记录并批准毕业。毕业后,agent 自主执行该 class,只把异常情况(outcome 偏离预测 &gt;
+        1.5σ)提给团队审。
+      </p>
+      <p>
+        团队随时可以撤回授权。撤回后,该 class 立即回到逐次审批模式。
+      </p>
+      <p>
+        毕业门槛是按 class 可调的 — 高风险 class(如日预算变化 &gt;
+        $5K)门槛更严。当前阈值见品牌默认值。
+      </p>
+      <p>
+        一个 listing 主要的 decision class
+        都毕业后,团队通常会把整个 listing 委托出去 — 这时计费从订阅转为结果奖金。
+      </p>
+    </div>
+  );
+}
+
+function DecisionClassList({ data, query, activeClearance, onTabChange }) {
   const [revokedIds, setRevokedIds] = useState(new Set());
   const [confirmingId, setConfirmingId] = useState(null);
+  const [explainerOpen, setExplainerOpen] = useState(false);
   const q = (query || "").trim().toLowerCase();
   const matches = (c) => !q || c.name.toLowerCase().includes(q);
 
   const isJustRevoked = (id) => revokedIds.has(id);
-  const active = classes.filter(
-    (c) => !c.revoked && !isJustRevoked(c.id) && matches(c),
+  const delegated = (data.delegated || []).filter(
+    (c) => !isJustRevoked(c.id) && matches(c),
   );
-  const justRevoked = classes.filter(
-    (c) => !c.revoked && isJustRevoked(c.id) && matches(c),
+  const justRevoked = (data.delegated || []).filter(
+    (c) => isJustRevoked(c.id) && matches(c),
   );
-  const historicallyRevoked = classes.filter((c) => c.revoked && matches(c));
+  const inTraining = (data.inTraining || []).filter(matches);
+  const recentlyRevoked = (data.recentlyRevoked || []).filter(matches);
   const noResults =
     q &&
-    active.length === 0 &&
+    delegated.length === 0 &&
     justRevoked.length === 0 &&
-    historicallyRevoked.length === 0;
+    inTraining.length === 0 &&
+    recentlyRevoked.length === 0;
 
   const onConfirm = (id) => {
     setRevokedIds((s) => {
@@ -10553,101 +11035,49 @@ function DecisionClassList({ classes, query, activeClearance }) {
   }
 
   return (
-    <div className="space-y-4">
-      {active.length > 0 && (
+    <div className="space-y-5">
+      {delegated.length > 0 && (
         <div>
           <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            活跃类别
+            已委托({delegated.length})
           </div>
           <div className="space-y-2">
-            {active.map((dc) => {
-              const visible = canView(activeClearance, dc.sensitivity);
-              return (
-              <div
+            {delegated.map((dc) => (
+              <DelegatedClassCard
                 key={dc.id}
-                className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-              >
-                <div className="flex items-start gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-slate-900 leading-snug">
-                      {dc.name}
-                    </div>
-                    {visible ? (
-                      <>
-                        <div className="text-11 text-slate-600 mt-1 leading-snug">
-                          {dc.definition}
-                        </div>
-                        <div className="text-10 text-slate-500 mt-1">
-                          {dc.thresholdSummary}
-                        </div>
-                      </>
-                    ) : (
-                      <div className="mt-1.5">
-                        <MaskedItem tag={dc.sensitivity} layout="inline" />
-                      </div>
-                    )}
-                    <div className="text-10 text-slate-500 mt-1">
-                      近 30 天调用:{" "}
-                      <span className="font-mono tabular-nums text-slate-700">
-                        {dc.recentInvocations}
-                      </span>{" "}
-                      次 · 最近{" "}
-                      <span className="font-mono tabular-nums text-slate-700">
-                        {dc.lastInvoked}
-                      </span>
-                    </div>
-                    <div className="mt-1.5 flex items-center gap-2">
-                      <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
-                        {dc.sensitivityLabel || SENSITIVITY_LABEL_ZH[dc.sensitivity]}
-                      </Pill>
-                      <span className="text-10 text-slate-500">
-                        授权人 {dc.delegatedBy} · {dc.delegatedAt}
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setConfirmingId(dc.id)}
-                    className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                    撤回
-                  </button>
-                </div>
-                {confirmingId === dc.id && (
-                  <div className="mt-2 border-t border-slate-200 pt-2">
-                    <div className="text-11 text-slate-700 leading-snug">
-                      撤回 "{dc.name}"?今后 agent 执行这类动作前需要明确批准。
-                    </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setConfirmingId(null)}
-                        className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
-                      >
-                        取消
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => onConfirm(dc.id)}
-                        className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
-                      >
-                        确认撤回
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-            })}
+                dc={dc}
+                activeClearance={activeClearance}
+                onRevoke={(id) => setConfirmingId(id)}
+                isConfirming={confirmingId === dc.id}
+                onConfirm={onConfirm}
+                onCancelConfirm={() => setConfirmingId(null)}
+              />
+            ))}
           </div>
         </div>
       )}
 
-      {(justRevoked.length > 0 || historicallyRevoked.length > 0) && (
+      {inTraining.length > 0 && (
         <div>
           <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            近期已撤回
+            培训中({inTraining.length})
+          </div>
+          <div className="space-y-2">
+            {inTraining.map((dc) => (
+              <TrainingClassCard
+                key={dc.id}
+                dc={dc}
+                activeClearance={activeClearance}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {(justRevoked.length > 0 || recentlyRevoked.length > 0) && (
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            近期撤回({justRevoked.length + recentlyRevoked.length})
           </div>
           <div className="space-y-2">
             {justRevoked.map((dc) => (
@@ -10662,19 +11092,11 @@ function DecisionClassList({ classes, query, activeClearance }) {
                   {dc.definition}
                 </div>
                 <div className="text-10 text-slate-500 mt-1">
-                  {dc.thresholdSummary}
+                  {dc.graduatedAt} 毕业 · 刚刚撤回
                 </div>
-                <div className="text-10 text-slate-500 mt-1">
-                  撤回时累计调用{" "}
-                  <span className="font-mono tabular-nums text-slate-700">
-                    {dc.recentInvocations}
-                  </span>{" "}
-                  次 · 最后一次 {dc.lastInvoked}
-                </div>
-                <div className="text-10 text-slate-500 mt-1">刚刚撤回</div>
               </div>
             ))}
-            {historicallyRevoked.map((dc) => (
+            {recentlyRevoked.map((dc) => (
               <div
                 key={dc.id}
                 className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
@@ -10700,6 +11122,42 @@ function DecisionClassList({ classes, query, activeClearance }) {
           </div>
         </div>
       )}
+
+      <div className="pt-2 border-t border-slate-100">
+        <button
+          type="button"
+          onClick={() => setExplainerOpen(true)}
+          className="inline-flex items-center gap-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+        >
+          毕业机制是怎么运作的?
+          <ArrowUpRight className="w-3 h-3" />
+        </button>
+      </div>
+
+      <InspectionDrawer
+        open={explainerOpen}
+        onClose={() => setExplainerOpen(false)}
+        title="毕业机制是怎么运作的"
+        headerMeta={
+          <Pill tone="emerald">权限毕业 · 方法说明</Pill>
+        }
+        bodyOverride={<GraduationExplainerBody />}
+        footer={
+          onTabChange ? (
+            <button
+              type="button"
+              onClick={() => {
+                setExplainerOpen(false);
+                onTabChange("outcomes");
+              }}
+              className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+            >
+              到结果 tab 查看每个 listing 的当前委托状态
+              <ChevronRight className="w-3 h-3" />
+            </button>
+          ) : null
+        }
+      />
     </div>
   );
 }
@@ -10847,7 +11305,7 @@ function RecentQueriesList({ queries, activeUser, query, onOpenThread, threadIds
   );
 }
 
-function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
+function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread, onTabChange }) {
   const [openActivity, setOpenActivity] = useState(null);
   const [openPattern, setOpenPattern] = useState(null);
   const [query, setQuery] = useState("");
@@ -10972,13 +11430,17 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
         <BrainSection
           id="decision-classes"
           title="决策类别"
-          count={COMPANY_BRAIN.decisionClassesDetail.filter((c) => !c.revoked).length}
+          count={
+            (COMPANY_BRAIN.decisionClassesDetail.delegated || []).length +
+            (COMPANY_BRAIN.decisionClassesDetail.inTraining || []).length
+          }
           defaultOpen={!!query}
         >
           <DecisionClassList
-            classes={COMPANY_BRAIN.decisionClassesDetail}
+            data={COMPANY_BRAIN.decisionClassesDetail}
             query={query}
             activeClearance={activeClearance}
+            onTabChange={onTabChange}
           />
         </BrainSection>
         <BrainSection
@@ -11701,6 +12163,7 @@ function InspectorPanel({
             activeUserId={activeUserId}
             onSwitchUser={onSwitchUser}
             onOpenThread={onOpenThread}
+            onTabChange={onTabChange}
           />
         ) : (
           <OutcomesContent
