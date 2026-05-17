@@ -3263,68 +3263,125 @@ const BRAIN_OPS = {
       sensitivity: "Sensitive",
     },
     aggregate: {
-      listingCount: 6,
-      hit: 2,
-      partial: 2,
-      miss: 2,
+      okrCount: 3,
+      krCount: 8,
+      krHit: 3,
+      krPartial: 1,
+      krMiss: 4,
+      avgCompletionPct: 89,
       actualRevenue: "$1.95M",
       goalRevenue: "$1.96M",
       revenueDeltaPct: -0.5,
     },
-    listings: [
+    okrs: [
       {
-        id: "q4-sku-a",
-        sku: "SKU-A · Floor Lamp",
-        goal: "Category top 5 by Dec · Q4 rev $480K",
-        actual: "BSR #2 · rev $512K",
-        verdict: "HIT",
-        verdictLabel: "Hit",
-        revDeltaText: "+$32K",
+        id: "okr-defense",
+        label: "O1",
+        objective: "Hold position on mature listings + land two core new products",
+        keyResults: [
+          {
+            id: "kr-sku-a-bsr",
+            label: "KR 1.1",
+            statement: "SKU-A Floor Lamp into category BSR top 5 by Dec 31",
+            target: "BSR ≤ #5",
+            actual: "BSR #2",
+            completionPct: 100,
+            status: "HIT",
+            statusLabel: "Hit",
+            listingRef: "SKU-A",
+          },
+          {
+            id: "kr-sku-117-hold",
+            label: "KR 1.2",
+            statement: "SKU-117 Bed Frame hold BSR #2-3 all quarter",
+            target: "BSR #2-3 · 90 days",
+            actual: "BSR #2 · held 90 days",
+            completionPct: 100,
+            status: "HIT",
+            statusLabel: "Hit",
+            listingRef: "SKU-117",
+          },
+          {
+            id: "kr-sku-pb-a-bsr",
+            label: "KR 1.3",
+            statement: "SKU-PB-A Power Bank reach Amazon BSR ≤ #15",
+            target: "BSR ≤ #15",
+            actual: "BSR #12",
+            completionPct: 120,
+            status: "HIT",
+            statusLabel: "Hit",
+            listingRef: "SKU-PB-A",
+          },
+        ],
       },
       {
-        id: "q4-sku-117",
-        sku: "SKU-117 · Bed Frame",
-        goal: "Hold BSR #2–3 · Q4 rev $520K",
-        actual: "BSR #2 · rev $498K",
-        verdict: "PARTIAL",
-        verdictLabel: "Partial",
-        revDeltaText: "−$22K · BSR hit, rev short",
+        id: "okr-revenue",
+        label: "O2",
+        objective: "Hit $1.96M Q4 revenue · hold product-line blended margin",
+        keyResults: [
+          {
+            id: "kr-rev-total",
+            label: "KR 2.1",
+            statement: "6 core listings Q4 revenue ≥ $1.96M",
+            target: "$1.96M",
+            actual: "$1.95M",
+            completionPct: 99,
+            status: "PARTIAL",
+            statusLabel: "Partial",
+            listingRef: "Aggregate",
+          },
+          {
+            id: "kr-razor-margin",
+            label: "KR 2.2",
+            statement: "Razor product line blended margin ≥ 15%",
+            target: "≥ 15%",
+            actual: "12.4%",
+            completionPct: 83,
+            status: "MISS",
+            statusLabel: "Miss",
+            listingRef: "SKU-RZ-001",
+          },
+          {
+            id: "kr-k22-stable",
+            label: "KR 2.3",
+            statement: "Kitchen Knife SKU-K22 Q4 revenue hold $215K",
+            target: "$215K",
+            actual: "$164K · organic CTR −8%",
+            completionPct: 76,
+            status: "MISS",
+            statusLabel: "Miss",
+            listingRef: "SKU-K22",
+          },
+        ],
       },
       {
-        id: "q4-sku-rz-001",
-        sku: "SKU-RZ-001 · Razor",
-        goal: "Blended margin 15% · Q4 rev $380K",
-        actual: "Margin 12.4% · rev $325K",
-        verdict: "MISS",
-        verdictLabel: "Miss",
-        revDeltaText: "−$55K · margin & rev both miss",
-      },
-      {
-        id: "q4-sku-pb-a",
-        sku: "SKU-PB-A · Power Bank",
-        goal: "Amazon BSR ≤ #15 · Q4 rev $180K",
-        actual: "BSR #12 · rev $156K",
-        verdict: "PARTIAL",
-        verdictLabel: "Partial",
-        revDeltaText: "−$24K · BSR hit, rev short",
-      },
-      {
-        id: "q4-sku-k22",
-        sku: "SKU-K22 · Kitchen Knife",
-        goal: "Q4 rev $215K · stable",
-        actual: "Rev $164K · organic CTR −8%",
-        verdict: "MISS",
-        verdictLabel: "Miss",
-        revDeltaText: "−$51K · organic traffic eroded",
-      },
-      {
-        id: "q4-sku-ti-a",
-        sku: "SKU-TI-A · Tire Inflator",
-        goal: "Launch · pickup-tire-inflator BSR ≤ #20",
-        actual: "BSR #22 · pickup CR 2.0%",
-        verdict: "MISS",
-        verdictLabel: "Miss",
-        revDeltaText: "Launch target miss · rev not the bar",
+        id: "okr-launch-ti",
+        label: "O3",
+        objective: "Launch SKU-TI-A Tire Inflator · take ground in pickup sub-category",
+        keyResults: [
+          {
+            id: "kr-ti-bsr",
+            label: "KR 3.1",
+            statement: "pickup tire-inflator sub-category BSR ≤ #20",
+            target: "BSR ≤ #20",
+            actual: "BSR #22",
+            completionPct: 91,
+            status: "MISS",
+            statusLabel: "Miss",
+            listingRef: "SKU-TI-A",
+          },
+          {
+            id: "kr-ti-cr",
+            label: "KR 3.2",
+            statement: "pickup keyword cluster CR ≥ 5%",
+            target: "≥ 5%",
+            actual: "2.0% · far below category 4.1%",
+            completionPct: 40,
+            status: "MISS",
+            statusLabel: "Miss",
+            listingRef: "SKU-TI-A",
+          },
+        ],
       },
     ],
     revenueGaps: [
@@ -3339,11 +3396,13 @@ const BRAIN_OPS = {
       {
         area: "Margin",
         detail: "Razor margin 12.4% vs goal 15% · subscription experiment polluted the attach-rate signal",
+        relatedKrs: ["KR 2.2"],
         tone: "rose",
       },
       {
         area: "Traffic structure",
-        detail: "Kitchen Knife organic CTR −8% (A+ content stale) + Tire Inflator pickup CR 2.0% (cluster misread)",
+        detail: "Kitchen Knife organic CTR −8% (A+ content 14 months untouched) + Tire Inflator pickup CR 2.0% (no cluster validation before launch)",
+        relatedKrs: ["KR 2.3", "KR 3.1", "KR 3.2"],
         tone: "rose",
       },
     ],
@@ -12431,19 +12490,13 @@ function PlaceholderCanvas({ kicker, title, part }) {
 /*  Brain operations canvases · Part 4                                        */
 /* ────────────────────────────────────────────────────────────────────────── */
 
-const VERDICT_TONE = {
-  HIT: "emerald",
-  PARTIAL: "amber",
-  MISS: "rose",
-};
-
 function UploadCanvas() {
   const Q = BRAIN_OPS.q4Retro;
   return (
     <>
       <CanvasHeader
         kicker="Company Brain · Q4 retrospective"
-        title="Q4 2025 retrospective · 6 listings · goals vs actuals"
+        title="Q4 2025 retrospective · 3 OKRs · 8 KRs · goals vs actuals"
         meta={
           <>
             <Pill tone="slate">
@@ -12462,9 +12515,9 @@ function UploadCanvas() {
         }
       />
 
-      {/* 1. Current state · Q4 goals vs actuals */}
+      {/* 1. Current state · OKR roll-up */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="Q4 goal vs actual">
+        <SectionLabel kicker="3 OKRs · 8 KRs · overall completion 76%">
           1. Current state
         </SectionLabel>
 
@@ -12472,20 +12525,34 @@ function UploadCanvas() {
           <div className="grid grid-cols-4 gap-4">
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Listings
+                OKRs · KRs
               </div>
               <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {Q.aggregate.listingCount}
+                {Q.aggregate.okrCount} · {Q.aggregate.krCount}
+              </div>
+              <div className="text-11 text-slate-500 font-mono">
+                3 OKRs · 8 KRs
               </div>
             </div>
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Outcome split
+                KR outcome split
               </div>
               <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                <Pill tone="emerald">{Q.aggregate.hit} hit</Pill>
-                <Pill tone="amber">{Q.aggregate.partial} partial</Pill>
-                <Pill tone="rose">{Q.aggregate.miss} miss</Pill>
+                <Pill tone="emerald">{Q.aggregate.krHit} hit</Pill>
+                <Pill tone="amber">{Q.aggregate.krPartial} partial</Pill>
+                <Pill tone="rose">{Q.aggregate.krMiss} miss</Pill>
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Overall completion
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-amber-700">
+                {Q.aggregate.avgCompletionPct}%
+              </div>
+              <div className="text-11 text-slate-500 font-mono">
+                avg of 8 KRs
               </div>
             </div>
             <div>
@@ -12496,52 +12563,127 @@ function UploadCanvas() {
                 {Q.aggregate.actualRevenue}
               </div>
               <div className="text-11 text-slate-500 font-mono">
-                goal {Q.aggregate.goalRevenue}
-              </div>
-            </div>
-            <div>
-              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Overall delta
-              </div>
-              <div className="mt-1 text-xl font-mono font-semibold text-amber-700">
-                {Q.aggregate.revenueDeltaPct}%
+                goal {Q.aggregate.goalRevenue} · {Q.aggregate.revenueDeltaPct}%
               </div>
             </div>
           </div>
         </Card>
 
-        <Card className="overflow-hidden">
-          <div className="grid grid-cols-12 px-4 py-2 bg-slate-50 border-b border-slate-200 text-10 uppercase tracking-wider text-slate-500 font-medium">
-            <div className="col-span-3">SKU</div>
-            <div className="col-span-4">Q4 goal</div>
-            <div className="col-span-3">Q4 actual</div>
-            <div className="col-span-2 text-right">Verdict</div>
-          </div>
-          {Q.listings.map((l, i) => (
-            <div
-              key={l.id}
-              className={`grid grid-cols-12 px-4 py-3 text-xs text-slate-700 ${
-                i < Q.listings.length - 1 ? "border-b border-slate-100" : ""
-              }`}
-            >
-              <div className="col-span-3 font-medium text-slate-900">
-                {l.sku}
-              </div>
-              <div className="col-span-4 leading-relaxed">{l.goal}</div>
-              <div className="col-span-3 leading-relaxed">{l.actual}</div>
-              <div className="col-span-2 flex justify-end items-start">
-                <Pill tone={VERDICT_TONE[l.verdict]}>{l.verdictLabel}</Pill>
-              </div>
-            </div>
-          ))}
-        </Card>
+        <div className="space-y-3">
+          {Q.okrs.map((o, oi) => {
+            const krs = o.keyResults;
+            const hit = krs.filter((k) => k.status === "HIT").length;
+            const partial = krs.filter((k) => k.status === "PARTIAL").length;
+            const miss = krs.filter((k) => k.status === "MISS").length;
+            const rollupTone =
+              hit === krs.length
+                ? "emerald"
+                : miss === krs.length
+                ? "rose"
+                : "slate";
+            const rollupText =
+              hit === krs.length
+                ? `${krs.length} KR · ${hit} hit`
+                : miss === krs.length
+                ? `${krs.length} KR · ${miss} miss`
+                : `${krs.length} KR · ${hit} hit · ${partial} partial · ${miss} miss`;
+            return (
+              <Card key={o.id} className="overflow-hidden">
+                <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-10 uppercase tracking-wider text-slate-500 font-medium font-mono">
+                      Objective {oi + 1}
+                    </div>
+                    <div className="mt-0.5 text-sm font-medium text-slate-900 leading-snug">
+                      {o.objective}
+                    </div>
+                  </div>
+                  <Pill tone={rollupTone} className="flex-shrink-0">
+                    {rollupText}
+                  </Pill>
+                </div>
+                <div className="grid grid-cols-12 px-4 py-2 bg-white border-b border-slate-100 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  <div className="col-span-6">Key Result</div>
+                  <div className="col-span-2">Target</div>
+                  <div className="col-span-2">Actual</div>
+                  <div className="col-span-2 text-right">Completion</div>
+                </div>
+                {krs.map((k, ki) => {
+                  const tone =
+                    k.status === "HIT"
+                      ? "emerald"
+                      : k.status === "PARTIAL"
+                      ? "amber"
+                      : "rose";
+                  const pctClass =
+                    k.status === "HIT"
+                      ? "text-emerald-700"
+                      : k.status === "PARTIAL"
+                      ? "text-amber-700"
+                      : "text-rose-700";
+                  return (
+                    <div
+                      key={k.id}
+                      className={`grid grid-cols-12 px-4 py-3 text-xs text-slate-700 items-start ${
+                        ki < krs.length - 1
+                          ? "border-b border-slate-100"
+                          : ""
+                      }`}
+                    >
+                      <div className="col-span-6 pr-3">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-11 font-mono font-semibold text-slate-500">
+                            {k.label}
+                          </span>
+                          <span className="text-slate-900 font-medium leading-snug">
+                            {k.statement}
+                          </span>
+                        </div>
+                        <div className="mt-0.5 text-11 text-slate-500 font-mono">
+                          {k.listingRef}
+                        </div>
+                      </div>
+                      <div className="col-span-2 pr-2 font-mono tabular-nums text-slate-700 leading-relaxed">
+                        {k.target}
+                      </div>
+                      <div className="col-span-2 pr-2 font-mono tabular-nums text-slate-900 leading-relaxed">
+                        {k.actual}
+                      </div>
+                      <div className="col-span-2 flex flex-col items-end gap-1">
+                        <div
+                          className={`font-mono tabular-nums text-sm font-semibold ${pctClass} flex items-center gap-1`}
+                        >
+                          {k.completionPct > 100 && (
+                            <TrendingUp className="w-3 h-3" />
+                          )}
+                          {k.completionPct}%
+                        </div>
+                        <Pill tone={tone}>{k.statusLabel}</Pill>
+                      </div>
+                    </div>
+                  );
+                })}
+              </Card>
+            );
+          })}
+        </div>
       </div>
 
-      {/* 2. Specific problem · gaps */}
+      {/* 2. Specific problem · failed-KR clustering */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="Revenue gaps + structural gaps">
+        <SectionLabel kicker="4 missed KRs · clustered in Objective 2 + 3">
           2. Specific problem
         </SectionLabel>
+
+        <Card className="p-4 mb-3 bg-rose-50/40 border-rose-200">
+          <div className="text-xs text-slate-700 leading-relaxed">
+            The 4 missed KRs (KR 2.2 / 2.3 / 3.1 / 3.2) all trace back to two things:
+            <span className="font-medium text-slate-900">
+              {" "}margin slipped + traffic structure broke
+            </span>
+            . Objective 1 (mature listings + Power Bank BSR) is fully hit — the problem isn't defense.
+          </div>
+        </Card>
 
         <div className="grid grid-cols-2 gap-3">
           <Card className="p-4">
@@ -12572,13 +12714,18 @@ function UploadCanvas() {
 
           <Card className="p-4">
             <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2.5">
-              Structural gaps
+              Failed-KR clusters
             </div>
             <div className="space-y-2.5">
               {Q.structuralGaps.map((g, i) => (
                 <div key={i} className="text-xs">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <Pill tone={g.tone}>{g.area}</Pill>
+                    {g.relatedKrs && g.relatedKrs.length > 0 && (
+                      <span className="text-11 text-slate-500 font-mono">
+                        covers {g.relatedKrs.join(" · ")}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-1 text-slate-700 leading-relaxed">
                     {g.detail}

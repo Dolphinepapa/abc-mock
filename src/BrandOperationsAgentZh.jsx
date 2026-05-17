@@ -3315,68 +3315,125 @@ const BRAIN_OPS = {
       sensitivityLabel: "敏感",
     },
     aggregate: {
-      listingCount: 6,
-      hit: 2,
-      partial: 2,
-      miss: 2,
+      okrCount: 3,
+      krCount: 8,
+      krHit: 3,
+      krPartial: 1,
+      krMiss: 4,
+      avgCompletionPct: 89,
       actualRevenue: "$1.95M",
       goalRevenue: "$1.96M",
       revenueDeltaPct: -0.5,
     },
-    listings: [
+    okrs: [
       {
-        id: "q4-sku-a",
-        sku: "SKU-A · 落地灯",
-        goal: "12 月前类目前 5 · Q4 收入 $480K",
-        actual: "BSR #2 · 收入 $512K",
-        verdict: "HIT",
-        verdictLabel: "达成",
-        revDeltaText: "+$32K",
+        id: "okr-defense",
+        label: "O1",
+        objective: "守住成熟期 listing 的位置 + 让两个核心新品站稳",
+        keyResults: [
+          {
+            id: "kr-sku-a-bsr",
+            label: "KR 1.1",
+            statement: "SKU-A 落地灯 12 月前进类目 BSR 前 5",
+            target: "BSR ≤ #5",
+            actual: "BSR #2",
+            completionPct: 100,
+            status: "HIT",
+            statusLabel: "达成",
+            listingRef: "SKU-A",
+          },
+          {
+            id: "kr-sku-117-hold",
+            label: "KR 1.2",
+            statement: "SKU-117 床架 BSR 整季守在 #2-3",
+            target: "BSR #2-3 · 90 天",
+            actual: "BSR #2 · 守了 90 天",
+            completionPct: 100,
+            status: "HIT",
+            statusLabel: "达成",
+            listingRef: "SKU-117",
+          },
+          {
+            id: "kr-sku-pb-a-bsr",
+            label: "KR 1.3",
+            statement: "SKU-PB-A 移动充电宝 Amazon BSR ≤ #15",
+            target: "BSR ≤ #15",
+            actual: "BSR #12",
+            completionPct: 120,
+            status: "HIT",
+            statusLabel: "达成",
+            listingRef: "SKU-PB-A",
+          },
+        ],
       },
       {
-        id: "q4-sku-117",
-        sku: "SKU-117 · 床架",
-        goal: "守住 BSR #2–3 · Q4 收入 $520K",
-        actual: "BSR #2 · 收入 $498K",
-        verdict: "PARTIAL",
-        verdictLabel: "部分达成",
-        revDeltaText: "−$22K · BSR 达成,收入未到",
+        id: "okr-revenue",
+        label: "O2",
+        objective: "Q4 总收入达 $1.96M · 维持产品线毛利率",
+        keyResults: [
+          {
+            id: "kr-rev-total",
+            label: "KR 2.1",
+            statement: "6 个核心 listing Q4 总收入 ≥ $1.96M",
+            target: "$1.96M",
+            actual: "$1.95M",
+            completionPct: 99,
+            status: "PARTIAL",
+            statusLabel: "部分达成",
+            listingRef: "聚合",
+          },
+          {
+            id: "kr-razor-margin",
+            label: "KR 2.2",
+            statement: "刮胡刀产品线综合毛利率 ≥ 15%",
+            target: "≥ 15%",
+            actual: "12.4%",
+            completionPct: 83,
+            status: "MISS",
+            statusLabel: "未达成",
+            listingRef: "SKU-RZ-001",
+          },
+          {
+            id: "kr-k22-stable",
+            label: "KR 2.3",
+            statement: "厨房刀 SKU-K22 Q4 收入维持 $215K",
+            target: "$215K",
+            actual: "$164K · 自然 CTR −8%",
+            completionPct: 76,
+            status: "MISS",
+            statusLabel: "未达成",
+            listingRef: "SKU-K22",
+          },
+        ],
       },
       {
-        id: "q4-sku-rz-001",
-        sku: "SKU-RZ-001 · 刮胡刀",
-        goal: "产品线综合毛利率 15% · Q4 收入 $380K",
-        actual: "毛利率 12.4% · 收入 $325K",
-        verdict: "MISS",
-        verdictLabel: "未达成",
-        revDeltaText: "−$55K · 毛利率与收入双 miss",
-      },
-      {
-        id: "q4-sku-pb-a",
-        sku: "SKU-PB-A · 移动充电宝",
-        goal: "Amazon BSR ≤ #15 · Q4 收入 $180K",
-        actual: "BSR #12 · 收入 $156K",
-        verdict: "PARTIAL",
-        verdictLabel: "部分达成",
-        revDeltaText: "−$24K · BSR 达成,收入未到",
-      },
-      {
-        id: "q4-sku-k22",
-        sku: "SKU-K22 · 厨房刀",
-        goal: "Q4 收入 $215K · 稳态",
-        actual: "收入 $164K · 自然 CTR −8%",
-        verdict: "MISS",
-        verdictLabel: "未达成",
-        revDeltaText: "−$51K · 自然流量结构掉",
-      },
-      {
-        id: "q4-sku-ti-a",
-        sku: "SKU-TI-A · 充气泵",
-        goal: "上线 · pickup-tire-inflator BSR ≤ #20",
-        actual: "BSR #22 · pickup 类 CR 2.0%",
-        verdict: "MISS",
-        verdictLabel: "未达成",
-        revDeltaText: "上线目标 miss · 收入非主考核",
+        id: "okr-launch-ti",
+        label: "O3",
+        objective: "新品 SKU-TI-A 充气泵 Q4 上线 · pickup 类目站稳",
+        keyResults: [
+          {
+            id: "kr-ti-bsr",
+            label: "KR 3.1",
+            statement: "pickup tire-inflator 子类 BSR ≤ #20",
+            target: "BSR ≤ #20",
+            actual: "BSR #22",
+            completionPct: 91,
+            status: "MISS",
+            statusLabel: "未达成",
+            listingRef: "SKU-TI-A",
+          },
+          {
+            id: "kr-ti-cr",
+            label: "KR 3.2",
+            statement: "pickup 关键词集群 CR ≥ 5%",
+            target: "≥ 5%",
+            actual: "2.0% · 远低于品类 4.1%",
+            completionPct: 40,
+            status: "MISS",
+            statusLabel: "未达成",
+            listingRef: "SKU-TI-A",
+          },
+        ],
       },
     ],
     revenueGaps: [
@@ -3391,11 +3448,13 @@ const BRAIN_OPS = {
       {
         area: "利润率",
         detail: "刮胡刀毛利率 12.4% vs 目标 15% · subscription 实验污染了 attach 信号",
+        relatedKrs: ["KR 2.2"],
         tone: "rose",
       },
       {
         area: "流量结构",
-        detail: "厨房刀自然 CTR −8%(A+ 内容过老)+ 充气泵 pickup CR 2.0%(cluster 误判)",
+        detail: "厨房刀自然 CTR −8%(A+ 内容 14 个月没动)+ 充气泵 pickup CR 2.0%(launch 前没做 cluster 验证)",
+        relatedKrs: ["KR 2.3", "KR 3.1", "KR 3.2"],
         tone: "rose",
       },
     ],
@@ -12476,19 +12535,13 @@ function PlaceholderCanvas({ kicker, title, part }) {
 /*  Brain operations canvases · Part 4                                        */
 /* ────────────────────────────────────────────────────────────────────────── */
 
-const VERDICT_TONE = {
-  HIT: "emerald",
-  PARTIAL: "amber",
-  MISS: "rose",
-};
-
 function UploadCanvas() {
   const Q = BRAIN_OPS.q4Retro;
   return (
     <>
       <CanvasHeader
         kicker="公司大脑 · Q4 复盘"
-        title="Q4 2025 复盘 · 6 个 listing 的目标 vs 结果"
+        title="Q4 2025 复盘 · 3 个 OKR · 8 个 KR 的目标 vs 结果"
         meta={
           <>
             <Pill tone="slate">
@@ -12507,9 +12560,9 @@ function UploadCanvas() {
         }
       />
 
-      {/* 1. 现状 · Q4 目标与结果 */}
+      {/* 1. 现状 · OKR roll-up */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="Q4 目标 vs 实际">
+        <SectionLabel kicker="3 OKR · 8 KR · 整体完成率 76%">
           1. 现状
         </SectionLabel>
 
@@ -12517,20 +12570,34 @@ function UploadCanvas() {
           <div className="grid grid-cols-4 gap-4">
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Listing 数
+                OKR · KR 数
               </div>
               <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {Q.aggregate.listingCount}
+                {Q.aggregate.okrCount} · {Q.aggregate.krCount}
+              </div>
+              <div className="text-11 text-slate-500 font-mono">
+                3 OKR · 8 KR
               </div>
             </div>
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                结果分布
+                KR 结果分布
               </div>
               <div className="mt-1 flex items-center gap-1.5 flex-wrap">
-                <Pill tone="emerald">{Q.aggregate.hit} 达成</Pill>
-                <Pill tone="amber">{Q.aggregate.partial} 部分</Pill>
-                <Pill tone="rose">{Q.aggregate.miss} 未达成</Pill>
+                <Pill tone="emerald">{Q.aggregate.krHit} 达成</Pill>
+                <Pill tone="amber">{Q.aggregate.krPartial} 部分</Pill>
+                <Pill tone="rose">{Q.aggregate.krMiss} 未达成</Pill>
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                整体完成率
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-amber-700">
+                {Q.aggregate.avgCompletionPct}%
+              </div>
+              <div className="text-11 text-slate-500 font-mono">
+                8 个 KR 平均
               </div>
             </div>
             <div>
@@ -12541,52 +12608,128 @@ function UploadCanvas() {
                 {Q.aggregate.actualRevenue}
               </div>
               <div className="text-11 text-slate-500 font-mono">
-                目标 {Q.aggregate.goalRevenue}
-              </div>
-            </div>
-            <div>
-              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                整体偏差
-              </div>
-              <div className="mt-1 text-xl font-mono font-semibold text-amber-700">
-                {Q.aggregate.revenueDeltaPct}%
+                目标 {Q.aggregate.goalRevenue} · {Q.aggregate.revenueDeltaPct}%
               </div>
             </div>
           </div>
         </Card>
 
-        <Card className="overflow-hidden">
-          <div className="grid grid-cols-12 px-4 py-2 bg-slate-50 border-b border-slate-200 text-10 uppercase tracking-wider text-slate-500 font-medium">
-            <div className="col-span-3">SKU</div>
-            <div className="col-span-4">Q4 目标</div>
-            <div className="col-span-3">Q4 实际</div>
-            <div className="col-span-2 text-right">结论</div>
-          </div>
-          {Q.listings.map((l, i) => (
-            <div
-              key={l.id}
-              className={`grid grid-cols-12 px-4 py-3 text-xs text-slate-700 ${
-                i < Q.listings.length - 1 ? "border-b border-slate-100" : ""
-              }`}
-            >
-              <div className="col-span-3 font-medium text-slate-900">
-                {l.sku}
-              </div>
-              <div className="col-span-4 leading-relaxed">{l.goal}</div>
-              <div className="col-span-3 leading-relaxed">{l.actual}</div>
-              <div className="col-span-2 flex justify-end items-start">
-                <Pill tone={VERDICT_TONE[l.verdict]}>{l.verdictLabel}</Pill>
-              </div>
-            </div>
-          ))}
-        </Card>
+        <div className="space-y-3">
+          {Q.okrs.map((o, oi) => {
+            const krs = o.keyResults;
+            const hit = krs.filter((k) => k.status === "HIT").length;
+            const partial = krs.filter((k) => k.status === "PARTIAL").length;
+            const miss = krs.filter((k) => k.status === "MISS").length;
+            const rollupTone =
+              hit === krs.length
+                ? "emerald"
+                : miss === krs.length
+                ? "rose"
+                : "slate";
+            const rollupText =
+              hit === krs.length
+                ? `${krs.length} KR · ${hit} 达成`
+                : miss === krs.length
+                ? `${krs.length} KR · ${miss} 未达成`
+                : `${krs.length} KR · ${hit} 达成 · ${partial} 部分 · ${miss} 未达成`;
+            return (
+              <Card key={o.id} className="overflow-hidden">
+                <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-10 uppercase tracking-wider text-slate-500 font-medium font-mono">
+                      Objective {oi + 1}
+                    </div>
+                    <div className="mt-0.5 text-sm font-medium text-slate-900 leading-snug">
+                      {o.objective}
+                    </div>
+                  </div>
+                  <Pill tone={rollupTone} className="flex-shrink-0">
+                    {rollupText}
+                  </Pill>
+                </div>
+                <div className="grid grid-cols-12 px-4 py-2 bg-white border-b border-slate-100 text-10 uppercase tracking-wider text-slate-500 font-medium">
+                  <div className="col-span-6">Key Result</div>
+                  <div className="col-span-2">目标</div>
+                  <div className="col-span-2">实际</div>
+                  <div className="col-span-2 text-right">完成度</div>
+                </div>
+                {krs.map((k, ki) => {
+                  const tone =
+                    k.status === "HIT"
+                      ? "emerald"
+                      : k.status === "PARTIAL"
+                      ? "amber"
+                      : "rose";
+                  const pctClass =
+                    k.status === "HIT"
+                      ? "text-emerald-700"
+                      : k.status === "PARTIAL"
+                      ? "text-amber-700"
+                      : "text-rose-700";
+                  return (
+                    <div
+                      key={k.id}
+                      className={`grid grid-cols-12 px-4 py-3 text-xs text-slate-700 items-start ${
+                        ki < krs.length - 1
+                          ? "border-b border-slate-100"
+                          : ""
+                      }`}
+                    >
+                      <div className="col-span-6 pr-3">
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-11 font-mono font-semibold text-slate-500">
+                            {k.label}
+                          </span>
+                          <span className="text-slate-900 font-medium leading-snug">
+                            {k.statement}
+                          </span>
+                        </div>
+                        <div className="mt-0.5 text-11 text-slate-500 font-mono">
+                          {k.listingRef}
+                        </div>
+                      </div>
+                      <div className="col-span-2 pr-2 font-mono tabular-nums text-slate-700 leading-relaxed">
+                        {k.target}
+                      </div>
+                      <div className="col-span-2 pr-2 font-mono tabular-nums text-slate-900 leading-relaxed">
+                        {k.actual}
+                      </div>
+                      <div className="col-span-2 flex flex-col items-end gap-1">
+                        <div
+                          className={`font-mono tabular-nums text-sm font-semibold ${pctClass} flex items-center gap-1`}
+                        >
+                          {k.completionPct > 100 && (
+                            <TrendingUp className="w-3 h-3" />
+                          )}
+                          {k.completionPct}%
+                        </div>
+                        <Pill tone={tone}>{k.statusLabel}</Pill>
+                      </div>
+                    </div>
+                  );
+                })}
+              </Card>
+            );
+          })}
+        </div>
       </div>
 
-      {/* 2. 具体问题 · 差距 */}
+      {/* 2. 具体问题 · 失败 KR 聚类 */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="收入差距 + 结构性差距">
+        <SectionLabel kicker="4 个未达成 KR · 集中在 Objective 2 + 3">
           2. 具体问题
         </SectionLabel>
+
+        <Card className="p-4 mb-3 bg-rose-50/40 border-rose-200">
+          <div className="text-xs text-slate-700 leading-relaxed">
+            未达成的 4 个 KR(KR 2.2 / 2.3 / 3.1 / 3.2)都是同两件事:
+            <span className="font-medium text-slate-900">
+              {" "}
+              利润率没守住 + 流量结构断了
+            </span>
+            。OKR 1(成熟期 + 充电宝 BSR)全部 hit,问题不在防守。
+          </div>
+        </Card>
 
         <div className="grid grid-cols-2 gap-3">
           <Card className="p-4">
@@ -12617,13 +12760,18 @@ function UploadCanvas() {
 
           <Card className="p-4">
             <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2.5">
-              结构性差距
+              失败 KR 聚类
             </div>
             <div className="space-y-2.5">
               {Q.structuralGaps.map((g, i) => (
                 <div key={i} className="text-xs">
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     <Pill tone={g.tone}>{g.area}</Pill>
+                    {g.relatedKrs && g.relatedKrs.length > 0 && (
+                      <span className="text-11 text-slate-500 font-mono">
+                        对应 {g.relatedKrs.join(" · ")}
+                      </span>
+                    )}
                   </div>
                   <div className="mt-1 text-slate-700 leading-relaxed">
                     {g.detail}
