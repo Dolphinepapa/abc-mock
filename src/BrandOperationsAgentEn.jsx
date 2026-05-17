@@ -3144,6 +3144,24 @@ const COMPANY_BRAIN = {
       lastModified: "Apr 28",
       modifiedBy: "Devon Park",
     },
+    {
+      id: "bd-graduation-threshold",
+      key: "Default decision-class graduation threshold",
+      value: "≥ 30 decisions · ≥ 92% approval rate",
+      category: "Quality",
+      rationale: "Below 30 the sample is too thin; below 92% the agent is consistently being modified, which means the class isn't ready.",
+      lastModified: "Apr 18",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-graduation-exception",
+      key: "Default graduation exception threshold",
+      value: "outcome > 1.5σ from prediction",
+      category: "Quality",
+      rationale: "Tight enough to surface real model drift; loose enough that routine variance doesn't page the team.",
+      lastModified: "Apr 18",
+      modifiedBy: "Maya Chen",
+    },
   ],
 
   recentQueries: [

@@ -3186,6 +3186,26 @@ const COMPANY_BRAIN = {
       lastModified: "Apr 28",
       modifiedBy: "Devon Park",
     },
+    {
+      id: "bd-graduation-threshold",
+      key: "默认决策类别毕业门槛",
+      value: "≥ 30 次决策 · ≥ 92% 批准率",
+      category: "Quality",
+      categoryLabel: "质量",
+      rationale: "低于 30 次样本太薄;低于 92% 说明 agent 一直在被修改,这个 class 还没准备好。",
+      lastModified: "Apr 18",
+      modifiedBy: "Maya Chen",
+    },
+    {
+      id: "bd-graduation-exception",
+      key: "默认毕业后异常门槛",
+      value: "outcome 偏离预测 > 1.5σ",
+      category: "Quality",
+      categoryLabel: "质量",
+      rationale: "够紧能抓住真正的模型漂移;够松又不会让日常波动反复打扰团队。",
+      lastModified: "Apr 18",
+      modifiedBy: "Maya Chen",
+    },
   ],
 
   recentQueries: [
