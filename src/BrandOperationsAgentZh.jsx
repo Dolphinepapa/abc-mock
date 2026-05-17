@@ -8807,111 +8807,10 @@ function DefenseCanvas() {
         </div>
       </div>
 
-      {/* 1. 现状 */}
+      {/* 1. 具体问题 */}
       <div className="px-6">
-        <SectionLabel kicker={`SKU-117 当前 BSR ${D.currentState.ourBsr} · 守了 ${D.currentState.ourBsrHeldDays} 天`}>
-          1. 现状 · Current state
-        </SectionLabel>
-
-        <div className="grid grid-cols-4 gap-3 mb-5">
-          <Card className="p-4">
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              我方 BSR · 床架
-            </div>
-            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-              {D.currentState.ourBsr}
-            </div>
-            <div className="text-11 text-slate-500 mt-1">
-              守了 <span className="font-mono">{D.currentState.ourBsrHeldDays}</span> 天
-            </div>
-          </Card>
-          <Card className="p-4">
-            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              月销售额
-            </div>
-            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-              {D.currentState.ourSales}
-            </div>
-            <div className="text-11 text-slate-500 mt-1">参考基准</div>
-          </Card>
-          <Card className="p-4">
-            <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
-              {wrapMetric("TACoS")}
-            </div>
-            <div className="mt-1">
-              <TacosValue value={D.currentState.ourTacos} size="lg" />
-            </div>
-            <div className="text-11 text-slate-500 mt-1">
-              日广告 <span className="font-mono">${D.currentState.ourDailyAdSpend}</span>
-            </div>
-          </Card>
-          <Card className="p-4 border-rose-300">
-            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
-              攻击方
-            </div>
-            <div className="mt-1 text-xl font-mono font-semibold text-rose-700">
-              {D.currentState.attackerName}
-            </div>
-            <div className="text-11 text-rose-700 mt-1">
-              {D.currentState.keywordCount} 核心词上的主要威胁
-            </div>
-          </Card>
-        </div>
-      </div>
-
-      {/* 2. 背景 · CONTEXT (NEW) */}
-      <div className="px-6 pt-2">
-        <SectionLabel kicker="为什么这次值得反应 · 不是普通促销引流">
-          2. 背景 · Context
-        </SectionLabel>
-
-        <div className="bg-slate-900 rounded-lg px-5 py-5 text-white">
-          <div className="flex items-start gap-3 mb-3">
-            <div className="w-8 h-8 rounded-md bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
-              <Brain className="w-4 h-4 text-emerald-400" strokeWidth={1.75} />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1">
-                公司大脑 · 上下文
-              </div>
-              <div className="text-base font-semibold text-white leading-snug">
-                {D.context.headline}
-              </div>
-            </div>
-          </div>
-          <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-line mb-4">
-            {D.context.body}
-          </div>
-
-          <div className="rounded-md bg-slate-800/70 border border-slate-700 px-4 py-3">
-            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1">
-              <Brain className="w-3 h-3 text-emerald-400 flex-shrink-0" />
-              <span className="text-11 font-medium text-white">公司大脑 · 同形态先例</span>
-            </div>
-            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1.5">
-              <span className="text-11 font-medium text-white">
-                {D.context.inlinePrecedent.sku}
-              </span>
-              <span className="text-10 text-slate-500">·</span>
-              <span className="text-10 text-slate-400 font-mono">
-                {D.context.inlinePrecedent.period}
-              </span>
-            </div>
-            <div className="text-11 text-slate-300 leading-relaxed mb-2">
-              {D.context.inlinePrecedent.summary}
-            </div>
-            <div className="flex items-start gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-1 rounded leading-relaxed">
-              <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
-              <span>{D.context.inlinePrecedent.lesson}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. 具体问题 */}
-      <div className="px-6 pt-6">
         <SectionLabel kicker="若不动 · 14 天内的预测">
-          3. 具体问题 · Specific problem
+          1. 具体问题 · Specific problem
         </SectionLabel>
 
         <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
@@ -8981,6 +8880,107 @@ function DefenseCanvas() {
             {D.trendChartTitle}
           </SectionLabel>
           <CompetitorTrendChart data={D.competitorTrend} />
+        </div>
+      </div>
+
+      {/* 2. 现状 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker={`SKU-117 当前 BSR ${D.currentState.ourBsr} · 守了 ${D.currentState.ourBsrHeldDays} 天`}>
+          2. 现状 · Current state
+        </SectionLabel>
+
+        <div className="grid grid-cols-4 gap-3 mb-5">
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              我方 BSR · 床架
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {D.currentState.ourBsr}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              守了 <span className="font-mono">{D.currentState.ourBsrHeldDays}</span> 天
+            </div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              月销售额
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
+              {D.currentState.ourSales}
+            </div>
+            <div className="text-11 text-slate-500 mt-1">参考基准</div>
+          </Card>
+          <Card className="p-4">
+            <div className="text-10 uppercase tracking-wider text-emerald-700 font-semibold">
+              {wrapMetric("TACoS")}
+            </div>
+            <div className="mt-1">
+              <TacosValue value={D.currentState.ourTacos} size="lg" />
+            </div>
+            <div className="text-11 text-slate-500 mt-1">
+              日广告 <span className="font-mono">${D.currentState.ourDailyAdSpend}</span>
+            </div>
+          </Card>
+          <Card className="p-4 border-rose-300">
+            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+              攻击方
+            </div>
+            <div className="mt-1 text-xl font-mono font-semibold text-rose-700">
+              {D.currentState.attackerName}
+            </div>
+            <div className="text-11 text-rose-700 mt-1">
+              {D.currentState.keywordCount} 核心词上的主要威胁
+            </div>
+          </Card>
+        </div>
+      </div>
+
+      {/* 3. 背景 · CONTEXT */}
+      <div className="px-6 pt-2">
+        <SectionLabel kicker="为什么这次值得反应 · 不是普通促销引流">
+          3. 背景 · Context
+        </SectionLabel>
+
+        <div className="bg-slate-900 rounded-lg px-5 py-5 text-white">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="w-8 h-8 rounded-md bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
+              <Brain className="w-4 h-4 text-emerald-400" strokeWidth={1.75} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1">
+                公司大脑 · 上下文
+              </div>
+              <div className="text-base font-semibold text-white leading-snug">
+                {D.context.headline}
+              </div>
+            </div>
+          </div>
+          <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-line mb-4">
+            {D.context.body}
+          </div>
+
+          <div className="rounded-md bg-slate-800/70 border border-slate-700 px-4 py-3">
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1">
+              <Brain className="w-3 h-3 text-emerald-400 flex-shrink-0" />
+              <span className="text-11 font-medium text-white">公司大脑 · 同形态先例</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 mb-1.5">
+              <span className="text-11 font-medium text-white">
+                {D.context.inlinePrecedent.sku}
+              </span>
+              <span className="text-10 text-slate-500">·</span>
+              <span className="text-10 text-slate-400 font-mono">
+                {D.context.inlinePrecedent.period}
+              </span>
+            </div>
+            <div className="text-11 text-slate-300 leading-relaxed mb-2">
+              {D.context.inlinePrecedent.summary}
+            </div>
+            <div className="flex items-start gap-1.5 text-11 text-rose-300 bg-rose-900/30 border border-rose-800/50 px-2 py-1 rounded leading-relaxed">
+              <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+              <span>{D.context.inlinePrecedent.lesson}</span>
+            </div>
+          </div>
         </div>
       </div>
 
