@@ -6191,6 +6191,16 @@ function OmnichannelCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: "/sku-pb-a-hero.png",
+            caption: "我方 SKU-PB-A · 移动充电宝主图",
+            fallbackText: "等待上传 · 我方 SKU-PB-A 主图",
+          },
+        ]}
+      />
+
       <div className="px-6 pt-5">
         <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
           <div className="flex items-start gap-2.5">
