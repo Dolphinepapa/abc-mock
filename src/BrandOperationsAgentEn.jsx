@@ -116,6 +116,15 @@ const THREADS = [
         canvasLink: false,
       },
       {
+        speaker: "agent",
+        timestamp: "2 hours ago",
+        tone: "urgent",
+        urgentLabel: "Time-sensitive · decide today/tomorrow",
+        body:
+          "If we counter today, we'll be in head-to-head contact for 5 days. If we wait until Wednesday, only 2 days of overlap before their promo ends — but the share they've already taken stays gone.",
+        canvasLink: false,
+      },
+      {
         speaker: "user",
         name: "Devon Park",
         initials: "DP",
@@ -1823,10 +1832,10 @@ const DEFENSE = {
     },
   ],
   competitorTrend: [
-    { day: "36h ago", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
-    { day: "24h ago", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
-    { day: "12h ago", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
-    { day: "now",     adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
+    { day: "36h ago", attackerAdPos: 5,   ourAdPos: 2,   attackerOrganic: 14, ourOrganic: 2, attackerSales: 1.8, ourSales: 6.1 },
+    { day: "24h ago", attackerAdPos: 3,   ourAdPos: 2,   attackerOrganic: 13, ourOrganic: 2, attackerSales: 2.4, ourSales: 6.0 },
+    { day: "12h ago", attackerAdPos: 2.5, ourAdPos: 2,   attackerOrganic: 12, ourOrganic: 2, attackerSales: 2.9, ourSales: 5.9 },
+    { day: "now",     attackerAdPos: 2,   ourAdPos: 2.2, attackerOrganic: 11, ourOrganic: 2.4, attackerSales: 3.4, ourSales: 5.7 },
   ],
   trendChartTitle: "Recap · what NightFox did on our 7 hero terms over the past 36 hours",
   projection: {
@@ -8225,86 +8234,110 @@ function ThreatSignalCard({ signal }) {
 }
 
 function CompetitorTrendChart({ data }) {
+  const ATTACKER = "#e11d48"; // rose-600
+  const OURS = "#059669";     // emerald-600
   const charts = [
     {
-      label: "NightFox ad position",
-      dataKey: "adPosition",
-      kicker: "Lower number = higher slot · climbed from #5 to #2 in 36 hours",
+      label: "Ad position",
+      attackerKey: "attackerAdPos",
+      ourKey: "ourAdPos",
+      kicker: "Lower = higher slot · NightFox #5 → #2 · Ours held #2",
       reversed: true,
       domain: [1, 6],
-      stroke: "#e11d48",
       format: (v) => `#${v.toFixed(1)}`,
     },
     {
-      label: "NightFox organic rank",
-      dataKey: "organicRank",
-      kicker: "Lower number = higher rank · climbed from #14 to #11",
+      label: "Organic rank",
+      attackerKey: "attackerOrganic",
+      ourKey: "ourOrganic",
+      kicker: "Lower = higher rank · NightFox #14 → #11 · Ours held #2",
       reversed: true,
-      domain: [10, 16],
-      stroke: "#b45309",
+      domain: [1, 16],
       format: (v) => `#${Math.round(v)}`,
     },
     {
-      label: "NightFox estimated daily sales",
-      dataKey: "estDailySales",
-      kicker: "$K / day · rose from ~$1.8K to ~$3.4K",
+      label: "Estimated daily sales ($K)",
+      attackerKey: "attackerSales",
+      ourKey: "ourSales",
+      kicker: "NightFox $1.8K → $3.4K · Ours $6.1K → $5.7K",
       reversed: false,
-      domain: [1.5, 3.8],
-      stroke: "#0f766e",
+      domain: [1, 7],
       format: (v) => `$${v.toFixed(1)}K`,
     },
   ];
   return (
-    <div className="grid grid-cols-3 gap-3">
-      {charts.map((c) => (
-        <Card key={c.dataKey} className="p-4">
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            {c.label}
-          </div>
-          <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
-            {c.kicker}
-          </div>
-          <div className="mt-2" style={{ height: 96 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
-                <XAxis
-                  dataKey="day"
-                  tick={{ fontSize: 10, fill: "#64748b" }}
-                  axisLine={{ stroke: "#cbd5e1" }}
-                  tickLine={false}
-                />
-                <YAxis
-                  reversed={c.reversed}
-                  domain={c.domain}
-                  tick={{ fontSize: 10, fill: "#64748b" }}
-                  axisLine={false}
-                  tickLine={false}
-                  width={36}
-                  tickFormatter={c.format}
-                />
-                <Tooltip
-                  contentStyle={{
-                    fontSize: 11,
-                    border: "1px solid #cbd5e1",
-                    borderRadius: 6,
-                    padding: "4px 8px",
-                  }}
-                  formatter={(value) => [c.format(value), c.label]}
-                />
-                <Line
-                  type="monotone"
-                  dataKey={c.dataKey}
-                  stroke={c.stroke}
-                  strokeWidth={2}
-                  dot={{ r: 2.5, fill: c.stroke, strokeWidth: 0 }}
-                  activeDot={{ r: 4 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-      ))}
+    <div>
+      <div className="mb-2 flex items-center gap-4 text-11 text-slate-600">
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-0.5 bg-rose-600 inline-block" />
+          NightFox (attacker)
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-0.5 bg-emerald-600 inline-block" />
+          Our SKU-117
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        {charts.map((c) => (
+          <Card key={c.label} className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              {c.label}
+            </div>
+            <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
+              {c.kicker}
+            </div>
+            <div className="mt-2" style={{ height: 96 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                  <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
+                  <XAxis
+                    dataKey="day"
+                    tick={{ fontSize: 10, fill: "#64748b" }}
+                    axisLine={{ stroke: "#cbd5e1" }}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    reversed={c.reversed}
+                    domain={c.domain}
+                    tick={{ fontSize: 10, fill: "#64748b" }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={36}
+                    tickFormatter={c.format}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      fontSize: 11,
+                      border: "1px solid #cbd5e1",
+                      borderRadius: 6,
+                      padding: "4px 8px",
+                    }}
+                    formatter={(value, name) => [c.format(value), name === "ours" ? "Ours" : "NightFox"]}
+                  />
+                  <Line
+                    name="attacker"
+                    type="monotone"
+                    dataKey={c.attackerKey}
+                    stroke={ATTACKER}
+                    strokeWidth={2}
+                    dot={{ r: 2.5, fill: ATTACKER, strokeWidth: 0 }}
+                    activeDot={{ r: 4 }}
+                  />
+                  <Line
+                    name="ours"
+                    type="monotone"
+                    dataKey={c.ourKey}
+                    stroke={OURS}
+                    strokeWidth={2}
+                    dot={{ r: 2.5, fill: OURS, strokeWidth: 0 }}
+                    activeDot={{ r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
@@ -8922,25 +8955,8 @@ function DefenseCanvas() {
         </div>
       </div>
 
-      {/* Time-sensitive constraint callout · before 现状 */}
-      <div className="px-6 pt-5">
-        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
-          <div className="flex items-start gap-2.5">
-            <Clock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
-            <div className="flex-1">
-              <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
-                Time-sensitive · decide {D.timeSensitive.window}
-              </div>
-              <div className="text-sm text-rose-900 leading-relaxed">
-                {D.timeSensitive.framing}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* 1. Specific problem */}
-      <div className="px-6">
+      <div className="px-6 pt-5">
         <SectionLabel kicker="What happens if we don't move · 14-day projection">
           1. Specific problem · 具体问题
         </SectionLabel>
@@ -9587,6 +9603,7 @@ function ThreadCard({ thread, active, onSelect, tone }) {
 
 function ThreadTurn({ turn, thread }) {
   const isAgent = turn.speaker === "agent";
+  const isUrgent = turn.tone === "urgent";
   const userInitials = turn.initials || thread.initials || "U";
   const userName = turn.name || thread.initiatorName;
   return (
@@ -9609,9 +9626,23 @@ function ThreadTurn({ turn, thread }) {
             {turn.timestamp}
           </span>
         </div>
-        <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
-          {turn.body}
-        </div>
+        {isUrgent ? (
+          <div className="mt-1 bg-rose-50 border border-rose-200 rounded-md px-2.5 py-2">
+            {turn.urgentLabel && (
+              <div className="flex items-center gap-1 text-10 uppercase tracking-wider text-rose-700 font-semibold mb-1">
+                <Clock className="w-2.5 h-2.5" />
+                {turn.urgentLabel}
+              </div>
+            )}
+            <div className="text-xs text-rose-900 leading-relaxed">
+              {turn.body}
+            </div>
+          </div>
+        ) : (
+          <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
+            {turn.body}
+          </div>
+        )}
         {turn.canvasLink && (
           <div className="mt-1 inline-flex items-center gap-1 text-11 text-emerald-700 font-medium">
             <FileText className="w-3 h-3" />

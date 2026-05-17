@@ -115,6 +115,15 @@ const THREADS = [
         canvasLink: false,
       },
       {
+        speaker: "agent",
+        timestamp: "2 小时前",
+        tone: "urgent",
+        urgentLabel: "时间敏感 · 建议今天/明天决策",
+        body:
+          "我们的反击如果今天上,能正面对位 5 天。如果拖到周三才上,实际只剩 2 天对位,然后他们促销结束,但他们抢到的份额已经留下了。",
+        canvasLink: false,
+      },
+      {
         speaker: "user",
         name: "Devon Park",
         initials: "DP",
@@ -1814,10 +1823,10 @@ const DEFENSE = {
     },
   ],
   competitorTrend: [
-    { day: "36h前", adPosition: 5,   organicRank: 14, estDailySales: 1.8 },
-    { day: "24h前", adPosition: 3,   organicRank: 13, estDailySales: 2.4 },
-    { day: "12h前", adPosition: 2.5, organicRank: 12, estDailySales: 2.9 },
-    { day: "现在",  adPosition: 2,   organicRank: 11, estDailySales: 3.4 },
+    { day: "36h前", attackerAdPos: 5,   ourAdPos: 2,   attackerOrganic: 14, ourOrganic: 2, attackerSales: 1.8, ourSales: 6.1 },
+    { day: "24h前", attackerAdPos: 3,   ourAdPos: 2,   attackerOrganic: 13, ourOrganic: 2, attackerSales: 2.4, ourSales: 6.0 },
+    { day: "12h前", attackerAdPos: 2.5, ourAdPos: 2,   attackerOrganic: 12, ourOrganic: 2, attackerSales: 2.9, ourSales: 5.9 },
+    { day: "现在",  attackerAdPos: 2,   ourAdPos: 2.2, attackerOrganic: 11, ourOrganic: 2.4, attackerSales: 3.4, ourSales: 5.7 },
   ],
   trendChartTitle: "回顾 · NightFox 过去 36 小时在我方 7 个核心词上做了什么",
   projection: {
@@ -8268,86 +8277,110 @@ function ThreatSignalCard({ signal }) {
 }
 
 function CompetitorTrendChart({ data }) {
+  const ATTACKER = "#e11d48"; // rose-600
+  const OURS = "#059669";     // emerald-600
   const charts = [
     {
-      label: "NightFox 广告位置",
-      dataKey: "adPosition",
-      kicker: "数字越小越靠前 · 36 小时内由 #5 升到 #2",
+      label: "广告位置",
+      attackerKey: "attackerAdPos",
+      ourKey: "ourAdPos",
+      kicker: "数字越小越靠前 · NightFox #5 → #2 · 我方 #2 守住",
       reversed: true,
       domain: [1, 6],
-      stroke: "#e11d48",
       format: (v) => `#${v.toFixed(1)}`,
     },
     {
-      label: "NightFox 自然排名",
-      dataKey: "organicRank",
-      kicker: "数字越小越靠前 · 由 #14 升到 #11",
+      label: "自然排名",
+      attackerKey: "attackerOrganic",
+      ourKey: "ourOrganic",
+      kicker: "数字越小越靠前 · NightFox #14 → #11 · 我方 #2 守住",
       reversed: true,
-      domain: [10, 16],
-      stroke: "#b45309",
+      domain: [1, 16],
       format: (v) => `#${Math.round(v)}`,
     },
     {
-      label: "NightFox 估算日销",
-      dataKey: "estDailySales",
-      kicker: "$K / 天 · 由 ~$1.8K 涨到 ~$3.4K",
+      label: "估算日销 ($K / 天)",
+      attackerKey: "attackerSales",
+      ourKey: "ourSales",
+      kicker: "NightFox $1.8K → $3.4K · 我方 $6.1K → $5.7K",
       reversed: false,
-      domain: [1.5, 3.8],
-      stroke: "#0f766e",
+      domain: [1, 7],
       format: (v) => `$${v.toFixed(1)}K`,
     },
   ];
   return (
-    <div className="grid grid-cols-3 gap-3">
-      {charts.map((c) => (
-        <Card key={c.dataKey} className="p-4">
-          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-            {c.label}
-          </div>
-          <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
-            {c.kicker}
-          </div>
-          <div className="mt-2" style={{ height: 96 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
-                <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
-                <XAxis
-                  dataKey="day"
-                  tick={{ fontSize: 10, fill: "#64748b" }}
-                  axisLine={{ stroke: "#cbd5e1" }}
-                  tickLine={false}
-                />
-                <YAxis
-                  reversed={c.reversed}
-                  domain={c.domain}
-                  tick={{ fontSize: 10, fill: "#64748b" }}
-                  axisLine={false}
-                  tickLine={false}
-                  width={36}
-                  tickFormatter={c.format}
-                />
-                <Tooltip
-                  contentStyle={{
-                    fontSize: 11,
-                    border: "1px solid #cbd5e1",
-                    borderRadius: 6,
-                    padding: "4px 8px",
-                  }}
-                  formatter={(value) => [c.format(value), c.label]}
-                />
-                <Line
-                  type="monotone"
-                  dataKey={c.dataKey}
-                  stroke={c.stroke}
-                  strokeWidth={2}
-                  dot={{ r: 2.5, fill: c.stroke, strokeWidth: 0 }}
-                  activeDot={{ r: 4 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
-      ))}
+    <div>
+      <div className="mb-2 flex items-center gap-4 text-11 text-slate-600">
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-0.5 bg-rose-600 inline-block" />
+          NightFox(攻击方)
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-3 h-0.5 bg-emerald-600 inline-block" />
+          我方 SKU-117
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        {charts.map((c) => (
+          <Card key={c.label} className="p-4">
+            <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+              {c.label}
+            </div>
+            <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
+              {c.kicker}
+            </div>
+            <div className="mt-2" style={{ height: 96 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
+                  <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
+                  <XAxis
+                    dataKey="day"
+                    tick={{ fontSize: 10, fill: "#64748b" }}
+                    axisLine={{ stroke: "#cbd5e1" }}
+                    tickLine={false}
+                  />
+                  <YAxis
+                    reversed={c.reversed}
+                    domain={c.domain}
+                    tick={{ fontSize: 10, fill: "#64748b" }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={36}
+                    tickFormatter={c.format}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      fontSize: 11,
+                      border: "1px solid #cbd5e1",
+                      borderRadius: 6,
+                      padding: "4px 8px",
+                    }}
+                    formatter={(value, name) => [c.format(value), name === "ours" ? "我方" : "NightFox"]}
+                  />
+                  <Line
+                    name="attacker"
+                    type="monotone"
+                    dataKey={c.attackerKey}
+                    stroke={ATTACKER}
+                    strokeWidth={2}
+                    dot={{ r: 2.5, fill: ATTACKER, strokeWidth: 0 }}
+                    activeDot={{ r: 4 }}
+                  />
+                  <Line
+                    name="ours"
+                    type="monotone"
+                    dataKey={c.ourKey}
+                    stroke={OURS}
+                    strokeWidth={2}
+                    dot={{ r: 2.5, fill: OURS, strokeWidth: 0 }}
+                    activeDot={{ r: 4 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
@@ -8959,25 +8992,8 @@ function DefenseCanvas() {
         </div>
       </div>
 
-      {/* Time-sensitive constraint callout · before 现状 */}
-      <div className="px-6 pt-5">
-        <div className="bg-rose-50 border border-rose-200 rounded-md px-5 py-4 mb-5">
-          <div className="flex items-start gap-2.5">
-            <Clock className="w-4 h-4 text-rose-700 mt-0.5 flex-shrink-0" />
-            <div className="flex-1">
-              <div className="text-11 uppercase tracking-wider text-rose-700 font-semibold mb-1">
-                时间敏感 · 建议{D.timeSensitive.window}决策
-              </div>
-              <div className="text-sm text-rose-900 leading-relaxed">
-                {D.timeSensitive.framing}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* 1. 具体问题 */}
-      <div className="px-6">
+      <div className="px-6 pt-5">
         <SectionLabel kicker="若不动 · 14 天内的预测">
           1. 具体问题 · Specific problem
         </SectionLabel>
@@ -9624,6 +9640,7 @@ function ThreadCard({ thread, active, onSelect, tone }) {
 
 function ThreadTurn({ turn, thread }) {
   const isAgent = turn.speaker === "agent";
+  const isUrgent = turn.tone === "urgent";
   const userInitials = turn.initials || thread.initials || "U";
   const userName = turn.name || thread.initiatorName;
   return (
@@ -9646,9 +9663,23 @@ function ThreadTurn({ turn, thread }) {
             {turn.timestamp}
           </span>
         </div>
-        <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
-          {turn.body}
-        </div>
+        {isUrgent ? (
+          <div className="mt-1 bg-rose-50 border border-rose-200 rounded-md px-2.5 py-2">
+            {turn.urgentLabel && (
+              <div className="flex items-center gap-1 text-10 uppercase tracking-wider text-rose-700 font-semibold mb-1">
+                <Clock className="w-2.5 h-2.5" />
+                {turn.urgentLabel}
+              </div>
+            )}
+            <div className="text-xs text-rose-900 leading-relaxed">
+              {turn.body}
+            </div>
+          </div>
+        ) : (
+          <div className="text-xs text-slate-700 mt-0.5 leading-relaxed">
+            {turn.body}
+          </div>
+        )}
         {turn.canvasLink && (
           <div className="mt-1 inline-flex items-center gap-1 text-11 text-emerald-700 font-medium">
             <FileText className="w-3 h-3" />
