@@ -9417,7 +9417,7 @@ function TopBar({
               outcomesActive ? "text-white" : "text-slate-700"
             }`}
           >
-            Outcomes
+            Usage report
           </span>
         </button>
         <div className="inline-flex items-center border border-slate-200 rounded-md overflow-hidden">
@@ -11434,7 +11434,7 @@ function DecisionClassList({ data, query, activeClearance, onTabChange }) {
               }}
               className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
             >
-              See Outcomes tab for current delegation status per listing
+              See Usage report for current delegation status per listing
               <ChevronRight className="w-3 h-3" />
             </button>
           ) : null
@@ -12393,7 +12393,7 @@ function InspectorPanel({
   const tabs = [
     { id: "ad-architecture", label: "Ad architecture" },
     { id: "company-brain", label: "Company Brain" },
-    { id: "outcomes", label: "Outcomes" },
+    { id: "outcomes", label: "Usage report" },
   ];
   return (
     <aside

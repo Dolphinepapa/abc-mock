@@ -9454,7 +9454,7 @@ function TopBar({
               outcomesActive ? "text-white" : "text-slate-700"
             }`}
           >
-            结果
+            使用报告
           </span>
         </button>
         <div className="inline-flex items-center border border-slate-200 rounded-md overflow-hidden">
@@ -11480,7 +11480,7 @@ function DecisionClassList({ data, query, activeClearance, onTabChange }) {
               }}
               className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
             >
-              到结果 tab 查看每个 listing 的当前委托状态
+              到使用报告查看每个 listing 的当前委托状态
               <ChevronRight className="w-3 h-3" />
             </button>
           ) : null
@@ -12437,7 +12437,7 @@ function InspectorPanel({
   const tabs = [
     { id: "ad-architecture", label: "广告架构" },
     { id: "company-brain", label: "公司大脑" },
-    { id: "outcomes", label: "结果" },
+    { id: "outcomes", label: "使用报告" },
   ];
   return (
     <aside
