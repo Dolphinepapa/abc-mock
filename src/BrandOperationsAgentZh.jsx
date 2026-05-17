@@ -253,25 +253,25 @@ const THREADS = [
     initialTimestamp: "May 12, 10:08",
     lastActivityTimestamp: "May 12, 10:21",
     unread: false,
-    title: "上传 Q4 复盘 · 提炼方法学",
+    title: "Q4 复盘 · 6 个 listing 目标 vs 结果",
     category: "brain-ops",
     turns: [
       {
         speaker: "user",
         timestamp: "May 12, 10:08",
-        body: "上传了 Q4-2025-Retrospective.pdf。Distill methodology 并更新到 Company Brain。",
+        body: "帮我复盘下 Q4。我管的 6 个 listing 里有些目标没达成,有些做得好的,看能不能提炼成方法论入公司大脑。",
         canvasLink: false,
       },
       {
         speaker: "agent",
         timestamp: "May 12, 10:14",
-        body: "Parsing 47 页 PDF…… 提取了 138K tokens 文本 + 12 张表 + 4 张图。",
+        body: "已拉出 Q4 这 6 个 listing 的目标和实际,差距已对齐,success / failure 经验已分类。打开画布。",
         canvasLink: false,
       },
       {
         speaker: "agent",
         timestamp: "May 12, 10:21",
-        body: "提炼出 3 个新模式 + 2 个 playbook 更新。打开画布查看详情。",
+        body: "复盘已起草。先看下内容是否准确,确认后会进入 L10+ 审批队列,通过后正式作为方法论入库。",
         canvasLink: true,
       },
     ],
@@ -3296,69 +3296,165 @@ const COMPANY_BRAIN = {
 /* ────────────────────────────────────────────────────────────────────────── */
 
 const BRAIN_OPS = {
-  upload: {
-    document: {
-      filename: "Q4-2025-Retrospective.pdf",
-      pages: 47,
-      tokens: "138K",
-      tables: 12,
-      charts: 4,
-      uploadedBy: "Maya Chen",
-      uploadedAt: "May 12, 10:08",
+  q4Retro: {
+    meta: {
+      period: "Q4 2025 · 10 月–12 月",
+      raisedBy: "Maya Chen",
+      raisedByRole: "电商副总裁",
+      raisedAt: "May 12, 10:08",
       sensitivity: "Sensitive",
       sensitivityLabel: "敏感",
-      signalNote: "高信号 · 47 页里 8 页含可沉淀的运营经验",
     },
-    coverageNote:
-      "公司大脑此前在 razor-blade 绑定购买率提升方向只有 4 个先例,且都没有 12 天促销窗口的具体打法。本次上传补齐这个缺口。",
-    patterns: [
+    aggregate: {
+      listingCount: 6,
+      hit: 2,
+      partial: 2,
+      miss: 2,
+      actualRevenue: "$1.95M",
+      goalRevenue: "$1.96M",
+      revenueDeltaPct: -0.5,
+    },
+    listings: [
       {
-        id: "bop-pat-razor-attach",
-        name: "牙刷线 12 天促销窗口 attach 提升 +24%",
-        confidencePct: 74,
-        sources: "pp. 14, 19, 23–25",
-        sensitivity: "Sensitive",
-        sensitivityLabel: "敏感",
-        categories: ["Strategy", "Optimization"],
-        summary: "12 天连续促销窗口下,刀片绑定购买率从基线 47% 提升至 71%。前提:手柄毛利 ≥ 24%。",
+        id: "q4-sku-a",
+        sku: "SKU-A · 落地灯",
+        goal: "12 月前类目前 5 · Q4 收入 $480K",
+        actual: "BSR #2 · 收入 $512K",
+        verdict: "HIT",
+        verdictLabel: "达成",
+        revDeltaText: "+$32K",
       },
       {
-        id: "bop-pat-holiday-cr",
-        name: "节日驱动的品类宽匹配 CR 膨胀",
-        confidencePct: 68,
-        sources: "pp. 8–9, 31",
-        sensitivity: "Internal",
-        sensitivityLabel: "内部",
-        categories: ["Optimization"],
-        summary: "节假日窗口里,品类宽匹配关键词的转化率会膨胀 1.6 – 2.4 倍,但 7 天后回落。出价节奏需要相应调整。",
+        id: "q4-sku-117",
+        sku: "SKU-117 · 床架",
+        goal: "守住 BSR #2–3 · Q4 收入 $520K",
+        actual: "BSR #2 · 收入 $498K",
+        verdict: "PARTIAL",
+        verdictLabel: "部分达成",
+        revDeltaText: "−$22K · BSR 达成,收入未到",
       },
       {
-        id: "bop-pat-inv-halo",
-        name: "库存耦合对 BS 光环持续时间的影响",
-        confidencePct: 71,
-        sources: "pp. 36–38, 42",
-        sensitivity: "Sensitive",
-        sensitivityLabel: "敏感",
-        categories: ["Strategy", "Defense"],
-        summary: "拿下 #1 后,如果库存深度不足 18 天,BS 光环窗口会缩到 11 天以内。促销前必须做库存预检。",
+        id: "q4-sku-rz-001",
+        sku: "SKU-RZ-001 · 刮胡刀",
+        goal: "产品线综合毛利率 15% · Q4 收入 $380K",
+        actual: "毛利率 12.4% · 收入 $325K",
+        verdict: "MISS",
+        verdictLabel: "未达成",
+        revDeltaText: "−$55K · 毛利率与收入双 miss",
+      },
+      {
+        id: "q4-sku-pb-a",
+        sku: "SKU-PB-A · 移动充电宝",
+        goal: "Amazon BSR ≤ #15 · Q4 收入 $180K",
+        actual: "BSR #12 · 收入 $156K",
+        verdict: "PARTIAL",
+        verdictLabel: "部分达成",
+        revDeltaText: "−$24K · BSR 达成,收入未到",
+      },
+      {
+        id: "q4-sku-k22",
+        sku: "SKU-K22 · 厨房刀",
+        goal: "Q4 收入 $215K · 稳态",
+        actual: "收入 $164K · 自然 CTR −8%",
+        verdict: "MISS",
+        verdictLabel: "未达成",
+        revDeltaText: "−$51K · 自然流量结构掉",
+      },
+      {
+        id: "q4-sku-ti-a",
+        sku: "SKU-TI-A · 充气泵",
+        goal: "上线 · pickup-tire-inflator BSR ≤ #20",
+        actual: "BSR #22 · pickup 类 CR 2.0%",
+        verdict: "MISS",
+        verdictLabel: "未达成",
+        revDeltaText: "上线目标 miss · 收入非主考核",
       },
     ],
-    playbookUpdates: [
+    revenueGaps: [
+      { sku: "落地灯", delta: "+$32K", tone: "emerald" },
+      { sku: "床架", delta: "−$22K", tone: "amber" },
+      { sku: "刮胡刀", delta: "−$55K · 单 listing 最大 miss", tone: "rose" },
+      { sku: "充电宝", delta: "−$24K", tone: "amber" },
+      { sku: "厨房刀", delta: "−$51K", tone: "rose" },
+      { sku: "充气泵", delta: "未对收入考核 · 走 BSR / CR", tone: "slate" },
+    ],
+    structuralGaps: [
       {
-        id: "bop-pb-bsr",
-        name: "Best-seller capture · #2 → #1",
-        change: "新增阶段考虑 · 促销前先做库存预检",
+        area: "利润率",
+        detail: "刮胡刀毛利率 12.4% vs 目标 15% · subscription 实验污染了 attach 信号",
+        tone: "rose",
       },
       {
-        id: "bop-pb-peak",
-        name: "Peak season SOV defense",
-        change: "置信度 71% → 78% · 增加 1 个高质量先例",
+        area: "流量结构",
+        detail: "厨房刀自然 CTR −8%(A+ 内容过老)+ 充气泵 pickup CR 2.0%(cluster 误判)",
+        tone: "rose",
       },
     ],
-    milestones: [
-      "Razor-blade 促销决策现在有 4 个先例可对照",
-      "节日窗口的关键词出价计划可引用 CR 膨胀模式",
-      "Best-seller capture 打法新增库存预检阶段",
+    successLessons: [
+      {
+        id: "succ-bedroom-creative",
+        title: "场景词 CTR 低于类目基准时,先做场景主图 A/B,不要靠堆量",
+        source: "SKU-A 落地灯 · 卧室场景主图 + A+ 改造后,场景词 CTR 2.1× 提升",
+        appliesWhen: "场景词 CTR 比类目基准低 25%+ 的成熟期 listing",
+      },
+      {
+        id: "succ-defense-baseline",
+        title: "旺季前 4–6 周建立 brand-defense baseline,不要等攻击发生再起反应",
+        source: "SKU-117 床架 · 提前 5 周建立竞品监控,守住 BSR #2,旺季无掉档",
+        appliesWhen: "BSR 前 3、季节性强、有竞品攻击史的 listing",
+      },
+      {
+        id: "succ-marginal-roas",
+        title: "跨平台广告分配按边际 ROAS,不按平台默认比例",
+        source: "SKU-PB-A 充电宝 · Walmart 边际 ROAS 高于 Amazon,预算切 35% 过去,BSR 从 #18 进到 #12",
+        appliesWhen: "同时上 Amazon + Walmart、单平台 ROAS 已到 plateau 的 SKU",
+      },
+    ],
+    failureLessons: [
+      {
+        id: "fail-cluster-validation",
+        title: "新品上线前必须做 keyword cluster 验证,不要 launch 后才补 CR 诊断",
+        source: "SKU-TI-A 充气泵 · pickup-tire-inflator cluster 上线后才发现 CR 2.0%,远低于品类 4.1%",
+        appliesWhen: "面向新场景词 cluster 的 launch · 尤其是细分子类",
+      },
+      {
+        id: "fail-subscription-coupling",
+        title: "Subscription 实验不要和 A+ 视觉 BC 实验同窗口跑,会污染 attach 信号",
+        source: "SKU-RZ-001 刮胡刀 · A+ 与 subscription 同时上,毛利率 12.4% vs 目标 15%,无法归因",
+        appliesWhen: "razor-blade 类、attach 是核心 lever 的 SKU",
+      },
+      {
+        id: "fail-aplus-age",
+        title: "A+ 内容 12 个月以上未更新的 listing 要按 age 主动复检,不要等流量下滑",
+        source: "SKU-K22 厨房刀 · A+ 14 个月未动,Q4 自然 CTR 累计 −8%,收入 $164K vs $215K",
+        appliesWhen: "成熟期 listing · A+ 内容上线 ≥ 12 个月",
+      },
+    ],
+    pipeline: [
+      {
+        step: 1,
+        title: "你确认复盘内容",
+        sub: "Maya Chen · 等待批准",
+        state: "current",
+      },
+      {
+        step: 2,
+        title: "提交至公司大脑审议队列",
+        sub: "自动 · 批准后立即触发",
+        state: "upcoming",
+      },
+      {
+        step: 3,
+        title: "L10+ 部门负责人审批",
+        sub: "需要电商或品牌负责人(L10+ )通过 · 审批维度:经验是否可推广 · 数据是否充分 · 是否与已有方法论冲突",
+        state: "upcoming",
+      },
+      {
+        step: 4,
+        title: "入库 · 作为方法论可被引用",
+        sub: "未来 conversation 可在公司大脑里搜索 / 引用",
+        state: "upcoming",
+      },
     ],
   },
 
@@ -12349,168 +12445,270 @@ function PlaceholderCanvas({ kicker, title, part }) {
 /*  Brain operations canvases · Part 4                                        */
 /* ────────────────────────────────────────────────────────────────────────── */
 
+const VERDICT_TONE = {
+  HIT: "emerald",
+  PARTIAL: "amber",
+  MISS: "rose",
+};
+
 function UploadCanvas() {
-  const U = BRAIN_OPS.upload;
+  const Q = BRAIN_OPS.q4Retro;
   return (
     <>
       <CanvasHeader
-        kicker="上传 · 提炼方法学"
-        title={U.document.filename}
+        kicker="公司大脑 · Q4 复盘"
+        title="Q4 2025 复盘 · 6 个 listing 的目标 vs 结果"
         meta={
           <>
             <Pill tone="slate">
-              <FileText className="w-3 h-3" />
-              {U.document.pages} 页
-            </Pill>
-            <Pill tone={SENSITIVITY_TONE[U.document.sensitivity] || "slate"}>
-              {U.document.sensitivityLabel}
+              <Calendar className="w-3 h-3" />
+              {Q.meta.period}
             </Pill>
             <Pill tone="emerald">
               <Sparkles className="w-3 h-3" />
-              由 {U.document.uploadedBy} 上传
+              由 {Q.meta.raisedBy} 发起
+            </Pill>
+            <Pill tone="amber">
+              <Clock className="w-3 h-3" />
+              待 L10+ 审批
             </Pill>
           </>
         }
       />
 
-      {/* 1. 现状 */}
+      {/* 1. 现状 · Q4 目标与结果 */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="解析输出 + 文档摘要">
+        <SectionLabel kicker="Q4 目标 vs 实际">
           1. 现状
         </SectionLabel>
-        <Card className="p-5">
+
+        <Card className="p-5 mb-3">
           <div className="grid grid-cols-4 gap-4">
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                页数
+                Listing 数
               </div>
               <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.pages}
+                {Q.aggregate.listingCount}
               </div>
             </div>
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                提取 tokens
+                结果分布
               </div>
-              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.tokens}
-              </div>
-            </div>
-            <div>
-              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                表格
-              </div>
-              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.tables}
+              <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                <Pill tone="emerald">{Q.aggregate.hit} 达成</Pill>
+                <Pill tone="amber">{Q.aggregate.partial} 部分</Pill>
+                <Pill tone="rose">{Q.aggregate.miss} 未达成</Pill>
               </div>
             </div>
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                图表
+                Q4 总收入
               </div>
               <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.charts}
+                {Q.aggregate.actualRevenue}
+              </div>
+              <div className="text-11 text-slate-500 font-mono">
+                目标 {Q.aggregate.goalRevenue}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                整体偏差
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-amber-700">
+                {Q.aggregate.revenueDeltaPct}%
               </div>
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-slate-100 text-11 text-slate-500 leading-relaxed">
-            {U.document.signalNote} · 上传时间 {U.document.uploadedAt}
+        </Card>
+
+        <Card className="overflow-hidden">
+          <div className="grid grid-cols-12 px-4 py-2 bg-slate-50 border-b border-slate-200 text-10 uppercase tracking-wider text-slate-500 font-medium">
+            <div className="col-span-3">SKU</div>
+            <div className="col-span-4">Q4 目标</div>
+            <div className="col-span-3">Q4 实际</div>
+            <div className="col-span-2 text-right">结论</div>
           </div>
+          {Q.listings.map((l, i) => (
+            <div
+              key={l.id}
+              className={`grid grid-cols-12 px-4 py-3 text-xs text-slate-700 ${
+                i < Q.listings.length - 1 ? "border-b border-slate-100" : ""
+              }`}
+            >
+              <div className="col-span-3 font-medium text-slate-900">
+                {l.sku}
+              </div>
+              <div className="col-span-4 leading-relaxed">{l.goal}</div>
+              <div className="col-span-3 leading-relaxed">{l.actual}</div>
+              <div className="col-span-2 flex justify-end items-start">
+                <Pill tone={VERDICT_TONE[l.verdict]}>{l.verdictLabel}</Pill>
+              </div>
+            </div>
+          ))}
         </Card>
       </div>
 
-      {/* 2. 具体问题 — 这次上传补的是什么缺口 */}
+      {/* 2. 具体问题 · 差距 */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="本次上传补的缺口">
+        <SectionLabel kicker="收入差距 + 结构性差距">
           2. 具体问题
         </SectionLabel>
-        <Card className="p-5 bg-slate-50/60">
-          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            公司大脑此前对该领域的覆盖
-          </div>
-          <div className="text-sm text-slate-700 leading-relaxed">
-            {U.coverageNote}
-          </div>
-        </Card>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Card className="p-4">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2.5">
+              收入维度差距
+            </div>
+            <div className="space-y-1.5">
+              {Q.revenueGaps.map((g, i) => (
+                <div key={i} className="flex items-start justify-between gap-3 text-xs">
+                  <span className="text-slate-700">{g.sku}</span>
+                  <span
+                    className={`font-mono tabular-nums ${
+                      g.tone === "emerald"
+                        ? "text-emerald-700"
+                        : g.tone === "rose"
+                        ? "text-rose-700"
+                        : g.tone === "amber"
+                        ? "text-amber-700"
+                        : "text-slate-500"
+                    } text-right`}
+                  >
+                    {g.delta}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="p-4">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2.5">
+              结构性差距
+            </div>
+            <div className="space-y-2.5">
+              {Q.structuralGaps.map((g, i) => (
+                <div key={i} className="text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Pill tone={g.tone}>{g.area}</Pill>
+                  </div>
+                  <div className="mt-1 text-slate-700 leading-relaxed">
+                    {g.detail}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
       </div>
 
-      {/* 3. 具体建议 — 提炼出的 3 个模式 + 2 个 playbook 更新 */}
+      {/* 3. 具体建议 · 经验总结 */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="3 个新模式 · 2 个 playbook 更新">
+        <SectionLabel kicker="3 条成功经验 · 3 条失败经验">
           3. 具体建议
         </SectionLabel>
 
-        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-          提炼出的 3 个新模式
-        </div>
-        <div className="space-y-2.5">
-          {U.patterns.map((p) => (
-            <div
-              key={p.id}
-              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-            >
-              <div className="text-sm font-medium text-slate-900 leading-snug">
-                {p.name}
-              </div>
-              <div className="mt-1.5 flex items-center gap-2 flex-wrap">
-                {p.categories.map((cat) => (
-                  <Pill key={cat} tone={PATTERN_CATEGORY_TONE[cat] || "slate"}>
-                    {PATTERN_CATEGORY_LABEL[cat]}
-                  </Pill>
-                ))}
-                <span className="text-11 text-slate-600">
-                  置信度{" "}
-                  <span className="font-mono tabular-nums text-slate-900">
-                    {p.confidencePct}%
-                  </span>
-                </span>
-                <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
-                  {p.sensitivityLabel}
-                </Pill>
-                <span className="text-11 text-slate-500 font-mono">
-                  {p.sources}
-                </span>
-              </div>
-              <div className="mt-1.5 text-11 text-slate-600 leading-relaxed">
-                {p.summary}
-              </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <div className="text-11 uppercase tracking-wider text-emerald-700 font-medium mb-2 flex items-center gap-1.5">
+              <Check className="w-3 h-3" />
+              成功经验
             </div>
-          ))}
-        </div>
-
-        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mt-5 mb-2">
-          2 个 playbook 更新
-        </div>
-        <div className="space-y-2">
-          {U.playbookUpdates.map((pb) => (
-            <div
-              key={pb.id}
-              className="flex items-start gap-2 border border-slate-200 rounded-md px-3 py-2 bg-white"
-            >
-              <Workflow className="w-3.5 h-3.5 text-slate-500 mt-0.5 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <div className="text-xs font-medium text-slate-900">
-                  {pb.name}
+            <div className="space-y-2">
+              {Q.successLessons.map((l) => (
+                <div
+                  key={l.id}
+                  className="border border-emerald-200 bg-emerald-50/30 rounded-md px-3 py-2.5"
+                >
+                  <div className="text-xs font-medium text-slate-900 leading-snug">
+                    {l.title}
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-emerald-100 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">来源:</span>
+                    {l.source}
+                  </div>
+                  <div className="mt-1 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">适用:</span>
+                    {l.appliesWhen}
+                  </div>
                 </div>
-                <div className="text-11 text-slate-600 mt-0.5">{pb.change}</div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          <div>
+            <div className="text-11 uppercase tracking-wider text-rose-700 font-medium mb-2 flex items-center gap-1.5">
+              <X className="w-3 h-3" />
+              失败经验
+            </div>
+            <div className="space-y-2">
+              {Q.failureLessons.map((l) => (
+                <div
+                  key={l.id}
+                  className="border border-rose-200 bg-rose-50/30 rounded-md px-3 py-2.5"
+                >
+                  <div className="text-xs font-medium text-slate-900 leading-snug">
+                    {l.title}
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-rose-100 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">来源:</span>
+                    {l.source}
+                  </div>
+                  <div className="mt-1 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">适用:</span>
+                    {l.appliesWhen}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 4. 里程碑 — 写入后能做什么 */}
+      {/* 4. 里程碑 · 入库路径 */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="写入大脑后能做什么">
+        <SectionLabel kicker="2 阶段审批 · 入库流程">
           4. 里程碑
         </SectionLabel>
-        <div className="space-y-1.5">
-          {U.milestones.map((m, i) => (
-            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
-              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
-              <span>{m}</span>
-            </div>
-          ))}
+        <div className="space-y-2">
+          {Q.pipeline.map((s) => {
+            const isCurrent = s.state === "current";
+            return (
+              <div
+                key={s.step}
+                className={`flex items-start gap-3 rounded-md px-3 py-2.5 ${
+                  isCurrent
+                    ? "border border-emerald-300 bg-emerald-50/40 border-l-4 border-l-emerald-500"
+                    : "border border-slate-200 bg-white"
+                }`}
+              >
+                <div
+                  className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-11 font-mono font-semibold ${
+                    isCurrent
+                      ? "bg-slate-900 text-white"
+                      : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {s.step}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className="text-xs font-medium text-slate-900 leading-snug">
+                      {s.title}
+                    </div>
+                    {isCurrent && (
+                      <Pill tone="emerald">当前阶段</Pill>
+                    )}
+                  </div>
+                  <div className="mt-0.5 text-11 text-slate-600 leading-relaxed">
+                    {s.sub}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -12520,7 +12718,7 @@ function UploadCanvas() {
       <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="text-11 text-slate-500">
-            3 个模式 + 2 个 playbook 更新 · 等待确认后写入
+            6 条经验 · 3 成功 + 3 失败 · 待你确认后提交至 L10+ 审批
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -12534,22 +12732,15 @@ function UploadCanvas() {
               type="button"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
             >
-              <Clock className="w-3.5 h-3.5" />
-              延后
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
-            >
               <Edit3 className="w-3.5 h-3.5" />
-              逐项批准
+              需要修改
             </button>
             <button
               type="button"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
             >
               <Check className="w-3.5 h-3.5" />
-              全部批准 · 写入公司大脑
+              批准并提交至 L10+ 审批
             </button>
           </div>
         </div>

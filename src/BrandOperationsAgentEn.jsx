@@ -253,25 +253,25 @@ const THREADS = [
     initialTimestamp: "May 12, 10:08",
     lastActivityTimestamp: "May 12, 10:21",
     unread: false,
-    title: "Upload Q4 retrospective · distill methodology",
+    title: "Q4 retrospective · 6 listings · goals vs actuals",
     category: "brain-ops",
     turns: [
       {
         speaker: "user",
         timestamp: "May 12, 10:08",
-        body: "Uploaded Q4-2025-Retrospective.pdf. Distill methodology and update the brain.",
+        body: "Run a Q4 retrospective for me. Across the 6 listings I own, some missed and some over-shot — see if we can pull a methodology worth adding to the Company Brain.",
         canvasLink: false,
       },
       {
         speaker: "agent",
         timestamp: "May 12, 10:14",
-        body: "Parsing 47-page PDF… extracted 138K tokens of text + 12 tables + 4 charts.",
+        body: "Pulled Q4 goals and actuals for all 6 listings, gap analysis aligned, success / failure lessons sorted. Opening the canvas.",
         canvasLink: false,
       },
       {
         speaker: "agent",
         timestamp: "May 12, 10:21",
-        body: "Distilled 3 new patterns and updated 2 playbooks. Opening canvas with details.",
+        body: "Retrospective drafted. Check the content is accurate first — once you approve it goes into the L10+ review queue, and after that it formalizes as methodology in the brain.",
         canvasLink: true,
       },
     ],
@@ -3245,65 +3245,164 @@ const COMPANY_BRAIN = {
 /* ────────────────────────────────────────────────────────────────────────── */
 
 const BRAIN_OPS = {
-  upload: {
-    document: {
-      filename: "Q4-2025-Retrospective.pdf",
-      pages: 47,
-      tokens: "138K",
-      tables: 12,
-      charts: 4,
-      uploadedBy: "Maya Chen",
-      uploadedAt: "May 12, 10:08",
+  q4Retro: {
+    meta: {
+      period: "Q4 2025 · Oct–Dec",
+      raisedBy: "Maya Chen",
+      raisedByRole: "VP, eCommerce",
+      raisedAt: "May 12, 10:08",
       sensitivity: "Sensitive",
-      signalNote: "High signal — 8 of 47 pages contain operational learnings",
     },
-    coverageNote:
-      "Brain had 4 prior cases on razor-blade attach lift, none with 12-day promo window specifics. This doc fills that gap.",
-    patterns: [
+    aggregate: {
+      listingCount: 6,
+      hit: 2,
+      partial: 2,
+      miss: 2,
+      actualRevenue: "$1.95M",
+      goalRevenue: "$1.96M",
+      revenueDeltaPct: -0.5,
+    },
+    listings: [
       {
-        id: "bop-pat-razor-attach",
-        name: "Razor-blade attach lift via 12-day promo window",
-        confidencePct: 74,
-        sources: "pp. 14, 19, 23–25",
-        sensitivity: "Sensitive",
-        categories: ["Strategy", "Optimization"],
-        summary: "In a 12-day continuous promo window, blade attach climbs from 47% baseline to 71%. Prerequisite: handle margin ≥ 24%.",
+        id: "q4-sku-a",
+        sku: "SKU-A · Floor Lamp",
+        goal: "Category top 5 by Dec · Q4 rev $480K",
+        actual: "BSR #2 · rev $512K",
+        verdict: "HIT",
+        verdictLabel: "Hit",
+        revDeltaText: "+$32K",
       },
       {
-        id: "bop-pat-holiday-cr",
-        name: "Holiday-driven CR inflation on category-broad keywords",
-        confidencePct: 68,
-        sources: "pp. 8–9, 31",
-        sensitivity: "Internal",
-        categories: ["Optimization"],
-        summary: "During holiday windows, category-broad keyword CR inflates 1.6–2.4x but reverts within 7 days. Bid cadence needs to track this.",
+        id: "q4-sku-117",
+        sku: "SKU-117 · Bed Frame",
+        goal: "Hold BSR #2–3 · Q4 rev $520K",
+        actual: "BSR #2 · rev $498K",
+        verdict: "PARTIAL",
+        verdictLabel: "Partial",
+        revDeltaText: "−$22K · BSR hit, rev short",
       },
       {
-        id: "bop-pat-inv-halo",
-        name: "Inventory-coupling effect on best-seller halo duration",
-        confidencePct: 71,
-        sources: "pp. 36–38, 42",
-        sensitivity: "Sensitive",
-        categories: ["Strategy", "Defense"],
-        summary: "After capturing #1, if inventory depth is below 18 days the BS halo window shrinks to under 11 days. Inventory pre-check before promo is required.",
+        id: "q4-sku-rz-001",
+        sku: "SKU-RZ-001 · Razor",
+        goal: "Blended margin 15% · Q4 rev $380K",
+        actual: "Margin 12.4% · rev $325K",
+        verdict: "MISS",
+        verdictLabel: "Miss",
+        revDeltaText: "−$55K · margin & rev both miss",
+      },
+      {
+        id: "q4-sku-pb-a",
+        sku: "SKU-PB-A · Power Bank",
+        goal: "Amazon BSR ≤ #15 · Q4 rev $180K",
+        actual: "BSR #12 · rev $156K",
+        verdict: "PARTIAL",
+        verdictLabel: "Partial",
+        revDeltaText: "−$24K · BSR hit, rev short",
+      },
+      {
+        id: "q4-sku-k22",
+        sku: "SKU-K22 · Kitchen Knife",
+        goal: "Q4 rev $215K · stable",
+        actual: "Rev $164K · organic CTR −8%",
+        verdict: "MISS",
+        verdictLabel: "Miss",
+        revDeltaText: "−$51K · organic traffic eroded",
+      },
+      {
+        id: "q4-sku-ti-a",
+        sku: "SKU-TI-A · Tire Inflator",
+        goal: "Launch · pickup-tire-inflator BSR ≤ #20",
+        actual: "BSR #22 · pickup CR 2.0%",
+        verdict: "MISS",
+        verdictLabel: "Miss",
+        revDeltaText: "Launch target miss · rev not the bar",
       },
     ],
-    playbookUpdates: [
+    revenueGaps: [
+      { sku: "Floor Lamp", delta: "+$32K", tone: "emerald" },
+      { sku: "Bed Frame", delta: "−$22K", tone: "amber" },
+      { sku: "Razor", delta: "−$55K · largest single miss", tone: "rose" },
+      { sku: "Power Bank", delta: "−$24K", tone: "amber" },
+      { sku: "Kitchen Knife", delta: "−$51K", tone: "rose" },
+      { sku: "Tire Inflator", delta: "Not measured vs rev · BSR / CR target", tone: "slate" },
+    ],
+    structuralGaps: [
       {
-        id: "bop-pb-bsr",
-        name: "Best-seller capture · #2 → #1",
-        change: "Added phase consideration · inventory check before promo",
+        area: "Margin",
+        detail: "Razor margin 12.4% vs goal 15% · subscription experiment polluted the attach-rate signal",
+        tone: "rose",
       },
       {
-        id: "bop-pb-peak",
-        name: "Peak season SOV defense",
-        change: "Confidence 71% → 78% · added 1 high-quality precedent",
+        area: "Traffic structure",
+        detail: "Kitchen Knife organic CTR −8% (A+ content stale) + Tire Inflator pickup CR 2.0% (cluster misread)",
+        tone: "rose",
       },
     ],
-    milestones: [
-      "Razor-blade promo decisions now have a 4-case precedent baseline",
-      "Holiday-window keyword bid plans can reference the CR-inflation pattern",
-      "Best-seller capture playbook now includes inventory pre-check",
+    successLessons: [
+      {
+        id: "succ-bedroom-creative",
+        title: "When scene-keyword CTR falls below category baseline, run a scene main-image A/B first — don't pile on volume",
+        source: "SKU-A Floor Lamp · bedroom-scene main image + A+ rework lifted scene-keyword CTR 2.1×",
+        appliesWhen: "Mature-stage listings where scene-keyword CTR runs 25%+ below the category baseline",
+      },
+      {
+        id: "succ-defense-baseline",
+        title: "Stand up brand-defense baselines 4–6 weeks before peak — reacting only after the attack lands is too late",
+        source: "SKU-117 Bed Frame · monitoring stood up 5 weeks early, held BSR #2 through peak with zero rank loss",
+        appliesWhen: "Top-3 BSR listings with strong seasonality and prior competitor-attack history",
+      },
+      {
+        id: "succ-marginal-roas",
+        title: "Allocate cross-platform ad budget by marginal ROAS, not platform default ratios",
+        source: "SKU-PB-A Power Bank · Walmart marginal ROAS beat Amazon, shifted 35% of budget, BSR moved #18 → #12",
+        appliesWhen: "SKUs live on both Amazon + Walmart with single-platform ROAS already at plateau",
+      },
+    ],
+    failureLessons: [
+      {
+        id: "fail-cluster-validation",
+        title: "Run keyword cluster validation before launch — don't post-mortem CR after the fact",
+        source: "SKU-TI-A Tire Inflator · pickup-tire-inflator cluster only flagged at CR 2.0% post-launch, vs category 4.1%",
+        appliesWhen: "Launches into new keyword clusters, especially long-tail sub-categories",
+      },
+      {
+        id: "fail-subscription-coupling",
+        title: "Don't run subscription experiments in the same window as A+ visual BC tests — attach signal gets polluted",
+        source: "SKU-RZ-001 Razor · A+ + subscription went live together, margin landed 12.4% vs goal 15%, attribution muddied",
+        appliesWhen: "Razor-blade pattern SKUs where attach rate is the core lever",
+      },
+      {
+        id: "fail-aplus-age",
+        title: "A+ content older than 12 months should be reviewed by age, not by the time traffic drops",
+        source: "SKU-K22 Kitchen Knife · A+ untouched for 14 months · Q4 organic CTR −8%, rev $164K vs $215K",
+        appliesWhen: "Mature-stage listings with A+ content live ≥ 12 months",
+      },
+    ],
+    pipeline: [
+      {
+        step: 1,
+        title: "You approve the retrospective content",
+        sub: "Maya Chen · awaiting approval",
+        state: "current",
+      },
+      {
+        step: 2,
+        title: "Submit to Company Brain review queue",
+        sub: "Automatic · triggers immediately after your approval",
+        state: "upcoming",
+      },
+      {
+        step: 3,
+        title: "L10+ department head approval",
+        sub: "Requires eCommerce or brand lead (L10+) sign-off · review dimensions: generalizability of lesson · sufficiency of data · conflicts with existing methodology",
+        state: "upcoming",
+      },
+      {
+        step: 4,
+        title: "Indexed · referenceable as methodology",
+        sub: "Future conversations can search and cite from Company Brain",
+        state: "upcoming",
+      },
     ],
   },
 
@@ -12301,168 +12400,270 @@ function PlaceholderCanvas({ kicker, title, part }) {
 /*  Brain operations canvases · Part 4                                        */
 /* ────────────────────────────────────────────────────────────────────────── */
 
+const VERDICT_TONE = {
+  HIT: "emerald",
+  PARTIAL: "amber",
+  MISS: "rose",
+};
+
 function UploadCanvas() {
-  const U = BRAIN_OPS.upload;
+  const Q = BRAIN_OPS.q4Retro;
   return (
     <>
       <CanvasHeader
-        kicker="Upload · distill methodology"
-        title={U.document.filename}
+        kicker="Company Brain · Q4 retrospective"
+        title="Q4 2025 retrospective · 6 listings · goals vs actuals"
         meta={
           <>
             <Pill tone="slate">
-              <FileText className="w-3 h-3" />
-              {U.document.pages} pages
-            </Pill>
-            <Pill tone={SENSITIVITY_TONE[U.document.sensitivity] || "slate"}>
-              {U.document.sensitivity}
+              <Calendar className="w-3 h-3" />
+              {Q.meta.period}
             </Pill>
             <Pill tone="emerald">
               <Sparkles className="w-3 h-3" />
-              Uploaded by {U.document.uploadedBy}
+              Raised by {Q.meta.raisedBy}
+            </Pill>
+            <Pill tone="amber">
+              <Clock className="w-3 h-3" />
+              Pending L10+ review
             </Pill>
           </>
         }
       />
 
-      {/* 1. Current state */}
+      {/* 1. Current state · Q4 goals vs actuals */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="Parsing output · document summary">
+        <SectionLabel kicker="Q4 goal vs actual">
           1. Current state
         </SectionLabel>
-        <Card className="p-5">
+
+        <Card className="p-5 mb-3">
           <div className="grid grid-cols-4 gap-4">
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Pages
+                Listings
               </div>
               <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.pages}
+                {Q.aggregate.listingCount}
               </div>
             </div>
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Tokens extracted
+                Outcome split
               </div>
-              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.tokens}
-              </div>
-            </div>
-            <div>
-              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Tables
-              </div>
-              <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.tables}
+              <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                <Pill tone="emerald">{Q.aggregate.hit} hit</Pill>
+                <Pill tone="amber">{Q.aggregate.partial} partial</Pill>
+                <Pill tone="rose">{Q.aggregate.miss} miss</Pill>
               </div>
             </div>
             <div>
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Charts
+                Q4 total revenue
               </div>
               <div className="mt-1 text-xl font-mono font-semibold text-slate-900">
-                {U.document.charts}
+                {Q.aggregate.actualRevenue}
+              </div>
+              <div className="text-11 text-slate-500 font-mono">
+                goal {Q.aggregate.goalRevenue}
+              </div>
+            </div>
+            <div>
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Overall delta
+              </div>
+              <div className="mt-1 text-xl font-mono font-semibold text-amber-700">
+                {Q.aggregate.revenueDeltaPct}%
               </div>
             </div>
           </div>
-          <div className="mt-4 pt-3 border-t border-slate-100 text-11 text-slate-500 leading-relaxed">
-            {U.document.signalNote} · uploaded {U.document.uploadedAt}
+        </Card>
+
+        <Card className="overflow-hidden">
+          <div className="grid grid-cols-12 px-4 py-2 bg-slate-50 border-b border-slate-200 text-10 uppercase tracking-wider text-slate-500 font-medium">
+            <div className="col-span-3">SKU</div>
+            <div className="col-span-4">Q4 goal</div>
+            <div className="col-span-3">Q4 actual</div>
+            <div className="col-span-2 text-right">Verdict</div>
           </div>
+          {Q.listings.map((l, i) => (
+            <div
+              key={l.id}
+              className={`grid grid-cols-12 px-4 py-3 text-xs text-slate-700 ${
+                i < Q.listings.length - 1 ? "border-b border-slate-100" : ""
+              }`}
+            >
+              <div className="col-span-3 font-medium text-slate-900">
+                {l.sku}
+              </div>
+              <div className="col-span-4 leading-relaxed">{l.goal}</div>
+              <div className="col-span-3 leading-relaxed">{l.actual}</div>
+              <div className="col-span-2 flex justify-end items-start">
+                <Pill tone={VERDICT_TONE[l.verdict]}>{l.verdictLabel}</Pill>
+              </div>
+            </div>
+          ))}
         </Card>
       </div>
 
-      {/* 2. Specific problem — what gap this upload fills */}
+      {/* 2. Specific problem · gaps */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="What gap this upload fills">
+        <SectionLabel kicker="Revenue gaps + structural gaps">
           2. Specific problem
         </SectionLabel>
-        <Card className="p-5 bg-slate-50/60">
-          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            Brain coverage before this upload
-          </div>
-          <div className="text-sm text-slate-700 leading-relaxed">
-            {U.coverageNote}
-          </div>
-        </Card>
+
+        <div className="grid grid-cols-2 gap-3">
+          <Card className="p-4">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2.5">
+              Revenue-side gaps
+            </div>
+            <div className="space-y-1.5">
+              {Q.revenueGaps.map((g, i) => (
+                <div key={i} className="flex items-start justify-between gap-3 text-xs">
+                  <span className="text-slate-700">{g.sku}</span>
+                  <span
+                    className={`font-mono tabular-nums ${
+                      g.tone === "emerald"
+                        ? "text-emerald-700"
+                        : g.tone === "rose"
+                        ? "text-rose-700"
+                        : g.tone === "amber"
+                        ? "text-amber-700"
+                        : "text-slate-500"
+                    } text-right`}
+                  >
+                    {g.delta}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="p-4">
+            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2.5">
+              Structural gaps
+            </div>
+            <div className="space-y-2.5">
+              {Q.structuralGaps.map((g, i) => (
+                <div key={i} className="text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Pill tone={g.tone}>{g.area}</Pill>
+                  </div>
+                  <div className="mt-1 text-slate-700 leading-relaxed">
+                    {g.detail}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
       </div>
 
-      {/* 3. Recommendation — 3 patterns + 2 playbook updates */}
+      {/* 3. Specific recommendation · lessons */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="3 new patterns · 2 playbook updates">
-          3. Recommendation
+        <SectionLabel kicker="3 success lessons · 3 failure lessons">
+          3. Specific recommendation
         </SectionLabel>
 
-        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-          3 patterns extracted
-        </div>
-        <div className="space-y-2.5">
-          {U.patterns.map((p) => (
-            <div
-              key={p.id}
-              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-            >
-              <div className="text-sm font-medium text-slate-900 leading-snug">
-                {p.name}
-              </div>
-              <div className="mt-1.5 flex items-center gap-2 flex-wrap">
-                {p.categories.map((cat) => (
-                  <Pill key={cat} tone={PATTERN_CATEGORY_TONE[cat] || "slate"}>
-                    {cat}
-                  </Pill>
-                ))}
-                <span className="text-11 text-slate-600">
-                  Confidence{" "}
-                  <span className="font-mono tabular-nums text-slate-900">
-                    {p.confidencePct}%
-                  </span>
-                </span>
-                <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
-                  {p.sensitivity}
-                </Pill>
-                <span className="text-11 text-slate-500 font-mono">
-                  {p.sources}
-                </span>
-              </div>
-              <div className="mt-1.5 text-11 text-slate-600 leading-relaxed">
-                {p.summary}
-              </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <div className="text-11 uppercase tracking-wider text-emerald-700 font-medium mb-2 flex items-center gap-1.5">
+              <Check className="w-3 h-3" />
+              Success lessons
             </div>
-          ))}
-        </div>
-
-        <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mt-5 mb-2">
-          2 playbook updates
-        </div>
-        <div className="space-y-2">
-          {U.playbookUpdates.map((pb) => (
-            <div
-              key={pb.id}
-              className="flex items-start gap-2 border border-slate-200 rounded-md px-3 py-2 bg-white"
-            >
-              <Workflow className="w-3.5 h-3.5 text-slate-500 mt-0.5 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <div className="text-xs font-medium text-slate-900">
-                  {pb.name}
+            <div className="space-y-2">
+              {Q.successLessons.map((l) => (
+                <div
+                  key={l.id}
+                  className="border border-emerald-200 bg-emerald-50/30 rounded-md px-3 py-2.5"
+                >
+                  <div className="text-xs font-medium text-slate-900 leading-snug">
+                    {l.title}
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-emerald-100 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">Source: </span>
+                    {l.source}
+                  </div>
+                  <div className="mt-1 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">Applies when: </span>
+                    {l.appliesWhen}
+                  </div>
                 </div>
-                <div className="text-11 text-slate-600 mt-0.5">{pb.change}</div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          <div>
+            <div className="text-11 uppercase tracking-wider text-rose-700 font-medium mb-2 flex items-center gap-1.5">
+              <X className="w-3 h-3" />
+              Failure lessons
+            </div>
+            <div className="space-y-2">
+              {Q.failureLessons.map((l) => (
+                <div
+                  key={l.id}
+                  className="border border-rose-200 bg-rose-50/30 rounded-md px-3 py-2.5"
+                >
+                  <div className="text-xs font-medium text-slate-900 leading-snug">
+                    {l.title}
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-rose-100 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">Source: </span>
+                    {l.source}
+                  </div>
+                  <div className="mt-1 text-11 text-slate-600 leading-relaxed">
+                    <span className="text-slate-500">Applies when: </span>
+                    {l.appliesWhen}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 4. Milestones — what becomes possible after write */}
+      {/* 4. Milestones · path to brain */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="What's possible once written to brain">
+        <SectionLabel kicker="2-stage approval · path to brain">
           4. Milestones
         </SectionLabel>
-        <div className="space-y-1.5">
-          {U.milestones.map((m, i) => (
-            <div key={i} className="flex items-start gap-2 text-xs text-slate-700 leading-relaxed">
-              <CornerDownRight className="w-3 h-3 text-slate-300 mt-1 flex-shrink-0" />
-              <span>{m}</span>
-            </div>
-          ))}
+        <div className="space-y-2">
+          {Q.pipeline.map((s) => {
+            const isCurrent = s.state === "current";
+            return (
+              <div
+                key={s.step}
+                className={`flex items-start gap-3 rounded-md px-3 py-2.5 ${
+                  isCurrent
+                    ? "border border-emerald-300 bg-emerald-50/40 border-l-4 border-l-emerald-500"
+                    : "border border-slate-200 bg-white"
+                }`}
+              >
+                <div
+                  className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-11 font-mono font-semibold ${
+                    isCurrent
+                      ? "bg-slate-900 text-white"
+                      : "bg-slate-200 text-slate-600"
+                  }`}
+                >
+                  {s.step}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <div className="text-xs font-medium text-slate-900 leading-snug">
+                      {s.title}
+                    </div>
+                    {isCurrent && (
+                      <Pill tone="emerald">Current</Pill>
+                    )}
+                  </div>
+                  <div className="mt-0.5 text-11 text-slate-600 leading-relaxed">
+                    {s.sub}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -12472,7 +12673,7 @@ function UploadCanvas() {
       <div className="border-t border-slate-200 bg-slate-50/50 px-6 py-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="text-11 text-slate-500">
-            3 patterns + 2 playbook updates · pending confirmation to write
+            6 lessons · 3 success + 3 failure · pending your approval before L10+ review
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -12480,28 +12681,21 @@ function UploadCanvas() {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-md"
             >
               <X className="w-3.5 h-3.5" />
-              Reject
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
-            >
-              <Clock className="w-3.5 h-3.5" />
-              Defer
+              Decline
             </button>
             <button
               type="button"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
             >
               <Edit3 className="w-3.5 h-3.5" />
-              Selective approve
+              Needs revision
             </button>
             <button
               type="button"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
             >
               <Check className="w-3.5 h-3.5" />
-              Approve all · write to brain
+              Approve & submit to L10+ review
             </button>
           </div>
         </div>
