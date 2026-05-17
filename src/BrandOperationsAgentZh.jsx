@@ -8957,6 +8957,7 @@ function TopBar({
 }) {
   const adArchActive = inspectorOpen && inspectorTab === "ad-architecture";
   const brainActive = inspectorOpen && inspectorTab === "company-brain";
+  const outcomesActive = inspectorOpen && inspectorTab === "outcomes";
   return (
     <header className="h-14 border-b border-slate-200 bg-white flex items-center px-4 gap-4 flex-shrink-0">
       <div className="flex items-center gap-2.5">
@@ -9040,6 +9041,28 @@ function TopBar({
             }`}
           >
             公司大脑
+          </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onToggleTab("outcomes")}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${
+            outcomesActive
+              ? "bg-slate-900 border border-slate-900"
+              : "border border-slate-200 hover:bg-slate-50"
+          }`}
+        >
+          <BarChart3
+            className={`w-3.5 h-3.5 ${
+              outcomesActive ? "text-white" : "text-slate-600"
+            }`}
+          />
+          <span
+            className={`text-11 font-medium ${
+              outcomesActive ? "text-white" : "text-slate-700"
+            }`}
+          >
+            结果
           </span>
         </button>
         <div className="inline-flex items-center border border-slate-200 rounded-md overflow-hidden">
@@ -11079,6 +11102,498 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
   );
 }
 
+const OUTCOMES_DATA = {
+  quarter: "Q2 2026",
+  brand: "ABC Home Goods",
+  subscription: { total: 8400, listings: 35, perListing: 240 },
+  bonus: { total: 6420, listings: 12 },
+  base: { netRevenue: 642000, effectiveRate: 1.0 },
+  portfolio: {
+    tacos: 17.4,
+    listingsTotal: 47,
+    delegated: 12,
+    training: 35,
+    timeSavedLabel: "4.2 FTE-周/月",
+  },
+  delegated: [
+    { sku: "SKU-A",     name: "Floor Lamp",      rev: 84200,  spend: 14062, tacos: 16.7, bonus: 840,  bonusPct: 1.2, since: "14 天前" },
+    { sku: "SKU-117",   name: "Bed Frame",       rev: 128400, spend: 19260, tacos: 15.0, bonus: 1310, bonusPct: 1.2, since: "since Feb 12" },
+    { sku: "SKU-LH-04", name: "Lounge Chair",    rev: 67800,  spend: 11526, tacos: 17.0, bonus: 678,  bonusPct: 1.2, since: "since Mar 4" },
+    { sku: "SKU-DR-12", name: "Dining Rug",      rev: 42300,  spend: 7196,  tacos: 17.0, bonus: 423,  bonusPct: 1.2, since: "since Mar 18" },
+    { sku: "SKU-WD-08", name: "Wall Decor",      rev: 38200,  spend: 7258,  tacos: 19.0, bonus: 382,  bonusPct: 1.2, since: "since Mar 22" },
+    { sku: "SKU-PL-21", name: "Pendant Light",   rev: 54600,  spend: 10374, tacos: 19.0, bonus: 546,  bonusPct: 1.2, since: "since Mar 28" },
+    { sku: "SKU-OS-03", name: "Office Storage",  rev: 74200,  spend: 13356, tacos: 18.0, bonus: 742,  bonusPct: 1.2, since: "since Apr 2"  },
+    { sku: "SKU-CD-15", name: "Coffee Decanter", rev: 24800,  spend: 4712,  tacos: 19.0, bonus: 248,  bonusPct: 1.2, since: "since Apr 10" },
+    { sku: "SKU-TR-09", name: "Throw Pillow",    rev: 48200,  spend: 9158,  tacos: 19.0, bonus: 482,  bonusPct: 1.2, since: "since Apr 14" },
+    { sku: "SKU-VS-04", name: "Vase Set",        rev: 36400,  spend: 6552,  tacos: 18.0, bonus: 364,  bonusPct: 1.2, since: "since Apr 20" },
+    { sku: "SKU-BR-07", name: "Bath Rug",        rev: 28400,  spend: 5396,  tacos: 19.0, bonus: 284,  bonusPct: 1.2, since: "since Apr 24" },
+    { sku: "SKU-OT-11", name: "Ottoman",         rev: 14500,  spend: 2755,  tacos: 19.0, bonus: 121,  bonusPct: 1.2, since: "since May 2"  },
+  ],
+  trainingShown: [
+    { sku: "SKU-PB-A",   name: "Power bank",       rev: 42100,  spend: 7748,  tacos: 18.4, sub: 240, since: "since Mar 8"  },
+    { sku: "SKU-RZ-001", name: "Razor (Henry's)",  rev: 128400, spend: 43656, tacos: 34.0, sub: 240, since: "since Jan 22" },
+    { sku: "SKU-RZ-002", name: "Razor Blade",      rev: 44200,  spend: 13260, tacos: 30.0, sub: 240, since: "since Jan 22" },
+    { sku: "SKU-TI-01",  name: "Tire Inflator",    rev: 18600,  spend: 7254,  tacos: 39.0, sub: 240, since: "since Apr 30", note: "新品" },
+    { sku: "SKU-TI-02",  name: "RV Compressor",    rev: 9200,   spend: 4968,  tacos: 54.0, sub: 240, since: "since May 6",  note: "红色案例" },
+  ],
+  trainingCollapsedCount: 30,
+};
+
+const OUTCOMES_QUARTERS = ["Q2 2026", "Q1 2026", "Q4 2025", "Q3 2025"];
+
+function formatMoney(n) {
+  return `$${n.toLocaleString()}`;
+}
+
+function OutcomesContent({ panelWidth, onTabChange }) {
+  const compact = typeof panelWidth === "number" && panelWidth < 400;
+  const [quarterOpen, setQuarterOpen] = useState(false);
+  const [quarterHint, setQuarterHint] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("revenue");
+  const [sortOpen, setSortOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [trainingExpanded, setTrainingExpanded] = useState(false);
+
+  const data = OUTCOMES_DATA;
+
+  const allListings = [
+    ...data.delegated.map((d) => ({
+      ...d,
+      status: "delegated",
+      billing: d.bonus,
+    })),
+    ...data.trainingShown.map((t) => ({
+      ...t,
+      status: "training",
+      billing: t.sub,
+    })),
+  ];
+
+  const filtered = allListings.filter((l) => {
+    if (activeFilter === "delegated" && l.status !== "delegated") return false;
+    if (activeFilter === "training" && l.status !== "training") return false;
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.toLowerCase();
+      if (
+        !l.sku.toLowerCase().includes(q) &&
+        !l.name.toLowerCase().includes(q)
+      )
+        return false;
+    }
+    return true;
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
+    if (sortBy === "revenue") return b.rev - a.rev;
+    if (sortBy === "spend") return b.spend - a.spend;
+    if (sortBy === "tacos") return b.tacos - a.tacos;
+    if (sortBy === "billing") return b.billing - a.billing;
+    return 0;
+  });
+
+  const sortLabels = {
+    revenue: "按收入排序",
+    spend: "按广告花费",
+    tacos: "按 TACoS",
+    billing: "按计费",
+  };
+
+  const filterChips = [
+    { id: "all", label: "全部" },
+    { id: "delegated", label: "委托" },
+    { id: "training", label: "培训中" },
+  ];
+
+  return (
+    <div className="flex-1 overflow-y-auto">
+      {/* Section A · Quarterly summary header */}
+      <div className="px-5 py-4 border-b border-slate-200 bg-slate-50/70">
+        <div className="flex items-center justify-between mb-3">
+          <div className="text-sm font-semibold text-slate-900">
+            {data.quarter} · {data.brand}
+          </div>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => {
+                setQuarterOpen(!quarterOpen);
+                setQuarterHint(false);
+              }}
+              className="inline-flex items-center gap-1 text-11 text-slate-700 border border-slate-200 rounded-md px-2 py-1 hover:bg-white"
+            >
+              <span>{data.quarter}</span>
+              <ChevronDown className="w-3 h-3" />
+            </button>
+            {quarterOpen && (
+              <div className="absolute right-0 top-full mt-1 z-10 bg-white border border-slate-200 rounded-md shadow-sm py-1 min-w-[140px]">
+                {OUTCOMES_QUARTERS.map((q) => {
+                  const isCurrent = q === data.quarter;
+                  return (
+                    <button
+                      key={q}
+                      type="button"
+                      onClick={() => {
+                        if (!isCurrent) {
+                          setQuarterHint(true);
+                        }
+                        setQuarterOpen(false);
+                      }}
+                      className={`w-full text-left px-3 py-1.5 text-11 ${
+                        isCurrent
+                          ? "bg-emerald-50 text-emerald-700 font-medium"
+                          : "text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {q}
+                      {isCurrent && (
+                        <span className="ml-1 text-slate-500">· 当前</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            {quarterHint && (
+              <div className="absolute right-0 top-full mt-1 z-10 text-10 text-slate-500 bg-white border border-slate-200 rounded px-2 py-1">
+                本演示只含 Q2 数据
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            XNURTA 本季度计费
+          </div>
+          <div className="text-2xl font-mono font-semibold text-slate-900 tabular-nums mb-2">
+            {formatMoney(data.subscription.total + data.bonus.total)}{" "}
+            <span className="text-xs text-slate-500 font-normal">合计</span>
+          </div>
+          <div className="text-11 text-slate-700 space-y-1 pl-1">
+            <div className="flex items-baseline gap-2">
+              <CornerDownRight className="w-3 h-3 text-slate-400" />
+              <span className="text-slate-600">订阅</span>
+              <span className="font-mono font-medium text-slate-900 tabular-nums">
+                {formatMoney(data.subscription.total)}
+              </span>
+              <span className="text-slate-500">
+                ({data.subscription.listings} 个 listing × $
+                {data.subscription.perListing})
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <CornerDownRight className="w-3 h-3 text-slate-400" />
+              <span className="text-slate-600">结果奖金</span>
+              <span className="font-mono font-medium text-emerald-700 tabular-nums">
+                {formatMoney(data.bonus.total)}
+              </span>
+              <span className="text-slate-500">
+                ({data.bonus.listings} 个委托 listing)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            奖金基数
+          </div>
+          <div className="text-11 text-slate-700 space-y-1">
+            <div className="flex items-baseline justify-between">
+              <span className="text-slate-600">Q2 净收入(委托)</span>
+              <span className="font-mono font-medium text-slate-900 tabular-nums">
+                {formatMoney(data.base.netRevenue)}
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="text-slate-600">奖金实际比率</span>
+              <span className="font-mono font-medium text-slate-900 tabular-nums">
+                {data.base.effectiveRate.toFixed(2)}%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            组合概览
+          </div>
+          <div className="space-y-1.5 text-11">
+            <div className="flex items-baseline justify-between">
+              <span className="text-slate-700">{wrapMetric("TACoS")}</span>
+              <TacosValue value={data.portfolio.tacos} size="lg" />
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="text-slate-700">管理的 listing</span>
+              <span className="font-mono font-medium text-slate-900 tabular-nums">
+                {data.portfolio.listingsTotal}
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between pl-4">
+              <span className="text-slate-600 flex items-center gap-1.5">
+                <CornerDownRight className="w-3 h-3 text-slate-400" />
+                委托
+              </span>
+              <span className="font-mono font-medium text-emerald-700 tabular-nums">
+                {data.portfolio.delegated}
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between pl-4">
+              <span className="text-slate-600 flex items-center gap-1.5">
+                <CornerDownRight className="w-3 h-3 text-slate-400" />
+                培训中
+              </span>
+              <span className="font-mono font-medium text-slate-700 tabular-nums">
+                {data.portfolio.training}
+              </span>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="text-slate-700">
+                节省运营时间{" "}
+                <span className="text-slate-500">(估算)</span>
+              </span>
+              <span className="font-mono font-medium text-slate-900 tabular-nums">
+                {data.portfolio.timeSavedLabel}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Section B · Filter + sort row */}
+      <div className="px-5 py-3 border-b border-slate-200 flex flex-wrap items-center gap-2">
+        <div className="inline-flex items-center gap-1">
+          {filterChips.map((c) => {
+            const active = activeFilter === c.id;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setActiveFilter(c.id)}
+                className={`text-11 font-medium px-2 py-1 rounded-md border ${
+                  active
+                    ? "bg-slate-900 text-white border-slate-900"
+                    : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                }`}
+              >
+                {c.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setSortOpen(!sortOpen)}
+            className="inline-flex items-center gap-1 text-11 text-slate-700 border border-slate-200 rounded-md px-2 py-1 hover:bg-slate-50"
+          >
+            <span>{sortLabels[sortBy]}</span>
+            <ChevronDown className="w-3 h-3" />
+          </button>
+          {sortOpen && (
+            <div className="absolute left-0 top-full mt-1 z-10 bg-white border border-slate-200 rounded-md shadow-sm py-1 min-w-[120px]">
+              {Object.entries(sortLabels).map(([id, label]) => {
+                const active = sortBy === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => {
+                      setSortBy(id);
+                      setSortOpen(false);
+                    }}
+                    className={`w-full text-left px-3 py-1.5 text-11 ${
+                      active
+                        ? "bg-emerald-50 text-emerald-700 font-medium"
+                        : "text-slate-700 hover:bg-slate-50"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1 min-w-[140px] relative">
+          <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="查找 listing..."
+            className="w-full text-11 pl-6 pr-6 py-1 border border-slate-200 rounded-md text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Section C · Listing list */}
+      <div className="px-5 py-4 space-y-2.5">
+        {sorted.length === 0 ? (
+          <div className="text-xs text-slate-600 py-4">
+            没有匹配 &ldquo;{searchQuery}&rdquo; 的 listing。试试其他关键词。
+          </div>
+        ) : (
+          sorted.map((l) => (
+            <OutcomesListingCard key={l.sku} listing={l} compact={compact} />
+          ))
+        )}
+
+        {(activeFilter === "all" || activeFilter === "training") &&
+          searchQuery.trim() === "" && (
+            <div className="border border-dashed border-slate-200 rounded-md">
+              <button
+                type="button"
+                onClick={() => setTrainingExpanded(!trainingExpanded)}
+                className="w-full text-left px-4 py-2.5 text-11 text-slate-600 hover:bg-slate-50 flex items-center justify-between"
+              >
+                <span>
+                  + 还有 {data.trainingCollapsedCount} 个培训中 listing
+                </span>
+                <span className="text-slate-500 flex items-center gap-1">
+                  {trainingExpanded ? "收起" : "点击展开"}
+                  {trainingExpanded ? (
+                    <ChevronDown className="w-3 h-3" />
+                  ) : (
+                    <ChevronRight className="w-3 h-3" />
+                  )}
+                </span>
+              </button>
+              {trainingExpanded && (
+                <div className="px-4 pb-3 pt-1 text-11 text-slate-600 border-t border-slate-100">
+                  <div className="mb-1.5 text-slate-500">
+                    + 还有 {data.trainingCollapsedCount} 个 · 每个订阅 $
+                    {data.subscription.perListing}/月
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+      </div>
+
+      {/* Section E · How billing works */}
+      <div className="px-5 pb-5">
+        <div className="bg-slate-50 border border-slate-200 rounded-md p-4 text-xs text-slate-700 leading-relaxed">
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            计费方式
+          </div>
+          <div className="mb-2.5 space-y-1">
+            <div>
+              <span className="text-slate-900 font-medium">培训中:</span> 每个
+              listing $
+              {data.subscription.perListing}/月订阅
+            </div>
+            <div>
+              <span className="text-slate-900 font-medium">委托:</span>{" "}
+              (收入 − 广告花费) 的 1% 作为奖金
+            </div>
+          </div>
+          <div className="mb-2.5 text-slate-600">
+            委托与否客户自己定。团队对某个 listing 上的 agent
+            建立信任后,才会把它升级为委托。委托一开始,订阅就停。
+          </div>
+          <button
+            type="button"
+            onClick={() => onTabChange && onTabChange("company-brain")}
+            className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+          >
+            去公司大脑 → 决策类别 看哪些已委托、哪些还在培训
+            <ChevronRight className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OutcomesListingCard({ listing, compact }) {
+  const isDelegated = listing.status === "delegated";
+  const statusLabel = isDelegated
+    ? `委托 · ${listing.since}`
+    : `培训中 · ${listing.since}`;
+  return (
+    <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+      <div className="flex items-baseline justify-between mb-1.5">
+        <div className="text-sm font-semibold text-slate-900">
+          <span className="font-mono">{listing.sku}</span>
+          <span className="text-slate-500 font-normal"> · </span>
+          {listing.name}
+        </div>
+      </div>
+      <div className="mb-3 flex items-center gap-1.5 flex-wrap">
+        <Pill tone={isDelegated ? "emerald" : "slate"}>{statusLabel}</Pill>
+        {listing.note && (
+          <span className="text-10 text-slate-500 italic">{listing.note}</span>
+        )}
+      </div>
+
+      <div
+        className={`mb-2 ${
+          compact ? "space-y-1.5" : "grid grid-cols-2 gap-3"
+        }`}
+      >
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Q2 收入
+          </div>
+          <div className="text-sm font-mono font-semibold text-slate-900 tabular-nums">
+            ${listing.rev.toLocaleString()}
+          </div>
+        </div>
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+            Q2 广告花费
+          </div>
+          <div className="text-sm font-mono font-semibold text-slate-900 tabular-nums">
+            ${listing.spend.toLocaleString()}
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-3 flex items-baseline justify-between">
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          Q2 {wrapMetric("TACoS")}
+        </div>
+        <TacosValue value={listing.tacos} size="md" />
+      </div>
+
+      <div className="border-t border-slate-100 pt-2">
+        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-0.5">
+          XNURTA 计费
+        </div>
+        <div className="text-sm">
+          <span
+            className={`font-mono font-semibold tabular-nums ${
+              isDelegated ? "text-emerald-700" : "text-slate-900"
+            }`}
+          >
+            ${listing.billing.toLocaleString()}
+          </span>
+          <span className="text-11 text-slate-500 ml-2">
+            (
+            {isDelegated
+              ? `结果奖金 · 净收入的 ${listing.bonusPct.toFixed(1)}%`
+              : "订阅 · 按 listing 计"}
+            )
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function InspectorDragHandle({ currentWidth, onWidthChange }) {
   const startX = useRef(0);
   const startWidth = useRef(0);
@@ -11132,6 +11647,7 @@ function InspectorPanel({
   const tabs = [
     { id: "ad-architecture", label: "广告架构" },
     { id: "company-brain", label: "公司大脑" },
+    { id: "outcomes", label: "结果" },
   ];
   return (
     <aside
@@ -11180,11 +11696,16 @@ function InspectorPanel({
       <div className="flex-1 flex flex-col min-h-0">
         {tab === "ad-architecture" ? (
           <AdArchitectureContent panelWidth={width} />
-        ) : (
+        ) : tab === "company-brain" ? (
           <CompanyBrainContent
             activeUserId={activeUserId}
             onSwitchUser={onSwitchUser}
             onOpenThread={onOpenThread}
+          />
+        ) : (
+          <OutcomesContent
+            panelWidth={width}
+            onTabChange={onTabChange}
           />
         )}
       </div>
