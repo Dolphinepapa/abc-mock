@@ -160,17 +160,17 @@ const THREADS = [
     title: "Daily ops report · pushed every morning",
     reports: {
       historical: [
-        { id: "rpt-2026-05-08", type: "daily", date: "5/8 Fri", time: "7:00", summary: { rev: "$56,180", tacos: "17.4%", anomalies: 0 } },
-        { id: "rpt-2026-05-09", type: "daily", date: "5/9 Sat", time: "7:00", summary: { rev: "$48,240", tacos: "16.8%", anomalies: 1 } },
-        { id: "rpt-2026-05-10", type: "daily", date: "5/10 Sun", time: "7:00", summary: { rev: "$44,720", tacos: "16.5%", anomalies: 0 } },
+        { id: "rpt-2026-05-08", canvasId: "report-2026-05-08", type: "daily", date: "5/8 Fri", time: "7:00", summary: { rev: "$56,180", tacos: "17.4%", anomalies: 0 } },
+        { id: "rpt-2026-05-09", canvasId: "report-2026-05-09", type: "daily", date: "5/9 Sat", time: "7:00", summary: { rev: "$48,240", tacos: "16.8%", anomalies: 1 } },
+        { id: "rpt-2026-05-10", canvasId: "report-2026-05-10", type: "daily", date: "5/10 Sun", time: "7:00", summary: { rev: "$44,720", tacos: "16.5%", anomalies: 0 } },
       ],
       current: [
-        { id: "rpt-weekly-w19", type: "weekly", date: "5/12 Mon", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$402,180", tacos: "17.6%", note: "3 listings showing trend shifts" } },
-        { id: "rpt-2026-05-12", type: "daily", date: "5/12 Mon", time: "7:30", summary: { rev: "$54,240", tacos: "18.2%", anomalies: 1 } },
-        { id: "rpt-2026-05-13", type: "daily", date: "5/13 Tue", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
-        { id: "rpt-2026-05-14", type: "daily", date: "5/14 Wed", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
-        { id: "rpt-2026-05-15", type: "daily", date: "5/15 Thu", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
-        { id: "rpt-2026-05-16", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isToday: true },
+        { id: "rpt-weekly-w19", canvasId: "report-weekly-w19", type: "weekly", date: "5/12 Mon", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$402,180", tacos: "17.6%", note: "3 listings showing trend shifts" } },
+        { id: "rpt-2026-05-12", canvasId: "report-2026-05-12", type: "daily", date: "5/12 Mon", time: "7:30", summary: { rev: "$54,240", tacos: "18.2%", anomalies: 1 } },
+        { id: "rpt-2026-05-13", canvasId: "report-2026-05-13", type: "daily", date: "5/13 Tue", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
+        { id: "rpt-2026-05-14", canvasId: "report-2026-05-14", type: "daily", date: "5/14 Wed", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
+        { id: "rpt-2026-05-15", canvasId: "report-2026-05-15", type: "daily", date: "5/15 Thu", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
+        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isToday: true },
       ],
     },
   },
@@ -9526,6 +9526,17 @@ function ChatPanel({ activeId, onSelect }) {
   );
   const newCount = agentFlagged.filter((t) => t.unread).length;
 
+  const isThreadActive = (thread) => {
+    if (thread.threadType === "report-feed") {
+      const allIds = [
+        ...thread.reports.historical,
+        ...thread.reports.current,
+      ].map((r) => r.canvasId);
+      return allIds.includes(activeId) || activeId === thread.canvasId;
+    }
+    return activeId === thread.id;
+  };
+
   return (
     <aside className="w-80 flex-shrink-0 border-r border-slate-200 bg-white flex flex-col">
       <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
@@ -9556,7 +9567,8 @@ function ChatPanel({ activeId, onSelect }) {
                 <ThreadCard
                   key={thread.id}
                   thread={thread}
-                  active={activeId === thread.id}
+                  active={isThreadActive(thread)}
+                  activeId={activeId}
                   onSelect={onSelect}
                 />
               ))}
@@ -9576,7 +9588,8 @@ function ChatPanel({ activeId, onSelect }) {
               <ThreadCard
                 key={thread.id}
                 thread={thread}
-                active={activeId === thread.id}
+                active={isThreadActive(thread)}
+                activeId={activeId}
                 onSelect={onSelect}
               />
             ))}
@@ -9596,7 +9609,8 @@ function ChatPanel({ activeId, onSelect }) {
                 <ThreadCard
                   key={thread.id}
                   thread={thread}
-                  active={activeId === thread.id}
+                  active={isThreadActive(thread)}
+                  activeId={activeId}
                   onSelect={onSelect}
                   tone="brain-ops"
                 />
@@ -9681,11 +9695,8 @@ function ReportCard({ report, selected, onClick }) {
   );
 }
 
-function ReportFeedExpanded({ thread }) {
+function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [selectedReportId, setSelectedReportId] = useState(
-    thread.reports.current[thread.reports.current.length - 1].id,
-  );
   return (
     <div className="px-3 py-3">
       <div className="text-11 text-slate-500 mb-3 leading-relaxed px-1">
@@ -9711,8 +9722,8 @@ function ReportFeedExpanded({ thread }) {
             <ReportCard
               key={rpt.id}
               report={rpt}
-              selected={selectedReportId === rpt.id}
-              onClick={() => setSelectedReportId(rpt.id)}
+              selected={activeId === rpt.canvasId}
+              onClick={() => onSelect(rpt.canvasId)}
             />
           ))}
         </div>
@@ -9723,8 +9734,8 @@ function ReportFeedExpanded({ thread }) {
           <ReportCard
             key={rpt.id}
             report={rpt}
-            selected={selectedReportId === rpt.id}
-            onClick={() => setSelectedReportId(rpt.id)}
+            selected={activeId === rpt.canvasId}
+            onClick={() => onSelect(rpt.canvasId)}
           />
         ))}
       </div>
@@ -9732,7 +9743,7 @@ function ReportFeedExpanded({ thread }) {
   );
 }
 
-function ThreadCard({ thread, active, onSelect, tone }) {
+function ThreadCard({ thread, active, activeId, onSelect, tone }) {
   const isAgent = thread.initiator === "agent";
   const isBrainOps = tone === "brain-ops";
   const isReportFeed = thread.threadType === "report-feed";
@@ -9743,6 +9754,14 @@ function ThreadCard({ thread, active, onSelect, tone }) {
   const previewBody = isReportFeed
     ? `Today sales ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · ${latestReport.summary.anomalies} anomal${latestReport.summary.anomalies === 1 ? "y" : "ies"}`
     : lastTurn?.body || "";
+
+  const handleHeaderClick = () => {
+    if (isReportFeed) {
+      onSelect(latestReport.canvasId);
+    } else {
+      onSelect(thread.id);
+    }
+  };
 
   return (
     <div
@@ -9756,7 +9775,7 @@ function ThreadCard({ thread, active, onSelect, tone }) {
     >
       <button
         type="button"
-        onClick={() => onSelect(thread.id)}
+        onClick={handleHeaderClick}
         className="w-full text-left p-3"
       >
         <div className="flex items-start gap-2">
@@ -9810,7 +9829,11 @@ function ThreadCard({ thread, active, onSelect, tone }) {
       {active && (
         <div className="border-t border-slate-200">
           {isReportFeed ? (
-            <ReportFeedExpanded thread={thread} />
+            <ReportFeedExpanded
+              thread={thread}
+              activeId={activeId}
+              onSelect={onSelect}
+            />
           ) : (
             <>
               <div className="px-3 py-3 space-y-3">
@@ -9895,11 +9918,79 @@ function ThreadTurn({ turn, thread }) {
   );
 }
 
-function AdArchitectureContent({ panelWidth }) {
+function AdArchitectureSubTabs({ subTab, onSubTabChange }) {
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "operation-log", label: "Operation log" },
+  ];
+  return (
+    <div className="px-5 pt-2 border-b border-slate-200 flex items-center gap-3 flex-shrink-0 bg-white">
+      {tabs.map((t) => {
+        const active = subTab === t.id;
+        return (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onSubTabChange && onSubTabChange(t.id)}
+            className={`text-xs font-medium pb-2 border-b-2 -mb-px ${
+              active
+                ? "text-slate-900 border-emerald-600 font-semibold"
+                : "text-slate-500 border-transparent hover:text-slate-700"
+            }`}
+          >
+            {t.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function AdArchitectureOpLogPlaceholder() {
+  return (
+    <div className="flex-1 overflow-y-auto px-5 py-5">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-9 h-9 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0">
+          <FileText className="w-4 h-4 text-slate-500" />
+        </div>
+        <div className="min-w-0">
+          <div className="text-sm font-semibold text-slate-900">
+            Operation log · coming soon
+          </div>
+          <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
+            Multi-dimensional filtering by listing / time / op type
+          </div>
+        </div>
+      </div>
+      <div className="border border-slate-200 rounded-md bg-slate-50/40 px-4 py-3">
+        <div className="text-xs text-slate-700 leading-relaxed mb-2">
+          The current demo only shows op aggregates inside the daily and weekly reports. The next version opens per-op detail queries, filterable by:
+        </div>
+        <ul className="space-y-1 text-11 text-slate-600 leading-relaxed pl-1">
+          <li>· listing (12 delegated)</li>
+          <li>· time window (today / 7d / 30d / custom)</li>
+          <li>· op type (bid tweak / negative keyword / budget reallocation / dayparting / other)</li>
+          <li>· trigger (routine optimization / anomaly response / attack defense)</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function AdArchitectureContent({ panelWidth, subTab = "overview", onSubTabChange }) {
   const s = STRATEGY.adArchitecture.summary;
   const compact = typeof panelWidth === "number" && panelWidth < 540;
+  if (subTab === "operation-log") {
+    return (
+      <>
+        <AdArchitectureSubTabs subTab={subTab} onSubTabChange={onSubTabChange} />
+        <AdArchitectureOpLogPlaceholder />
+      </>
+    );
+  }
   return (
     <>
+      <AdArchitectureSubTabs subTab={subTab} onSubTabChange={onSubTabChange} />
       <div className="px-5 py-3 border-b border-slate-200 bg-slate-50/40 flex items-center gap-2 flex-shrink-0">
         <ListTree className="w-4 h-4 text-slate-700" />
         <span className="text-xs text-slate-600">SKU-A</span>
@@ -12564,6 +12655,8 @@ function InspectorPanel({
   open,
   tab,
   onTabChange,
+  adArchSubTab,
+  onAdArchSubTabChange,
   onClose,
   width,
   onWidthChange,
@@ -12623,7 +12716,11 @@ function InspectorPanel({
       </div>
       <div className="flex-1 flex flex-col min-h-0">
         {tab === "ad-architecture" ? (
-          <AdArchitectureContent panelWidth={width} />
+          <AdArchitectureContent
+            panelWidth={width}
+            subTab={adArchSubTab}
+            onSubTabChange={onAdArchSubTabChange}
+          />
         ) : tab === "company-brain" ? (
           <CompanyBrainContent
             activeUserId={activeUserId}
@@ -13478,38 +13575,1101 @@ function QACanvas({ activeClearance }) {
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
-function DailyReportCanvas() {
+const REPORT_LISTING_TEMPLATE = [
+  { sku: "SKU-117", name: "Bed frame", share: 15240 / 58420, tacos: 15.2, trend7d: [14800, 15100, 15300, 15600, 15400, 15500, 15240] },
+  { sku: "SKU-A", name: "Floor lamp", share: 7920 / 58420, tacos: 16.7, trend7d: [7820, 7880, 7910, 7940, 7900, 7920, 7920] },
+  { sku: "SKU-K22", name: "Kitchen knife", share: 6820 / 58420, tacos: 17.8, trend7d: [6780, 6810, 6830, 6850, 6820, 6820, 6820] },
+  { sku: "SKU-DR-12", name: "Table runner", share: 6380 / 58420, tacos: 19.0, trend7d: [5980, 6050, 6120, 6200, 6280, 6340, 6380] },
+  { sku: "SKU-WD-08", name: "Wall hanging", share: 4860 / 58420, tacos: 19.0, trend7d: [4820, 4840, 4860, 4870, 4860, 4860, 4860] },
+  { sku: "SKU-LH-04", name: "Lounge chair", share: 4320 / 58420, tacos: 17.0, trend7d: [4280, 4300, 4310, 4330, 4320, 4320, 4320] },
+  { sku: "SKU-OS-03", name: "Storage cabinet", share: 3360 / 58420, tacos: 18.0, trend7d: [3320, 3340, 3360, 3360, 3360, 3360, 3360] },
+  { sku: "SKU-PL-21", name: "Pendant lamp", share: 3180 / 58420, tacos: 19.0, trend7d: [3140, 3160, 3170, 3180, 3180, 3180, 3180] },
+  { sku: "SKU-TR-09", name: "Throw pillow", share: 2720 / 58420, tacos: 19.0, trend7d: [2900, 2860, 2820, 2790, 2760, 2740, 2720] },
+  { sku: "SKU-CD-15", name: "Cruet", share: 1540 / 58420, tacos: 19.0, trend7d: [1520, 1530, 1540, 1540, 1540, 1540, 1540] },
+  { sku: "SKU-VS-04", name: "Vase", share: 1180 / 58420, tacos: 18.0, trend7d: [1160, 1170, 1180, 1180, 1180, 1180, 1180] },
+  { sku: "SKU-BR-07", name: "Bath mat", share: 900 / 58420, tacos: 19.0, trend7d: [890, 895, 900, 900, 900, 900, 900] },
+];
+
+function buildListingTable(dayTotal, overrides = {}) {
+  const raw = REPORT_LISTING_TEMPLATE.map((r) => {
+    const o = overrides[r.sku] || {};
+    return {
+      ...r,
+      rev: Math.round(r.share * dayTotal),
+      tacos: o.tacos ?? r.tacos,
+      trend: o.trend || (r.trend7d[6] > r.trend7d[0] ? "up" : r.trend7d[6] < r.trend7d[0] ? "down" : "flat"),
+    };
+  });
+  const sum = raw.reduce((s, r) => s + r.rev, 0);
+  const diff = dayTotal - sum;
+  raw[0].rev += diff;
+  return raw;
+}
+
+const DAILY_REPORTS_DATA = {
+  "report-2026-05-16": {
+    date: "Fri 5/16",
+    isToday: true,
+    topline: { rev: 58420, spend: 11340, tacos: 19.4, orders: 412, aov: 141.80 },
+    vsLast: {
+      label: "vs last Friday (5/9)",
+      revPct: -4.2, spendPct: -2.1, tacosPp: 0.6, ordersPct: -5.8, aovPct: 1.6,
+    },
+    listings: buildListingTable(58420),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A Floor lamp · bedroom keyword CTR 3 days under baseline",
+        body:
+          "Bedroom keywords averaging 1.1% CTR over 7 days · category baseline 2.8%. This is a listing-content problem (hero image has no bedroom scene), not a bid problem. I've already done two bid rounds — no movement.",
+        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
+      },
+      {
+        tone: "emerald",
+        title: "SKU-DR-12 Table runner · \"boho table runner\" category search +180% over 7 days",
+        body:
+          "New category keyword is heating up — we're not running ads on it yet. Competitor SOV is still low, so this is a window. I didn't move on my own — it's outside my current delegated authority. There's an approval card below.",
+        jump: null,
+      },
+      {
+        tone: "blue",
+        title: "SKU-117 Bed frame · NightFox attack on day 4",
+        body:
+          "They didn't escalate today. We held position by matching their bids. The defense plan is running in-window — no adjustment needed. Continuing hourly monitoring.",
+        jump: { key: "defense", label: "Jump to defense alert thread" },
+      },
+    ],
+    actions: {
+      totalOps: 38,
+      breakdown: [
+        { label: "Bid tweaks", count: 22, note: "range -8% to +5%" },
+        { label: "Negative keyword harvest", count: 11, note: "" },
+        { label: "Budget reallocation", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 Bed frame", count: 12, note: "incl. bid matching during NightFox attack" },
+        { sku: "SKU-DR-12 Table runner", count: 8, note: "" },
+        { sku: "SKU-A Floor lamp", count: 7, note: "" },
+        { sku: "SKU-K22 Kitchen knife", count: 5, note: "" },
+        { sku: "Other 8 listings", count: 6, note: "routine optimization" },
+      ],
+      authorityNote: "All 38 ops today within delegated authority. No autonomous moves outside scope.",
+    },
+    outlook: [
+      "Overall TACoS should land back in 18.8% - 19.4% (today's 19.4% is already in range)",
+      "SKU-117 Bed frame BSR should hold within #3 — assuming NightFox doesn't escalate further",
+      "Once SKU-DR-12 new keyword is approved, first-day spend should be $200-300 at ACoS ≤ 22%",
+      "Other 9 listings running on the known track — no expected change",
+    ],
+    needYou: [
+      {
+        kind: "approve",
+        sku: "SKU-DR-12 Table runner",
+        title: "New keyword authorization",
+        body: "\"boho table runner\" is a new keyword category — outside my current delegated authority. I didn't move. Recommended budget: $80/day to start, watch first-week ACoS.",
+        primary: "Approve now",
+      },
+      {
+        kind: "jump",
+        sku: "SKU-A Floor lamp",
+        title: "Bedroom keyword CTR problem",
+        body: "Brand team's job — needs a new hero image test (bedroom scene). I added the insight to the SKU-A thread; you'll need to coordinate with the brand team.",
+        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
+      },
+    ],
+  },
+  "report-2026-05-15": {
+    date: "Thu 5/15",
+    topline: { rev: 59820, spend: 10940, tacos: 18.3, orders: 423, aov: 141.42 },
+    vsLast: {
+      label: "vs last Thursday (5/8)",
+      revPct: 6.5, spendPct: 3.2, tacosPp: -0.5, ordersPct: 4.2, aovPct: 2.1,
+    },
+    listings: buildListingTable(59820, { "SKU-A": { tacos: 17.2 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A Floor lamp · bedroom keyword CTR day 4",
+        body:
+          "CTR still ~1.1%, category baseline 2.8%. I've tried two bid rounds — no effect. Re-confirming this is a listing content problem, not a bid problem.",
+        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
+      },
+      {
+        tone: "emerald",
+        title: "SKU-DR-12 Table runner · new keyword signal first surfaced",
+        body:
+          "\"boho table runner\" category search volume showed its first clear lift today (+62%). Not enough conviction to launch ads yet, but worth 2-3 more days of observation.",
+        jump: null,
+      },
+    ],
+    actions: {
+      totalOps: 38,
+      breakdown: [
+        { label: "Bid tweaks", count: 23, note: "" },
+        { label: "Negative keyword harvest", count: 10, note: "" },
+        { label: "Budget reallocation", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 Bed frame", count: 11, note: "NightFox attack response" },
+        { sku: "SKU-A Floor lamp", count: 8, note: "second bid round on bedroom keywords" },
+        { sku: "SKU-DR-12 Table runner", count: 5, note: "" },
+        { sku: "SKU-K22 Kitchen knife", count: 4, note: "" },
+        { sku: "Other 8 listings", count: 10, note: "" },
+      ],
+      authorityNote: "All within delegated authority.",
+    },
+    outlook: [
+      "Overall TACoS should stay in 18% - 19%",
+      "SKU-117 defense plan continues — NightFox discount window has ~5 days left",
+      "SKU-DR-12 new keyword needs 2-3 more days of observation before deciding to ask for authorization",
+    ],
+    needYou: [
+      {
+        kind: "info",
+        sku: "SKU-DR-12 Table runner",
+        title: "New keyword observation · FYI",
+        body: "\"boho table runner\" category search volume hit its first clear lift. I'll watch for 3 more days before asking you to authorize a new-keyword budget. No action needed today.",
+      },
+    ],
+  },
+  "report-2026-05-14": {
+    date: "Wed 5/14",
+    topline: { rev: 61240, spend: 10900, tacos: 17.8, orders: 432, aov: 141.76 },
+    vsLast: {
+      label: "vs last Wednesday (5/7)",
+      revPct: 8.4, spendPct: 4.1, tacosPp: -0.7, ordersPct: 5.8, aovPct: 2.4,
+    },
+    listings: buildListingTable(61240, { "SKU-A": { tacos: 17.0 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A Floor lamp · bedroom keyword CTR day 3",
+        body:
+          "Bedroom keyword CTR still ~1.1%. One bid round didn't help — confirmed it's a content problem. Needs a new hero image.",
+        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
+      },
+      {
+        tone: "blue",
+        title: "SKU-117 Bed frame · NightFox attack day 2",
+        body:
+          "They escalated a bit today (bids on 2 core keywords up another 6-8%). We matched and held rank. The defense plan is running in-window.",
+        jump: { key: "defense", label: "Jump to defense alert thread" },
+      },
+    ],
+    actions: {
+      totalOps: 45,
+      breakdown: [
+        { label: "Bid tweaks", count: 28, note: "incl. defense bid matching" },
+        { label: "Negative keyword harvest", count: 12, note: "" },
+        { label: "Budget reallocation", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 Bed frame", count: 16, note: "dense NightFox attack response" },
+        { sku: "SKU-A Floor lamp", count: 9, note: "" },
+        { sku: "SKU-DR-12 Table runner", count: 4, note: "" },
+        { sku: "SKU-K22 Kitchen knife", count: 5, note: "" },
+        { sku: "Other 8 listings", count: 11, note: "" },
+      ],
+      authorityNote: "All within delegated authority. Attack response stayed in scope — bid matching plus negative keyword harvest only.",
+    },
+    outlook: [
+      "NightFox attack continues — we keep watching",
+      "SKU-A bedroom keyword data should recover once the hero image test goes live",
+      "Overall TACoS should sit at 17.5% - 18.5%",
+    ],
+    needYou: [],
+  },
+  "report-2026-05-13": {
+    date: "Tue 5/13",
+    topline: { rev: 58420, spend: 10000, tacos: 17.1, orders: 418, aov: 139.76 },
+    vsLast: {
+      label: "vs last Tuesday (5/6)",
+      revPct: 5.2, spendPct: 2.4, tacosPp: -0.5, ordersPct: 3.4, aovPct: 1.7,
+    },
+    listings: buildListingTable(58420, { "SKU-A": { tacos: 16.9 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A Floor lamp · bedroom keyword CTR day 2",
+        body:
+          "Yesterday's bedroom keyword CTR gap didn't close. 1.1% is still well below category baseline 2.8%. I'll try a bid round first, but it's more likely a content problem.",
+        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
+      },
+      {
+        tone: "rose",
+        title: "SKU-117 Bed frame · NightFox attack started",
+        body:
+          "Today we caught NightFox concentrating bid raises on our 7 hero keywords, plus they just dropped an 18% coupon. This is organized share grab. I opened a separate defense alert thread.",
+        jump: { key: "defense", label: "Jump to defense alert thread" },
+      },
+    ],
+    actions: {
+      totalOps: 41,
+      breakdown: [
+        { label: "Bid tweaks", count: 26, note: "incl. defense bid matching" },
+        { label: "Negative keyword harvest", count: 10, note: "" },
+        { label: "Budget reallocation", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 Bed frame", count: 14, note: "NightFox attack initial response" },
+        { sku: "SKU-A Floor lamp", count: 7, note: "" },
+        { sku: "SKU-DR-12 Table runner", count: 4, note: "" },
+        { sku: "SKU-K22 Kitchen knife", count: 5, note: "" },
+        { sku: "Other 8 listings", count: 11, note: "" },
+      ],
+      authorityNote: "All within delegated authority. Attack defense didn't use any out-of-scope authority — just routine bid matching.",
+    },
+    outlook: [
+      "NightFox attack window estimated 5-7 days",
+      "SKU-117 rank should hold within top 3, assuming we match their bids",
+      "If one more SKU-A bedroom bid round doesn't move CTR, escalate to brand team",
+    ],
+    needYou: [
+      {
+        kind: "jump",
+        sku: "SKU-117 Bed frame",
+        title: "NightFox attack response",
+        body: "1 item for your confirmation today: the NightFox attack response. I drafted 3 postures in the defense thread — recommended posture is highlighted. Best to decide today or tomorrow.",
+        jump: { key: "defense", label: "Jump to defense alert thread" },
+      },
+    ],
+  },
+  "report-2026-05-12": {
+    date: "Mon 5/12",
+    topline: { rev: 54240, spend: 9870, tacos: 18.2, orders: 384, aov: 141.25 },
+    vsLast: {
+      label: "vs last Monday (5/5)",
+      revPct: 3.8, spendPct: 2.6, tacosPp: -0.2, ordersPct: 2.4, aovPct: 1.4,
+    },
+    listings: buildListingTable(54240, { "SKU-A": { tacos: 16.4 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A Floor lamp · bedroom keyword CTR day 1",
+        body:
+          "First time seeing SKU-A's CTR run abnormally low on bedroom-scene keywords (1.1%, category baseline 2.8%). Observing for a day — if it's still like this tomorrow I'll try a bid round.",
+        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
+      },
+    ],
+    actions: {
+      totalOps: 33,
+      breakdown: [
+        { label: "Bid tweaks", count: 20, note: "" },
+        { label: "Negative keyword harvest", count: 9, note: "" },
+        { label: "Budget reallocation", count: 4, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 Bed frame", count: 8, note: "" },
+        { sku: "SKU-A Floor lamp", count: 6, note: "" },
+        { sku: "SKU-K22 Kitchen knife", count: 5, note: "" },
+        { sku: "SKU-DR-12 Table runner", count: 3, note: "" },
+        { sku: "Other 8 listings", count: 11, note: "" },
+      ],
+      authorityNote: "All within delegated authority.",
+    },
+    outlook: [
+      "SKU-A bedroom keyword needs one more day of observation before deciding to adjust bid",
+      "Overall TACoS should stay near 18%",
+      "Other 11 listings running on the known track",
+    ],
+    needYou: [],
+  },
+};
+
+const WEEKLY_REPORT_DATA = {
+  coverRange: "5/5 - 5/11",
+  weekLabel: "W19 · 5/5 - 5/11",
+  topline: { rev: 402180, spend: 70820, tacos: 17.6, dailyOrders: 412 },
+  vsLast: { revPct: 6.2, spendPct: 4.1, tacosPp: -0.3, ordersPct: 3.4 },
+  listings: [
+    { sku: "SKU-117", name: "Bed frame", weekRev: 104680, tacos: 15.4, trend: "up", tag: "Under attack" },
+    { sku: "SKU-A", name: "Floor lamp", weekRev: 55420, tacos: 16.8, trend: "flat", tag: "Bedroom keyword issue" },
+    { sku: "SKU-K22", name: "Kitchen knife", weekRev: 47180, tacos: 17.4, trend: "flat", tag: "Steady" },
+    { sku: "SKU-DR-12", name: "Table runner", weekRev: 43680, tacos: 18.9, trend: "up", tag: "New keyword window" },
+    { sku: "SKU-WD-08", name: "Wall hanging", weekRev: 33420, tacos: 18.6, trend: "flat", tag: "Steady" },
+    { sku: "SKU-LH-04", name: "Lounge chair", weekRev: 29680, tacos: 17.2, trend: "flat", tag: "Steady" },
+    { sku: "SKU-OS-03", name: "Storage cabinet", weekRev: 23120, tacos: 17.9, trend: "flat", tag: "Steady" },
+    { sku: "SKU-PL-21", name: "Pendant lamp", weekRev: 21860, tacos: 18.8, trend: "flat", tag: "Steady" },
+    { sku: "SKU-TR-09", name: "Throw pillow", weekRev: 18620, tacos: 18.4, trend: "flat", tag: "Steady" },
+    { sku: "SKU-CD-15", name: "Cruet", weekRev: 10580, tacos: 18.7, trend: "flat", tag: "Steady" },
+    { sku: "SKU-VS-04", name: "Vase", weekRev: 7820, tacos: 17.6, trend: "flat", tag: "Steady" },
+    { sku: "SKU-BR-07", name: "Bath mat", weekRev: 6120, tacos: 18.9, trend: "flat", tag: "Steady" },
+  ],
+  insights: [
+    {
+      tone: "rose",
+      title: "SKU-117 Bed frame · steady period ended, now under attack",
+      body:
+        "Attack started Wednesday (5/7) — NightFox concentrated bid raises on 7 hero keywords. Still in-window as the week ended. See defense alert thread.",
+      jump: { key: "defense", label: "Jump to defense alert thread" },
+    },
+    {
+      tone: "amber",
+      title: "SKU-A Floor lamp · bedroom keyword problem 5 days running",
+      body:
+        "Estimated cumulative sales impact ~$1,200/week. Two bid rounds didn't help — confirmed it's a listing content problem. Recommend escalating to brand team priority.",
+      jump: { key: "strategy", label: "Jump to SKU-A thread" },
+    },
+    {
+      tone: "emerald",
+      title: "SKU-DR-12 Table runner · new keyword window",
+      body:
+        "\"boho table runner\" category search volume up 7 days running. New keyword authorized Thursday; first-day data Friday ($340 · ACoS 18%).",
+      jump: null,
+    },
+  ],
+  actions: {
+    totalOps: 247,
+    overAuthority: 0,
+    exceptions: 5,
+    typeBreakdown: [
+      { label: "Bid tweaks", count: 148, pct: 60 },
+      { label: "Negative keyword harvest", count: 68, pct: 28 },
+      { label: "Budget reallocation", count: 19, pct: 8 },
+      { label: "Dayparting", count: 12, pct: 5 },
+    ],
+    listingBreakdown: [
+      { sku: "SKU-117 Bed frame", count: 64, note: "incl. dense adjustments during NightFox attack" },
+      { sku: "SKU-DR-12 Table runner", count: 52, note: "" },
+      { sku: "SKU-A Floor lamp", count: 38, note: "" },
+      { sku: "Other 9 listings", count: 93, note: "" },
+    ],
+  },
+  nextWeek: [
+    "NightFox discount window expected to end 5/19 — key date",
+    "SKU-A Floor lamp new hero image test scheduled for 5/22 (brand team)",
+    "4 listings entering pre-peak warmup (bed frame / lighting category)",
+    "\"boho table runner\" enters week 2 observation",
+  ],
+  needYou: [
+    {
+      kind: "jump",
+      sku: "SKU-A Floor lamp",
+      title: "Hero image test sign-off",
+      body: "Brand team needs your sign-off on the shoot plan. Recommend replying by Monday so they can shoot Tuesday.",
+      jump: { key: "strategy", label: "Jump to SKU-A thread" },
+    },
+    {
+      kind: "jump",
+      sku: "Decision class upgrade review",
+      title: "bid_raise on velocity SKUs",
+      body:
+        "28 of 30 executions accumulated — projected to hit graduation threshold this week. At that point you'll need to approve whether it upgrades to autonomous execution.",
+      jump: { key: "decision-classes", label: "Jump to decision classes" },
+    },
+  ],
+};
+
+function ReportTrendArrow({ trend, className = "" }) {
+  if (trend === "up") return <TrendingUp className={`w-3 h-3 text-emerald-600 ${className}`} />;
+  if (trend === "down") return <TrendingUp className={`w-3 h-3 text-rose-600 rotate-180 ${className}`} />;
+  return <Minus className={`w-3 h-3 text-slate-400 ${className}`} />;
+}
+
+function ReportInsightCard({ insight, onJumpTo }) {
+  const tone = insight.tone || "slate";
+  const toneClass =
+    tone === "rose"
+      ? "border-rose-200 bg-rose-50/60"
+      : tone === "amber"
+        ? "border-amber-200 bg-amber-50/60"
+        : tone === "emerald"
+          ? "border-emerald-200 bg-emerald-50/60"
+          : tone === "blue"
+            ? "border-blue-200 bg-blue-50/60"
+            : "border-slate-200 bg-slate-50/60";
+  const titleColor =
+    tone === "rose"
+      ? "text-rose-900"
+      : tone === "amber"
+        ? "text-amber-900"
+        : tone === "emerald"
+          ? "text-emerald-900"
+          : tone === "blue"
+            ? "text-blue-900"
+            : "text-slate-900";
+  return (
+    <div className={`border rounded-md px-4 py-3 ${toneClass}`}>
+      <div className={`text-sm font-semibold ${titleColor} mb-1.5`}>
+        {insight.title}
+      </div>
+      <div className="text-xs text-slate-700 leading-relaxed">
+        {insight.body}
+      </div>
+      {insight.jump && (
+        <button
+          type="button"
+          onClick={() => onJumpTo && onJumpTo(insight.jump.key)}
+          className="mt-2 inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+        >
+          {insight.jump.label} <ArrowRight className="w-3 h-3" />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ReportToplineCard({ label, value, deltaLabel, deltaTone }) {
+  const deltaCls =
+    deltaTone === "good"
+      ? "text-emerald-700"
+      : deltaTone === "bad"
+        ? "text-rose-700"
+        : "text-slate-500";
+  return (
+    <div className="border border-slate-200 rounded-md px-3 py-2.5 bg-white">
+      <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+        {label}
+      </div>
+      <div className="text-lg font-mono font-semibold text-slate-900 mt-1 tabular-nums">
+        {value}
+      </div>
+      {deltaLabel && (
+        <div className={`text-11 font-mono mt-0.5 ${deltaCls}`}>
+          {deltaLabel}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function formatSignedPct(v, suffix = "%") {
+  const sign = v > 0 ? "+" : "";
+  return `${sign}${v.toFixed(1)}${suffix}`;
+}
+
+function ReportDatePicker({ currentId, onSelect }) {
+  const [open, setOpen] = useState(false);
+  const options = [
+    { id: "report-2026-05-16", label: "5/16 Fri · today" },
+    { id: "report-2026-05-15", label: "5/15 Thu" },
+    { id: "report-2026-05-14", label: "5/14 Wed" },
+    { id: "report-2026-05-13", label: "5/13 Tue" },
+    { id: "report-2026-05-12", label: "5/12 Mon" },
+    { id: "report-weekly-w19", label: "W19 weekly · 5/5-5/11" },
+    { id: "report-2026-05-10", label: "5/10 Sun · archived" },
+    { id: "report-2026-05-09", label: "5/9 Sat · archived" },
+    { id: "report-2026-05-08", label: "5/8 Fri · archived" },
+  ];
+  const currentLabel =
+    options.find((o) => o.id === currentId)?.label.split(" · ")[0] || "Pick date";
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
+      >
+        <Calendar className="w-3 h-3" />
+        {currentLabel} ⌄
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-20 w-56 bg-white border border-slate-200 rounded-md shadow-lg py-1">
+          {options.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                onSelect && onSelect(o.id);
+              }}
+              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-slate-50 ${
+                o.id === currentId
+                  ? "text-emerald-700 font-medium"
+                  : "text-slate-700"
+              }`}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReportExportPill() {
+  return (
+    <span
+      title="Demo locked · export disabled"
+      className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed"
+    >
+      <FileText className="w-3 h-3" />
+      Export PDF · demo-locked
+    </span>
+  );
+}
+
+function NeedYouCard({ item, onJumpTo }) {
+  const kind = item.kind;
+  const borderCls =
+    kind === "approve"
+      ? "border-emerald-300 bg-emerald-50/40"
+      : kind === "jump"
+        ? "border-amber-200 bg-amber-50/40"
+        : "border-slate-200 bg-slate-50/40";
+  return (
+    <div className={`border rounded-md px-4 py-3 ${borderCls}`}>
+      <div className="text-11 text-slate-500 mb-0.5 uppercase tracking-wider font-medium">
+        {item.sku}
+      </div>
+      <div className="text-sm font-semibold text-slate-900 mb-1.5">
+        {item.title}
+      </div>
+      <div className="text-xs text-slate-700 leading-relaxed mb-3">
+        {item.body}
+      </div>
+      {kind === "approve" && (
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            {item.primary || "Approve now"}
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            Modify
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-md"
+          >
+            <X className="w-3.5 h-3.5" />
+            Decline
+          </button>
+        </div>
+      )}
+      {kind === "jump" && item.jump && (
+        <button
+          type="button"
+          onClick={() => onJumpTo && onJumpTo(item.jump.key)}
+          className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800 border border-emerald-300 hover:bg-emerald-50 rounded-md px-3 py-1.5 bg-white"
+        >
+          {item.jump.label} <ArrowRight className="w-3 h-3" />
+        </button>
+      )}
+      {kind === "info" && (
+        <div className="text-11 text-slate-500 italic">
+          FYI — no action needed.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
+  const data = DAILY_REPORTS_DATA[reportId] || DAILY_REPORTS_DATA["report-2026-05-16"];
+  const t = data.topline;
+  const vs = data.vsLast;
   return (
     <>
       <CanvasHeader
-        kicker="Daily ops report"
-        title="Daily report · Fri 5/16"
+        kicker="Daily ops report · pushed every morning"
+        title={`Daily ops report · ${data.date}`}
         meta={
           <>
-            <Pill tone="slate">
-              <FileText className="w-3 h-3" />
-              Export PDF · demo-locked
-            </Pill>
-            <Pill tone="slate">
-              <Calendar className="w-3 h-3" />
-              5/16 ⌄
-            </Pill>
+            <ReportExportPill />
+            <ReportDatePicker currentId={reportId} onSelect={onSelectDate} />
           </>
         }
       />
-      <div className="px-6 py-16">
-        <div className="max-w-md mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 mb-4">
-            <FileText className="w-5 h-5 text-slate-500" />
+
+      {/* Section 1: data */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker={vs.label}>Today · data</SectionLabel>
+        <div className="grid grid-cols-5 gap-3">
+          <ReportToplineCard
+            label="Sales"
+            value={`$${t.rev.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.revPct)} vs last week`}
+            deltaTone={vs.revPct >= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="Ad spend"
+            value={`$${t.spend.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.spendPct)} vs last week`}
+            deltaTone={vs.spendPct <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label={wrapMetric("TACoS")}
+            value={`${t.tacos.toFixed(1)}%`}
+            deltaLabel={`${formatSignedPct(vs.tacosPp, "pp")} vs last week`}
+            deltaTone={vs.tacosPp <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="Orders"
+            value={t.orders}
+            deltaLabel={`${formatSignedPct(vs.ordersPct)} vs last week`}
+            deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="AOV"
+            value={`$${t.aov.toFixed(2)}`}
+            deltaLabel={`${formatSignedPct(vs.aovPct)} vs last week`}
+            deltaTone={vs.aovPct >= 0 ? "good" : "bad"}
+          />
+        </div>
+
+        <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
+            <div className="text-11 text-slate-600 font-medium">
+              12 delegated listings · today's sales
+            </div>
+            <div className="text-10 text-slate-500 font-mono">
+              Total ${t.rev.toLocaleString()}
+            </div>
+          </div>
+          <table className="w-full text-xs">
+            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="text-left font-medium px-4 py-2">SKU · name</th>
+                <th className="text-right font-medium px-3 py-2">Today's sales</th>
+                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
+                <th className="text-left font-medium px-3 py-2">7-day trend</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.listings.map((row) => (
+                <tr
+                  key={row.sku}
+                  className="border-t border-slate-100"
+                  style={{ height: "32px" }}
+                >
+                  <td className="px-4 py-1.5">
+                    <div className="text-xs text-slate-900">
+                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
+                      · {row.name}
+                    </div>
+                  </td>
+                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
+                    ${row.rev.toLocaleString()}
+                  </td>
+                  <td className="text-right px-3 py-1.5">
+                    <TacosValue value={row.tacos} size="sm" />
+                  </td>
+                  <td className="px-3 py-1.5">
+                    <div className="flex items-center gap-2">
+                      <Sparkline
+                        data={row.trend7d}
+                        width={80}
+                        height={18}
+                        color={
+                          row.trend === "up"
+                            ? "emerald"
+                            : row.trend === "down"
+                              ? "rose"
+                              : "slate"
+                        }
+                      />
+                      <ReportTrendArrow trend={row.trend} />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Section 2: what stood out */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.insights.length} item${data.insights.length === 1 ? "" : "s"}`}>
+          Today · what stood out
+        </SectionLabel>
+        {data.insights.length === 0 ? (
+          <div className="border border-dashed border-slate-200 rounded-md px-4 py-6 text-center bg-slate-50/40">
+            <div className="text-xs text-slate-600">
+              No new signals today · all 12 listings running on the known track
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {data.insights.map((ins, i) => (
+              <ReportInsightCard key={i} insight={ins} onJumpTo={onJumpTo} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Section 3: actions */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.actions.totalOps} ops · all within delegated authority`}>
+          Today · what I did on your behalf
+        </SectionLabel>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              By op type
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.breakdown.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700">
+                    {row.label}
+                    {row.note && (
+                      <span className="text-slate-500 ml-1.5">· {row.note}</span>
+                    )}
+                  </div>
+                  <div className="font-mono tabular-nums text-slate-900 font-medium">
+                    {row.count}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              By listing (top 4 + others)
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.topListings.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700 min-w-0">
+                    <span className="font-mono">{row.sku.split(" ")[0]}</span>{" "}
+                    {row.sku.split(" ").slice(1).join(" ")}
+                    {row.note && (
+                      <div className="text-10 text-slate-500 leading-tight">
+                        {row.note}
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-mono tabular-nums text-slate-900 font-medium ml-2 flex-shrink-0">
+                    {row.count}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 flex items-center justify-between">
+          <div className="text-11 text-slate-600">{data.actions.authorityNote}</div>
+          <button
+            type="button"
+            onClick={() => onJumpTo && onJumpTo("op-log")}
+            className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+          >
+            Ad architecture → Operation log <ArrowUpRight className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+
+      {/* Section 4: outlook */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="Tomorrow">Today · what's next</SectionLabel>
+        <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+          <ul className="space-y-1.5">
+            {data.outlook.map((line, i) => (
+              <li key={i} className="text-xs text-slate-700 leading-relaxed flex gap-2">
+                <span className="text-slate-400 flex-shrink-0">·</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Need from you today */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={data.needYou.length > 0 ? `${data.needYou.length} item${data.needYou.length === 1 ? "" : "s"}` : "0 items"}>
+          Need from you today
+        </SectionLabel>
+        {data.needYou.length === 0 ? (
+          <div className="border border-slate-200 rounded-md px-4 py-4 bg-slate-50/40">
+            <div className="text-xs text-slate-600">
+              Nothing for you today · all 12 listings running on the known track
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {data.needYou.map((item, i) => (
+              <NeedYouCard key={i} item={item} onJumpTo={onJumpTo} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Bottom action bar */}
+      <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          Pushed at 7:00 this morning · pending review
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            Question one of these
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            All good · mark reviewed
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
+  const data = WEEKLY_REPORT_DATA;
+  const t = data.topline;
+  const vs = data.vsLast;
+  const tagTone = {
+    Steady: "slate",
+    "Under attack": "amber",
+    "Bedroom keyword issue": "amber",
+    "New keyword window": "emerald",
+    Rising: "emerald",
+  };
+  return (
+    <>
+      <CanvasHeader
+        kicker="Weekly ops report · pushed Mondays"
+        title={`Weekly ops report · ${data.weekLabel}`}
+        meta={
+          <>
+            <ReportExportPill />
+            <ReportDatePicker currentId="report-weekly-w19" onSelect={onSelectDate} />
+          </>
+        }
+      />
+
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="vs last week">This week · overall</SectionLabel>
+        <div className="grid grid-cols-4 gap-3">
+          <ReportToplineCard
+            label="Weekly sales"
+            value={`$${t.rev.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.revPct)} vs last week`}
+            deltaTone={vs.revPct >= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="Weekly ad spend"
+            value={`$${t.spend.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.spendPct)} vs last week`}
+            deltaTone={vs.spendPct <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label={<>{wrapMetric("TACoS")} · week</>}
+            value={`${t.tacos.toFixed(1)}%`}
+            deltaLabel={`${formatSignedPct(vs.tacosPp, "pp")} vs last week`}
+            deltaTone={vs.tacosPp <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="Daily orders"
+            value={t.dailyOrders}
+            deltaLabel={`${formatSignedPct(vs.ordersPct)} vs last week`}
+            deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
+          />
+        </div>
+
+        <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
+            <div className="text-11 text-slate-600 font-medium">
+              12 delegated listings · weekly sales
+            </div>
+            <div className="text-10 text-slate-500 font-mono">
+              Total ${t.rev.toLocaleString()}
+            </div>
+          </div>
+          <table className="w-full text-xs">
+            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="text-left font-medium px-4 py-2">SKU · name</th>
+                <th className="text-right font-medium px-3 py-2">Weekly sales</th>
+                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
+                <th className="text-left font-medium px-3 py-2">Trend</th>
+                <th className="text-left font-medium px-3 py-2">Tag this week</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.listings.map((row) => (
+                <tr key={row.sku} className="border-t border-slate-100" style={{ height: "32px" }}>
+                  <td className="px-4 py-1.5">
+                    <div className="text-xs text-slate-900">
+                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
+                      · {row.name}
+                    </div>
+                  </td>
+                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
+                    ${row.weekRev.toLocaleString()}
+                  </td>
+                  <td className="text-right px-3 py-1.5">
+                    <TacosValue value={row.tacos} size="sm" />
+                  </td>
+                  <td className="px-3 py-1.5">
+                    <ReportTrendArrow trend={row.trend} />
+                  </td>
+                  <td className="px-3 py-1.5">
+                    <Pill tone={tagTone[row.tag] || "slate"}>{row.tag}</Pill>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="3 items">This week · what stood out</SectionLabel>
+        <div className="space-y-2.5">
+          {data.insights.map((ins, i) => (
+            <ReportInsightCard key={i} insight={ins} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel
+          kicker={`${data.actions.totalOps} ops · ${data.actions.overAuthority} out-of-scope · ${data.actions.exceptions} exceptions held (you reviewed)`}
+        >
+          This week · what I did on your behalf
+        </SectionLabel>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              By op type
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.typeBreakdown.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700">{row.label}</div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-mono tabular-nums text-slate-900 font-medium">
+                      {row.count}
+                    </span>
+                    <span className="text-10 text-slate-500 font-mono">
+                      {row.pct}%
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              By listing
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.listingBreakdown.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700 min-w-0">
+                    {row.sku}
+                    {row.note && (
+                      <div className="text-10 text-slate-500 leading-tight">
+                        {row.note}
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-mono tabular-nums text-slate-900 font-medium ml-2 flex-shrink-0">
+                    {row.count}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            onClick={() => onJumpTo && onJumpTo("op-log")}
+            className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+          >
+            Ad architecture → Operation log <ArrowUpRight className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="Next week">Next week · what to watch</SectionLabel>
+        <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+          <ul className="space-y-1.5">
+            {data.nextWeek.map((line, i) => (
+              <li key={i} className="text-xs text-slate-700 leading-relaxed flex gap-2">
+                <span className="text-slate-400 flex-shrink-0">·</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.needYou.length} item${data.needYou.length === 1 ? "" : "s"}`}>
+          Need from you next week
+        </SectionLabel>
+        <div className="space-y-3">
+          {data.needYou.map((item, i) => (
+            <NeedYouCard key={i} item={item} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          Pushed Monday 7:00 · pending review
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            Question one of these
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            All good · mark reviewed
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+const ARCHIVED_REPORT_LABELS = {
+  "report-2026-05-08": "5/8 Fri",
+  "report-2026-05-09": "5/9 Sat",
+  "report-2026-05-10": "5/10 Sun",
+};
+
+function ArchivedReportCanvas({ reportId, onJumpTo }) {
+  const dateLabel = ARCHIVED_REPORT_LABELS[reportId] || "Historical report";
+  return (
+    <>
+      <CanvasHeader
+        kicker="Daily ops report · archived"
+        title={`Daily ops report · ${dateLabel} · archived`}
+        meta={<ReportExportPill />}
+      />
+      <div className="px-6 py-10">
+        <div className="border border-slate-200 rounded-lg px-6 py-8 bg-slate-50/40 max-w-2xl mx-auto">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            Historical report · {dateLabel}
           </div>
           <div className="text-sm font-semibold text-slate-900 mb-2">
-            Report canvas — next step
+            Data archived
           </div>
-          <div className="text-11 text-slate-500 leading-relaxed">
-            Step 1 covered the sidebar thread + history-card collapse.
-            Step 2 onward fills in the 4 report sections (data, insights,
-            actions, outlook).
+          <div className="text-xs text-slate-600 leading-relaxed mb-4">
+            Detailed reports archive after 7 days. For specific ops records on this date, see Operation log under Ad architecture.
           </div>
+          <button
+            type="button"
+            onClick={() => onJumpTo && onJumpTo("op-log")}
+            className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800 border border-emerald-300 hover:bg-emerald-50 rounded-md px-3 py-1.5 bg-white"
+          >
+            Ad architecture → Operation log <ArrowUpRight className="w-3 h-3" />
+          </button>
         </div>
       </div>
     </>
@@ -13541,6 +14701,7 @@ export default function App({ locale, setLocale }) {
   const [activeId, setActiveId] = useState(null);
   const [inspectorOpen, setInspectorOpen] = useState(false);
   const [inspectorTab, setInspectorTab] = useState("ad-architecture");
+  const [adArchSubTab, setAdArchSubTab] = useState("overview");
   const [inspectorWidth, setInspectorWidth] = useState(480);
   const [activeUserId, setActiveUserId] = useState(
     COMPANY_BRAIN.identity.activeUserId,
@@ -13559,6 +14720,19 @@ export default function App({ locale, setLocale }) {
       setInspectorTab(tab);
     }
   }
+
+  const handleJump = (key) => {
+    if (key === "strategy") setActiveId("strategy");
+    else if (key === "defense") setActiveId("defense");
+    else if (key === "decision-classes") {
+      setInspectorOpen(true);
+      setInspectorTab("company-brain");
+    } else if (key === "op-log") {
+      setInspectorOpen(true);
+      setInspectorTab("ad-architecture");
+      setAdArchSubTab("operation-log");
+    }
+  };
 
   useEffect(() => {
     if (
@@ -13581,7 +14755,38 @@ export default function App({ locale, setLocale }) {
       case "defense":
         return <DefenseCanvas />;
       case "daily-report":
-        return <DailyReportCanvas />;
+        return (
+          <DailyReportCanvas
+            reportId="report-2026-05-16"
+            onJumpTo={handleJump}
+            onSelectDate={setActiveId}
+          />
+        );
+      case "report-2026-05-16":
+      case "report-2026-05-15":
+      case "report-2026-05-14":
+      case "report-2026-05-13":
+      case "report-2026-05-12":
+        return (
+          <DailyReportCanvas
+            reportId={activeId}
+            onJumpTo={handleJump}
+            onSelectDate={setActiveId}
+          />
+        );
+      case "report-weekly-w19":
+        return (
+          <WeeklyReportCanvas
+            onJumpTo={handleJump}
+            onSelectDate={setActiveId}
+          />
+        );
+      case "report-2026-05-08":
+      case "report-2026-05-09":
+      case "report-2026-05-10":
+        return (
+          <ArchivedReportCanvas reportId={activeId} onJumpTo={handleJump} />
+        );
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
@@ -13640,6 +14845,8 @@ export default function App({ locale, setLocale }) {
           open={inspectorOpen}
           tab={inspectorTab}
           onTabChange={setInspectorTab}
+          adArchSubTab={adArchSubTab}
+          onAdArchSubTabChange={setAdArchSubTab}
           onClose={() => setInspectorOpen(false)}
           width={inspectorWidth}
           onWidthChange={setInspectorWidth}

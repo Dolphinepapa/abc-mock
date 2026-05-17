@@ -159,17 +159,17 @@ const THREADS = [
     title: "代运营日报 · 每日推送",
     reports: {
       historical: [
-        { id: "rpt-2026-05-08", type: "daily", date: "5/8 周五", time: "7:00", summary: { rev: "$56,180", tacos: "17.4%", anomalies: 0 } },
-        { id: "rpt-2026-05-09", type: "daily", date: "5/9 周六", time: "7:00", summary: { rev: "$48,240", tacos: "16.8%", anomalies: 1 } },
-        { id: "rpt-2026-05-10", type: "daily", date: "5/10 周日", time: "7:00", summary: { rev: "$44,720", tacos: "16.5%", anomalies: 0 } },
+        { id: "rpt-2026-05-08", canvasId: "report-2026-05-08", type: "daily", date: "5/8 周五", time: "7:00", summary: { rev: "$56,180", tacos: "17.4%", anomalies: 0 } },
+        { id: "rpt-2026-05-09", canvasId: "report-2026-05-09", type: "daily", date: "5/9 周六", time: "7:00", summary: { rev: "$48,240", tacos: "16.8%", anomalies: 1 } },
+        { id: "rpt-2026-05-10", canvasId: "report-2026-05-10", type: "daily", date: "5/10 周日", time: "7:00", summary: { rev: "$44,720", tacos: "16.5%", anomalies: 0 } },
       ],
       current: [
-        { id: "rpt-weekly-w19", type: "weekly", date: "5/12 周一", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$402,180", tacos: "17.6%", note: "3 个 listing 出现趋势变化" } },
-        { id: "rpt-2026-05-12", type: "daily", date: "5/12 周一", time: "7:30", summary: { rev: "$54,240", tacos: "18.2%", anomalies: 1 } },
-        { id: "rpt-2026-05-13", type: "daily", date: "5/13 周二", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
-        { id: "rpt-2026-05-14", type: "daily", date: "5/14 周三", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
-        { id: "rpt-2026-05-15", type: "daily", date: "5/15 周四", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
-        { id: "rpt-2026-05-16", type: "daily", date: "5/16 周五", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isToday: true },
+        { id: "rpt-weekly-w19", canvasId: "report-weekly-w19", type: "weekly", date: "5/12 周一", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$402,180", tacos: "17.6%", note: "3 个 listing 出现趋势变化" } },
+        { id: "rpt-2026-05-12", canvasId: "report-2026-05-12", type: "daily", date: "5/12 周一", time: "7:30", summary: { rev: "$54,240", tacos: "18.2%", anomalies: 1 } },
+        { id: "rpt-2026-05-13", canvasId: "report-2026-05-13", type: "daily", date: "5/13 周二", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
+        { id: "rpt-2026-05-14", canvasId: "report-2026-05-14", type: "daily", date: "5/14 周三", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
+        { id: "rpt-2026-05-15", canvasId: "report-2026-05-15", type: "daily", date: "5/15 周四", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
+        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 周五", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isToday: true },
       ],
     },
   },
@@ -9562,6 +9562,17 @@ function ChatPanel({ activeId, onSelect }) {
   );
   const newCount = agentFlagged.filter((t) => t.unread).length;
 
+  const isThreadActive = (thread) => {
+    if (thread.threadType === "report-feed") {
+      const allIds = [
+        ...thread.reports.historical,
+        ...thread.reports.current,
+      ].map((r) => r.canvasId);
+      return allIds.includes(activeId) || activeId === thread.canvasId;
+    }
+    return activeId === thread.id;
+  };
+
   return (
     <aside className="w-80 flex-shrink-0 border-r border-slate-200 bg-white flex flex-col">
       <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
@@ -9592,7 +9603,8 @@ function ChatPanel({ activeId, onSelect }) {
                 <ThreadCard
                   key={thread.id}
                   thread={thread}
-                  active={activeId === thread.id}
+                  active={isThreadActive(thread)}
+                  activeId={activeId}
                   onSelect={onSelect}
                 />
               ))}
@@ -9612,7 +9624,8 @@ function ChatPanel({ activeId, onSelect }) {
               <ThreadCard
                 key={thread.id}
                 thread={thread}
-                active={activeId === thread.id}
+                active={isThreadActive(thread)}
+                activeId={activeId}
                 onSelect={onSelect}
               />
             ))}
@@ -9632,7 +9645,8 @@ function ChatPanel({ activeId, onSelect }) {
                 <ThreadCard
                   key={thread.id}
                   thread={thread}
-                  active={activeId === thread.id}
+                  active={isThreadActive(thread)}
+                  activeId={activeId}
                   onSelect={onSelect}
                   tone="brain-ops"
                 />
@@ -9717,11 +9731,8 @@ function ReportCard({ report, selected, onClick }) {
   );
 }
 
-function ReportFeedExpanded({ thread }) {
+function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [selectedReportId, setSelectedReportId] = useState(
-    thread.reports.current[thread.reports.current.length - 1].id,
-  );
   return (
     <div className="px-3 py-3">
       <div className="text-11 text-slate-500 mb-3 leading-relaxed px-1">
@@ -9747,8 +9758,8 @@ function ReportFeedExpanded({ thread }) {
             <ReportCard
               key={rpt.id}
               report={rpt}
-              selected={selectedReportId === rpt.id}
-              onClick={() => setSelectedReportId(rpt.id)}
+              selected={activeId === rpt.canvasId}
+              onClick={() => onSelect(rpt.canvasId)}
             />
           ))}
         </div>
@@ -9759,8 +9770,8 @@ function ReportFeedExpanded({ thread }) {
           <ReportCard
             key={rpt.id}
             report={rpt}
-            selected={selectedReportId === rpt.id}
-            onClick={() => setSelectedReportId(rpt.id)}
+            selected={activeId === rpt.canvasId}
+            onClick={() => onSelect(rpt.canvasId)}
           />
         ))}
       </div>
@@ -9768,7 +9779,7 @@ function ReportFeedExpanded({ thread }) {
   );
 }
 
-function ThreadCard({ thread, active, onSelect, tone }) {
+function ThreadCard({ thread, active, activeId, onSelect, tone }) {
   const isAgent = thread.initiator === "agent";
   const isBrainOps = tone === "brain-ops";
   const isReportFeed = thread.threadType === "report-feed";
@@ -9779,6 +9790,14 @@ function ThreadCard({ thread, active, onSelect, tone }) {
   const previewBody = isReportFeed
     ? `今日 销售 ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · 异常 ${latestReport.summary.anomalies}`
     : lastTurn?.body || "";
+
+  const handleHeaderClick = () => {
+    if (isReportFeed) {
+      onSelect(latestReport.canvasId);
+    } else {
+      onSelect(thread.id);
+    }
+  };
 
   return (
     <div
@@ -9792,7 +9811,7 @@ function ThreadCard({ thread, active, onSelect, tone }) {
     >
       <button
         type="button"
-        onClick={() => onSelect(thread.id)}
+        onClick={handleHeaderClick}
         className="w-full text-left p-3"
       >
         <div className="flex items-start gap-2">
@@ -9846,7 +9865,11 @@ function ThreadCard({ thread, active, onSelect, tone }) {
       {active && (
         <div className="border-t border-slate-200">
           {isReportFeed ? (
-            <ReportFeedExpanded thread={thread} />
+            <ReportFeedExpanded
+              thread={thread}
+              activeId={activeId}
+              onSelect={onSelect}
+            />
           ) : (
             <>
               <div className="px-3 py-3 space-y-3">
@@ -9931,11 +9954,79 @@ function ThreadTurn({ turn, thread }) {
   );
 }
 
-function AdArchitectureContent({ panelWidth }) {
+function AdArchitectureSubTabs({ subTab, onSubTabChange }) {
+  const tabs = [
+    { id: "overview", label: "概览" },
+    { id: "operation-log", label: "操作日志" },
+  ];
+  return (
+    <div className="px-5 pt-2 border-b border-slate-200 flex items-center gap-3 flex-shrink-0 bg-white">
+      {tabs.map((t) => {
+        const active = subTab === t.id;
+        return (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onSubTabChange && onSubTabChange(t.id)}
+            className={`text-xs font-medium pb-2 border-b-2 -mb-px ${
+              active
+                ? "text-slate-900 border-emerald-600 font-semibold"
+                : "text-slate-500 border-transparent hover:text-slate-700"
+            }`}
+          >
+            {t.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function AdArchitectureOpLogPlaceholder() {
+  return (
+    <div className="flex-1 overflow-y-auto px-5 py-5">
+      <div className="flex items-start gap-3 mb-4">
+        <div className="w-9 h-9 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center flex-shrink-0">
+          <FileText className="w-4 h-4 text-slate-500" />
+        </div>
+        <div className="min-w-0">
+          <div className="text-sm font-semibold text-slate-900">
+            操作日志 · 即将上线
+          </div>
+          <div className="text-11 text-slate-500 mt-0.5 leading-relaxed">
+            敬请期待 · 即将支持 listing / 时间 / 操作类型多维筛选
+          </div>
+        </div>
+      </div>
+      <div className="border border-slate-200 rounded-md bg-slate-50/40 px-4 py-3">
+        <div className="text-xs text-slate-700 leading-relaxed mb-2">
+          当前演示版仅展示日报和周报中的操作统计。下一版将开放完整的逐次操作明细查询,可按以下维度过滤:
+        </div>
+        <ul className="space-y-1 text-11 text-slate-600 leading-relaxed pl-1">
+          <li>· listing(12 个 delegated)</li>
+          <li>· 时间窗口(今天 / 7 天 / 30 天 / 自定义)</li>
+          <li>· 操作类型(出价微调 / 负向关键词 / 预算重分配 / 分时调价 / 其他)</li>
+          <li>· 触发原因(常规优化 / 异常响应 / 攻击防御)</li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+function AdArchitectureContent({ panelWidth, subTab = "overview", onSubTabChange }) {
   const s = STRATEGY.adArchitecture.summary;
   const compact = typeof panelWidth === "number" && panelWidth < 540;
+  if (subTab === "operation-log") {
+    return (
+      <>
+        <AdArchitectureSubTabs subTab={subTab} onSubTabChange={onSubTabChange} />
+        <AdArchitectureOpLogPlaceholder />
+      </>
+    );
+  }
   return (
     <>
+      <AdArchitectureSubTabs subTab={subTab} onSubTabChange={onSubTabChange} />
       <div className="px-5 py-3 border-b border-slate-200 bg-slate-50/40 flex items-center gap-2 flex-shrink-0">
         <ListTree className="w-4 h-4 text-slate-700" />
         <span className="text-xs text-slate-600">SKU-A</span>
@@ -12607,6 +12698,8 @@ function InspectorPanel({
   open,
   tab,
   onTabChange,
+  adArchSubTab,
+  onAdArchSubTabChange,
   onClose,
   width,
   onWidthChange,
@@ -12666,7 +12759,11 @@ function InspectorPanel({
       </div>
       <div className="flex-1 flex flex-col min-h-0">
         {tab === "ad-architecture" ? (
-          <AdArchitectureContent panelWidth={width} />
+          <AdArchitectureContent
+            panelWidth={width}
+            subTab={adArchSubTab}
+            onSubTabChange={onAdArchSubTabChange}
+          />
         ) : tab === "company-brain" ? (
           <CompanyBrainContent
             activeUserId={activeUserId}
@@ -13523,37 +13620,1165 @@ function QACanvas({ activeClearance }) {
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
-function DailyReportCanvas() {
+const REPORT_LISTING_TEMPLATE = [
+  { sku: "SKU-117", name: "床架 / Bed frame", share: 15240 / 58420, tacos: 15.2, trend7d: [14800, 15100, 15300, 15600, 15400, 15500, 15240] },
+  { sku: "SKU-A", name: "落地灯 / Floor lamp", share: 7920 / 58420, tacos: 16.7, trend7d: [7820, 7880, 7910, 7940, 7900, 7920, 7920] },
+  { sku: "SKU-K22", name: "厨刀 / Kitchen knife", share: 6820 / 58420, tacos: 17.8, trend7d: [6780, 6810, 6830, 6850, 6820, 6820, 6820] },
+  { sku: "SKU-DR-12", name: "餐布 / Table runner", share: 6380 / 58420, tacos: 19.0, trend7d: [5980, 6050, 6120, 6200, 6280, 6340, 6380] },
+  { sku: "SKU-WD-08", name: "壁挂 / Wall hanging", share: 4860 / 58420, tacos: 19.0, trend7d: [4820, 4840, 4860, 4870, 4860, 4860, 4860] },
+  { sku: "SKU-LH-04", name: "沙发椅 / Lounge chair", share: 4320 / 58420, tacos: 17.0, trend7d: [4280, 4300, 4310, 4330, 4320, 4320, 4320] },
+  { sku: "SKU-OS-03", name: "收纳柜 / Storage cabinet", share: 3360 / 58420, tacos: 18.0, trend7d: [3320, 3340, 3360, 3360, 3360, 3360, 3360] },
+  { sku: "SKU-PL-21", name: "吊灯 / Pendant lamp", share: 3180 / 58420, tacos: 19.0, trend7d: [3140, 3160, 3170, 3180, 3180, 3180, 3180] },
+  { sku: "SKU-TR-09", name: "抱枕 / Throw pillow", share: 2720 / 58420, tacos: 19.0, trend7d: [2900, 2860, 2820, 2790, 2760, 2740, 2720] },
+  { sku: "SKU-CD-15", name: "餐瓶 / Cruet", share: 1540 / 58420, tacos: 19.0, trend7d: [1520, 1530, 1540, 1540, 1540, 1540, 1540] },
+  { sku: "SKU-VS-04", name: "花瓶 / Vase", share: 1180 / 58420, tacos: 18.0, trend7d: [1160, 1170, 1180, 1180, 1180, 1180, 1180] },
+  { sku: "SKU-BR-07", name: "浴垫 / Bath mat", share: 900 / 58420, tacos: 19.0, trend7d: [890, 895, 900, 900, 900, 900, 900] },
+];
+
+function buildListingTable(dayTotal, overrides = {}) {
+  const raw = REPORT_LISTING_TEMPLATE.map((r) => {
+    const o = overrides[r.sku] || {};
+    return {
+      ...r,
+      rev: Math.round(r.share * dayTotal),
+      tacos: o.tacos ?? r.tacos,
+      trend: o.trend || (r.trend7d[6] > r.trend7d[0] ? "up" : r.trend7d[6] < r.trend7d[0] ? "down" : "flat"),
+    };
+  });
+  // Adjust the largest row so the total matches exactly.
+  const sum = raw.reduce((s, r) => s + r.rev, 0);
+  const diff = dayTotal - sum;
+  raw[0].rev += diff;
+  return raw;
+}
+
+const DAILY_REPORTS_DATA = {
+  "report-2026-05-16": {
+    date: "5/16 周五",
+    weekday: "周五",
+    isToday: true,
+    topline: {
+      rev: 58420,
+      spend: 11340,
+      tacos: 19.4,
+      orders: 412,
+      aov: 141.80,
+    },
+    vsLast: {
+      label: "对比上周五 (5/9)",
+      revPct: -4.2,
+      spendPct: -2.1,
+      tacosPp: 0.6,
+      ordersPct: -5.8,
+      aovPct: 1.6,
+    },
+    listings: buildListingTable(58420),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A 落地灯 · 卧室词 CTR 连续 3 天低于基准",
+        body:
+          "卧室词 7 天平均 CTR 1.1% · 品类基准 2.8%。问题在 listing 内容(主图缺卧室场景),不是出价。我已经调过两轮 bid,没起作用。",
+        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
+      },
+      {
+        tone: "emerald",
+        title: "SKU-DR-12 餐布 · boho table runner 类目搜索量 7 天 +180%",
+        body:
+          "新类目搜索词起量,我们还没出广告。竞品 SOV 也很低,这是窗口期。我没自己上,这超出当前自主权限。下面有授权卡片等你点头。",
+        jump: null,
+      },
+      {
+        tone: "blue",
+        title: "SKU-117 床架 · NightFox 攻击进入第 4 天",
+        body:
+          "今天他们没加码,我们出价跟齐就守住了。防御方案在窗口期内正常运转,无需调整。继续每小时监控。",
+        jump: { key: "defense", label: "跳到防御警报会话" },
+      },
+    ],
+    actions: {
+      totalOps: 38,
+      breakdown: [
+        { label: "出价微调", count: 22, note: "区间 -8% ~ +5%" },
+        { label: "负向关键词收割", count: 11, note: "" },
+        { label: "预算重分配", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 床架", count: 12, note: "含 NightFox 攻击中的出价跟齐" },
+        { sku: "SKU-DR-12 餐布", count: 8, note: "" },
+        { sku: "SKU-A 落地灯", count: 7, note: "" },
+        { sku: "SKU-K22 厨刀", count: 5, note: "" },
+        { sku: "其余 8 个 listing", count: 6, note: "常规优化" },
+      ],
+      authorityNote: "今天 38 次操作全部在已委托范围内,没有超权限自主行为。",
+    },
+    outlook: [
+      "整体 TACoS 应回到 18.8% ~ 19.4% 区间(今天 19.4% 已经在区间内)",
+      "SKU-117 床架 BSR 应守住 #3 以内 — 前提是 NightFox 不进一步加码",
+      "SKU-DR-12 餐布新词授权批准后,首日跑量应在 $200-300,ACoS 应 ≤ 22%",
+      "其他 9 个 listing 照常运转,无变化预期",
+    ],
+    needYou: [
+      {
+        kind: "approve",
+        sku: "SKU-DR-12 餐布",
+        title: "新搜索词授权",
+        body: "\"boho table runner\" 是新关键词类别,超出我当前的自主权限。我没动,等你点头。预算建议 $80/天起,首周观察 ACoS。",
+        primary: "现在批",
+      },
+      {
+        kind: "jump",
+        sku: "SKU-A 落地灯",
+        title: "卧室词 CTR 问题",
+        body: "品牌团队的活,需要新主图测试(卧室场景)。我已经在 SKU-A 会话里加了 insight,等你和品牌团队对接。",
+        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
+      },
+    ],
+  },
+  "report-2026-05-15": {
+    date: "5/15 周四",
+    weekday: "周四",
+    topline: {
+      rev: 59820,
+      spend: 10940,
+      tacos: 18.3,
+      orders: 423,
+      aov: 141.42,
+    },
+    vsLast: {
+      label: "对比上周四 (5/8)",
+      revPct: 6.5,
+      spendPct: 3.2,
+      tacosPp: -0.5,
+      ordersPct: 4.2,
+      aovPct: 2.1,
+    },
+    listings: buildListingTable(59820, { "SKU-A": { tacos: 17.2 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A 落地灯 · 卧室词 CTR 问题第 4 天",
+        body:
+          "CTR 仍在 1.1% 上下,品类基准 2.8%。我已经调过两轮 bid,没起作用。再次确认这是 listing 内容问题,不是出价。",
+        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
+      },
+      {
+        tone: "emerald",
+        title: "SKU-DR-12 餐布 · 新词信号第一次出现",
+        body:
+          "\"boho table runner\" 类目搜索量今天首次出现明显涨幅(+62%)。还没到出广告的把握,但值得多观察 2-3 天。",
+        jump: null,
+      },
+    ],
+    actions: {
+      totalOps: 38,
+      breakdown: [
+        { label: "出价微调", count: 23, note: "" },
+        { label: "负向关键词收割", count: 10, note: "" },
+        { label: "预算重分配", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 床架", count: 11, note: "NightFox 攻击响应中" },
+        { sku: "SKU-A 落地灯", count: 8, note: "卧室词 bid 第二轮调整" },
+        { sku: "SKU-DR-12 餐布", count: 5, note: "" },
+        { sku: "SKU-K22 厨刀", count: 4, note: "" },
+        { sku: "其余 8 个 listing", count: 10, note: "" },
+      ],
+      authorityNote: "全部在已委托范围内。",
+    },
+    outlook: [
+      "整体 TACoS 应继续在 18% ~ 19% 区间",
+      "SKU-117 防御方案继续,NightFox 折扣期还有 ~5 天",
+      "SKU-DR-12 新词需再观察 2-3 天再决定要不要找你授权",
+    ],
+    needYou: [
+      {
+        kind: "info",
+        sku: "SKU-DR-12 餐布",
+        title: "新词观察 · 信息同步",
+        body: "\"boho table runner\" 类目搜索量首次明显涨幅。我打算再观察 3 天再决定要不要找你批新词预算。这条今天不用回。",
+      },
+    ],
+  },
+  "report-2026-05-14": {
+    date: "5/14 周三",
+    weekday: "周三",
+    topline: {
+      rev: 61240,
+      spend: 10900,
+      tacos: 17.8,
+      orders: 432,
+      aov: 141.76,
+    },
+    vsLast: {
+      label: "对比上周三 (5/7)",
+      revPct: 8.4,
+      spendPct: 4.1,
+      tacosPp: -0.7,
+      ordersPct: 5.8,
+      aovPct: 2.4,
+    },
+    listings: buildListingTable(61240, { "SKU-A": { tacos: 17.0 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A 落地灯 · 卧室词 CTR 第 3 天",
+        body:
+          "卧室词 CTR 还在 1.1% 附近。bid 已经调了一轮没用,确认是内容问题。需要新主图。",
+        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
+      },
+      {
+        tone: "blue",
+        title: "SKU-117 床架 · NightFox 攻击第 2 天",
+        body:
+          "他们今天稍微加码了一点(2 个核心词的 bid 又上了 6-8%)。我们出价跟齐,排名守住了。防御方案在窗口期内运转。",
+        jump: { key: "defense", label: "跳到防御警报会话" },
+      },
+    ],
+    actions: {
+      totalOps: 45,
+      breakdown: [
+        { label: "出价微调", count: 28, note: "含防御出价跟齐" },
+        { label: "负向关键词收割", count: 12, note: "" },
+        { label: "预算重分配", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 床架", count: 16, note: "NightFox 攻击响应密集" },
+        { sku: "SKU-A 落地灯", count: 9, note: "" },
+        { sku: "SKU-DR-12 餐布", count: 4, note: "" },
+        { sku: "SKU-K22 厨刀", count: 5, note: "" },
+        { sku: "其余 8 个 listing", count: 11, note: "" },
+      ],
+      authorityNote: "全部在已委托范围内。攻击响应没有超权限,都是出价跟齐+负词收割。",
+    },
+    outlook: [
+      "SKU-117 NightFox 还会持续,我们继续盯",
+      "SKU-A 卧室词主图测试一上线,数据应该会回",
+      "整体 TACoS 应在 17.5% ~ 18.5% 区间",
+    ],
+    needYou: [],
+  },
+  "report-2026-05-13": {
+    date: "5/13 周二",
+    weekday: "周二",
+    topline: {
+      rev: 58420,
+      spend: 10000,
+      tacos: 17.1,
+      orders: 418,
+      aov: 139.76,
+    },
+    vsLast: {
+      label: "对比上周二 (5/6)",
+      revPct: 5.2,
+      spendPct: 2.4,
+      tacosPp: -0.5,
+      ordersPct: 3.4,
+      aovPct: 1.7,
+    },
+    listings: buildListingTable(58420, { "SKU-A": { tacos: 16.9 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A 落地灯 · 卧室词 CTR 第 2 天",
+        body:
+          "昨天发现的卧室词 CTR 缺口今天没回。1.1% 仍远低于品类基准 2.8%。我先尝试调高一轮 bid 看效果,但更可能是内容问题。",
+        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
+      },
+      {
+        tone: "rose",
+        title: "SKU-117 床架 · NightFox 开始攻击",
+        body:
+          "今天监控到 NightFox 在我们 7 个核心词上集中抬 bid,加上他们刚挂的 18% 折扣券。这是有组织的份额抢占。我已经把这条单独开为防御警报会话。",
+        jump: { key: "defense", label: "跳到防御警报会话" },
+      },
+    ],
+    actions: {
+      totalOps: 41,
+      breakdown: [
+        { label: "出价微调", count: 26, note: "含防御出价跟齐" },
+        { label: "负向关键词收割", count: 10, note: "" },
+        { label: "预算重分配", count: 5, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 床架", count: 14, note: "NightFox 攻击启动响应" },
+        { sku: "SKU-A 落地灯", count: 7, note: "" },
+        { sku: "SKU-DR-12 餐布", count: 4, note: "" },
+        { sku: "SKU-K22 厨刀", count: 5, note: "" },
+        { sku: "其余 8 个 listing", count: 11, note: "" },
+      ],
+      authorityNote: "全部在已委托范围内。攻击防御没有动用超权限,只是常规出价跟齐。",
+    },
+    outlook: [
+      "NightFox 攻击窗口期预计 5-7 天",
+      "SKU-117 排名应能守住前 3,前提是我们跟齐出价",
+      "SKU-A 卧室词如果再 bid 一轮没起色,需要升级到品牌团队",
+    ],
+    needYou: [
+      {
+        kind: "jump",
+        sku: "SKU-117 床架",
+        title: "NightFox 攻击响应方案",
+        body: "今天有 1 件待你确认:NightFox 攻击响应方案。我已经按防御警报会话起草了 3 种姿态,推荐姿态已高亮。建议今天/明天就决策。",
+        jump: { key: "defense", label: "跳到防御警报会话" },
+      },
+    ],
+  },
+  "report-2026-05-12": {
+    date: "5/12 周一",
+    weekday: "周一",
+    topline: {
+      rev: 54240,
+      spend: 9870,
+      tacos: 18.2,
+      orders: 384,
+      aov: 141.25,
+    },
+    vsLast: {
+      label: "对比上周一 (5/5)",
+      revPct: 3.8,
+      spendPct: 2.6,
+      tacosPp: -0.2,
+      ordersPct: 2.4,
+      aovPct: 1.4,
+    },
+    listings: buildListingTable(54240, { "SKU-A": { tacos: 16.4 } }),
+    insights: [
+      {
+        tone: "amber",
+        title: "SKU-A 落地灯 · 卧室词 CTR 第 1 天",
+        body:
+          "今天首次发现 SKU-A 在卧室场景关键词上的 CTR 异常低(1.1%,品类基准 2.8%)。先观察一天,如果明天还是这样,我会调一轮 bid 看效果。",
+        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
+      },
+    ],
+    actions: {
+      totalOps: 33,
+      breakdown: [
+        { label: "出价微调", count: 20, note: "" },
+        { label: "负向关键词收割", count: 9, note: "" },
+        { label: "预算重分配", count: 4, note: "" },
+      ],
+      topListings: [
+        { sku: "SKU-117 床架", count: 8, note: "" },
+        { sku: "SKU-A 落地灯", count: 6, note: "" },
+        { sku: "SKU-K22 厨刀", count: 5, note: "" },
+        { sku: "SKU-DR-12 餐布", count: 3, note: "" },
+        { sku: "其余 8 个 listing", count: 11, note: "" },
+      ],
+      authorityNote: "全部在已委托范围内。",
+    },
+    outlook: [
+      "SKU-A 卧室词需要再观察 1 天再决定要不要调 bid",
+      "整体 TACoS 应继续在 18% 上下",
+      "其他 11 个 listing 照常运转",
+    ],
+    needYou: [],
+  },
+};
+
+const WEEKLY_REPORT_DATA = {
+  coverRange: "5/5 - 5/11",
+  weekLabel: "W19 · 5/5 - 5/11",
+  topline: {
+    rev: 402180,
+    spend: 70820,
+    tacos: 17.6,
+    dailyOrders: 412,
+  },
+  vsLast: {
+    revPct: 6.2,
+    spendPct: 4.1,
+    tacosPp: -0.3,
+    ordersPct: 3.4,
+  },
+  listings: [
+    { sku: "SKU-117", name: "床架 / Bed frame", weekRev: 104680, tacos: 15.4, trend: "up", tag: "受攻击" },
+    { sku: "SKU-A", name: "落地灯 / Floor lamp", weekRev: 55420, tacos: 16.8, trend: "flat", tag: "卧室词问题持续" },
+    { sku: "SKU-K22", name: "厨刀 / Kitchen knife", weekRev: 47180, tacos: 17.4, trend: "flat", tag: "平稳" },
+    { sku: "SKU-DR-12", name: "餐布 / Table runner", weekRev: 43680, tacos: 18.9, trend: "up", tag: "新词机会期" },
+    { sku: "SKU-WD-08", name: "壁挂 / Wall hanging", weekRev: 33420, tacos: 18.6, trend: "flat", tag: "平稳" },
+    { sku: "SKU-LH-04", name: "沙发椅 / Lounge chair", weekRev: 29680, tacos: 17.2, trend: "flat", tag: "平稳" },
+    { sku: "SKU-OS-03", name: "收纳柜 / Storage cabinet", weekRev: 23120, tacos: 17.9, trend: "flat", tag: "平稳" },
+    { sku: "SKU-PL-21", name: "吊灯 / Pendant lamp", weekRev: 21860, tacos: 18.8, trend: "flat", tag: "平稳" },
+    { sku: "SKU-TR-09", name: "抱枕 / Throw pillow", weekRev: 18620, tacos: 18.4, trend: "flat", tag: "平稳" },
+    { sku: "SKU-CD-15", name: "餐瓶 / Cruet", weekRev: 10580, tacos: 18.7, trend: "flat", tag: "平稳" },
+    { sku: "SKU-VS-04", name: "花瓶 / Vase", weekRev: 7820, tacos: 17.6, trend: "flat", tag: "平稳" },
+    { sku: "SKU-BR-07", name: "浴垫 / Bath mat", weekRev: 6120, tacos: 18.9, trend: "flat", tag: "平稳" },
+  ],
+  insights: [
+    {
+      tone: "rose",
+      title: "SKU-117 床架 · 从平稳期进入受攻击期",
+      body:
+        "攻击始于周三 (5/7),NightFox 在 7 个核心词上集中抬 bid。本周末仍在窗口内。详见防御警报会话。",
+      jump: { key: "defense", label: "跳到防御警报会话" },
+    },
+    {
+      tone: "amber",
+      title: "SKU-A 落地灯 · 卧室词问题已 5 天连续",
+      body:
+        "累计影响销售估算 $1,200/周。bid 调整已尝试两轮无效,确认是 listing 内容问题。建议升级到品牌团队优先级。",
+      jump: { key: "strategy", label: "跳到 SKU-A 会话" },
+    },
+    {
+      tone: "emerald",
+      title: "SKU-DR-12 餐布 · 新词机会期",
+      body:
+        "\"boho table runner\" 类目搜索量 7 天连续上扬。新词授权周四批准,周五已经跑了首日数据($340 · ACoS 18%)。",
+      jump: null,
+    },
+  ],
+  actions: {
+    totalOps: 247,
+    overAuthority: 0,
+    exceptions: 5,
+    typeBreakdown: [
+      { label: "出价微调", count: 148, pct: 60 },
+      { label: "负向关键词收割", count: 68, pct: 28 },
+      { label: "预算重分配", count: 19, pct: 8 },
+      { label: "分时调价", count: 12, pct: 5 },
+    ],
+    listingBreakdown: [
+      { sku: "SKU-117 床架", count: 64, note: "含 NightFox 攻击的密集调整" },
+      { sku: "SKU-DR-12 餐布", count: 52, note: "" },
+      { sku: "SKU-A 落地灯", count: 38, note: "" },
+      { sku: "其他 9 个 listing", count: 93, note: "" },
+    ],
+  },
+  nextWeek: [
+    "NightFox 折扣窗口预计 5/19 结束,关键节点",
+    "SKU-A 落地灯新主图测试预计 5/22 上线(品牌团队)",
+    "4 个 listing 进入旺季前预热期(床架 / 灯具品类)",
+    "\"boho table runner\" 进入第 2 周观察期",
+  ],
+  needYou: [
+    {
+      kind: "jump",
+      sku: "SKU-A 落地灯",
+      title: "主图测试 sign off",
+      body: "品牌团队需要你确认拍摄方案。建议周一前回复,周二开拍。",
+      jump: { key: "strategy", label: "跳到 SKU-A 会话" },
+    },
+    {
+      kind: "jump",
+      sku: "决策类别升级评估",
+      title: "bid_raise on velocity SKUs",
+      body:
+        "已积累 28/30 次执行,预计本周达 graduation 阈值。届时需要你审批是否升级到自主执行。",
+      jump: { key: "decision-classes", label: "跳到决策类别" },
+    },
+  ],
+};
+
+function ReportTrendArrow({ trend, className = "" }) {
+  if (trend === "up") return <TrendingUp className={`w-3 h-3 text-emerald-600 ${className}`} />;
+  if (trend === "down") return <TrendingUp className={`w-3 h-3 text-rose-600 rotate-180 ${className}`} />;
+  return <Minus className={`w-3 h-3 text-slate-400 ${className}`} />;
+}
+
+function ReportInsightCard({ insight, onJumpTo }) {
+  const tone = insight.tone || "slate";
+  const toneClass =
+    tone === "rose"
+      ? "border-rose-200 bg-rose-50/60"
+      : tone === "amber"
+        ? "border-amber-200 bg-amber-50/60"
+        : tone === "emerald"
+          ? "border-emerald-200 bg-emerald-50/60"
+          : tone === "blue"
+            ? "border-blue-200 bg-blue-50/60"
+            : "border-slate-200 bg-slate-50/60";
+  const titleColor =
+    tone === "rose"
+      ? "text-rose-900"
+      : tone === "amber"
+        ? "text-amber-900"
+        : tone === "emerald"
+          ? "text-emerald-900"
+          : tone === "blue"
+            ? "text-blue-900"
+            : "text-slate-900";
+  return (
+    <div className={`border rounded-md px-4 py-3 ${toneClass}`}>
+      <div className={`text-sm font-semibold ${titleColor} mb-1.5`}>
+        {insight.title}
+      </div>
+      <div className="text-xs text-slate-700 leading-relaxed">
+        {insight.body}
+      </div>
+      {insight.jump && (
+        <button
+          type="button"
+          onClick={() => onJumpTo && onJumpTo(insight.jump.key)}
+          className="mt-2 inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+        >
+          {insight.jump.label} <ArrowRight className="w-3 h-3" />
+        </button>
+      )}
+    </div>
+  );
+}
+
+function ReportToplineCard({ label, value, deltaLabel, deltaTone }) {
+  const deltaCls =
+    deltaTone === "good"
+      ? "text-emerald-700"
+      : deltaTone === "bad"
+        ? "text-rose-700"
+        : "text-slate-500";
+  return (
+    <div className="border border-slate-200 rounded-md px-3 py-2.5 bg-white">
+      <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+        {label}
+      </div>
+      <div className="text-lg font-mono font-semibold text-slate-900 mt-1 tabular-nums">
+        {value}
+      </div>
+      {deltaLabel && (
+        <div className={`text-11 font-mono mt-0.5 ${deltaCls}`}>
+          {deltaLabel}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function formatSignedPct(v, suffix = "%") {
+  const sign = v > 0 ? "+" : "";
+  return `${sign}${v.toFixed(1)}${suffix}`;
+}
+
+function ReportDatePicker({ currentId, onSelect }) {
+  const [open, setOpen] = useState(false);
+  const options = [
+    { id: "report-2026-05-16", label: "5/16 周五 · 今天" },
+    { id: "report-2026-05-15", label: "5/15 周四" },
+    { id: "report-2026-05-14", label: "5/14 周三" },
+    { id: "report-2026-05-13", label: "5/13 周二" },
+    { id: "report-2026-05-12", label: "5/12 周一" },
+    { id: "report-weekly-w19", label: "W19 周报 · 5/5-5/11" },
+    { id: "report-2026-05-10", label: "5/10 周日 · 归档" },
+    { id: "report-2026-05-09", label: "5/9 周六 · 归档" },
+    { id: "report-2026-05-08", label: "5/8 周五 · 归档" },
+  ];
+  const currentLabel =
+    options.find((o) => o.id === currentId)?.label.split(" · ")[0] || "选日期";
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
+      >
+        <Calendar className="w-3 h-3" />
+        {currentLabel} ⌄
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full mt-1 z-20 w-56 bg-white border border-slate-200 rounded-md shadow-lg py-1">
+          {options.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                onSelect && onSelect(o.id);
+              }}
+              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-slate-50 ${
+                o.id === currentId
+                  ? "text-emerald-700 font-medium"
+                  : "text-slate-700"
+              }`}
+            >
+              {o.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReportExportPill() {
+  return (
+    <span
+      title="演示锁定 · 导出未启用"
+      className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed"
+    >
+      <FileText className="w-3 h-3" />
+      导出 PDF · 演示锁定
+    </span>
+  );
+}
+
+function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
+  const data = DAILY_REPORTS_DATA[reportId] || DAILY_REPORTS_DATA["report-2026-05-16"];
+  const t = data.topline;
+  const vs = data.vsLast;
   return (
     <>
       <CanvasHeader
         kicker="代运营日报 · 每日推送"
-        title="代运营日报 · 5/16 周五"
+        title={`代运营日报 · ${data.date}`}
         meta={
           <>
-            <Pill tone="slate">
-              <FileText className="w-3 h-3" />
-              导出 PDF · 演示锁定
-            </Pill>
-            <Pill tone="slate">
-              <Calendar className="w-3 h-3" />
-              5/16 ⌄
-            </Pill>
+            <ReportExportPill />
+            <ReportDatePicker currentId={reportId} onSelect={onSelectDate} />
           </>
         }
       />
-      <div className="px-6 py-16">
-        <div className="max-w-md mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-slate-100 border border-slate-200 mb-4">
-            <FileText className="w-5 h-5 text-slate-500" />
+
+      {/* Section 1: 现状 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker={vs.label}>这一天 · 数据</SectionLabel>
+        <div className="grid grid-cols-5 gap-3">
+          <ReportToplineCard
+            label="销售"
+            value={`$${t.rev.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.revPct)} vs 上周同日`}
+            deltaTone={vs.revPct >= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="广告花费"
+            value={`$${t.spend.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.spendPct)} vs 上周同日`}
+            deltaTone={vs.spendPct <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label={wrapMetric("TACoS")}
+            value={`${t.tacos.toFixed(1)}%`}
+            deltaLabel={`${formatSignedPct(vs.tacosPp, "pp")} vs 上周同日`}
+            deltaTone={vs.tacosPp <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="订单数"
+            value={t.orders}
+            deltaLabel={`${formatSignedPct(vs.ordersPct)} vs 上周同日`}
+            deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="客单价 AOV"
+            value={`$${t.aov.toFixed(2)}`}
+            deltaLabel={`${formatSignedPct(vs.aovPct)} vs 上周同日`}
+            deltaTone={vs.aovPct >= 0 ? "good" : "bad"}
+          />
+        </div>
+
+        <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
+            <div className="text-11 text-slate-600 font-medium">
+              12 个 delegated listing · 当日销售
+            </div>
+            <div className="text-10 text-slate-500 font-mono">
+              合计 ${t.rev.toLocaleString()}
+            </div>
+          </div>
+          <table className="w-full text-xs">
+            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="text-left font-medium px-4 py-2">SKU · 名称</th>
+                <th className="text-right font-medium px-3 py-2">当日销售</th>
+                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
+                <th className="text-left font-medium px-3 py-2">7 日趋势</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.listings.map((row) => (
+                <tr
+                  key={row.sku}
+                  className="border-t border-slate-100"
+                  style={{ height: "32px" }}
+                >
+                  <td className="px-4 py-1.5">
+                    <div className="text-xs text-slate-900">
+                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
+                      · {row.name}
+                    </div>
+                  </td>
+                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
+                    ${row.rev.toLocaleString()}
+                  </td>
+                  <td className="text-right px-3 py-1.5">
+                    <TacosValue value={row.tacos} size="sm" />
+                  </td>
+                  <td className="px-3 py-1.5">
+                    <div className="flex items-center gap-2">
+                      <Sparkline
+                        data={row.trend7d}
+                        width={80}
+                        height={18}
+                        color={
+                          row.trend === "up"
+                            ? "emerald"
+                            : row.trend === "down"
+                              ? "rose"
+                              : "slate"
+                        }
+                      />
+                      <ReportTrendArrow trend={row.trend} />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Section 2: 发现 */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.insights.length} 条`}>这一天 · 发现</SectionLabel>
+        {data.insights.length === 0 ? (
+          <div className="border border-dashed border-slate-200 rounded-md px-4 py-6 text-center bg-slate-50/40">
+            <div className="text-xs text-slate-600">
+              今天没有新发现 · 12 个 listing 都在已知轨道上运转
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-2.5">
+            {data.insights.map((ins, i) => (
+              <ReportInsightCard key={i} insight={ins} onJumpTo={onJumpTo} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Section 3: 动作 */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.actions.totalOps} 次操作 · 全部在委托范围内`}>
+          这一天 · 我代你做的事
+        </SectionLabel>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              按操作类型
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.breakdown.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700">
+                    {row.label}
+                    {row.note && (
+                      <span className="text-slate-500 ml-1.5">· {row.note}</span>
+                    )}
+                  </div>
+                  <div className="font-mono tabular-nums text-slate-900 font-medium">
+                    {row.count}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              按 listing(Top 4 + 其他)
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.topListings.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700 min-w-0">
+                    <span className="font-mono">{row.sku.split(" ")[0]}</span>{" "}
+                    {row.sku.split(" ").slice(1).join(" ")}
+                    {row.note && (
+                      <div className="text-10 text-slate-500 leading-tight">
+                        {row.note}
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-mono tabular-nums text-slate-900 font-medium ml-2 flex-shrink-0">
+                    {row.count}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 flex items-center justify-between">
+          <div className="text-11 text-slate-600">{data.actions.authorityNote}</div>
+          <button
+            type="button"
+            onClick={() => onJumpTo && onJumpTo("op-log")}
+            className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+          >
+            广告架构 → 操作日志 <ArrowUpRight className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+
+      {/* Section 4: 预判 */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="明天">这一天 · 接下来怎么走</SectionLabel>
+        <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+          <ul className="space-y-1.5">
+            {data.outlook.map((line, i) => (
+              <li key={i} className="text-xs text-slate-700 leading-relaxed flex gap-2">
+                <span className="text-slate-400 flex-shrink-0">·</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* 需要你今天回的 */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={data.needYou.length > 0 ? `${data.needYou.length} 件` : "0 件"}>
+          需要你今天回的
+        </SectionLabel>
+        {data.needYou.length === 0 ? (
+          <div className="border border-slate-200 rounded-md px-4 py-4 bg-slate-50/40">
+            <div className="text-xs text-slate-600">
+              今天没有要你回的 · 12 个 listing 都在已知轨道上运转
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {data.needYou.map((item, i) => (
+              <NeedYouCard key={i} item={item} onJumpTo={onJumpTo} />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Bottom action bar */}
+      <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          今早 7:00 自动推送 · 待审
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            对某项有问题
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            就这样 OK · 标记已审
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function NeedYouCard({ item, onJumpTo }) {
+  const kind = item.kind;
+  const borderCls =
+    kind === "approve"
+      ? "border-emerald-300 bg-emerald-50/40"
+      : kind === "jump"
+        ? "border-amber-200 bg-amber-50/40"
+        : "border-slate-200 bg-slate-50/40";
+  return (
+    <div className={`border rounded-md px-4 py-3 ${borderCls}`}>
+      <div className="text-11 text-slate-500 mb-0.5 uppercase tracking-wider font-medium">
+        {item.sku}
+      </div>
+      <div className="text-sm font-semibold text-slate-900 mb-1.5">
+        {item.title}
+      </div>
+      <div className="text-xs text-slate-700 leading-relaxed mb-3">
+        {item.body}
+      </div>
+      {kind === "approve" && (
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            {item.primary || "现在批"}
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            改
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-md"
+          >
+            <X className="w-3.5 h-3.5" />
+            拒绝
+          </button>
+        </div>
+      )}
+      {kind === "jump" && item.jump && (
+        <button
+          type="button"
+          onClick={() => onJumpTo && onJumpTo(item.jump.key)}
+          className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800 border border-emerald-300 hover:bg-emerald-50 rounded-md px-3 py-1.5 bg-white"
+        >
+          {item.jump.label} <ArrowRight className="w-3 h-3" />
+        </button>
+      )}
+      {kind === "info" && (
+        <div className="text-11 text-slate-500 italic">
+          仅供你知道,本条无需操作。
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
+  const data = WEEKLY_REPORT_DATA;
+  const t = data.topline;
+  const vs = data.vsLast;
+  const tagTone = {
+    平稳: "slate",
+    "受攻击": "amber",
+    "卧室词问题持续": "amber",
+    "新词机会期": "emerald",
+    上升: "emerald",
+  };
+  return (
+    <>
+      <CanvasHeader
+        kicker="代运营周报 · 周一推送"
+        title={`代运营周报 · ${data.weekLabel}`}
+        meta={
+          <>
+            <ReportExportPill />
+            <ReportDatePicker currentId="report-weekly-w19" onSelect={onSelectDate} />
+          </>
+        }
+      />
+
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="vs 上一周">这一周整体</SectionLabel>
+        <div className="grid grid-cols-4 gap-3">
+          <ReportToplineCard
+            label="周销售"
+            value={`$${t.rev.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.revPct)} vs 上周`}
+            deltaTone={vs.revPct >= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="周广告花费"
+            value={`$${t.spend.toLocaleString()}`}
+            deltaLabel={`${formatSignedPct(vs.spendPct)} vs 上周`}
+            deltaTone={vs.spendPct <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label={<>{wrapMetric("TACoS")} 周</>}
+            value={`${t.tacos.toFixed(1)}%`}
+            deltaLabel={`${formatSignedPct(vs.tacosPp, "pp")} vs 上周`}
+            deltaTone={vs.tacosPp <= 0 ? "good" : "bad"}
+          />
+          <ReportToplineCard
+            label="日均订单"
+            value={t.dailyOrders}
+            deltaLabel={`${formatSignedPct(vs.ordersPct)} vs 上周`}
+            deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
+          />
+        </div>
+
+        <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
+            <div className="text-11 text-slate-600 font-medium">
+              12 个 delegated listing · 本周销售
+            </div>
+            <div className="text-10 text-slate-500 font-mono">
+              合计 ${t.rev.toLocaleString()}
+            </div>
+          </div>
+          <table className="w-full text-xs">
+            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="text-left font-medium px-4 py-2">SKU · 名称</th>
+                <th className="text-right font-medium px-3 py-2">本周销售</th>
+                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
+                <th className="text-left font-medium px-3 py-2">趋势</th>
+                <th className="text-left font-medium px-3 py-2">本周标签</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.listings.map((row) => (
+                <tr key={row.sku} className="border-t border-slate-100" style={{ height: "32px" }}>
+                  <td className="px-4 py-1.5">
+                    <div className="text-xs text-slate-900">
+                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
+                      · {row.name}
+                    </div>
+                  </td>
+                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
+                    ${row.weekRev.toLocaleString()}
+                  </td>
+                  <td className="text-right px-3 py-1.5">
+                    <TacosValue value={row.tacos} size="sm" />
+                  </td>
+                  <td className="px-3 py-1.5">
+                    <ReportTrendArrow trend={row.trend} />
+                  </td>
+                  <td className="px-3 py-1.5">
+                    <Pill tone={tagTone[row.tag] || "slate"}>{row.tag}</Pill>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="3 条">这一周的发现</SectionLabel>
+        <div className="space-y-2.5">
+          {data.insights.map((ins, i) => (
+            <ReportInsightCard key={i} insight={ins} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel
+          kicker={`${data.actions.totalOps} 次操作 · ${data.actions.overAuthority} 次超权限 · ${data.actions.exceptions} 次异常挂起(你已 review)`}
+        >
+          这一周代你做的事
+        </SectionLabel>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              按操作类型
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.typeBreakdown.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700">{row.label}</div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="font-mono tabular-nums text-slate-900 font-medium">
+                      {row.count}
+                    </span>
+                    <span className="text-10 text-slate-500 font-mono">
+                      {row.pct}%
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+            <div className="text-11 text-slate-500 font-medium mb-2 uppercase tracking-wider">
+              按 listing
+            </div>
+            <div className="space-y-1.5">
+              {data.actions.listingBreakdown.map((row, i) => (
+                <div key={i} className="flex items-center justify-between text-xs">
+                  <div className="text-slate-700 min-w-0">
+                    {row.sku}
+                    {row.note && (
+                      <div className="text-10 text-slate-500 leading-tight">
+                        {row.note}
+                      </div>
+                    )}
+                  </div>
+                  <div className="font-mono tabular-nums text-slate-900 font-medium ml-2 flex-shrink-0">
+                    {row.count}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 flex justify-end">
+          <button
+            type="button"
+            onClick={() => onJumpTo && onJumpTo("op-log")}
+            className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+          >
+            广告架构 → 操作日志 <ArrowUpRight className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="下周">下周关注</SectionLabel>
+        <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+          <ul className="space-y-1.5">
+            {data.nextWeek.map((line, i) => (
+              <li key={i} className="text-xs text-slate-700 leading-relaxed flex gap-2">
+                <span className="text-slate-400 flex-shrink-0">·</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.needYou.length} 件`}>需要你下周做的事</SectionLabel>
+        <div className="space-y-3">
+          {data.needYou.map((item, i) => (
+            <NeedYouCard key={i} item={item} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          周一 7:00 自动推送 · 待审
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            对某项有问题
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            就这样 OK · 标记已审
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+const ARCHIVED_REPORT_LABELS = {
+  "report-2026-05-08": "5/8 周五",
+  "report-2026-05-09": "5/9 周六",
+  "report-2026-05-10": "5/10 周日",
+};
+
+function ArchivedReportCanvas({ reportId, onJumpTo }) {
+  const dateLabel = ARCHIVED_REPORT_LABELS[reportId] || "历史日报";
+  return (
+    <>
+      <CanvasHeader
+        kicker="代运营日报 · 历史"
+        title={`代运营日报 · ${dateLabel} · 已归档`}
+        meta={
+          <ReportExportPill />
+        }
+      />
+      <div className="px-6 py-10">
+        <div className="border border-slate-200 rounded-lg px-6 py-8 bg-slate-50/40 max-w-2xl mx-auto">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            历史报告 · {dateLabel}
           </div>
           <div className="text-sm font-semibold text-slate-900 mb-2">
-            日报画布下一步建
+            数据已归档
           </div>
-          <div className="text-11 text-slate-500 leading-relaxed">
-            Step 1 已完成左侧 thread 视觉 + 历史卡片折叠。
-            Step 2 起开始填日报 4 段内容(数据 / 发现 / 动作 / 预判)。
+          <div className="text-xs text-slate-600 leading-relaxed mb-4">
+            详细日报内容超过 7 天后归档。如需查询当日的具体操作记录,使用广告架构下的操作日志。
           </div>
+          <button
+            type="button"
+            onClick={() => onJumpTo && onJumpTo("op-log")}
+            className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800 border border-emerald-300 hover:bg-emerald-50 rounded-md px-3 py-1.5 bg-white"
+          >
+            广告架构 → 操作日志 <ArrowUpRight className="w-3 h-3" />
+          </button>
         </div>
       </div>
     </>
@@ -13585,6 +14810,7 @@ export default function App({ locale, setLocale }) {
   const [activeId, setActiveId] = useState(null);
   const [inspectorOpen, setInspectorOpen] = useState(false);
   const [inspectorTab, setInspectorTab] = useState("ad-architecture");
+  const [adArchSubTab, setAdArchSubTab] = useState("overview");
   const [inspectorWidth, setInspectorWidth] = useState(480);
   const [activeUserId, setActiveUserId] = useState(
     COMPANY_BRAIN.identity.activeUserId,
@@ -13603,6 +14829,19 @@ export default function App({ locale, setLocale }) {
       setInspectorTab(tab);
     }
   }
+
+  const handleJump = (key) => {
+    if (key === "strategy") setActiveId("strategy");
+    else if (key === "defense") setActiveId("defense");
+    else if (key === "decision-classes") {
+      setInspectorOpen(true);
+      setInspectorTab("company-brain");
+    } else if (key === "op-log") {
+      setInspectorOpen(true);
+      setInspectorTab("ad-architecture");
+      setAdArchSubTab("operation-log");
+    }
+  };
 
   useEffect(() => {
     if (
@@ -13625,7 +14864,38 @@ export default function App({ locale, setLocale }) {
       case "defense":
         return <DefenseCanvas />;
       case "daily-report":
-        return <DailyReportCanvas />;
+        return (
+          <DailyReportCanvas
+            reportId="report-2026-05-16"
+            onJumpTo={handleJump}
+            onSelectDate={setActiveId}
+          />
+        );
+      case "report-2026-05-16":
+      case "report-2026-05-15":
+      case "report-2026-05-14":
+      case "report-2026-05-13":
+      case "report-2026-05-12":
+        return (
+          <DailyReportCanvas
+            reportId={activeId}
+            onJumpTo={handleJump}
+            onSelectDate={setActiveId}
+          />
+        );
+      case "report-weekly-w19":
+        return (
+          <WeeklyReportCanvas
+            onJumpTo={handleJump}
+            onSelectDate={setActiveId}
+          />
+        );
+      case "report-2026-05-08":
+      case "report-2026-05-09":
+      case "report-2026-05-10":
+        return (
+          <ArchivedReportCanvas reportId={activeId} onJumpTo={handleJump} />
+        );
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
@@ -13684,6 +14954,8 @@ export default function App({ locale, setLocale }) {
           open={inspectorOpen}
           tab={inspectorTab}
           onTabChange={setInspectorTab}
+          adArchSubTab={adArchSubTab}
+          onAdArchSubTabChange={setAdArchSubTab}
           onClose={() => setInspectorOpen(false)}
           width={inspectorWidth}
           onWidthChange={setInspectorWidth}
