@@ -6811,6 +6811,16 @@ function RazorBladeCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: "/razor-blade-hero.png",
+            caption: "我方 Henry's · 刀身 + 刀头主图",
+            fallbackText: "等待上传 · Henry's 刀身 + 刀头主图",
+          },
+        ]}
+      />
+
       <div className="px-6 pt-6 space-y-5">
         {/* PHASE 1 */}
         <PhaseSection

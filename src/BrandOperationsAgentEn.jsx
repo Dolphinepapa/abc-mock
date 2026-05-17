@@ -6762,6 +6762,16 @@ function RazorBladeCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: "/razor-blade-hero.png",
+            caption: "Our Henry's · razor + blade hero",
+            fallbackText: "Pending upload · Henry's razor + blade hero",
+          },
+        ]}
+      />
+
       <div className="px-6 pt-6 space-y-5">
         {/* PHASE 1 */}
         <PhaseSection
