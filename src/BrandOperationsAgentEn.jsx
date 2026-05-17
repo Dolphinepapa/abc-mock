@@ -8370,7 +8370,62 @@ function DefenseMilestoneTimeline({ milestones }) {
   );
 }
 
+function GalleryLightbox({ open, onClose, title, images }) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  if (!open) return null;
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-6"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-lg shadow-xl max-w-4xl w-full flex flex-col"
+        style={{ maxHeight: "90vh" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="px-5 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
+          <div className="text-sm font-semibold text-slate-900 tracking-tight">
+            {title} · Full gallery ({images.length})
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-slate-500 hover:text-slate-900"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-5">
+          <div className="grid grid-cols-2 gap-4">
+            {images.map((src, i) => (
+              <div
+                key={i}
+                className="aspect-square rounded-md border border-slate-200 bg-slate-100 overflow-hidden"
+              >
+                <img
+                  src={src}
+                  alt={`Image ${i + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function HeroImageStrip({ images }) {
+  const [openGallery, setOpenGallery] = useState(null);
   return (
     <div className="px-6 pt-5">
       <div
@@ -8402,6 +8457,26 @@ function HeroImageStrip({ images }) {
             >
               {img.caption}
             </div>
+            {img.gallery && img.gallery.length > 0 && (
+              <div
+                className="mt-1 text-center mx-auto"
+                style={{ width: "280px" }}
+              >
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpenGallery({
+                      images: img.gallery,
+                      title: img.caption,
+                    })
+                  }
+                  className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium"
+                >
+                  View full gallery ({img.gallery.length})
+                  <ArrowUpRight className="w-3 h-3" />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -8410,6 +8485,12 @@ function HeroImageStrip({ images }) {
           {images[0].descriptor} · {images[1].descriptor}
         </div>
       )}
+      <GalleryLightbox
+        open={!!openGallery}
+        onClose={() => setOpenGallery(null)}
+        title={openGallery?.title || ""}
+        images={openGallery?.images || []}
+      />
     </div>
   );
 }
