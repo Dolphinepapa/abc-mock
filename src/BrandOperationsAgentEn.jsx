@@ -4572,6 +4572,13 @@ function StrategyCanvas() {
             src: "/sku-a-hero.png",
             caption: "Our SKU-A · Arc Floor Lamp hero",
             fallbackText: "Pending upload · our SKU-A hero",
+            gallery: [
+              "/sku-a-gallery-1.png",
+              "/sku-a-gallery-2.png",
+              "/sku-a-gallery-3.png",
+              "/sku-a-gallery-4.png",
+              "/sku-a-gallery-5.png",
+            ],
           },
         ]}
       />

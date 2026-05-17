@@ -4637,6 +4637,13 @@ function StrategyCanvas() {
             src: "/sku-a-hero.png",
             caption: "我方 SKU-A · 弧形落地灯主图",
             fallbackText: "等待上传 · 我方 SKU-A 主图",
+            gallery: [
+              "/sku-a-gallery-1.png",
+              "/sku-a-gallery-2.png",
+              "/sku-a-gallery-3.png",
+              "/sku-a-gallery-4.png",
+              "/sku-a-gallery-5.png",
+            ],
           },
         ]}
       />
