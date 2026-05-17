@@ -7641,6 +7641,13 @@ function LaunchCRCanvas() {
             caption: "我方 SKU-TI-A · 轮胎充气泵主图",
             fallbackText: "等待上传 · 我方 SKU-TI-A 主图",
             descriptor: "我方主图(应用场景图:SUV · 摩托 · 轿车 · 篮球)",
+            gallery: [
+              "/tire-inflator-gallery-1.png",
+              "/tire-inflator-gallery-2.png",
+              "/tire-inflator-gallery-3.png",
+              "/tire-inflator-gallery-4.png",
+              "/tire-inflator-gallery-5.png",
+            ],
           },
           {
             src: "/tire-inflator-competitor.png",

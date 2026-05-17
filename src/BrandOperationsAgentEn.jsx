@@ -7592,6 +7592,13 @@ function LaunchCRCanvas() {
             caption: "Our SKU-TI-A · tire inflator hero",
             fallbackText: "Pending upload · our SKU-TI-A hero",
             descriptor: "Our hero (use-case set: SUV · motorcycle · sedan · basketball)",
+            gallery: [
+              "/tire-inflator-gallery-1.png",
+              "/tire-inflator-gallery-2.png",
+              "/tire-inflator-gallery-3.png",
+              "/tire-inflator-gallery-4.png",
+              "/tire-inflator-gallery-5.png",
+            ],
           },
           {
             src: "/tire-inflator-competitor.png",
