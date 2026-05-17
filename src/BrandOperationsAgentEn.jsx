@@ -93,6 +93,11 @@ const METRIC_DEFINITIONS = {
   roas: "Return on Ad Spend · Ad-attributed sales ÷ ad spend. ROAS is the reciprocal of ACoS (ROAS = 1 / ACoS).",
   impressions:
     "Number of times an ad is displayed — regardless of whether the user noticed it. Monthly impressions = past-30-day total.",
+  marginalRoas:
+    "Ad revenue from the next $1 of incremental spend. Better than average ROAS for sizing headroom.",
+  organicRank:
+    "Position on the search results page outside paid slots. Organic #1-3 captures 3-4x the free traffic of lower positions.",
+  cpa: "Cost per Acquisition · Ad spend ÷ conversions.",
 };
 
 const THREADS = [
@@ -247,7 +252,7 @@ const THREADS = [
         speaker: "agent",
         timestamp: "May 15, 08:38",
         body:
-          "Completed audience clustering + competitor listing teardown. Identified 4 hypotheses (2 P0: main image rework + title rewrite; 2 P1: A+ module + bullet reorder). Opening the canvas for the test schedule.",
+          "Completed search-term clustering + competitor listing teardown. Identified 4 hypotheses (2 P0: main image rework + title rewrite; 2 P1: A+ module + bullet reorder). Opening the canvas for the test schedule.",
         canvasLink: true,
       },
     ],
@@ -1232,7 +1237,7 @@ const RAZOR_BLADE = {
       title: "Experiment A · Cut razor price 12.5%",
       treatmentLabel: "$39.99 → $34.99",
       treatmentDetail:
-        "Razor sale price drops to within $0.00 of Competitor A. Blade price and ad architecture held constant; only the razor list price moves.",
+        "Razor sale price drops to $34.99 — matches Competitor A. Blade price and ad architecture held constant; only the razor list price moves.",
       hypothesis:
         "At parity with Competitor A, razor unit sales rise ≥ 20% with attach rate unchanged or rising, so 90-day cohort revenue per acquired customer goes up despite the lower per-razor margin.",
       testMethod: "Amazon Manage Your Experiments · price A/B test on razor ASIN",
@@ -3435,7 +3440,7 @@ const BRAIN_OPS = {
       },
       {
         id: "fail-subscription-coupling",
-        title: "Don't run subscription experiments in the same window as A+ visual BC tests — attach signal gets polluted",
+        title: "Don't run subscription experiments in the same window as A+ visual swap tests — attach signal gets polluted",
         source: "SKU-RZ-001 Razor · A+ + subscription went live together, margin landed 12.4% vs goal 15%, attribution muddied",
         appliesWhen: "Razor-blade pattern SKUs where attach rate is the core lever",
       },
@@ -3532,7 +3537,7 @@ const BRAIN_OPS = {
         breakdown: "handle 28% · heads 58%",
       },
       analysisEn:
-        "Both well above the 15% floor. Razor has more headroom in blade pricing (current attach rate 47% leaves room to grow); toothbrush has the higher attach rate baseline (78%) — different leverage profiles.",
+        "Both well above the 15% floor. Razor's lever is attach-rate growth (currently 47%, headroom to lift) driven by razor pricing; toothbrush has the higher attach rate baseline (78%) — lever shifts to unit price / refill cadence.",
     },
     sources: [
       {
@@ -3669,10 +3674,42 @@ function wrapMetric(label) {
     ROAS: METRIC_DEFINITIONS.roas,
     "Monthly impressions": METRIC_DEFINITIONS.impressions,
     "Conversion rate": METRIC_DEFINITIONS.cr,
+    "marginal ROAS": METRIC_DEFINITIONS.marginalRoas,
+    "organic rank": METRIC_DEFINITIONS.organicRank,
+    "cohort revenue": METRIC_DEFINITIONS.cohortRevenue,
+    "blended margin": METRIC_DEFINITIONS.blendedMargin,
+    "attach rate": METRIC_DEFINITIONS.attachRate,
+    "attach-rate": METRIC_DEFINITIONS.attachRate,
+    CPA: METRIC_DEFINITIONS.cpa,
   };
   const def = map[label];
   if (def) return <MetricTerm definition={def}>{label}</MetricTerm>;
   return label;
+}
+
+/* Wrap the FIRST occurrence of each known jargon term inside a prose string. */
+function wrapProse(text, terms) {
+  if (!text || !terms || terms.length === 0) return text;
+  const sorted = [...terms].sort((a, b) => b.length - a.length);
+  const found = sorted
+    .map((t) => ({ term: t, idx: text.indexOf(t) }))
+    .filter((x) => x.idx >= 0)
+    .sort((a, b) => a.idx - b.idx);
+  if (found.length === 0) return text;
+  const parts = [];
+  let cursor = 0;
+  const consumed = new Set();
+  for (const { term, idx } of found) {
+    if (consumed.has(term)) continue;
+    const realIdx = text.indexOf(term, cursor);
+    if (realIdx < 0) continue;
+    if (realIdx > cursor) parts.push(text.slice(cursor, realIdx));
+    parts.push(<span key={`${term}-${realIdx}`}>{wrapMetric(term)}</span>);
+    cursor = realIdx + term.length;
+    consumed.add(term);
+  }
+  if (cursor < text.length) parts.push(text.slice(cursor));
+  return parts;
 }
 
 function tacosColorClass(value) {
@@ -4536,7 +4573,7 @@ function InformationalInsightCard({ insight }) {
               className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed"
             >
               <span className="w-1 h-1 mt-1.5 rounded-full bg-slate-400 flex-shrink-0" />
-              <span>{obs}</span>
+              <span>{i === 0 ? wrapProse(obs, ["organic rank", "SOV"]) : obs}</span>
             </li>
           ))}
         </ul>
@@ -5917,7 +5954,7 @@ function BudgetEnvelopeStrip({ budget }) {
                 ${a.combined.toLocaleString()}
               </div>
               <div className="text-10 text-slate-400 mt-0.5 leading-snug">
-                +${a.incremental.toLocaleString()} · {a.tag}
+                +${a.incremental.toLocaleString()} · {wrapProse(a.tag, ["marginal ROAS"])}
               </div>
             </div>
           </div>
@@ -6319,7 +6356,7 @@ function TikTokBiddingCard({ mechanisms, recommendation }) {
               Agent recommendation
             </div>
             <div className="text-xs text-slate-200 leading-relaxed">
-              {recommendation}
+              {wrapProse(recommendation, ["CPA", "LTV"])}
             </div>
           </div>
         </div>
@@ -7242,7 +7279,7 @@ function RazorBladeCanvas() {
                     Diagnosis
                   </div>
                   <div className="text-sm font-semibold text-white mb-1.5 leading-snug">
-                    {R.diagnosis.headline}
+                    {wrapProse(R.diagnosis.headline, ["attach rate", "LTV"])}
                   </div>
                   <div className="text-xs text-slate-300 leading-relaxed">
                     {R.diagnosis.body}
@@ -7303,7 +7340,7 @@ function RazorBladeCanvas() {
                   </span>
                 </div>
                 <div className="text-xs text-slate-200 leading-relaxed mb-2">
-                  {R.precedent.summary}
+                  {wrapProse(R.precedent.summary, ["cohort revenue", "blended margin"])}
                 </div>
                 <div className="text-11 text-slate-400 leading-relaxed">
                   Method · {R.precedent.method}
@@ -7974,9 +8011,9 @@ function LaunchCRCanvas() {
         </div>
       </div>
 
-      {/* 1. Current state · audience clustering */}
+      {/* 1. Current state · search-term clustering */}
       <div className="px-6">
-        <SectionLabel kicker="3 audience clusters · pickup is the flagged one">
+        <SectionLabel kicker="3 search-term clusters · pickup is the problem">
           1. Current state · 现状
         </SectionLabel>
         <div className="grid grid-cols-3 gap-3">
@@ -9163,7 +9200,7 @@ function DefenseCanvas() {
             </div>
           </div>
           <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-line mb-4">
-            {D.context.body}
+            {wrapProse(D.context.body, ["organic rank"])}
           </div>
 
           <div className="rounded-md bg-slate-800/70 border border-slate-700 px-4 py-3">
@@ -12517,7 +12554,7 @@ function UploadCanvas() {
 
       {/* 1. Current state · OKR roll-up */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="3 OKRs · 8 KRs · overall completion 76%">
+        <SectionLabel kicker="3 OKRs · 8 KRs · overall completion 89%">
           1. Current state
         </SectionLabel>
 
@@ -13177,7 +13214,7 @@ function QACanvas({ activeClearance }) {
               </div>
 
               <div className="mt-4 text-sm text-slate-700 leading-relaxed">
-                {Q.answer.analysisEn}
+                {wrapProse(Q.answer.analysisEn, ["attach rate", "attach-rate"])}
               </div>
 
               <div className="mt-5 pt-4 border-t border-slate-100">

@@ -92,6 +92,11 @@ const METRIC_DEFINITIONS = {
   roas: "Return on Ad Spend · 广告投资回报 · 广告归因销售额 ÷ 广告花费。ROAS 与 ACoS 互为倒数(ROAS = 1 / ACoS)。",
   impressions:
     "曝光 · 广告被展示的次数(不论用户是否注意)。月曝光 = 过去 30 天累计曝光。",
+  marginalRoas:
+    "每追加 $1 广告投入,边际带来多少广告收入。边际比平均更准确反映扩量空间。",
+  organicRank:
+    "搜索结果里非广告自然排序的位置。自然位 #1-3 拿到的免费流量是后面位置的 3-4 倍。",
+  cpa: "单次转化成本 · 广告花费 ÷ 转化数。国际通用术语:CPA (Cost per Acquisition)。",
 };
 
 const THREADS = [
@@ -99,7 +104,7 @@ const THREADS = [
     id: "defense",
     canvasId: "defense",
     initiator: "agent",
-    initiatorName: "品牌运营助手",
+    initiatorName: "Agent",
     initiatorRole: "监控警报",
     initialTimestamp: "2 小时前",
     lastActivityTimestamp: "2 小时前",
@@ -247,7 +252,7 @@ const THREADS = [
         speaker: "agent",
         timestamp: "May 15, 08:38",
         body:
-          "已完成受众聚类与竞品 listing 对比拆解,识别 4 个假设(2 个 P0:主图重做 + 标题重写;2 个 P1:A+ 模块 + bullet 重排)。打开画布查看测试计划。",
+          "已完成搜索词分群与竞品 listing 对比拆解,识别 4 个假设(2 个 P0:主图重做 + 标题重写;2 个 P1:A+ 模块 + bullet 重排)。打开画布查看测试计划。",
         canvasLink: true,
       },
     ],
@@ -1097,12 +1102,12 @@ const OMNICHANNEL = {
       id: "tiktok-geo-holdout",
       title: "地区对照测试 · 验证 TikTok 增量",
       summary:
-        "在 7 个测试 DMA 投 TikTok 8 周,7 个匹配对照 DMA 不投,对比两组下游 Amazon + Walmart 销售差异 — 隔离 TikTok 的真实因果贡献。样本由 5 + 5 扩至 7 + 7,目的是提高 minimum detectable lift 的统计能力。",
+        "在 7 个测试 DMA 投 TikTok 8 周,7 个匹配对照 DMA 不投,对比两组下游 Amazon + Walmart 销售差异 — 隔离 TikTok 的真实因果贡献。样本由 5 + 5 扩至 7 + 7,目的是提高最小可检出提升 (MDL) 的统计能力。",
       hypothesis:
         "TikTok 投放能为充电宝带来下游 Amazon + Walmart 销售增量(每 $1 TikTok 花费带来 ≥ $0.80 的 Amazon + Walmart 销售增量)。",
       treatment:
         "7 个测试 DMA(基线 Amazon + Walmart 销售匹配后选定)投 TikTok 视频广告,Cost Cap CPA $14;7 个对照 DMA 维持原状。",
-      sampleSize: "7 测试 DMA + 7 对照 DMA · 基线销售 ±8% 内匹配 · 提高 minimum detectable lift 统计能力",
+      sampleSize: "7 测试 DMA + 7 对照 DMA · 基线销售 ±8% 内匹配 · 提高最小可检出提升 (MDL) 统计能力",
       duration: "8 周",
       budget: "$36K 测试预算 · 平均每周 $4.5K · 7 个 DMA 均分",
       successMetric:
@@ -1129,7 +1134,7 @@ const OMNICHANNEL = {
         "TikTok 是 0 → 1 验证投资。+$36K 跑 7 DMA holdout test(8 周),验证下游 Amazon + Walmart lift。如果验证通过,Q3 再决定是否全量扩。",
         "Amazon 现状最大、接近饱和。+$28K 不走 Bed Frame 打法(价格锁定下不兼容),改走「品牌广告持续扩量 → CPC 下行」pattern。12 周内不一定完成 BSR ≤ 5 目标,但建立的品牌词 SOV 和广告效率改善是长期资产。",
         "Week 4 复盘:重点看 TikTok holdout 早期信号方向。如 lift 显著低于预期,Week 5-8 可考虑把 TikTok 剩余预算挪到 Walmart 加码品牌广告。",
-        "价格锁定约束是底层 framing — 任何依赖促销 / 降价的方案都被排除。三个 channel 的方案全部基于「流量效率 + 广告结构」改进。",
+        "价格锁定约束是硬约束 — 任何依赖促销 / 降价的方案都被排除。三个 channel 的方案全部基于「流量效率 + 广告结构」改进。",
         "Walmart +$36K + TikTok +$36K + Amazon +$28K = $100K 增量,无储备。合并后月度总投入 $153K,Q3 预算审议前可调整。",
       ],
       accuracy: 71,
@@ -1192,11 +1197,11 @@ const RAZOR_BLADE = {
     },
   ],
   diagnosis: {
-    headline: "刮胡刀定价似乎在压制捆绑购买率,进而压制 LTV",
+    headline: "刮胡刀定价似乎在压制绑定购买率,进而压制 LTV",
     body:
-      "我方刮胡刀价格比 Competitor A 高 14.3%,估算捆绑购买率低 15pp,估算 LTV 低约 26%。三者的关系一致指向刮胡刀定价是上游约束:",
+      "我方刮胡刀价格比 Competitor A 高 14.3%,估算绑定购买率低 15pp,估算 LTV 低约 26%。三者的关系一致指向刮胡刀定价是上游约束:",
     hypothesis:
-      "刮胡刀定价正在压制捆绑购买率,进而压制 LTV。降低刮胡刀价格带来的 LTV 提升应当超过刮胡刀单位毛利损失 — 但必须通过实验验证。",
+      "刮胡刀定价正在压制绑定购买率,进而压制 LTV。降低刮胡刀价格带来的 LTV 提升应当超过刮胡刀单位毛利损失 — 但必须通过实验验证。",
   },
   headroom: {
     currentPct: 38.1,
@@ -1204,7 +1209,7 @@ const RAZOR_BLADE = {
     headroomPct: 23.1,
     priceFloorIfDrop: "$25.49",
     narrative:
-      "当前产品线综合毛利率 38.1%,约束下限 15%,余量 23.1pp。刮胡刀售价理论上可降至约 $25.49(单位毛利损失 $4.90,假设销量与捆绑率响应到位),同时产品线毛利 ≥ 15%。空间存在;但能否回本是 Phase 2 要回答的问题。",
+      "当前产品线综合毛利率 38.1%,约束下限 15%,余量 23.1pp。刮胡刀售价理论上可降至约 $25.49(单位毛利损失 $4.90,假设销量与绑定购买率响应到位),同时产品线毛利 ≥ 15%。空间存在;但能否回本是 Phase 2 要回答的问题。",
   },
   precedent: {
     sku: "牙刷 · SKU-TB-22",
@@ -1215,7 +1220,7 @@ const RAZOR_BLADE = {
     method:
       "Amazon Manage Your Experiments · 牙刷 ASIN 价格 A/B 测试;替换刷头 ASIN 不变;结果以 90 天获客队列收入衡量。",
     caveat:
-      "牙刷捆绑购买率估算约 78%,远高于刮胡刀的 47%。LTV 数学根本不同 — 直接照搬降价幅度为时过早,必须通过 A/B 测试验证后再外推。",
+      "牙刷绑定购买率估算约 78%,远高于刮胡刀的 47%。LTV 的算法不一样 — 不能直接照搬降价幅度,必须通过 A/B 测试验证后再外推。",
   },
   experiments: [
     {
@@ -1225,12 +1230,12 @@ const RAZOR_BLADE = {
       treatmentDetail:
         "刮胡刀售价降至与 Competitor A 持平。刀头价格与广告架构保持不变;仅刮胡刀挂牌价变动。",
       hypothesis:
-        "在与 Competitor A 持平的价格下,刮胡刀销量 ≥ +20% 且捆绑购买率不下降甚至上升,从而 90 天获客队列收入上升,覆盖刮胡刀单位毛利的下降。",
+        "在与 Competitor A 持平的价格下,刮胡刀销量 ≥ +20% 且绑定购买率不下降甚至上升,从而 90 天获客队列收入上升,覆盖刮胡刀单位毛利的下降。",
       testMethod: "Amazon Manage Your Experiments · 刮胡刀 ASIN 价格 A/B 测试",
       sampleSize: "每组 ~12,400 刮胡刀买家 · 3 周爬坡",
       duration: "3 周",
       successMetric:
-        "每个获客 90 天队列收入 ≥ +15% vs 对照组 · 捆绑购买率衰减不超过 3pp",
+        "每个获客 90 天队列收入 ≥ +15% vs 对照组 · 绑定购买率衰减不超过 3pp",
       marginCheck: {
         passes: true,
         detail:
@@ -1240,27 +1245,27 @@ const RAZOR_BLADE = {
         {
           label: "最优情景",
           tone: "emerald",
-          summary: "队列收入 +22% · 捆绑率升至 51%",
+          summary: "队列收入 +22% · 绑定购买率升至 51%",
           nextMove:
             "全产品线锁定新刮胡刀定价;广告预算向刮胡刀获客转移(Phase 3 详述)。",
         },
         {
           label: "基准情景",
           tone: "slate",
-          summary: "队列收入 +14% · 捆绑率维持 47%",
+          summary: "队列收入 +14% · 绑定购买率维持 47%",
           nextMove:
             "新定价保留 60 天观察;期满前不宣布为永久。",
         },
         {
           label: "最差情景",
           tone: "rose",
-          summary: "队列收入 +3% · 捆绑率降至 44%",
+          summary: "队列收入 +3% · 绑定购买率降至 44%",
           nextMove:
-            "回退价格;假设失败 — 定价不是捆绑率的约束。",
+            "回退价格;假设失败 — 定价不是绑定购买率的约束。",
         },
       ],
       confidence: 72,
-      confidenceLabel: "12 次历史价格测试 · 捆绑率响应方差较大",
+      confidenceLabel: "12 次历史价格测试 · 绑定购买率响应方差较大",
     },
     {
       id: "razor-bundle",
@@ -1269,7 +1274,7 @@ const RAZOR_BLADE = {
       treatmentDetail:
         "在刮胡刀主 ASIN 旁上架套装 ASIN:1 把刮胡刀 + 3 个刀头, $59.99。套装 COGS = $30.39 + $5.40 = $35.79 → 单位毛利 $24.20 / 40.3%。",
       hypothesis:
-        "套装结构性地把捆绑购买率锁定为 100%,套装买家的单位 LTV 在扣除对单独刮胡刀销量的蚕食后,仍高于单独刮胡刀的平均 LTV($23.43)。",
+        "套装结构性地把绑定购买率锁定为 100%,套装买家的单位 LTV 在扣除对单独刮胡刀销量的蚕食后,仍高于单独刮胡刀的平均 LTV($23.43)。",
       testMethod: "新套装 ASIN 与刮胡刀主 ASIN 并列上架 · 自然 + 付费流量",
       sampleSize: "套装 vs 单独刮胡刀 LTV 对比 · 预估 ~6,800 套装买家",
       duration: "4 周",
@@ -1379,7 +1384,7 @@ const RAZOR_BLADE = {
   ],
   competitorDataSources: {
     methodology:
-      "竞品价格每日从 Helium10 产品 feed 抓取。捆绑购买率与 LTV 估算来自公开 Amazon Brand Analytics Top-of-Funnel 数据 · Jungle Scout BSR 轨迹推断 · 公开 review 量反推(每单评论率基线 1.4%)。",
+      "竞品价格每日从 Helium10 产品 feed 抓取。绑定购买率与 LTV 估算来自公开 Amazon Brand Analytics Top-of-Funnel 数据 · Jungle Scout BSR 轨迹推断 · 公开 review 量反推(每单评论率基线 1.4%)。",
     tableHeaders: ["字段", "Competitor A", "Competitor B", "数据来源"],
     columnWidths: ["28%", "22%", "22%", "28%"],
     tableRows: [
@@ -1388,15 +1393,15 @@ const RAZOR_BLADE = {
       ["刀头 4 件装挂牌价", "$18.49", "$16.99", "Helium10 每日价格 feed"],
       ["估算月度刮胡刀销量", "5,840", "7,210", "Jungle Scout BSR-销量模型"],
       ["估算 12 个月评论量", "2,847", "3,612", "公开 Amazon 评论数"],
-      ["提及刀头复购的评论数", "1,766(62%)", "2,094(58%)", "Helium10 评论文本爬取 · 捆绑率代理"],
-      ["估算捆绑购买率", "62%", "58%", "评论 / 单 + 复购提及反推"],
+      ["提及刀头复购的评论数", "1,766(62%)", "2,094(58%)", "Helium10 评论文本爬取 · 绑定购买率代理"],
+      ["估算绑定购买率", "62%", "58%", "评论 / 单 + 复购提及反推"],
       ["估算 LTV", "$31.84", "$27.42", "我方 LTV 公式 · 用他们的经济结构代入"],
     ],
     definitionsList: [
       {
-        term: "评论 / 单捆绑率代理",
+        term: "评论 / 单绑定购买率代理",
         definition:
-          "公开评论中提及刀头复购或订阅注册的占比。在我方过往牙刷与刮胡刀 SKU 中与实际捆绑购买率高度相关(14 个历史案例 r² = 0.71)。非完美 · 已知是下限。",
+          "公开评论中提及刀头复购或订阅注册的占比。在我方过往牙刷与刮胡刀 SKU 中与实际绑定购买率高度相关(14 个历史案例 r² = 0.71)。非完美 · 已知是下限。",
       },
       {
         term: "Jungle Scout BSR-销量模型",
@@ -1412,13 +1417,13 @@ const RAZOR_BLADE = {
   },
   precedentDataSources: {
     methodology:
-      "牙刷定价测试数据来自 Company Brain 的 Q2 2025 案例。90 天队列收入提升由 Amazon Manage Your Experiments 处理-对照报表与我方内部 LTV 账目导出。注意 · 捆绑率差异意味着结果只能在方向上 — 而非数值上 — 迁移。",
+      "牙刷定价测试数据来自 Company Brain 的 Q2 2025 案例。90 天队列收入提升由 Amazon Manage Your Experiments 处理-对照报表与我方内部 LTV 账目导出。注意 · 绑定购买率差异意味着结果只能在方向上 — 而非数值上 — 迁移。",
     tableHeaders: ["指标", "测试前", "测试中", "测试后(90 天)"],
     columnWidths: ["32%", "22%", "22%", "24%"],
     tableRows: [
       ["牙刷主体挂牌价", "$54.99", "$44.99", "$44.99(维持)"],
       ["替换刷头挂牌价", "$22.49", "$22.49", "$22.49"],
-      ["估算捆绑购买率", "76.4%", "78.2%", "78.6%"],
+      ["估算绑定购买率", "76.4%", "78.2%", "78.6%"],
       ["牙刷主体月销量", "1,840", "2,610", "2,540"],
       ["队列收入指数(归一)", "100", "118.1", "124.3"],
       ["产品线综合毛利率", "42.3%", "21.6%", "23.8%"],
@@ -1433,7 +1438,7 @@ const RAZOR_BLADE = {
       {
         term: "为何只能方向迁移、不能数值迁移",
         definition:
-          "牙刷捆绑率约 78%,比刮胡刀的 47% 高 31pp。刮胡刀降价的 LTV 提升幅度关键依赖于捆绑率移动幅度 — 牙刷案例无法预测幅度,只能说明方向上可能。",
+          "牙刷绑定购买率约 78%,比刮胡刀的 47% 高 31pp。刮胡刀降价的 LTV 提升幅度关键依赖于绑定购买率移动幅度 — 牙刷案例无法预测幅度,只能说明方向上可能。",
       },
     ],
   },
@@ -1503,7 +1508,7 @@ const LAUNCH_CR = {
     adPositionAvg: "slot 4",
     adPositionBest: "slot 1",
     audienceProfile:
-      "皮卡买家 · 男性为主 28-55 岁 · 约 38% 是商用 / 车队用途 · 强烈偏好重型 / 耐用化的视觉语言 · 对品牌专属度敏感 — 他们靠标题和主图判断这个产品是不是「为皮卡造的」,而不是恰好能装上去的通用配件。",
+      "皮卡买家 · 男性为主 28-55 岁 · 约 38% 是商用 / 车队用途 · 强烈偏好重型 / 耐用化的视觉语言 · 他们要看到这玩意儿是不是『给皮卡造的』,而不是恰好能装上去 — 靠标题和主图来判断。",
   },
   competitors: [
     {
@@ -1697,8 +1702,8 @@ const LAUNCH_CR = {
     "总测试窗口 8 周 · 4 个测试 · 1 对并行 · 2 处顺序依赖。代价就是总时长 vs 变量干净度 — 全部并行 3 周能跑完,但 CR 信号没法解读。",
   clusteringInspection: {
     methodology:
-      "皮卡集群包含含「pickup」「truck」或任一主流皮卡型号(F-150、Silverado、Ram、Tacoma、Sierra、Tundra、Frontier)的搜索词。房车 / 越野集群需要包含「rv」「off-road」「jeep」或「overland」。其余归入通用便携集群。按 30 天搜索量降序排列。",
-    tableHeaders: ["搜索词", "集群", "30 天曝光", "集群 CR"],
+      "皮卡分群包含含「pickup」「truck」或任一主流皮卡型号(F-150、Silverado、Ram、Tacoma、Sierra、Tundra、Frontier)的搜索词。房车 / 越野分群需要包含「rv」「off-road」「jeep」或「overland」。其余归入通用便携分群。按 30 天搜索量降序排列。",
+    tableHeaders: ["搜索词", "分群", "30 天曝光", "分群 CR"],
     columnWidths: ["44%", "20%", "18%", "18%"],
     tableRows: [
       ["portable tire inflator",              "通用便携",    "12.8K", "6.7%"],
@@ -1755,7 +1760,7 @@ const LAUNCH_CR = {
 const DEFENSE = {
   sku: "SKU-117 · 床架",
   attacker: "NightFox Bedding",
-  initiator: "品牌运营助手",
+  initiator: "Agent",
   initiatorRole: "实时监控警报",
   detectedAt: "2 小时前",
   timeSensitive: {
@@ -1876,7 +1881,7 @@ const DEFENSE = {
     },
     {
       id: "asymmetric",
-      name: "不正面碰 · 抢他们后路",
+      name: "不正面碰 · 打他们薄弱的 12 个词",
       kind: "asymmetric",
       tone: "emerald",
       recommended: true,
@@ -1959,7 +1964,7 @@ const DEFENSE = {
         { item: "自然位 #1-3 流量份额", frequency: "每日",     trigger: "我方自然位流量份额下滑 ≥ 8% → 触发切换到非对称方案" },
       ],
       readyResponse:
-        "反击方案预先起草好 · 如果 BSR 真跌到 #4,我们 6 小时内能切到「不正面碰 · 抢他们后路」方案。代价是先吃掉 ~$15-18K 流失 + BSR 修复需要额外 7-10 天。",
+        "反击方案预先起草好 · 如果 BSR 真跌到 #4,我们 6 小时内能切到「不正面碰 · 打他们薄弱的 12 个词」方案。代价是先吃掉 ~$15-18K 流失 + BSR 修复需要额外 7-10 天。",
     },
   },
   milestones: {
@@ -2020,7 +2025,7 @@ const DEFENSE = {
   },
   approval: {
     note: "时间敏感 · 今天/明天决策窗口 · NightFox 折扣券约 5 天后到期",
-    primaryLabel: "批准「不正面碰 · 抢他们后路」",
+    primaryLabel: "批准「不正面碰 · 打他们薄弱的 12 个词」",
     secondaryLabel: "选择其他姿态 →",
     timeSensitiveLabel: "时间敏感 · 今天/明天决策窗口",
   },
@@ -2148,9 +2153,9 @@ const LAUNCH = {
     { tier: "长尾", count: 64, dailyBudget: 740,  examples: "modern floor lamp for small apartment · tripod 64 inch" },
   ],
   bidStrategy: [
-    { phase: "第 1 周 · 激进", head: "$2.40 – $2.85", mid: "$1.60 – $1.95", long: "$0.80 – $1.10", logic: "建立竞价存在感;在核心关键词上以出价底价获取早期排名信号。" },
+    { phase: "第 1 周 · 激进", head: "$2.40 – $2.85", mid: "$1.60 – $1.95", long: "$0.80 – $1.10", logic: "先把核心词的曝光跑出来;顶住出价,拿到位次反馈。" },
     { phase: "第 2–3 周 · 稳定", head: "$2.10 – $2.45", mid: "$1.40 – $1.70", long: "$0.65 – $0.90", logic: "依据观测到的 CTR / CR 调优,守住第 1 周获取的 SOV。" },
-    { phase: "第 4 周 · 效率", head: "$1.80 – $2.10", mid: "$1.20 – $1.45", long: "$0.55 – $0.75", logic: "转向 TACoS 优化。长尾层优先用于获取边际高效收入。" },
+    { phase: "第 4 周 · 效率", head: "$1.80 – $2.10", mid: "$1.20 – $1.45", long: "$0.55 – $0.75", logic: "转向 TACoS 优化。长尾层优先用于拿性价比最高的单。" },
   ],
   pacing: [
     { week: "W1", daily: 449, total: 3143 },
@@ -2288,13 +2293,13 @@ const COMPANY_BRAIN = {
       },
       story: {
         context:
-          "落地灯线在 Walmart 上的广告投入做了一年多,但品牌大脑里关于 Walmart 的数据一直是第三方 scrape(精度 ±20%),没有第一方接入。Cross-platform 分析(Amazon vs Walmart 同一 SKU)只能基于估算。",
+          "落地灯线在 Walmart 上的广告投入做了一年多,但品牌大脑里关于 Walmart 的数据一直是第三方爬取(精度 ±20%),没有第一方接入。Cross-platform 分析(Amazon vs Walmart 同一 SKU)只能基于估算。",
         problem:
           "Devon 在 5 月 10 日通过 chat 发起 connect。要让品牌大脑能从 Walmart 第一方拉数据:campaigns、关键词表现、SB 创意、search terms、销售对应,过去 90 天历史 + 之后每 15 分钟实时同步。",
         action:
           "Maya 授权 OAuth(4 项 read scope)。Agent 从授权完成到第一条数据落库花了 12 分钟 — 8 个 Walmart 表 backfill 90 天,12,400 条历史事件被索引。建立了跨平台 SKU 映射(Amazon ASIN ↔ Walmart Item ID)。",
         results:
-          "现在能跑跨平台分析(见 Devon 的全渠道方案画布,Walmart $36K 增量基于真实 CPC,不是 scrape 估值)。Walmart 广告架构在 Ad architecture inspector 自动多了一个 tab。30 天后会自动触发一次跨平台 attribution 模型重训。",
+          "现在能跑跨平台分析(见 Devon 的全渠道方案画布,Walmart $36K 增量基于真实 CPC,不是爬取估值)。Walmart 广告架构在 Ad architecture inspector 自动多了一个 tab。30 天后会自动触发一次跨平台 attribution 模型重训。",
         takeaway:
           "现在我能比较 Amazon 和 Walmart 真实 CPC 时,我会主动指出 Walmart 上的结构性扩量空间(本案例发现 CPC 低 42%、SB 占比仅 8%)— 这种洞察在没有第一方数据时只能猜。如果未来 sync 失败超过 6 小时,我会在画布顶部红色 callout 提示数据可能滞后,避免基于过时数据做决策。",
       },
@@ -2358,7 +2363,7 @@ const COMPANY_BRAIN = {
     {
       id: "act-ingest-bsr",
       kind: "extraction",
-      title: "Walmart competitor BSR scrape · 4 weeks ingested",
+      title: "Walmart 竞品 BSR 爬取 · 已接入 4 周",
       summary: "Lighting、Bedroom Furniture、Bath 三个类目 Top-50 按日抓取",
       addedAt: "May 3, 22:55",
       sensitivity: "Internal",
@@ -2372,7 +2377,7 @@ const COMPANY_BRAIN = {
       },
       story: {
         context:
-          "2026 Q1 我们只有 Walmart 第三方 scrape(自有 SKU 也是)— 5 月 10 日 Walmart Connect API 连接后才有第一方数据。但要早期发现 Walmart-only 竞品对落地灯品类的 BSR 攻击,光靠自有数据不够,需要竞品 BSR 的日级时间序列,而 Walmart 没开放竞品 BSR 接口。",
+          "2026 Q1 我们只有 Walmart 第三方爬取(自有 SKU 也是)— 5 月 10 日 Walmart Connect API 连接后才有第一方数据。但要早期发现 Walmart-only 竞品对落地灯品类的 BSR 攻击,光靠自有数据不够,需要竞品 BSR 的日级时间序列,而 Walmart 没开放竞品 BSR 接口。",
         problem:
           "SKU-A 的防御能力依赖「竞品 BSR 排名变化的早期信号」。如果只能事后看到自家 BSR 掉了再响应,反应慢了至少 1-2 周。需要建竞品 BSR 监控管道。",
         action:
@@ -2428,7 +2433,7 @@ const COMPANY_BRAIN = {
     },
     {
       id: "cn-helium10",
-      name: "Helium10 scrape",
+      name: "Helium10 爬取",
       type: "scrape",
       status: "paused",
       lastSync: "3 天前",
@@ -3447,13 +3452,13 @@ const BRAIN_OPS = {
     structuralGaps: [
       {
         area: "利润率",
-        detail: "刮胡刀毛利率 12.4% vs 目标 15% · subscription 实验污染了 attach 信号",
+        detail: "刮胡刀毛利率 12.4% vs 目标 15% · subscription 实验污染了绑定购买率信号",
         relatedKrs: ["KR 2.2"],
         tone: "rose",
       },
       {
         area: "流量结构",
-        detail: "厨房刀自然 CTR −8%(A+ 内容 14 个月没动)+ 充气泵 pickup CR 2.0%(launch 前没做 cluster 验证)",
+        detail: "厨房刀自然 CTR −8%(A+ 内容 14 个月没动)+ 充气泵 pickup CR 2.0%(launch 前没做关键词分群验证)",
         relatedKrs: ["KR 2.3", "KR 3.1", "KR 3.2"],
         tone: "rose",
       },
@@ -3481,13 +3486,13 @@ const BRAIN_OPS = {
     failureLessons: [
       {
         id: "fail-cluster-validation",
-        title: "新品上线前必须做 keyword cluster 验证,不要 launch 后才补 CR 诊断",
+        title: "新品上线前必须做关键词分群验证,不要 launch 后才补 CR 诊断",
         source: "SKU-TI-A 充气泵 · pickup-tire-inflator cluster 上线后才发现 CR 2.0%,远低于品类 4.1%",
         appliesWhen: "面向新场景词 cluster 的 launch · 尤其是细分子类",
       },
       {
         id: "fail-subscription-coupling",
-        title: "Subscription 实验不要和 A+ 视觉 BC 实验同窗口跑,会污染 attach 信号",
+        title: "Subscription 实验不要和 A+ 视觉改版实验同窗口跑,会污染绑定购买率信号",
         source: "SKU-RZ-001 刮胡刀 · A+ 与 subscription 同时上,毛利率 12.4% vs 目标 15%,无法归因",
         appliesWhen: "razor-blade 类、attach 是核心 lever 的 SKU",
       },
@@ -3541,7 +3546,7 @@ const BRAIN_OPS = {
     sensitivity: "Internal",
     sensitivityLabel: "内部",
     coverageGap:
-      "落地灯线在 Walmart 的广告 / 销售 / 搜索词数据,Company Brain 此前没有第一方接入。所有 Walmart 假设都依赖第三方 scrape(精度 ±20%)。",
+      "落地灯线在 Walmart 的广告 / 销售 / 搜索词数据,Company Brain 此前没有第一方接入。所有 Walmart 假设都依赖第三方爬取(精度 ±20%)。",
     dataScope: {
       tables: [
         "campaigns",
@@ -3586,7 +3591,7 @@ const BRAIN_OPS = {
         breakdown: "手柄 28% · 刀头 58%",
       },
       analysisZh:
-        "两条产品线都远超 15% 底线。刮胡刀这边主要靠未来的绑定购买率增长(当前 47%);牙刷因为绑定购买率已经 78%,杠杆主要在单价 / 复购周期。",
+        "两条产品线都远超 15% 底线。刮胡刀这边的杠杆在刮胡刀定价 → 绑定购买率(当前 47%,有上升空间);牙刷因为绑定购买率已经 78%,杠杆主要在单价 / 复购周期。",
     },
     sources: [
       {
@@ -3722,6 +3727,8 @@ function wrapMetric(label) {
     CTR: METRIC_DEFINITIONS.ctr,
     CR: METRIC_DEFINITIONS.cr,
     ROAS: METRIC_DEFINITIONS.roas,
+    SOV: METRIC_DEFINITIONS.sov,
+    LTV: METRIC_DEFINITIONS.ltv,
     曝光份额: METRIC_DEFINITIONS.sov,
     客户终身价值: METRIC_DEFINITIONS.ltv,
     队列收入: METRIC_DEFINITIONS.cohortRevenue,
@@ -3733,10 +3740,39 @@ function wrapMetric(label) {
     成本上限竞价: METRIC_DEFINITIONS.costCapBidding,
     月曝光: METRIC_DEFINITIONS.impressions,
     转化率: METRIC_DEFINITIONS.cr,
+    "边际 ROAS": METRIC_DEFINITIONS.marginalRoas,
+    自然位: METRIC_DEFINITIONS.organicRank,
+    CPA: METRIC_DEFINITIONS.cpa,
   };
   const def = map[label];
   if (def) return <MetricTerm definition={def}>{label}</MetricTerm>;
   return label;
+}
+
+/* Wrap the FIRST occurrence of each known jargon term inside a prose string. */
+function wrapProse(text, terms) {
+  if (!text || !terms || terms.length === 0) return text;
+  // Sort terms by length desc so longer phrases match before shorter ones.
+  const sorted = [...terms].sort((a, b) => b.length - a.length);
+  const found = sorted
+    .map((t) => ({ term: t, idx: text.indexOf(t) }))
+    .filter((x) => x.idx >= 0)
+    .sort((a, b) => a.idx - b.idx);
+  if (found.length === 0) return text;
+  const parts = [];
+  let cursor = 0;
+  const consumed = new Set();
+  for (const { term, idx } of found) {
+    if (consumed.has(term)) continue;
+    const realIdx = text.indexOf(term, cursor);
+    if (realIdx < 0) continue;
+    if (realIdx > cursor) parts.push(text.slice(cursor, realIdx));
+    parts.push(<span key={`${term}-${realIdx}`}>{wrapMetric(term)}</span>);
+    cursor = realIdx + term.length;
+    consumed.add(term);
+  }
+  if (cursor < text.length) parts.push(text.slice(cursor));
+  return parts;
 }
 
 function tacosColorClass(value) {
@@ -4600,7 +4636,7 @@ function InformationalInsightCard({ insight }) {
               className="flex items-start gap-2 text-xs text-slate-600 leading-relaxed"
             >
               <span className="w-1 h-1 mt-1.5 rounded-full bg-slate-400 flex-shrink-0" />
-              <span>{obs}</span>
+              <span>{i === 0 ? wrapProse(obs, ["自然位", "曝光份额", "SOV"]) : obs}</span>
             </li>
           ))}
         </ul>
@@ -5799,7 +5835,7 @@ function LaunchCanvas() {
               </ResponsiveContainer>
             </div>
             <div className="text-xs text-slate-500 mt-3 leading-relaxed">
-              前置爬坡:4 周预算中 26% 集中在第 1 周以建立竞价存在感。
+              前置爬坡:4 周预算中 26% 集中在第 1 周,先把曝光跑出来。
               随效率数据积累,日预算上限逐步回落。
             </div>
           </Card>
@@ -5977,7 +6013,7 @@ function BudgetEnvelopeStrip({ budget }) {
                 ${a.combined.toLocaleString()}
               </div>
               <div className="text-10 text-slate-400 mt-0.5 leading-snug">
-                +${a.incremental.toLocaleString()} · {a.tag}
+                +${a.incremental.toLocaleString()} · {wrapProse(a.tag, ["边际 ROAS"])}
               </div>
             </div>
           </div>
@@ -6377,7 +6413,7 @@ function TikTokBiddingCard({ mechanisms, recommendation }) {
               Agent 建议
             </div>
             <div className="text-xs text-slate-200 leading-relaxed">
-              {recommendation}
+              {wrapProse(recommendation, ["CPA", "LTV"])}
             </div>
           </div>
         </div>
@@ -6920,7 +6956,7 @@ function HeadroomBar({ currentPct, floorPct, priceFloorIfDrop }) {
       <div className="text-11 text-slate-500 leading-relaxed">
         刮胡刀挂牌价理论上可降至约{" "}
         <span className="font-mono text-slate-900">{priceFloorIfDrop}</span>{" "}
-        触及产品线综合毛利率下限(假设销量与捆绑购买率响应到位)。
+        触及产品线综合毛利率下限(假设销量与绑定购买率响应到位)。
       </div>
     </div>
   );
@@ -7285,10 +7321,10 @@ function RazorBladeCanvas() {
                     诊断
                   </div>
                   <div className="text-sm font-semibold text-white mb-1.5 leading-snug">
-                    {R.diagnosis.headline}
+                    {wrapProse(R.diagnosis.headline, ["绑定购买率", "LTV"])}
                   </div>
                   <div className="text-xs text-slate-300 leading-relaxed">
-                    {R.diagnosis.body}
+                    {wrapProse(R.diagnosis.body, [])}
                   </div>
                   <div className="text-xs text-white font-semibold mt-2 leading-relaxed">
                     {R.diagnosis.hypothesis}
@@ -7346,7 +7382,7 @@ function RazorBladeCanvas() {
                   </span>
                 </div>
                 <div className="text-xs text-slate-200 leading-relaxed mb-2">
-                  {R.precedent.summary}
+                  {wrapProse(R.precedent.summary, ["队列收入", "产品线综合毛利率"])}
                 </div>
                 <div className="text-11 text-slate-400 leading-relaxed">
                   方法 · {R.precedent.method}
@@ -8017,9 +8053,9 @@ function LaunchCRCanvas() {
         </div>
       </div>
 
-      {/* 1. 现状 · 受众聚类 */}
+      {/* 1. 现状 · 搜索词分群 */}
       <div className="px-6">
-        <SectionLabel kicker="3 个受众集群 · 皮卡是问题集群">
+        <SectionLabel kicker="3 个搜索词分群 · 皮卡是问题分群">
           1. 现状
         </SectionLabel>
         <div className="grid grid-cols-3 gap-3">
@@ -8038,7 +8074,7 @@ function LaunchCRCanvas() {
             className="inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-slate-300 bg-white hover:bg-slate-50 hover:border-slate-400 rounded-md text-xs font-medium text-slate-700"
           >
             <Layers className="w-3.5 h-3.5 text-slate-500" />
-            查看聚类逻辑
+            查看分群逻辑
             <ArrowUpRight className="w-3 h-3 text-slate-400" />
           </button>
         </div>
@@ -9200,7 +9236,7 @@ function DefenseCanvas() {
             </div>
           </div>
           <div className="text-sm text-slate-200 leading-relaxed whitespace-pre-line mb-4">
-            {D.context.body}
+            {wrapProse(D.context.body, ["自然位"])}
           </div>
 
           <div className="rounded-md bg-slate-800/70 border border-slate-700 px-4 py-3">
@@ -12562,7 +12598,7 @@ function UploadCanvas() {
 
       {/* 1. 现状 · OKR roll-up */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker="3 OKR · 8 KR · 整体完成率 76%">
+        <SectionLabel kicker="3 OKR · 8 KR · 整体完成率 89%">
           1. 现状
         </SectionLabel>
 
@@ -13223,7 +13259,7 @@ function QACanvas({ activeClearance }) {
               </div>
 
               <div className="mt-4 text-sm text-slate-700 leading-relaxed">
-                {Q.answer.analysisZh}
+                {wrapProse(Q.answer.analysisZh, ["绑定购买率"])}
               </div>
 
               <div className="mt-5 pt-4 border-t border-slate-100">
