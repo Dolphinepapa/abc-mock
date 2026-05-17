@@ -2281,6 +2281,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["SKU-A (active before revoke)", "SKU-117 (active before revoke)"],
         definition: "Agent will require explicit approval for dayparting changes on SKUs at >85% impression share going forward.",
       },
+      story: {
+        context:
+          "Agent had autonomy on dayparting moves for SKUs at impression share > 85% since Q3 2025. Maya's original rationale: IS > 85% means we're paying for low-CR-hour tail impressions, dayparting can cut the waste.",
+        problem:
+          "After 11 weeks running autonomously across SKU-A and SKU-117, cumulative IS gain was only 0.4 pt. Meanwhile the dayparting decisions added noise to attribution analysis — Sara kept having to explain 'this SKU was paused 2hr at 3am' in her Q1 retrospective. Marginal lift too small to justify the attribution-readability cost.",
+        action:
+          "Maya opened a revoke action via chat. Agent moved the class from Active to Recently revoked. 3 in-flight dayparting actions (queued for the night of May 8) were cancelled. All future dayparting on IS-saturated SKUs now requires explicit per-action team approval.",
+        results:
+          "Zero autonomous dayparting actions since May 8. The class shows in Recently revoked with Maya as the revoker. Net IS impact since revocation: -0.1 pt (within noise). Sara hasn't raised attribution-readability complaints since.",
+        takeaway:
+          "I now hold a higher bar before proposing an autonomy class — at least one historical case showing ≥1 pt IS gain in 8 weeks AND the action can't compound with same-hour budget / bid changes (which contaminate attribution). Dayparting specifically I now treat as 'team approves each batch', not as an autonomy candidate.",
+      },
     },
     {
       id: "act-flag-q4-diverge",
@@ -2296,6 +2308,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["Currently paused — no active references"],
         definition: "Pattern stays in the brain but is gated: agent will flag the divergence whenever this pattern would be cited.",
       },
+      story: {
+        context:
+          "The pattern 'Launch ramp curve · $120-180 price band' had been the brain's go-to projection for new-SKU launches in that price tier since Q2 2024. The 6 prior launches in this band landed within ±8% of the curve's prediction.",
+        problem:
+          "Q4 2025 had 3 launches in this price band (SKU-PB-A power bank, SKU-LV-2 floor lamp variant, one offline SKU). All 3 came in 9-21% below the predicted ramp, average miss 14%. If we kept using the pattern unflagged, agent would have predicted ~14% better Q1 2026 launches than they'd actually deliver, biasing budget allocation.",
+        action:
+          "Maya noticed the divergence during Q1 actuals-vs-forecast reconciliation and flagged the pattern. Agent gated it — kept in brain, but every reference now displays 'pattern flagged · last 3 cases diverged 14%, evidence pending'. 3 in-flight references in draft canvases got footnotes added. Side-channel investigation started: early hypothesis is that TikTok-driven category awareness has changed early-week traffic shapes vs the pre-TikTok-era cases that built this pattern.",
+        results:
+          "Pattern's effective UI confidence dropped 78% → 62%. No active canvas references it now; 3 flagged old references got footnotes. Maya is reviewing 5 candidate launches that would have used this pattern — agent gives wider error bars instead of citing the pattern directly.",
+        takeaway:
+          "When 2 of 3 (or 3 of 4) consecutive actuals fall outside a pattern's historical ±10% band, I proactively flag it for revalidation, not waiting for the team. Patterns are cheap to build but expensive when stale. This one (TikTok's effect on Q1 launches) is a category-level structural shift that no per-case tuning would catch — going forward I check pattern lineage when a category shows signs of structural change (new platform entering, new format adoption).",
+      },
     },
     {
       id: "act-ingest-bsr",
@@ -2310,6 +2334,18 @@ const COMPANY_BRAIN = {
         sourceNote: "Scrape window Apr 6 — May 3, 2026. 4,200 daily rank snapshots across 3 subcategories.",
         appliedIn: ["Defense case · BSR slippage detection", "Razor-blade plan competitor map"],
         definition: "Daily BSR snapshots stored as time series; agent now monitors rank delta thresholds (≥3 positions/week) for alerts.",
+      },
+      story: {
+        context:
+          "Through Q1 2026 we only had third-party Walmart scrape data — even for our own SKUs (the Walmart Connect API only landed May 10, after this ingestion). But to detect Walmart-only competitors moving into Floor Lamps early, our own-SKU data isn't enough — needed daily competitor BSR time series, and Walmart doesn't expose competitor BSR through API.",
+        problem:
+          "SKU-A's defense capability depends on early-warning signals from competitor BSR trajectory. Without daily competitor BSR data we'd only see attacks after our own BSR dropped — 1-2 weeks late to react. Needed a competitor monitoring pipeline.",
+        action:
+          "Set up Helium10 + Jungle Scout dual-source polling on 3 Walmart subcategories (Lighting, Bedroom Furniture, Bath) — daily Top-50 BSR snapshots. Ingested 4 weeks of historical data Apr 6 — May 3: 4,200 daily snapshots indexed by Walmart Item ID. Built a rate-of-change detector: any competitor SKU climbing ≥3 BSR positions in a single week triggers a soft alert in the Defense canvas's early-warning panel.",
+        results:
+          "The system caught 2 early-warning events in the 4-week historical window — both turned out to be promo-driven (competitor running a 14-day coupon), neither escalated to a real attack. Validated the 3-position threshold is reasonable; at 5 positions we'd have missed both.",
+        takeaway:
+          "For Walmart competitor monitoring (no official API), I rely on the Helium10 + Jungle Scout polling layer. Before promoting any alert, I check the rate-of-change against historical baseline — 1 of 2 historical alerts was promo-driven and the team only needs the 'persistent-climb' class. So in any BSR alert I label 'promo-driven vs structural momentum' separately so the team doesn't conflate them.",
       },
     },
   ],

@@ -2272,6 +2272,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["SKU-A(撤回前活跃)", "SKU-117(撤回前活跃)"],
         definition: "对曝光份额 >85% 的 SKU 的 dayparting 调整,agent 今后需要明确批准。",
       },
+      story: {
+        context:
+          "agent 从 2025 Q3 起对「曝光份额 >85% 的 SKU dayparting 调整」有自主权限。当时 Maya 授权的逻辑是:IS >85% 说明我们在低 CR 时段也在抢曝光,dayparting 可以剪掉浪费。",
+        problem:
+          "11 周后,跨 SKU-A 和 SKU-117 累计 IS 提升只有 0.4 pt。同时这些 dayparting 决策给归因分析加了噪声 — Sara 在 Q1 复盘里反复要解释「这个 SKU 凌晨 3 点停了 2 小时」。收益太小,审计成本太高。",
+        action:
+          "Maya 在 chat 里发起 revoke。Agent 把该类别从 Active 移到 Recently revoked。取消了 3 个排队中的 dayparting 操作(5 月 8 日晚原本要执行)。后续所有针对 IS 饱和 SKU 的 dayparting 都需团队逐次批准。",
+        results:
+          "5 月 8 日起 0 个 dayparting 自主操作。该类别显示在 Recently revoked 区,Maya 标为撤回人。撤回后 IS 净影响 -0.1 pt(在噪声范围内)。Sara 没有再投诉归因可读性问题。",
+        takeaway:
+          "我现在对「申请自主权限」的门槛提高了 — 至少需要历史案例支持 8 周内 IS 提升 ≥1 pt,且操作不会跟同小时的 budget / bid 调整复合污染归因。dayparting 我现在默认按「团队逐批批准」处理,不再作为自主候选。",
+      },
     },
     {
       id: "act-flag-q4-diverge",
@@ -2288,6 +2300,18 @@ const COMPANY_BRAIN = {
         appliedIn: ["暂停中 — 当前无活跃引用"],
         definition: "模式保留在 brain 中但已被门控:agent 每次引用该模式时会同时标出偏离。",
       },
+      story: {
+        context:
+          "模式「上线爬坡曲线 · $120-180 价格带」从 2024 Q2 起一直是品牌大脑里新品上线预测的默认参考。过去 6 个该价格带的新品上线,实际落在曲线预测的 ±8% 范围内。",
+        problem:
+          "2025 Q4 该价格带连续 3 个新品(SKU-PB-A 充电宝、SKU-LV-2 落地灯变体、1 个 offline SKU)实际表现比预测低 9-21%,平均偏离 14%。如果继续无标记使用,agent 给 2026 Q1 新品的预测会系统性偏乐观,影响预算分配。",
+        action:
+          "Maya 在 Q1 实际值 vs 预测对账时发现偏离,标记该模式。Agent 给模式加门控 — 保留在 brain,但每次引用都会显示「模式已标 · 近 3 个案例偏离 14%,证据待补」。3 个旧 draft canvas 里的引用加了脚注。同时开始侧通道收集偏离原因 — 早期假设是 TikTok 拉动品类认知改变了上线初期流量形态,跟 pre-TikTok 时代的案例不一样了。",
+        results:
+          "模式在 UI 上的有效信心度从 78% 降到 62%。目前没有 active canvas 引用它;3 个 flagged 的旧引用都有脚注。Maya 在审 5 个原本会用这个模式的候选新品 — agent 给出更宽的误差带,而不是直接套这条模式。",
+        takeaway:
+          "当一个模式的连续 2/3 或 3/4 个实际值落在历史 ±10% 区间外,我会主动标记需重新验证,不等团队发现。模式建立便宜,过时使用代价大。这次(TikTok 对 Q1 上线的影响)是品类层结构性变化,任何按单案例的微调都抓不到 — 以后我会在品类有结构性变化迹象时(比如新平台进入)主动检查相关模式的 lineage。",
+      },
     },
     {
       id: "act-ingest-bsr",
@@ -2303,6 +2327,18 @@ const COMPANY_BRAIN = {
         sourceNote: "抓取窗口 2026/4/6 — 2026/5/3。3 个子类目共 4,200 条日排名快照。",
         appliedIn: ["防御案例 · BSR 滑落检测", "razor-blade 计划竞品图谱"],
         definition: "日级 BSR 快照按时间序列存储;agent 现已监控排名变化阈值(每周 ≥3 位)用于告警。",
+      },
+      story: {
+        context:
+          "2026 Q1 我们只有 Walmart 第三方 scrape(自有 SKU 也是)— 5 月 10 日 Walmart Connect API 连接后才有第一方数据。但要早期发现 Walmart-only 竞品对落地灯品类的 BSR 攻击,光靠自有数据不够,需要竞品 BSR 的日级时间序列,而 Walmart 没开放竞品 BSR 接口。",
+        problem:
+          "SKU-A 的防御能力依赖「竞品 BSR 排名变化的早期信号」。如果只能事后看到自家 BSR 掉了再响应,反应慢了至少 1-2 周。需要建竞品 BSR 监控管道。",
+        action:
+          "对 3 个 Walmart 子品类(Lighting、Bedroom Furniture、Bath)设了 Helium10 + Jungle Scout 双源轮询,每天抓一次 Top-50 BSR。摄入了 2026/4/6 — 2026/5/3 共 4 周的历史数据 — 按 Walmart Item ID 索引的 4,200 个日级快照。建了变化率检测器:任何竞品 SKU 单周上升 ≥3 位即触发软告警,在 Defense 画布的早期预警面板显示。",
+        results:
+          "4 周历史窗口里系统捕捉到 2 个早期预警 — 都是促销驱动(竞品 14 天促销券),没有升级为真实攻击。验证了 3 位阈值合理,如果设到 5 位会全漏。",
+        takeaway:
+          "Walmart 竞品监控没有官方 API,我依赖 Helium10 + Jungle Scout 轮询层。在告警升级前,我会把变化率跟历史基线对比 — 历史 2 次告警里 1 次是促销驱动,团队真正需要的只是「持续上升」那一类。所以在任何 BSR 告警里,我会单独标「促销驱动 vs 结构性上升」,不让两者混淆。",
       },
     },
   ],
