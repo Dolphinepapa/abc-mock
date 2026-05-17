@@ -1449,7 +1449,7 @@ const LAUNCH_CR = {
   initiator: "Jamal Hassan",
   confirmedOn: "May 15",
   constraint:
-    "Listing changes — main image, title, A+, bullets — are executed by the brand creative team. I surface the gap, design the tests, monitor the results.",
+    "Confirm real product capability with the product team before any listing change goes live. Over-claiming drives negative reviews and returns.",
   clusters: [
     {
       id: "pickup",
@@ -3649,17 +3649,34 @@ function ReasoningSection({ reasoning }) {
   );
 }
 
-function CanvasHeader({ kicker, title, meta }) {
+function CanvasHeader({ kicker, title, meta, heroImage }) {
   return (
     <div className="px-6 py-5 border-b border-slate-200">
       <div className="flex items-start justify-between gap-6">
-        <div>
-          <div className="text-xs uppercase tracking-wider text-emerald-700 font-medium mb-1.5">
-            {kicker}
+        <div className="flex items-start gap-4 min-w-0 flex-1">
+          {heroImage && (
+            <button
+              type="button"
+              onClick={heroImage.onClick}
+              className="flex-shrink-0 rounded-md border border-slate-200 overflow-hidden bg-slate-100 hover:border-slate-400 transition-colors"
+              style={{ width: "56px", height: "56px" }}
+              aria-label={heroImage.alt}
+            >
+              <img
+                src={heroImage.src}
+                alt={heroImage.alt}
+                className="w-full h-full object-cover"
+              />
+            </button>
+          )}
+          <div className="min-w-0">
+            <div className="text-xs uppercase tracking-wider text-emerald-700 font-medium mb-1.5">
+              {kicker}
+            </div>
+            <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
+              {title}
+            </h2>
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
-            {title}
-          </h2>
         </div>
         {meta && (
           <div className="flex flex-wrap items-center gap-2 pt-1">{meta}</div>
@@ -6220,6 +6237,7 @@ function TikTokInsightCard({ insight }) {
 
 function OmnichannelCanvas() {
   const O = OMNICHANNEL;
+  const [heroLightbox, setHeroLightbox] = useState(false);
   const amazonStatus = [
     { label: "BSR", value: O.amazon.currentState.bsr },
     { label: "Monthly sales", value: O.amazon.currentState.monthlySales },
@@ -6254,6 +6272,11 @@ function OmnichannelCanvas() {
       <CanvasHeader
         kicker="Omnichannel · power bank"
         title="$100K budget across Amazon · Walmart · TikTok"
+        heroImage={{
+          src: "/sku-pb-a-hero.png",
+          alt: "Our SKU-PB-A · power bank hero · click to enlarge",
+          onClick: () => setHeroLightbox(true),
+        }}
         meta={
           <>
             <Pill tone="slate">
@@ -6268,14 +6291,11 @@ function OmnichannelCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/sku-pb-a-hero.png",
-            caption: "Our SKU-PB-A · power bank hero",
-            fallbackText: "Pending upload · our SKU-PB-A hero",
-          },
-        ]}
+      <GalleryLightbox
+        open={heroLightbox}
+        onClose={() => setHeroLightbox(false)}
+        title="Our SKU-PB-A · power bank hero"
+        images={["/sku-pb-a-hero.png"]}
       />
 
       <div className="px-6 pt-5">
@@ -7755,14 +7775,14 @@ function LaunchCRCanvas() {
         ]}
       />
 
-      {/* Constraint callout · before 现状 */}
+      {/* Heads-up callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
           <div className="flex items-start gap-2.5">
-            <Lock className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <div className="text-11 uppercase tracking-wider text-amber-800 font-semibold mb-1">
-                Constraint · listing changes need the brand creative team
+                Heads-up · confirm capability with product team
               </div>
               <div className="text-sm text-amber-900 leading-relaxed">
                 {L.constraint}

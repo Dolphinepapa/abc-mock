@@ -1440,7 +1440,7 @@ const LAUNCH_CR = {
   initiator: "Jamal Hassan",
   confirmedOn: "May 15",
   constraint:
-    "Listing 改动 — 主图、标题、A+、文案 — 由品牌创意团队上手。我负责把问题摆出来、把测试设计好、把结果盯下来。",
+    "注意和产品团队确认产品的真实能力,夸大销售会导致差评和退货。",
   clusters: [
     {
       id: "pickup",
@@ -3716,17 +3716,34 @@ function ReasoningSection({ reasoning }) {
   );
 }
 
-function CanvasHeader({ kicker, title, meta }) {
+function CanvasHeader({ kicker, title, meta, heroImage }) {
   return (
     <div className="px-6 py-5 border-b border-slate-200">
       <div className="flex items-start justify-between gap-6">
-        <div>
-          <div className="text-xs uppercase tracking-wider text-emerald-700 font-medium mb-1.5">
-            {kicker}
+        <div className="flex items-start gap-4 min-w-0 flex-1">
+          {heroImage && (
+            <button
+              type="button"
+              onClick={heroImage.onClick}
+              className="flex-shrink-0 rounded-md border border-slate-200 overflow-hidden bg-slate-100 hover:border-slate-400 transition-colors"
+              style={{ width: "56px", height: "56px" }}
+              aria-label={heroImage.alt}
+            >
+              <img
+                src={heroImage.src}
+                alt={heroImage.alt}
+                className="w-full h-full object-cover"
+              />
+            </button>
+          )}
+          <div className="min-w-0">
+            <div className="text-xs uppercase tracking-wider text-emerald-700 font-medium mb-1.5">
+              {kicker}
+            </div>
+            <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
+              {title}
+            </h2>
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 tracking-tight">
-            {title}
-          </h2>
         </div>
         {meta && (
           <div className="flex flex-wrap items-center gap-2 pt-1">{meta}</div>
@@ -6279,6 +6296,7 @@ function TikTokInsightCard({ insight }) {
 
 function OmnichannelCanvas() {
   const O = OMNICHANNEL;
+  const [heroLightbox, setHeroLightbox] = useState(false);
   const amazonStatus = [
     { label: "BSR", value: O.amazon.currentState.bsr },
     { label: "月销售额", value: O.amazon.currentState.monthlySales },
@@ -6313,6 +6331,11 @@ function OmnichannelCanvas() {
       <CanvasHeader
         kicker="全渠道 · 移动充电宝"
         title="$100K 预算在 Amazon / Walmart / TikTok 三平台分配"
+        heroImage={{
+          src: "/sku-pb-a-hero.png",
+          alt: "我方 SKU-PB-A · 移动充电宝主图 · 点击放大",
+          onClick: () => setHeroLightbox(true),
+        }}
         meta={
           <>
             <Pill tone="slate">
@@ -6327,14 +6350,11 @@ function OmnichannelCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/sku-pb-a-hero.png",
-            caption: "我方 SKU-PB-A · 移动充电宝主图",
-            fallbackText: "等待上传 · 我方 SKU-PB-A 主图",
-          },
-        ]}
+      <GalleryLightbox
+        open={heroLightbox}
+        onClose={() => setHeroLightbox(false)}
+        title="我方 SKU-PB-A · 移动充电宝主图"
+        images={["/sku-pb-a-hero.png"]}
       />
 
       <div className="px-6 pt-5">
@@ -7801,14 +7821,14 @@ function LaunchCRCanvas() {
         ]}
       />
 
-      {/* Constraint callout · before 现状 */}
+      {/* Heads-up callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
           <div className="flex items-start gap-2.5">
-            <Lock className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
+            <AlertCircle className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <div className="text-11 uppercase tracking-wider text-amber-800 font-semibold mb-1">
-                约束 · Listing 改动需要品牌创意团队
+                提示 · 与产品团队确认能力
               </div>
               <div className="text-sm text-amber-900 leading-relaxed">
                 {L.constraint}
