@@ -13344,34 +13344,19 @@ function QACanvas({ activeClearance }) {
 
 function EmptyCanvas() {
   return (
-    <div className="px-6 py-20 flex items-start justify-center">
+    <div className="px-6 py-24 flex items-start justify-center">
       <div className="max-w-md text-center">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-slate-900 mb-5">
           <Sparkles className="w-5 h-5 text-emerald-400" />
         </div>
-        <div className="text-base font-semibold text-slate-900 mb-2">
-          画布在你选择会话后展示
+        <div className="text-base font-semibold text-slate-900 mb-3 leading-snug">
+          左边挑一条会话开始
         </div>
-        <div className="text-sm text-slate-600 leading-relaxed mb-6">
-          每条会话对应一张结构化画布 —— 现状 / 具体问题 / 具体建议 / 里程碑。
+        <div className="text-sm text-slate-600 leading-relaxed">
+          Agent 今天主动起了 <span className="text-rose-700 font-medium">1 条警报</span> —— 床架 SKU-117 在被 NightFox 抢核心词。其他 <span className="font-medium text-slate-900">7 条</span>是这周你和团队提的问题。
         </div>
-        <div className="bg-slate-50 border border-slate-200 rounded-md px-4 py-3 text-left">
-          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            8 个会话 · 两类
-          </div>
-          <div className="space-y-1.5 text-xs text-slate-700">
-            <div className="flex items-baseline gap-2">
-              <span className="text-emerald-700 font-medium">5 个</span>
-              <span>策略画布:策略 / 全渠道 / 防御 / 价格 + 营销 / 新品 CR</span>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-slate-600 font-medium">3 个</span>
-              <span>公司大脑操作:Q4 复盘 / 连接器 / Q&A</span>
-            </div>
-          </div>
-        </div>
-        <div className="mt-4 text-11 text-slate-500 leading-relaxed">
-          提示:右上角"广告架构 / 公司大脑 / 结果"按钮独立于会话,随时可查。
+        <div className="mt-4 text-sm text-slate-600 leading-relaxed">
+          任意一条点开,看 agent 起的方案。
         </div>
       </div>
     </div>

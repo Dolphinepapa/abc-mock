@@ -13298,34 +13298,19 @@ function QACanvas({ activeClearance }) {
 
 function EmptyCanvas() {
   return (
-    <div className="px-6 py-20 flex items-start justify-center">
+    <div className="px-6 py-24 flex items-start justify-center">
       <div className="max-w-md text-center">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-slate-900 mb-5">
           <Sparkles className="w-5 h-5 text-emerald-400" />
         </div>
-        <div className="text-base font-semibold text-slate-900 mb-2">
-          Canvas opens when you pick a conversation
+        <div className="text-base font-semibold text-slate-900 mb-3 leading-snug">
+          Pick a conversation on the left
         </div>
-        <div className="text-sm text-slate-600 leading-relaxed mb-6">
-          Every conversation produces a structured canvas — current state · specific problem · recommendation · milestones.
+        <div className="text-sm text-slate-600 leading-relaxed">
+          The agent flagged <span className="text-rose-700 font-medium">1 alert</span> today — SKU-117 bed frame is under attack from NightFox on its hero keywords. The other <span className="font-medium text-slate-900">7</span> threads are questions you and the team raised this week.
         </div>
-        <div className="bg-slate-50 border border-slate-200 rounded-md px-4 py-3 text-left">
-          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            8 conversations · two kinds
-          </div>
-          <div className="space-y-1.5 text-xs text-slate-700">
-            <div className="flex items-baseline gap-2">
-              <span className="text-emerald-700 font-medium">5</span>
-              <span>strategy canvases: Strategy / Omnichannel / Defense / Razor-blade / Launch CR</span>
-            </div>
-            <div className="flex items-baseline gap-2">
-              <span className="text-slate-600 font-medium">3</span>
-              <span>Company Brain operations: Q4 retrospective / Connector / Q&amp;A</span>
-            </div>
-          </div>
-        </div>
-        <div className="mt-4 text-11 text-slate-500 leading-relaxed">
-          Tip: the top-right buttons (Ad architecture / Company Brain / Outcomes) open inspector tabs independent of the conversation.
+        <div className="mt-4 text-sm text-slate-600 leading-relaxed">
+          Click any one to see what the agent drafted.
         </div>
       </div>
     </div>
