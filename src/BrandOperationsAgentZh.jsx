@@ -9030,19 +9030,45 @@ function AdArchitectureContent({ panelWidth }) {
   );
 }
 
-const SENSITIVITY_TONE = {
-  Public: "slate",
-  Internal: "blue",
-  Sensitive: "emerald",
-  Confidential: "rose",
+const SENSITIVITY_LABEL_ZH = {
+  Public: "公开",
+  Internal: "内部",
+  Sensitive: "敏感",
+  Confidential: "机密",
 };
 
-const CLEARANCE_TONE = {
-  Public: "slate",
-  Internal: "blue",
-  Sensitive: "emerald",
-  Confidential: "rose",
+const SENSITIVITY_TAGS = {
+  Public: {
+    tone: "slate",
+    label: "公开",
+    minClearance: "Public",
+    minRole: "任何人",
+  },
+  Internal: {
+    tone: "blue",
+    label: "内部",
+    minClearance: "Internal",
+    minRole: "L5+ 且具备内部权限",
+  },
+  Sensitive: {
+    tone: "emerald",
+    label: "敏感",
+    minClearance: "Sensitive",
+    minRole: "L6+ 且具备敏感权限",
+  },
+  Confidential: {
+    tone: "rose",
+    label: "机密",
+    minClearance: "Confidential",
+    minRole: "L7+ 且具备机密权限",
+  },
 };
+
+const SENSITIVITY_TONE = Object.fromEntries(
+  Object.entries(SENSITIVITY_TAGS).map(([k, v]) => [k, v.tone]),
+);
+
+const CLEARANCE_TONE = SENSITIVITY_TONE;
 
 const CLEARANCE_ORDER = ["Public", "Internal", "Sensitive", "Confidential"];
 function canView(userClearance, contentSensitivity) {
@@ -9052,12 +9078,61 @@ function canView(userClearance, contentSensitivity) {
   );
 }
 
-const SENSITIVITY_LABEL_ZH = {
-  Public: "公开",
-  Internal: "内部",
-  Sensitive: "敏感",
-  Confidential: "机密",
-};
+function MaskedItem({ tag = "Internal", layout = "inline", iconSize = 14 }) {
+  const meta = SENSITIVITY_TAGS[tag] || SENSITIVITY_TAGS.Internal;
+  if (layout === "card") {
+    return (
+      <div className="border border-rose-200 bg-rose-50/40 rounded-md py-6 px-5">
+        <div className="flex items-start gap-3 max-w-xl mx-auto">
+          <Lock
+            className="text-rose-700 flex-shrink-0 mt-0.5"
+            style={{ width: iconSize + 4, height: iconSize + 4 }}
+          />
+          <div className="flex-1 min-w-0">
+            <div className="text-10 uppercase tracking-wider text-rose-700 font-semibold">
+              标签:{meta.label}
+            </div>
+            <div className="text-sm text-rose-900 leading-relaxed mt-1">
+              当前权限下受限 · 需 {meta.minRole} 可访问。
+            </div>
+            <div className="text-11 text-slate-600 leading-relaxed mt-1.5">
+              切换演示用户以查看此内容。
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="bg-rose-50 border-l-2 border-rose-200 pl-2 pr-2 py-1 rounded-r-md flex items-center gap-1.5">
+      <Lock
+        className="text-rose-700 flex-shrink-0"
+        style={{ width: iconSize - 2, height: iconSize - 2 }}
+      />
+      <span className="text-10 uppercase tracking-wider text-rose-700 font-medium">
+        标签:{meta.label}
+      </span>
+      <span className="text-11 text-rose-800 leading-snug truncate">
+        当前权限下受限 · 需 {meta.minRole}。
+      </span>
+    </div>
+  );
+}
+
+function countRestrictedItems(activeClearance, brain) {
+  let n = 0;
+  const check = (s) => !canView(activeClearance, s);
+  (brain.recentActivity || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
+  (brain.connectors || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
+  (brain.uploadedDocs || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
+  (brain.patterns || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
+  (brain.playbookList || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
+  (brain.decisionClassesDetail || []).forEach(
+    (x) => !x.revoked && x.sensitivity && check(x.sensitivity) && n++,
+  );
+  (brain.recentQueries || []).forEach((x) => x.sensitivity && check(x.sensitivity) && n++);
+  return n;
+}
 
 const CONNECTOR_STATUS_TONE = {
   live: "emerald",
@@ -9285,7 +9360,7 @@ function ActivityIcon({ kind }) {
   );
 }
 
-function RecentActivityList({ entries, onSelect }) {
+function RecentActivityList({ entries, onSelect, activeClearance }) {
   const wrapSummary = (text) => {
     const tokens = ["CPC", "ROAS", "TACoS", "CTR", "CR", "SOV", "LTV", "ACoS"];
     const pattern = new RegExp(`\\b(${tokens.join("|")})\\b`, "g");
@@ -9300,33 +9375,42 @@ function RecentActivityList({ entries, onSelect }) {
   };
   return (
     <div className="space-y-2">
-      {entries.map((e) => (
-        <button
-          key={e.id}
-          type="button"
-          onClick={() => onSelect(e)}
-          className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 flex items-start gap-3"
-        >
-          <ActivityIcon kind={e.kind} />
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium text-slate-900 leading-snug">
-              {e.title}
+      {entries.map((e) => {
+        const visible = canView(activeClearance, e.sensitivity);
+        return (
+          <button
+            key={e.id}
+            type="button"
+            onClick={() => onSelect(e)}
+            className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 flex items-start gap-3"
+          >
+            <ActivityIcon kind={e.kind} />
+            <div className="flex-1 min-w-0">
+              {visible ? (
+                <>
+                  <div className="text-sm font-medium text-slate-900 leading-snug">
+                    {e.title}
+                  </div>
+                  <div className="text-11 text-slate-600 mt-1 leading-relaxed">
+                    {wrapSummary(e.summary)}
+                  </div>
+                </>
+              ) : (
+                <MaskedItem tag={e.sensitivity} layout="inline" />
+              )}
+              <div className="mt-1.5 flex items-center gap-2">
+                <Pill tone={SENSITIVITY_TONE[e.sensitivity] || "slate"}>
+                  {e.sensitivityLabel || SENSITIVITY_LABEL_ZH[e.sensitivity]}
+                </Pill>
+                <span className="text-10 text-slate-500 font-mono tabular-nums">
+                  {e.addedAt}
+                </span>
+              </div>
             </div>
-            <div className="text-11 text-slate-600 mt-1 leading-relaxed">
-              {wrapSummary(e.summary)}
-            </div>
-            <div className="mt-1.5 flex items-center gap-2">
-              <Pill tone={SENSITIVITY_TONE[e.sensitivity] || "slate"}>
-                {e.sensitivityLabel || e.sensitivity}
-              </Pill>
-              <span className="text-10 text-slate-500 font-mono tabular-nums">
-                {e.addedAt}
-              </span>
-            </div>
-          </div>
-          <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0 mt-1" />
-        </button>
-      ))}
+            <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0 mt-1" />
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -9368,7 +9452,7 @@ const CONNECTOR_SCOPES = {
   ],
 };
 
-function ConnectorList({ connectors, query }) {
+function ConnectorList({ connectors, query, activeClearance }) {
   const [openScopeId, setOpenScopeId] = useState(null);
   const q = (query || "").trim().toLowerCase();
   const filtered = q
@@ -9382,6 +9466,7 @@ function ConnectorList({ connectors, query }) {
       {filtered.map((c) => {
         const open = openScopeId === c.id;
         const scopes = CONNECTOR_SCOPES[c.id] || [];
+        const visible = canView(activeClearance, c.sensitivity);
         return (
           <div
             key={c.id}
@@ -9418,28 +9503,34 @@ function ConnectorList({ connectors, query }) {
                 </div>
                 {open && (
                   <div className="mt-2 border-t border-slate-200 pt-2">
-                    <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
-                      OAuth 权限范围
-                    </div>
-                    {scopes.length > 0 ? (
-                      <ul className="space-y-0.5">
-                        {scopes.map((s, i) => (
-                          <li
-                            key={i}
-                            className="text-11 text-slate-700 font-mono tabular-nums leading-snug"
-                          >
-                            · {s}
-                          </li>
-                        ))}
-                      </ul>
+                    {visible ? (
+                      <>
+                        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+                          OAuth 权限范围
+                        </div>
+                        {scopes.length > 0 ? (
+                          <ul className="space-y-0.5">
+                            {scopes.map((s, i) => (
+                              <li
+                                key={i}
+                                className="text-11 text-slate-700 font-mono tabular-nums leading-snug"
+                              >
+                                · {s}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <div className="text-11 text-slate-500">
+                            权限范围未登记。
+                          </div>
+                        )}
+                        <div className="mt-1.5 text-10 text-slate-500 leading-relaxed">
+                          要修改权限范围,在对话里说一句:"更新 {c.name} 的权限范围"。
+                        </div>
+                      </>
                     ) : (
-                      <div className="text-11 text-slate-500">
-                        权限范围未登记。
-                      </div>
+                      <MaskedItem tag={c.sensitivity} layout="card" />
                     )}
-                    <div className="mt-1.5 text-10 text-slate-500 leading-relaxed">
-                      要修改权限范围,在对话里说一句:"更新 {c.name} 的权限范围"。
-                    </div>
                   </div>
                 )}
               </div>
@@ -9463,7 +9554,7 @@ function DocFileIcon({ type }) {
   );
 }
 
-function UploadedDocsList({ docs, query }) {
+function UploadedDocsList({ docs, query, activeClearance }) {
   const [menuOpenId, setMenuOpenId] = useState(null);
   const [drawerMode, setDrawerMode] = useState(null);
   const [drawerDocId, setDrawerDocId] = useState(null);
@@ -9640,6 +9731,11 @@ function UploadedDocsList({ docs, query }) {
         }
         tableHeaders={["字段", "取值"]}
         columnWidths={["40%", "60%"]}
+        bodyOverride={
+          drawerDoc && !canView(activeClearance, drawerDoc.sensitivity) ? (
+            <MaskedItem tag={drawerDoc.sensitivity} layout="card" />
+          ) : undefined
+        }
         tableRows={
           drawerDoc
             ? [
@@ -9689,6 +9785,11 @@ function UploadedDocsList({ docs, query }) {
         }
         tableHeaders={["模式", "类别", "置信度"]}
         columnWidths={["52%", "24%", "24%"]}
+        bodyOverride={
+          drawerDoc && !canView(activeClearance, drawerDoc.sensitivity) ? (
+            <MaskedItem tag={drawerDoc.sensitivity} layout="card" />
+          ) : undefined
+        }
         tableRows={drawerPatterns.map((p) => [
           p.name,
           PATTERN_CATEGORY_LABEL[p.category] || p.category,
@@ -9711,7 +9812,7 @@ function UploadedDocsList({ docs, query }) {
   );
 }
 
-function CapturedPatterns({ patterns, onSelect, query }) {
+function CapturedPatterns({ patterns, onSelect, query, activeClearance }) {
   const [filter, setFilter] = useState("All");
   const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
   const q = (query || "").trim().toLowerCase();
@@ -9742,43 +9843,62 @@ function CapturedPatterns({ patterns, onSelect, query }) {
         })}
       </div>
       <div className="space-y-2">
-        {filtered.map((p) => (
-          <button
-            key={p.id}
-            type="button"
-            onClick={() => onSelect(p)}
-            className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white"
-          >
-            <div className="text-sm font-medium text-slate-900 leading-snug">
-              {p.name}
-            </div>
-            <div className="mt-1.5 flex items-center gap-2 flex-wrap">
-              <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
-                {PATTERN_CATEGORY_LABEL[p.category]}
-              </Pill>
-              <span className="text-11 text-slate-600">
-                置信度{" "}
-                <span className="font-mono tabular-nums text-slate-900">
-                  {p.confidencePct}%
-                </span>
-              </span>
-              <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
-                {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
-              </Pill>
-            </div>
-            <div className="mt-1 text-11 text-slate-500">
-              已应用{" "}
-              <span className="font-mono tabular-nums text-slate-700">
-                {p.usedInCount}
-              </span>{" "}
-              次 · 来源{" "}
-              <span className="font-mono tabular-nums text-slate-700">
-                {p.sourceCount}
-              </span>{" "}
-              个 · 录入 {p.addedAt}
-            </div>
-          </button>
-        ))}
+        {filtered.map((p) => {
+          const visible = canView(activeClearance, p.sensitivity);
+          return (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => onSelect(p)}
+              className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white"
+            >
+              {visible ? (
+                <>
+                  <div className="text-sm font-medium text-slate-900 leading-snug">
+                    {p.name}
+                  </div>
+                  <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+                    <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+                      {PATTERN_CATEGORY_LABEL[p.category]}
+                    </Pill>
+                    <span className="text-11 text-slate-600">
+                      置信度{" "}
+                      <span className="font-mono tabular-nums text-slate-900">
+                        {p.confidencePct}%
+                      </span>
+                    </span>
+                    <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+                      {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
+                    </Pill>
+                  </div>
+                  <div className="mt-1 text-11 text-slate-500">
+                    已应用{" "}
+                    <span className="font-mono tabular-nums text-slate-700">
+                      {p.usedInCount}
+                    </span>{" "}
+                    次 · 来源{" "}
+                    <span className="font-mono tabular-nums text-slate-700">
+                      {p.sourceCount}
+                    </span>{" "}
+                    个 · 录入 {p.addedAt}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <MaskedItem tag={p.sensitivity} layout="card" />
+                  <div className="mt-2 flex items-center gap-2 flex-wrap">
+                    <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+                      {PATTERN_CATEGORY_LABEL[p.category]}
+                    </Pill>
+                    <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+                      {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
+                    </Pill>
+                  </div>
+                </>
+              )}
+            </button>
+          );
+        })}
         {filtered.length === 0 && (
           <div className="text-11 text-slate-500 px-1 py-3">
             {q ? "无匹配项。" : "当前类别下无模式。"}
@@ -9789,7 +9909,7 @@ function CapturedPatterns({ patterns, onSelect, query }) {
   );
 }
 
-function PlaybookList({ playbooks, query }) {
+function PlaybookList({ playbooks, query, activeClearance }) {
   const [openId, setOpenId] = useState(null);
   const q = (query || "").trim().toLowerCase();
   const filtered = q
@@ -9803,6 +9923,7 @@ function PlaybookList({ playbooks, query }) {
       {filtered.map((pb) => {
         const open = openId === pb.id;
         const phasesCount = pb.phases.length;
+        const visible = canView(activeClearance, pb.sensitivity);
         return (
           <div
             key={pb.id}
@@ -9842,33 +9963,37 @@ function PlaybookList({ playbooks, query }) {
             </button>
             {open && (
               <div className="border-t border-slate-200 px-3 py-2.5 bg-slate-50/40">
-                <table className="w-full text-11">
-                  <thead>
-                    <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
-                      <th className="font-medium py-1 pr-2">阶段</th>
-                      <th className="font-medium py-1 pr-2">重点</th>
-                      <th className="font-medium py-1 pr-2 text-right">周数</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {pb.phases.map((ph, i) => (
-                      <tr key={i} className="border-t border-slate-200 align-top">
-                        <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
-                          {ph.label}
-                        </td>
-                        <td className="py-1.5 pr-2 text-slate-700">
-                          <div>{ph.focus}</div>
-                          <div className="text-10 text-slate-500 mt-0.5">
-                            通过条件:{ph.exitGate}
-                          </div>
-                        </td>
-                        <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
-                          {ph.durationWeeks}
-                        </td>
+                {visible ? (
+                  <table className="w-full text-11">
+                    <thead>
+                      <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
+                        <th className="font-medium py-1 pr-2">阶段</th>
+                        <th className="font-medium py-1 pr-2">重点</th>
+                        <th className="font-medium py-1 pr-2 text-right">周数</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {pb.phases.map((ph, i) => (
+                        <tr key={i} className="border-t border-slate-200 align-top">
+                          <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
+                            {ph.label}
+                          </td>
+                          <td className="py-1.5 pr-2 text-slate-700">
+                            <div>{ph.focus}</div>
+                            <div className="text-10 text-slate-500 mt-0.5">
+                              通过条件:{ph.exitGate}
+                            </div>
+                          </td>
+                          <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
+                            {ph.durationWeeks}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <MaskedItem tag={pb.sensitivity} layout="card" />
+                )}
               </div>
             )}
           </div>
@@ -9878,7 +10003,7 @@ function PlaybookList({ playbooks, query }) {
   );
 }
 
-function DecisionClassList({ classes, query }) {
+function DecisionClassList({ classes, query, activeClearance }) {
   const [revokedIds, setRevokedIds] = useState(new Set());
   const [confirmingId, setConfirmingId] = useState(null);
   const q = (query || "").trim().toLowerCase();
@@ -9919,7 +10044,9 @@ function DecisionClassList({ classes, query }) {
             活跃类别
           </div>
           <div className="space-y-2">
-            {active.map((dc) => (
+            {active.map((dc) => {
+              const visible = canView(activeClearance, dc.sensitivity);
+              return (
               <div
                 key={dc.id}
                 className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
@@ -9929,12 +10056,20 @@ function DecisionClassList({ classes, query }) {
                     <div className="text-sm font-medium text-slate-900 leading-snug">
                       {dc.name}
                     </div>
-                    <div className="text-11 text-slate-600 mt-1 leading-snug">
-                      {dc.definition}
-                    </div>
-                    <div className="text-10 text-slate-500 mt-1">
-                      {dc.thresholdSummary}
-                    </div>
+                    {visible ? (
+                      <>
+                        <div className="text-11 text-slate-600 mt-1 leading-snug">
+                          {dc.definition}
+                        </div>
+                        <div className="text-10 text-slate-500 mt-1">
+                          {dc.thresholdSummary}
+                        </div>
+                      </>
+                    ) : (
+                      <div className="mt-1.5">
+                        <MaskedItem tag={dc.sensitivity} layout="inline" />
+                      </div>
+                    )}
                     <div className="text-10 text-slate-500 mt-1">
                       近 30 天调用:{" "}
                       <span className="font-mono tabular-nums text-slate-700">
@@ -9987,7 +10122,8 @@ function DecisionClassList({ classes, query }) {
                   </div>
                 )}
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       )}
@@ -10202,7 +10338,13 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
   const identity = { ...COMPANY_BRAIN.identity, activeUserId };
   const activeUser =
     identity.users.find((u) => u.id === activeUserId) || identity.users[0];
+  const activeClearance = activeUser.clearance;
   const threadIds = new Set(THREADS.map((t) => t.id));
+
+  const restrictedCount = countRestrictedItems(activeClearance, COMPANY_BRAIN);
+  const atMaxClearance = activeClearance === "Confidential";
+  const clearanceLabel =
+    SENSITIVITY_LABEL_ZH[activeClearance] || activeClearance;
 
   const drawerRows = openActivity
     ? [
@@ -10239,6 +10381,13 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
               </button>
             )}
           </div>
+          {!query && (
+            <div className="mt-1.5 text-11 text-slate-500 leading-snug">
+              {atMaxClearance
+                ? `你的权限:${clearanceLabel} · 全部可见`
+                : `你的权限:${clearanceLabel} · ${restrictedCount} 条内容受限`}
+            </div>
+          )}
         </div>
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
           <BrainStatStrip />
@@ -10252,6 +10401,7 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
           <RecentActivityList
             entries={COMPANY_BRAIN.recentActivity}
             onSelect={setOpenActivity}
+            activeClearance={activeClearance}
           />
         </BrainSection>
         <BrainSection
@@ -10263,6 +10413,7 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
           <ConnectorList
             connectors={COMPANY_BRAIN.connectors}
             query={query}
+            activeClearance={activeClearance}
           />
         </BrainSection>
         <BrainSection
@@ -10271,7 +10422,11 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
           count={COMPANY_BRAIN.uploadedDocs.length}
           defaultOpen={!!query}
         >
-          <UploadedDocsList docs={COMPANY_BRAIN.uploadedDocs} query={query} />
+          <UploadedDocsList
+            docs={COMPANY_BRAIN.uploadedDocs}
+            query={query}
+            activeClearance={activeClearance}
+          />
         </BrainSection>
         <BrainSection
           id="captured-patterns"
@@ -10283,6 +10438,7 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
             patterns={COMPANY_BRAIN.patterns}
             onSelect={setOpenPattern}
             query={query}
+            activeClearance={activeClearance}
           />
         </BrainSection>
         <BrainSection
@@ -10291,7 +10447,11 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
           count={COMPANY_BRAIN.playbookList.length}
           defaultOpen={!!query}
         >
-          <PlaybookList playbooks={COMPANY_BRAIN.playbookList} query={query} />
+          <PlaybookList
+            playbooks={COMPANY_BRAIN.playbookList}
+            query={query}
+            activeClearance={activeClearance}
+          />
         </BrainSection>
         <BrainSection
           id="decision-classes"
@@ -10302,6 +10462,7 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
           <DecisionClassList
             classes={COMPANY_BRAIN.decisionClassesDetail}
             query={query}
+            activeClearance={activeClearance}
           />
         </BrainSection>
         <BrainSection
@@ -10343,6 +10504,11 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
         tableHeaders={["字段", "取值"]}
         tableRows={drawerRows}
         columnWidths={["40%", "60%"]}
+        bodyOverride={
+          openActivity && !canView(activeClearance, openActivity.sensitivity) ? (
+            <MaskedItem tag={openActivity.sensitivity} layout="card" />
+          ) : undefined
+        }
         definitionsList={
           openActivity
             ? [
@@ -10368,6 +10534,11 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
         tableHeaders={["来源", "结果"]}
         tableRows={openPattern ? openPattern.detail.sourceList : []}
         columnWidths={["44%", "56%"]}
+        bodyOverride={
+          openPattern && !canView(activeClearance, openPattern.sensitivity) ? (
+            <MaskedItem tag={openPattern.sensitivity} layout="card" />
+          ) : undefined
+        }
         definitionsList={
           openPattern
             ? openPattern.detail.appliedIn.map((a, i) => ({

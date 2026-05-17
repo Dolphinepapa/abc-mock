@@ -11,6 +11,7 @@ export default function InspectionDrawer({
   definitionsList,
   definitionsLabel = "Definitions",
   footer,
+  bodyOverride,
 }) {
   if (!open) return null;
   return (
@@ -37,7 +38,7 @@ export default function InspectionDrawer({
           </button>
         </div>
 
-        {methodologyDescription && (
+        {!bodyOverride && methodologyDescription && (
           <div className="px-5 py-3 border-b border-slate-100 bg-slate-50/40 flex-shrink-0">
             <div className="text-11 text-slate-600 leading-relaxed">
               {methodologyDescription}
@@ -46,7 +47,10 @@ export default function InspectionDrawer({
         )}
 
         <div className="flex-1 overflow-y-auto">
-          {tableRows.length > 0 && (
+          {bodyOverride && (
+            <div className="px-5 py-4">{bodyOverride}</div>
+          )}
+          {!bodyOverride && tableRows.length > 0 && (
             <div className="px-5 py-4">
               <table
                 className={`w-full text-xs ${columnWidths ? "table-fixed" : ""}`}
@@ -91,7 +95,7 @@ export default function InspectionDrawer({
             </div>
           )}
 
-          {definitionsList && definitionsList.length > 0 && (
+          {!bodyOverride && definitionsList && definitionsList.length > 0 && (
             <div className="px-5 py-4 border-t border-slate-200">
               <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
                 {definitionsLabel}
