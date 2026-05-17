@@ -8466,10 +8466,10 @@ function DefenseCanvas() {
       <HeroImageStrip
         images={[
           {
-            src: null,
+            src: "/sku-117-hero.png",
             caption: "我方 SKU-117 床架主图",
             fallbackText: "等待上传 · 我方 SKU-117 主图",
-            descriptor: "我方主图 (中性背景 · 产品独立展示)",
+            descriptor: "我方主图(深灰亚麻 · 三层条纹床头板)",
           },
           {
             src: null,

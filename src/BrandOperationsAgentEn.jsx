@@ -8423,10 +8423,10 @@ function DefenseCanvas() {
       <HeroImageStrip
         images={[
           {
-            src: null,
+            src: "/sku-117-hero.png",
             caption: "Our SKU-117 bed frame hero",
             fallbackText: "Pending upload · our SKU-117 hero",
-            descriptor: "Our hero (neutral background · product isolated)",
+            descriptor: "Our hero (dark grey linen · 3-bar tufted headboard)",
           },
           {
             src: null,
