@@ -7643,10 +7643,10 @@ function LaunchCRCanvas() {
             descriptor: "我方主图(应用场景图:SUV · 摩托 · 轿车 · 篮球)",
           },
           {
-            src: null,
+            src: "/tire-inflator-competitor.png",
             caption: "头部竞品 · 轮胎充气泵主图",
             fallbackText: "等待上传 · 竞品主图",
-            descriptor: "头部竞品主图(对位皮卡市场)",
+            descriptor: "竞品主图(皮卡越野胎 · F-150 + Jeep · 容量数字 + US Patent)",
           },
         ]}
       />

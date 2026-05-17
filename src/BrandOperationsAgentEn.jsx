@@ -7594,10 +7594,10 @@ function LaunchCRCanvas() {
             descriptor: "Our hero (use-case set: SUV · motorcycle · sedan · basketball)",
           },
           {
-            src: null,
+            src: "/tire-inflator-competitor.png",
             caption: "Top competitor · tire inflator hero",
             fallbackText: "Pending upload · competitor hero",
-            descriptor: "Top competitor hero (pickup-context positioning)",
+            descriptor: "Competitor hero (pickup off-road tire · F-150 + Jeep · capacity claims + US Patent)",
           },
         ]}
       />
