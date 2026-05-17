@@ -9697,6 +9697,10 @@ function ReportCard({ report, selected, onClick }) {
 
 function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
+  const current = thread.reports.current;
+  const todayCard = current.find((r) => r.isToday);
+  const olderCurrent = current.filter((r) => !r.isToday);
+  const olderTotal = thread.reports.historical.length + olderCurrent.length;
   return (
     <div className="px-3 py-3">
       <div className="text-11 text-slate-500 mb-3 leading-relaxed px-1">
@@ -9713,7 +9717,7 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
         ) : (
           <ChevronRight className="w-3 h-3" />
         )}
-        Older reports ({thread.reports.historical.length})
+        Older reports ({olderTotal})
       </button>
 
       {historyOpen && (
@@ -9726,19 +9730,26 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
               onClick={() => onSelect(rpt.canvasId)}
             />
           ))}
+          {olderCurrent.map((rpt) => (
+            <ReportCard
+              key={rpt.id}
+              report={rpt}
+              selected={activeId === rpt.canvasId}
+              onClick={() => onSelect(rpt.canvasId)}
+            />
+          ))}
         </div>
       )}
 
-      <div className="space-y-2">
-        {thread.reports.current.map((rpt) => (
+      {todayCard && (
+        <div className="space-y-2">
           <ReportCard
-            key={rpt.id}
-            report={rpt}
-            selected={activeId === rpt.canvasId}
-            onClick={() => onSelect(rpt.canvasId)}
+            report={todayCard}
+            selected={activeId === todayCard.canvasId}
+            onClick={() => onSelect(todayCard.canvasId)}
           />
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
