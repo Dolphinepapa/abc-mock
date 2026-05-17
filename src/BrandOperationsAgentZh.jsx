@@ -8472,10 +8472,10 @@ function DefenseCanvas() {
             descriptor: "我方主图(深灰亚麻 · 三层条纹床头板)",
           },
           {
-            src: null,
+            src: "/nightfox-hero.png",
             caption: "NightFox 床架主图",
             fallbackText: "等待上传 · NightFox 主图",
-            descriptor: "NightFox 主图 (灰色亚麻床头板 + 卧室实景)",
+            descriptor: "NightFox 主图(灰色亚麻床头板 + 现代卧室实景)",
           },
         ]}
       />

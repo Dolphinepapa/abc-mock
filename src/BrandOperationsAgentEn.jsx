@@ -8429,10 +8429,10 @@ function DefenseCanvas() {
             descriptor: "Our hero (dark grey linen · 3-bar tufted headboard)",
           },
           {
-            src: null,
+            src: "/nightfox-hero.png",
             caption: "NightFox bed frame hero",
             fallbackText: "Pending upload · NightFox hero",
-            descriptor: "NightFox hero (grey linen headboard · bedroom scene)",
+            descriptor: "NightFox hero (grey linen headboard · modern bedroom scene)",
           },
         ]}
       />
