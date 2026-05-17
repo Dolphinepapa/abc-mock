@@ -4,6 +4,7 @@ import {
   Lock,
   Brain,
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
   Check,
   X,
@@ -8522,17 +8523,25 @@ function DefenseMilestoneTimeline({ milestones }) {
   );
 }
 
-function GalleryLightbox({ open, onClose, title, images }) {
+function GalleryLightbox({ open, onClose, title, images, startIndex = 0 }) {
+  const [idx, setIdx] = useState(startIndex);
+  useEffect(() => {
+    if (open) setIdx(startIndex);
+  }, [open, startIndex]);
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
+      if (e.key === "ArrowLeft")
+        setIdx((i) => (i - 1 + images.length) % images.length);
+      if (e.key === "ArrowRight")
+        setIdx((i) => (i + 1) % images.length);
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [open, onClose, images.length]);
 
-  if (!open) return null;
+  if (!open || images.length === 0) return null;
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-6"
@@ -8545,7 +8554,7 @@ function GalleryLightbox({ open, onClose, title, images }) {
       >
         <div className="px-5 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
           <div className="text-sm font-semibold text-slate-900 tracking-tight">
-            {title} · Full gallery ({images.length})
+            {title} · {idx + 1} / {images.length}
           </div>
           <button
             type="button"
@@ -8555,93 +8564,125 @@ function GalleryLightbox({ open, onClose, title, images }) {
             <X className="w-4 h-4" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto p-5">
-          <div className="grid grid-cols-2 gap-4">
+        <div
+          className="flex-1 flex items-center justify-center bg-slate-50 relative overflow-hidden"
+          style={{ minHeight: "320px" }}
+        >
+          <img
+            src={images[idx]}
+            alt={`Image ${idx + 1}`}
+            className="max-w-full max-h-full object-contain"
+            style={{ maxHeight: "70vh" }}
+          />
+          {images.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  setIdx((i) => (i - 1 + images.length) % images.length)
+                }
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border border-slate-200 rounded-full w-9 h-9 flex items-center justify-center text-slate-700"
+                aria-label="Previous"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setIdx((i) => (i + 1) % images.length)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border border-slate-200 rounded-full w-9 h-9 flex items-center justify-center text-slate-700"
+                aria-label="Next"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </>
+          )}
+        </div>
+        {images.length > 1 && (
+          <div className="px-5 py-3 border-t border-slate-200 flex gap-2 overflow-x-auto flex-shrink-0">
             {images.map((src, i) => (
-              <div
+              <button
                 key={i}
-                className="aspect-square rounded-md border border-slate-200 bg-slate-100 overflow-hidden"
+                type="button"
+                onClick={() => setIdx(i)}
+                className={`rounded border flex-shrink-0 overflow-hidden ${
+                  i === idx
+                    ? "border-emerald-500 ring-1 ring-emerald-500"
+                    : "border-slate-200 hover:border-slate-400"
+                }`}
+                style={{ width: "56px", height: "56px" }}
+                aria-label={`Jump to image ${i + 1}`}
               >
                 <img
                   src={src}
-                  alt={`Image ${i + 1}`}
+                  alt=""
                   className="w-full h-full object-cover"
                 />
-              </div>
+              </button>
             ))}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 }
 
 function HeroImageStrip({ images }) {
-  const [openGallery, setOpenGallery] = useState(null);
+  const [lightbox, setLightbox] = useState(null);
+  const openLightbox = (allImages, index, title) =>
+    setLightbox({ images: allImages, index, title });
   return (
     <div className="px-6 pt-5">
-      <div
-        className={`grid ${
-          images.length === 1
-            ? "grid-cols-1 max-w-xs"
-            : "grid-cols-2 gap-4 max-w-2xl"
-        } mx-auto`}
-      >
-        {images.map((img, i) => (
-          <div key={i}>
-            <div
-              className="rounded-md border border-slate-200 bg-slate-100 flex items-center justify-center text-11 text-slate-500 text-center px-4 mx-auto"
-              style={{ width: "280px", height: "280px" }}
-            >
-              {img.src ? (
-                <img
-                  src={img.src}
-                  alt={img.caption}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              ) : (
-                <span>{img.fallbackText}</span>
-              )}
-            </div>
-            <div
-              className="mt-2 text-11 text-slate-600 text-center mx-auto"
-              style={{ width: "280px" }}
-            >
-              {img.caption}
-            </div>
-            {img.gallery && img.gallery.length > 0 && (
+      {images.map((img, setIdx) => {
+        const all = [img.src, ...(img.gallery || [])].filter(Boolean);
+        return (
+          <div key={setIdx} className={setIdx > 0 ? "mt-4" : ""}>
+            {all.length > 0 ? (
+              <div className="flex flex-wrap items-start justify-center gap-2">
+                {all.map((src, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => openLightbox(all, i, img.caption)}
+                    className="block rounded-md border border-slate-200 bg-slate-100 overflow-hidden hover:border-slate-400 transition-colors"
+                    style={{ width: "96px", height: "96px" }}
+                    aria-label={`${img.caption} · image ${i + 1} · click to enlarge`}
+                  >
+                    <img
+                      src={src}
+                      alt={`${img.caption} · image ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : (
               <div
-                className="mt-1 text-center mx-auto"
-                style={{ width: "280px" }}
+                className="rounded-md border border-slate-200 bg-slate-100 flex items-center justify-center text-11 text-slate-500 text-center px-4 mx-auto"
+                style={{ width: "280px", height: "120px" }}
               >
-                <button
-                  type="button"
-                  onClick={() =>
-                    setOpenGallery({
-                      images: img.gallery,
-                      title: img.caption,
-                    })
-                  }
-                  className="inline-flex items-center gap-1 text-11 text-emerald-700 hover:text-emerald-800 font-medium"
-                >
-                  View full gallery ({img.gallery.length})
-                  <ArrowUpRight className="w-3 h-3" />
-                </button>
+                <span>{img.fallbackText}</span>
               </div>
             )}
+            <div className="mt-2 text-11 text-slate-600 text-center">
+              {img.caption}
+              {all.length > 1 && (
+                <span className="text-slate-400"> · {all.length} images · click to enlarge</span>
+              )}
+            </div>
           </div>
-        ))}
-      </div>
+        );
+      })}
       {images.length === 2 && (
-        <div className="mt-3 text-11 text-slate-600 text-center max-w-2xl mx-auto">
+        <div className="mt-3 text-11 text-slate-500 text-center">
           {images[0].descriptor} · {images[1].descriptor}
         </div>
       )}
       <GalleryLightbox
-        open={!!openGallery}
-        onClose={() => setOpenGallery(null)}
-        title={openGallery?.title || ""}
-        images={openGallery?.images || []}
+        open={!!lightbox}
+        onClose={() => setLightbox(null)}
+        title={lightbox?.title || ""}
+        images={lightbox?.images || []}
+        startIndex={lightbox?.index || 0}
       />
     </div>
   );
