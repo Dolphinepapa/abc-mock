@@ -4566,6 +4566,16 @@ function StrategyCanvas() {
         }
       />
 
+      <HeroImageStrip
+        images={[
+          {
+            src: "/sku-a-hero.png",
+            caption: "Our SKU-A · Arc Floor Lamp hero",
+            fallbackText: "Pending upload · our SKU-A hero",
+          },
+        ]}
+      />
+
       {/* Goal strip */}
       <div className="px-6 pt-5">
         <div className="flex items-center justify-between bg-slate-900 text-white rounded-lg px-4 py-3">
@@ -4594,28 +4604,6 @@ function StrategyCanvas() {
             >
               Change goal
             </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Listing snapshot — visual context for the SKU under discussion */}
-      <div className="px-6 pt-5">
-        <div className="flex items-center gap-4 bg-white border border-slate-200 rounded-lg p-3">
-          <img
-            src="/sku-a-hero.png"
-            alt="SKU-A · Arc Floor Lamp hero image"
-            className="w-20 h-20 rounded-md object-cover flex-shrink-0 border border-slate-200"
-          />
-          <div className="flex-1 min-w-0">
-            <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-0.5">
-              Listing
-            </div>
-            <div className="text-sm font-semibold text-slate-900 truncate">
-              SKU-A · Arc Floor Lamp
-            </div>
-            <div className="text-xs text-slate-500 mt-0.5">
-              Floor Lamps · linen drum shade · 3-CCT · arc-stand
-            </div>
           </div>
         </div>
       </div>
