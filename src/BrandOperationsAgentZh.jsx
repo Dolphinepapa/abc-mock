@@ -9734,8 +9734,11 @@ function ReportCard({ report, selected, onClick }) {
 function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const current = thread.reports.current;
+  const latestWeekly = current.find((r) => r.type === "weekly");
   const todayCard = current.find((r) => r.isToday);
-  const olderCurrent = current.filter((r) => !r.isToday);
+  const olderCurrent = current.filter(
+    (r) => r.type !== "weekly" && !r.isToday,
+  );
   const olderTotal = thread.reports.historical.length + olderCurrent.length;
   return (
     <div className="px-3 py-3">
@@ -9753,7 +9756,7 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
         ) : (
           <ChevronRight className="w-3 h-3" />
         )}
-        往上翻看历史 ({olderTotal} 篇)
+        往上翻看历史日报 ({olderTotal} 篇)
       </button>
 
       {historyOpen && (
@@ -9777,15 +9780,22 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
         </div>
       )}
 
-      {todayCard && (
-        <div className="space-y-2">
+      <div className="space-y-2">
+        {latestWeekly && (
+          <ReportCard
+            report={latestWeekly}
+            selected={activeId === latestWeekly.canvasId}
+            onClick={() => onSelect(latestWeekly.canvasId)}
+          />
+        )}
+        {todayCard && (
           <ReportCard
             report={todayCard}
             selected={activeId === todayCard.canvasId}
             onClick={() => onSelect(todayCard.canvasId)}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
