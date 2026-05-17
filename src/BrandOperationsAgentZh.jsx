@@ -196,13 +196,13 @@ const THREADS = [
     initialTimestamp: "May 13, 10:08",
     lastActivityTimestamp: "May 13, 10:14",
     unread: false,
-    title: "刮胡刀 + 刀头 · Henry's",
+    title: "刮胡刀 + 刀头",
     turns: [
       {
         speaker: "user",
         timestamp: "May 13, 10:08",
         body:
-          "Henry's 刮胡刀产品线 — 刀头 3 个月换一次。需要保持产品线综合毛利率 ≥ 15% 的同时把整体销售额最大化。该如何测试和制定定价 + 营销策略?",
+          "刮胡刀产品线 — 刀头 3 个月换一次。需要保持产品线综合毛利率 ≥ 15% 的同时把整体销售额最大化。该如何测试和制定定价 + 营销策略?",
         canvasLink: false,
       },
       {
@@ -1128,9 +1128,9 @@ const OMNICHANNEL = {
   },
 };
 
-/* Razor-and-blade pricing canvas — Henry's 刮胡刀产品线 */
+/* Razor-and-blade pricing canvas — 刮胡刀产品线 */
 const RAZOR_BLADE = {
-  sku: "Henry's · 刮胡刀产品线",
+  sku: "刮胡刀产品线",
   initiator: "Sara Lin",
   confirmedOn: "May 13",
   economics: {
@@ -6502,7 +6502,7 @@ function OmnichannelCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
-/*  Razor + blade pricing canvas — Henry's                                    */
+/*  Razor + blade pricing canvas                                              */
 /* ────────────────────────────────────────────────────────────────────────── */
 
 function PhaseSection({ index, title, kicker, disabled, badge, children }) {
@@ -6927,7 +6927,7 @@ function RazorBladeCanvas() {
   return (
     <>
       <CanvasHeader
-        kicker="刮胡刀 + 刀头 · Henry's"
+        kicker="刮胡刀 + 刀头"
         title={R.sku}
         meta={
           <>
@@ -6951,8 +6951,8 @@ function RazorBladeCanvas() {
         images={[
           {
             src: "/razor-blade-hero.png",
-            caption: "我方 Henry's · 刀身 + 刀头主图",
-            fallbackText: "等待上传 · Henry's 刀身 + 刀头主图",
+            caption: "我方刀身 + 刀头主图",
+            fallbackText: "等待上传 · 刀身 + 刀头主图",
           },
         ]}
       />
@@ -11654,7 +11654,7 @@ const OUTCOMES_DATA = {
   ],
   trainingShown: [
     { sku: "SKU-PB-A",   name: "Power bank",       rev: 42100,  spend: 7748,  tacos: 18.4, sub: 240, since: "since Mar 8"  },
-    { sku: "SKU-RZ-001", name: "Razor (Henry's)",  rev: 128400, spend: 43656, tacos: 34.0, sub: 240, since: "since Jan 22" },
+    { sku: "SKU-RZ-001", name: "Razor",  rev: 128400, spend: 43656, tacos: 34.0, sub: 240, since: "since Jan 22" },
     { sku: "SKU-RZ-002", name: "Razor Blade",      rev: 44200,  spend: 13260, tacos: 30.0, sub: 240, since: "since Jan 22" },
     { sku: "SKU-TI-01",  name: "Tire Inflator",    rev: 18600,  spend: 7254,  tacos: 39.0, sub: 240, since: "since Apr 30", note: "新品" },
     { sku: "SKU-TI-02",  name: "RV Compressor",    rev: 9200,   spend: 4968,  tacos: 54.0, sub: 240, since: "since May 6",  note: "红色案例" },

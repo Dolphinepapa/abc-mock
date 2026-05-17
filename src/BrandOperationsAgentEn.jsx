@@ -196,13 +196,13 @@ const THREADS = [
     initialTimestamp: "May 13, 10:08",
     lastActivityTimestamp: "May 13, 10:14",
     unread: false,
-    title: "Razor + blade · Henry's",
+    title: "Razor + blade",
     turns: [
       {
         speaker: "user",
         timestamp: "May 13, 10:08",
         body:
-          "Henry's razor product line — blades replace every 3 months. Maximize total sales while keeping product-line blended margin ≥ 15%. How should we test and design the pricing + marketing strategy?",
+          "Razor product line — blades replace every 3 months. Maximize total sales while keeping product-line blended margin ≥ 15%. How should we test and design the pricing + marketing strategy?",
         canvasLink: false,
       },
       {
@@ -1137,9 +1137,9 @@ const OMNICHANNEL = {
   },
 };
 
-/* Razor-and-blade pricing canvas — Henry's razor product line */
+/* Razor-and-blade pricing canvas — razor product line */
 const RAZOR_BLADE = {
-  sku: "Henry's · razor product line",
+  sku: "Razor product line",
   initiator: "Sara Lin",
   confirmedOn: "May 13",
   economics: {
@@ -6448,7 +6448,7 @@ function OmnichannelCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
-/*  Razor + blade pricing canvas — Henry's                                    */
+/*  Razor + blade pricing canvas                                              */
 /* ────────────────────────────────────────────────────────────────────────── */
 
 function PhaseSection({ index, title, kicker, disabled, badge, children }) {
@@ -6881,7 +6881,7 @@ function RazorBladeCanvas() {
   return (
     <>
       <CanvasHeader
-        kicker="Razor + blade · Henry's"
+        kicker="Razor + blade"
         title={R.sku}
         meta={
           <>
@@ -6905,8 +6905,8 @@ function RazorBladeCanvas() {
         images={[
           {
             src: "/razor-blade-hero.png",
-            caption: "Our Henry's · razor + blade hero",
-            fallbackText: "Pending upload · Henry's razor + blade hero",
+            caption: "Our razor + blade hero",
+            fallbackText: "Pending upload · razor + blade hero",
           },
         ]}
       />
@@ -11602,7 +11602,7 @@ const OUTCOMES_DATA = {
   ],
   trainingShown: [
     { sku: "SKU-PB-A",   name: "Power bank",       rev: 42100,  spend: 7748,  tacos: 18.4, sub: 240, since: "since Mar 8"  },
-    { sku: "SKU-RZ-001", name: "Razor (Henry's)",  rev: 128400, spend: 43656, tacos: 34.0, sub: 240, since: "since Jan 22" },
+    { sku: "SKU-RZ-001", name: "Razor",  rev: 128400, spend: 43656, tacos: 34.0, sub: 240, since: "since Jan 22" },
     { sku: "SKU-RZ-002", name: "Razor Blade",      rev: 44200,  spend: 13260, tacos: 30.0, sub: 240, since: "since Jan 22" },
     { sku: "SKU-TI-01",  name: "Tire Inflator",    rev: 18600,  spend: 7254,  tacos: 39.0, sub: 240, since: "since Apr 30", note: "new launch" },
     { sku: "SKU-TI-02",  name: "RV Compressor",    rev: 9200,   spend: 4968,  tacos: 54.0, sub: 240, since: "since May 6",  note: "the rose case" },
