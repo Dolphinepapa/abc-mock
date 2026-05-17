@@ -41,6 +41,8 @@ import {
   MoreVertical,
   Trash2,
   MessageSquare,
+  Search,
+  Eye,
 } from "lucide-react";
 import {
   LineChart,
@@ -2966,7 +2968,7 @@ const COMPANY_BRAIN = {
       askerInitials: "SL",
       askedAt: "1d ago",
       sensitivity: "Confidential",
-      threadId: "thread-margin-compare",
+      threadId: "qa-margins",
     },
     {
       id: "rq-bedroom-cr",
@@ -9059,6 +9061,13 @@ const DEFAULT_CATEGORY_LABEL = {
 
 function BrainSection({ id, title, count, defaultOpen = false, children }) {
   const [open, setOpen] = useState(defaultOpen);
+  const lastDefault = useRef(defaultOpen);
+  useEffect(() => {
+    if (lastDefault.current !== defaultOpen) {
+      lastDefault.current = defaultOpen;
+      if (defaultOpen) setOpen(true);
+    }
+  }, [defaultOpen]);
   return (
     <section id={id} className="border-b border-slate-200">
       <button
@@ -9269,48 +9278,122 @@ function RecentActivityList({ entries, onSelect }) {
   );
 }
 
-function ConnectorList({ connectors }) {
+const CONNECTOR_SCOPES = {
+  "cn-amazon-ads": [
+    "advertising::campaign_management",
+    "advertising::reports",
+    "advertising::audiences (read-only)",
+    "profile (read-only)",
+  ],
+  "cn-walmart-connect": [
+    "ads:read",
+    "ads:write",
+    "reports:read",
+    "items:read",
+  ],
+  "cn-tiktok-ads": [
+    "ad.account.list",
+    "ad.report.get",
+    "ad.creative.read",
+  ],
+  "cn-brand-analytics": [
+    "brand_analytics:repeat_purchase",
+    "brand_analytics:search_terms",
+    "brand_analytics:market_basket",
+  ],
+  "cn-helium10": [
+    "scrape:keyword_rank",
+    "scrape:asin_history",
+  ],
+  "cn-slack": [
+    "chat:write",
+    "incoming-webhook",
+  ],
+  "cn-gdrive": [
+    "drive.readonly",
+    "drive.metadata.readonly",
+  ],
+};
+
+function ConnectorList({ connectors, query }) {
+  const [openScopeId, setOpenScopeId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? connectors.filter((c) => c.name.toLowerCase().includes(q))
+    : connectors;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">No matches.</div>;
+  }
   return (
     <div className="space-y-2">
-      {connectors.map((c) => (
-        <div
-          key={c.id}
-          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-        >
-          <div className="flex items-start gap-2">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-medium text-slate-900">
-                  {c.name}
-                </span>
-                <Pill tone="slate">{CONNECTOR_TYPE_LABEL[c.type]}</Pill>
-                <Pill tone={CONNECTOR_STATUS_TONE[c.status] || "slate"}>
-                  {CONNECTOR_STATUS_LABEL[c.status] || c.status}
-                </Pill>
-                <Pill tone={SENSITIVITY_TONE[c.sensitivity] || "slate"}>
-                  {c.sensitivity}
-                </Pill>
-              </div>
-              <div className="mt-1.5 flex items-center justify-between gap-2">
-                <a
-                  href={c.scopeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
-                >
-                  View OAuth scope
-                  <ArrowUpRight className="w-3 h-3" />
-                </a>
-                {c.lastSync && (
-                  <span className="text-11 text-slate-500 font-mono tabular-nums">
-                    {c.lastSync}
+      {filtered.map((c) => {
+        const open = openScopeId === c.id;
+        const scopes = CONNECTOR_SCOPES[c.id] || [];
+        return (
+          <div
+            key={c.id}
+            className="border border-slate-200 rounded-md px-3 py-2.5 bg-white relative"
+          >
+            <div className="flex items-start gap-2">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-medium text-slate-900">
+                    {c.name}
                   </span>
+                  <Pill tone="slate">{CONNECTOR_TYPE_LABEL[c.type]}</Pill>
+                  <Pill tone={CONNECTOR_STATUS_TONE[c.status] || "slate"}>
+                    {CONNECTOR_STATUS_LABEL[c.status] || c.status}
+                  </Pill>
+                  <Pill tone={SENSITIVITY_TONE[c.sensitivity] || "slate"}>
+                    {c.sensitivity}
+                  </Pill>
+                </div>
+                <div className="mt-1.5 flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setOpenScopeId(open ? null : c.id)}
+                    className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
+                  >
+                    View OAuth scope
+                    <ArrowUpRight className="w-3 h-3" />
+                  </button>
+                  {c.lastSync && (
+                    <span className="text-11 text-slate-500 font-mono tabular-nums">
+                      {c.lastSync}
+                    </span>
+                  )}
+                </div>
+                {open && (
+                  <div className="mt-2 border-t border-slate-200 pt-2">
+                    <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+                      OAuth scope
+                    </div>
+                    {scopes.length > 0 ? (
+                      <ul className="space-y-0.5">
+                        {scopes.map((s, i) => (
+                          <li
+                            key={i}
+                            className="text-11 text-slate-700 font-mono tabular-nums leading-snug"
+                          >
+                            · {s}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="text-11 text-slate-500">
+                        Scope not registered.
+                      </div>
+                    )}
+                    <div className="mt-1.5 text-10 text-slate-500 leading-relaxed">
+                      To modify scope, start a conversation: "Update {c.name} scope".
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
       <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
         To add a new connector or modify scope, start a conversation: "Connect
         [service]" or "Update [service] scope".
@@ -9328,64 +9411,260 @@ function DocFileIcon({ type }) {
   );
 }
 
-function UploadedDocsList({ docs }) {
+function UploadedDocsList({ docs, query }) {
+  const [menuOpenId, setMenuOpenId] = useState(null);
+  const [drawerMode, setDrawerMode] = useState(null);
+  const [drawerDocId, setDrawerDocId] = useState(null);
+  const [removePromptId, setRemovePromptId] = useState(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpenId) return;
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpenId(null);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [menuOpenId]);
+
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? docs.filter((d) => d.filename.toLowerCase().includes(q))
+    : docs;
+
+  const drawerDoc = drawerDocId
+    ? docs.find((d) => d.id === drawerDocId) || null
+    : null;
+
+  const drawerPatterns =
+    drawerDoc && drawerMode === "patterns"
+      ? COMPANY_BRAIN.patterns.filter((p) =>
+          (p.detail.sourceList || []).some((row) =>
+            (row[0] || "").toLowerCase().includes(
+              drawerDoc.filename.replace(/\.[a-z]+$/i, "").toLowerCase().split("-")[0],
+            ),
+          ),
+        )
+      : [];
+
+  const closeDrawer = () => {
+    setDrawerMode(null);
+    setDrawerDocId(null);
+  };
+
   return (
     <div className="space-y-2">
-      {docs.map((d) => (
+      {filtered.length === 0 && (
+        <div className="text-11 text-slate-500 px-1 py-1">No matches.</div>
+      )}
+      {filtered.map((d) => (
         <div
           key={d.id}
-          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white flex items-start gap-2.5"
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white relative"
         >
-          <DocFileIcon type={d.type} />
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium text-slate-900 truncate">
-              {d.filename}
+          <div className="flex items-start gap-2.5">
+            <DocFileIcon type={d.type} />
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium text-slate-900 truncate">
+                {d.filename}
+              </div>
+              <div className="mt-1 flex items-center gap-2 flex-wrap">
+                <Pill tone={DOC_STATUS_TONE[d.status] || "slate"}>
+                  {DOC_STATUS_LABEL[d.status] || d.status}
+                </Pill>
+                {d.patternsCount !== null && (
+                  <span
+                    className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-10 font-mono tabular-nums border ${
+                      d.patternsCount > 0
+                        ? "bg-slate-900 text-white border-slate-900"
+                        : "bg-slate-100 text-slate-600 border-slate-200"
+                    }`}
+                  >
+                    {d.patternsCount} patterns
+                  </span>
+                )}
+                <Pill tone={SENSITIVITY_TONE[d.sensitivity] || "slate"}>
+                  {d.sensitivity}
+                </Pill>
+              </div>
+              <div className="mt-1 text-11 text-slate-500">
+                {d.uploadedAt} · by {d.uploadedBy}
+              </div>
             </div>
-            <div className="mt-1 flex items-center gap-2 flex-wrap">
-              <Pill tone={DOC_STATUS_TONE[d.status] || "slate"}>
-                {DOC_STATUS_LABEL[d.status] || d.status}
-              </Pill>
-              {d.patternsCount !== null && (
-                <span
-                  className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-10 font-mono tabular-nums border ${
-                    d.patternsCount > 0
-                      ? "bg-slate-900 text-white border-slate-900"
-                      : "bg-slate-100 text-slate-600 border-slate-200"
-                  }`}
-                >
-                  {d.patternsCount} patterns
-                </span>
+            <div
+              className="flex-shrink-0 relative"
+              ref={menuOpenId === d.id ? menuRef : null}
+            >
+              <button
+                type="button"
+                onClick={() =>
+                  setMenuOpenId(menuOpenId === d.id ? null : d.id)
+                }
+                title="Actions"
+                className="p-1 text-slate-500 hover:text-slate-900"
+              >
+                <MoreVertical className="w-4 h-4" />
+              </button>
+              {menuOpenId === d.id && (
+                <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-slate-200 rounded-md shadow-lg z-20">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDrawerMode("source");
+                      setDrawerDocId(d.id);
+                      setMenuOpenId(null);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-11 text-slate-700 hover:bg-slate-50 border-b border-slate-100"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-slate-500" />
+                    View source
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDrawerMode("patterns");
+                      setDrawerDocId(d.id);
+                      setMenuOpenId(null);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-11 text-slate-700 hover:bg-slate-50 border-b border-slate-100"
+                  >
+                    <ListTree className="w-3.5 h-3.5 text-slate-500" />
+                    View extracted patterns
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRemovePromptId(d.id);
+                      setMenuOpenId(null);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-11 text-slate-700 hover:bg-slate-50"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-slate-500" />
+                    Remove from brain
+                  </button>
+                </div>
               )}
-              <Pill tone={SENSITIVITY_TONE[d.sensitivity] || "slate"}>
-                {d.sensitivity}
-              </Pill>
-            </div>
-            <div className="mt-1 text-11 text-slate-500">
-              {d.uploadedAt} · by {d.uploadedBy}
             </div>
           </div>
-          <button
-            type="button"
-            disabled
-            title="View source · View extracted patterns · Remove from brain"
-            className="flex-shrink-0 p-1 text-slate-400 hover:text-slate-600 disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            <MoreVertical className="w-4 h-4" />
-          </button>
+          {removePromptId === d.id && (
+            <div className="mt-2 border-t border-slate-200 pt-2">
+              <div className="text-11 text-slate-700 leading-snug">
+                To remove a document, start a conversation:{" "}
+                <span className="font-mono text-slate-900">
+                  "Remove {d.filename} from brain"
+                </span>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRemovePromptId(null)}
+                  className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                >
+                  Cancel
+                </button>
+                <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
+                  Drafted in chat
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       ))}
       <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
         To upload a new document, start a conversation: "Upload [filename]" or
         drag the file into the chat input.
       </div>
+
+      <InspectionDrawer
+        open={!!drawerDoc && drawerMode === "source"}
+        onClose={closeDrawer}
+        title={drawerDoc?.filename}
+        methodologyDescription={
+          drawerDoc
+            ? `${DOC_STATUS_LABEL[drawerDoc.status] || drawerDoc.status} · uploaded ${drawerDoc.uploadedAt} by ${drawerDoc.uploadedBy}.`
+            : undefined
+        }
+        tableHeaders={["Field", "Value"]}
+        columnWidths={["40%", "60%"]}
+        tableRows={
+          drawerDoc
+            ? [
+                ["Filename", drawerDoc.filename],
+                ["Format", drawerDoc.type.toUpperCase()],
+                ["Status", DOC_STATUS_LABEL[drawerDoc.status] || drawerDoc.status],
+                [
+                  "Extracted patterns",
+                  drawerDoc.patternsCount === null
+                    ? "Processing"
+                    : `${drawerDoc.patternsCount}`,
+                ],
+                ["Uploaded by", drawerDoc.uploadedBy],
+                ["Uploaded at", drawerDoc.uploadedAt],
+                ["Sensitivity", drawerDoc.sensitivity],
+              ]
+            : []
+        }
+        definitionsList={
+          drawerDoc
+            ? [
+                {
+                  term: "Where the source lives",
+                  definition:
+                    "Company Brain · original document storage (read-only). To replace or re-upload, start a chat conversation.",
+                },
+              ]
+            : undefined
+        }
+        definitionsLabel="Detail"
+      />
+
+      <InspectionDrawer
+        open={!!drawerDoc && drawerMode === "patterns"}
+        onClose={closeDrawer}
+        title={drawerDoc ? `${drawerDoc.filename} · Extracted patterns` : undefined}
+        methodologyDescription={
+          drawerDoc
+            ? drawerDoc.patternsCount === 0
+              ? "This document is indexed but no patterns have been distilled yet."
+              : `${drawerDoc.patternsCount} pattern(s) draw evidence from this document. Below: patterns referencing this document, by confidence.`
+            : undefined
+        }
+        tableHeaders={["Pattern", "Category", "Confidence"]}
+        columnWidths={["52%", "24%", "24%"]}
+        tableRows={drawerPatterns.map((p) => [
+          p.name,
+          PATTERN_CATEGORY_LABEL[p.category] || p.category,
+          `${p.confidencePct}%`,
+        ])}
+        definitionsList={
+          drawerDoc && drawerPatterns.length === 0
+            ? [
+                {
+                  term: "No back-references found",
+                  definition:
+                    "This document is not directly cited in any pattern's source list — see Captured patterns section to browse by category.",
+                },
+              ]
+            : undefined
+        }
+        definitionsLabel="Note"
+      />
     </div>
   );
 }
 
-function CapturedPatterns({ patterns, onSelect }) {
+function CapturedPatterns({ patterns, onSelect, query }) {
   const [filter, setFilter] = useState("All");
   const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
-  const filtered = filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
+  const q = (query || "").trim().toLowerCase();
+  const byCategory =
+    filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
+  const filtered = q
+    ? byCategory.filter((p) => p.name.toLowerCase().includes(q))
+    : byCategory;
   return (
     <div>
       <div className="flex flex-wrap gap-1.5 mb-3">
@@ -9447,7 +9726,7 @@ function CapturedPatterns({ patterns, onSelect }) {
         ))}
         {filtered.length === 0 && (
           <div className="text-11 text-slate-500 px-1 py-3">
-            No patterns in this category.
+            {q ? "No matches." : "No patterns in this category."}
           </div>
         )}
       </div>
@@ -9455,11 +9734,18 @@ function CapturedPatterns({ patterns, onSelect }) {
   );
 }
 
-function PlaybookList({ playbooks }) {
+function PlaybookList({ playbooks, query }) {
   const [openId, setOpenId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? playbooks.filter((pb) => pb.name.toLowerCase().includes(q))
+    : playbooks;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">No matches.</div>;
+  }
   return (
     <div className="space-y-2">
-      {playbooks.map((pb) => {
+      {filtered.map((pb) => {
         const open = openId === pb.id;
         const phasesCount = pb.phases.length;
         return (
@@ -9537,14 +9823,25 @@ function PlaybookList({ playbooks }) {
   );
 }
 
-function DecisionClassList({ classes }) {
+function DecisionClassList({ classes, query }) {
   const [revokedIds, setRevokedIds] = useState(new Set());
   const [confirmingId, setConfirmingId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const matches = (c) => !q || c.name.toLowerCase().includes(q);
 
   const isJustRevoked = (id) => revokedIds.has(id);
-  const active = classes.filter((c) => !c.revoked && !isJustRevoked(c.id));
-  const justRevoked = classes.filter((c) => !c.revoked && isJustRevoked(c.id));
-  const historicallyRevoked = classes.filter((c) => c.revoked);
+  const active = classes.filter(
+    (c) => !c.revoked && !isJustRevoked(c.id) && matches(c),
+  );
+  const justRevoked = classes.filter(
+    (c) => !c.revoked && isJustRevoked(c.id) && matches(c),
+  );
+  const historicallyRevoked = classes.filter((c) => c.revoked && matches(c));
+  const noResults =
+    q &&
+    active.length === 0 &&
+    justRevoked.length === 0 &&
+    historicallyRevoked.length === 0;
 
   const onConfirm = (id) => {
     setRevokedIds((s) => {
@@ -9555,85 +9852,91 @@ function DecisionClassList({ classes }) {
     setConfirmingId(null);
   };
 
+  if (noResults) {
+    return <div className="text-11 text-slate-500 px-1 py-1">No matches.</div>;
+  }
+
   return (
     <div className="space-y-4">
-      <div>
-        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
-          Active classes
-        </div>
-        <div className="space-y-2">
-          {active.map((dc) => (
-            <div
-              key={dc.id}
-              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-            >
-              <div className="flex items-start gap-2">
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-slate-900 leading-snug">
-                    {dc.name}
+      {active.length > 0 && (
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            Active classes
+          </div>
+          <div className="space-y-2">
+            {active.map((dc) => (
+              <div
+                key={dc.id}
+                className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+              >
+                <div className="flex items-start gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-slate-900 leading-snug">
+                      {dc.name}
+                    </div>
+                    <div className="text-11 text-slate-600 mt-1 leading-snug">
+                      {dc.definition}
+                    </div>
+                    <div className="text-10 text-slate-500 mt-1">
+                      {dc.thresholdSummary}
+                    </div>
+                    <div className="text-10 text-slate-500 mt-1">
+                      Invocations 30d:{" "}
+                      <span className="font-mono tabular-nums text-slate-700">
+                        {dc.recentInvocations}
+                      </span>{" "}
+                      · last{" "}
+                      <span className="font-mono tabular-nums text-slate-700">
+                        {dc.lastInvoked}
+                      </span>
+                    </div>
+                    <div className="mt-1.5 flex items-center gap-2">
+                      <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+                        {dc.sensitivity}
+                      </Pill>
+                      <span className="text-10 text-slate-500">
+                        delegated by {dc.delegatedBy} · {dc.delegatedAt}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-11 text-slate-600 mt-1 leading-snug">
-                    {dc.definition}
-                  </div>
-                  <div className="text-10 text-slate-500 mt-1">
-                    {dc.thresholdSummary}
-                  </div>
-                  <div className="text-10 text-slate-500 mt-1">
-                    Invocations 30d:{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {dc.recentInvocations}
-                    </span>{" "}
-                    · last{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {dc.lastInvoked}
-                    </span>
-                  </div>
-                  <div className="mt-1.5 flex items-center gap-2">
-                    <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
-                      {dc.sensitivity}
-                    </Pill>
-                    <span className="text-10 text-slate-500">
-                      delegated by {dc.delegatedBy} · {dc.delegatedAt}
-                    </span>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingId(dc.id)}
+                    className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    Revoke
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setConfirmingId(dc.id)}
-                  className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
-                >
-                  <Trash2 className="w-3 h-3" />
-                  Revoke
-                </button>
+                {confirmingId === dc.id && (
+                  <div className="mt-2 border-t border-slate-200 pt-2">
+                    <div className="text-11 text-slate-700 leading-snug">
+                      Revoke "{dc.name}"? Agent will require explicit approval for
+                      these actions going forward.
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setConfirmingId(null)}
+                        className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onConfirm(dc.id)}
+                        className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
+                      >
+                        Confirm revoke
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-              {confirmingId === dc.id && (
-                <div className="mt-2 border-t border-slate-200 pt-2">
-                  <div className="text-11 text-slate-700 leading-snug">
-                    Revoke "{dc.name}"? Agent will require explicit approval for
-                    these actions going forward.
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setConfirmingId(null)}
-                      className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onConfirm(dc.id)}
-                      className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
-                    >
-                      Confirm revoke
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {(justRevoked.length > 0 || historicallyRevoked.length > 0) && (
         <div>
@@ -9644,10 +9947,23 @@ function DecisionClassList({ classes }) {
             {justRevoked.map((dc) => (
               <div
                 key={dc.id}
-                className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
+                className="border border-slate-200 rounded-md px-3 py-2.5 bg-slate-50/60"
               >
                 <div className="text-sm font-medium text-slate-500 line-through leading-snug">
                   {dc.name}
+                </div>
+                <div className="text-11 text-slate-500 mt-1 leading-snug line-through">
+                  {dc.definition}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  {dc.thresholdSummary}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  Invoked{" "}
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {dc.recentInvocations}
+                  </span>{" "}
+                  times before revoke · last {dc.lastInvoked}
                 </div>
                 <div className="text-10 text-slate-500 mt-1">
                   revoked just now
@@ -9684,11 +10000,18 @@ function DecisionClassList({ classes }) {
   );
 }
 
-function BrandDefaultsList({ defaults }) {
+function BrandDefaultsList({ defaults, query }) {
   const [editId, setEditId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? defaults.filter((d) => d.key.toLowerCase().includes(q))
+    : defaults;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">No matches.</div>;
+  }
   return (
     <div className="space-y-2">
-      {defaults.map((d) => (
+      {filtered.map((d) => (
         <div
           key={d.id}
           className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
@@ -9721,14 +10044,17 @@ function BrandDefaultsList({ defaults }) {
             </button>
           </div>
           {editId === d.id && (
-            <div className="mt-2 border-t border-slate-200 pt-2">
-              <div className="text-11 text-slate-700 leading-snug">
-                Open a chat conversation:{" "}
-                <span className="font-mono text-slate-900">
-                  "Update {d.key.toLowerCase()} to [new value]"
-                </span>
+            <div className="mt-2 border-t border-slate-200 pt-2 space-y-2">
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                Chat command draft
               </div>
-              <div className="mt-2 flex items-center gap-2">
+              <div className="font-mono text-11 text-slate-900 bg-slate-50 border border-slate-200 rounded-md px-2 py-1.5 leading-snug">
+                Update {d.key} to ___ (current: {d.value})
+              </div>
+              <div className="text-11 text-slate-500 leading-snug">
+                Brand default changes go through chat for audit trail.
+              </div>
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setEditId(null)}
@@ -9737,7 +10063,7 @@ function BrandDefaultsList({ defaults }) {
                   Cancel
                 </button>
                 <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
-                  Open chat
+                  Drafted in chat
                   <ArrowUpRight className="w-3 h-3" />
                 </span>
               </div>
@@ -9749,44 +10075,66 @@ function BrandDefaultsList({ defaults }) {
   );
 }
 
-function RecentQueriesList({ queries, activeUser }) {
+function RecentQueriesList({ queries, activeUser, query, onOpenThread, threadIds }) {
+  const qStr = (query || "").trim().toLowerCase();
+  const filtered = qStr
+    ? queries.filter((rq) => rq.question.toLowerCase().includes(qStr))
+    : queries;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">No matches.</div>;
+  }
   return (
     <div className="space-y-2">
-      {queries.map((q) => {
-        const visible = canView(activeUser.clearance, q.sensitivity);
+      {filtered.map((rq) => {
+        const visible = canView(activeUser.clearance, rq.sensitivity);
+        const threadExists = threadIds.has(rq.threadId);
         return (
           <div
-            key={q.id}
+            key={rq.id}
             className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
           >
             <div className="text-sm font-medium text-slate-900 leading-snug flex items-start gap-2">
               <MessageSquare className="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5" />
               <span className="flex-1 min-w-0 truncate">
                 {visible
-                  ? q.question
+                  ? rq.question
                   : "[Question restricted at your clearance · contact Maya Chen or higher clearance]"}
               </span>
             </div>
             <div className="mt-1.5 flex items-center gap-2 flex-wrap">
               <div className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-semibold text-10 flex items-center justify-center flex-shrink-0">
-                {q.askerInitials}
+                {rq.askerInitials}
               </div>
-              <span className="text-11 text-slate-600">{q.asker}</span>
+              <span className="text-11 text-slate-600">{rq.asker}</span>
               <span className="text-10 text-slate-500 font-mono tabular-nums">
-                {q.askedAt}
+                {rq.askedAt}
               </span>
               <Pill
-                tone={SENSITIVITY_TONE[q.sensitivity] || "slate"}
+                tone={SENSITIVITY_TONE[rq.sensitivity] || "slate"}
                 className="ml-auto"
               >
-                {q.sensitivity}
+                {rq.sensitivity}
               </Pill>
             </div>
             <div className="mt-1.5">
-              <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
-                Open thread
-                <ArrowRight className="w-3 h-3" />
-              </span>
+              {threadExists ? (
+                <button
+                  type="button"
+                  onClick={() => onOpenThread && onOpenThread(rq.threadId)}
+                  className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+                >
+                  Open thread
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              ) : (
+                <span
+                  title="Thread no longer in this session"
+                  className="inline-flex items-center gap-1 text-11 font-medium text-slate-400 cursor-default"
+                >
+                  Open thread
+                  <ArrowRight className="w-3 h-3" />
+                </span>
+              )}
             </div>
           </div>
         );
@@ -9795,12 +10143,14 @@ function RecentQueriesList({ queries, activeUser }) {
   );
 }
 
-function CompanyBrainContent({ activeUserId, onSwitchUser }) {
+function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
   const [openActivity, setOpenActivity] = useState(null);
   const [openPattern, setOpenPattern] = useState(null);
+  const [query, setQuery] = useState("");
   const identity = { ...COMPANY_BRAIN.identity, activeUserId };
   const activeUser =
     identity.users.find((u) => u.id === activeUserId) || identity.users[0];
+  const threadIds = new Set(THREADS.map((t) => t.id));
 
   const drawerRows = openActivity
     ? [
@@ -9816,6 +10166,28 @@ function CompanyBrainContent({ activeUserId, onSwitchUser }) {
     <>
       <div className="flex-1 overflow-y-auto">
         <IdentityCard identity={identity} onSwitchUser={onSwitchUser} />
+        <div className="px-4 pt-3 pb-3 border-b border-slate-200 bg-white">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search Company Brain..."
+              className="w-full bg-slate-50 border border-slate-200 rounded-md pl-8 pr-7 py-1.5 text-11 text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-400"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900"
+                title="Clear"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
           <BrainStatStrip />
         </div>
@@ -9834,62 +10206,75 @@ function CompanyBrainContent({ activeUserId, onSwitchUser }) {
           id="connectors"
           title="Connectors"
           count={COMPANY_BRAIN.connectors.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <ConnectorList connectors={COMPANY_BRAIN.connectors} />
+          <ConnectorList
+            connectors={COMPANY_BRAIN.connectors}
+            query={query}
+          />
         </BrainSection>
         <BrainSection
           id="uploaded-docs"
           title="Uploaded documents"
           count={COMPANY_BRAIN.uploadedDocs.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <UploadedDocsList docs={COMPANY_BRAIN.uploadedDocs} />
+          <UploadedDocsList docs={COMPANY_BRAIN.uploadedDocs} query={query} />
         </BrainSection>
         <BrainSection
           id="captured-patterns"
           title="Captured patterns"
           count={COMPANY_BRAIN.patterns.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
           <CapturedPatterns
             patterns={COMPANY_BRAIN.patterns}
             onSelect={setOpenPattern}
+            query={query}
           />
         </BrainSection>
         <BrainSection
           id="playbooks"
           title="Playbooks"
           count={COMPANY_BRAIN.playbookList.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <PlaybookList playbooks={COMPANY_BRAIN.playbookList} />
+          <PlaybookList playbooks={COMPANY_BRAIN.playbookList} query={query} />
         </BrainSection>
         <BrainSection
           id="decision-classes"
           title="Decision classes"
           count={COMPANY_BRAIN.decisionClassesDetail.filter((c) => !c.revoked).length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <DecisionClassList classes={COMPANY_BRAIN.decisionClassesDetail} />
+          <DecisionClassList
+            classes={COMPANY_BRAIN.decisionClassesDetail}
+            query={query}
+          />
         </BrainSection>
         <BrainSection
           id="brand-defaults"
           title="Brand defaults"
           count={COMPANY_BRAIN.brandDefaults.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <BrandDefaultsList defaults={COMPANY_BRAIN.brandDefaults} />
+          <BrandDefaultsList
+            defaults={COMPANY_BRAIN.brandDefaults}
+            query={query}
+          />
         </BrainSection>
         <BrainSection
           id="recent-queries"
           title="Recent queries"
           count={COMPANY_BRAIN.recentQueries.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
           <RecentQueriesList
             queries={COMPANY_BRAIN.recentQueries}
             activeUser={activeUser}
+            query={query}
+            onOpenThread={onOpenThread}
+            threadIds={threadIds}
           />
         </BrainSection>
       </div>
@@ -9992,6 +10377,7 @@ function InspectorPanel({
   onWidthChange,
   activeUserId,
   onSwitchUser,
+  onOpenThread,
 }) {
   if (!open) return null;
   const tabs = [
@@ -10049,6 +10435,7 @@ function InspectorPanel({
           <CompanyBrainContent
             activeUserId={activeUserId}
             onSwitchUser={onSwitchUser}
+            onOpenThread={onOpenThread}
           />
         )}
       </div>
@@ -10815,6 +11202,7 @@ export default function App({ locale, setLocale }) {
           onWidthChange={setInspectorWidth}
           activeUserId={activeUserId}
           onSwitchUser={setActiveUserId}
+          onOpenThread={setActiveId}
         />
       </div>
     </div>

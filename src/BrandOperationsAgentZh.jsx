@@ -41,6 +41,8 @@ import {
   MoreVertical,
   Trash2,
   MessageSquare,
+  Search,
+  Eye,
 } from "lucide-react";
 import {
   LineChart,
@@ -3012,7 +3014,7 @@ const COMPANY_BRAIN = {
       askedAt: "1 天前",
       sensitivity: "Confidential",
       sensitivityLabel: "机密",
-      threadId: "thread-margin-compare",
+      threadId: "qa-margins",
     },
     {
       id: "rq-bedroom-cr",
@@ -9112,6 +9114,13 @@ const DEFAULT_CATEGORY_LABEL = {
 
 function BrainSection({ id, title, count, defaultOpen = false, children }) {
   const [open, setOpen] = useState(defaultOpen);
+  const lastDefault = useRef(defaultOpen);
+  useEffect(() => {
+    if (lastDefault.current !== defaultOpen) {
+      lastDefault.current = defaultOpen;
+      if (defaultOpen) setOpen(true);
+    }
+  }, [defaultOpen]);
   return (
     <section id={id} className="border-b border-slate-200">
       <button
@@ -9322,48 +9331,122 @@ function RecentActivityList({ entries, onSelect }) {
   );
 }
 
-function ConnectorList({ connectors }) {
+const CONNECTOR_SCOPES = {
+  "cn-amazon-ads": [
+    "advertising::campaign_management",
+    "advertising::reports",
+    "advertising::audiences (只读)",
+    "profile (只读)",
+  ],
+  "cn-walmart-connect": [
+    "ads:read",
+    "ads:write",
+    "reports:read",
+    "items:read",
+  ],
+  "cn-tiktok-ads": [
+    "ad.account.list",
+    "ad.report.get",
+    "ad.creative.read",
+  ],
+  "cn-brand-analytics": [
+    "brand_analytics:repeat_purchase",
+    "brand_analytics:search_terms",
+    "brand_analytics:market_basket",
+  ],
+  "cn-helium10": [
+    "scrape:keyword_rank",
+    "scrape:asin_history",
+  ],
+  "cn-slack": [
+    "chat:write",
+    "incoming-webhook",
+  ],
+  "cn-gdrive": [
+    "drive.readonly",
+    "drive.metadata.readonly",
+  ],
+};
+
+function ConnectorList({ connectors, query }) {
+  const [openScopeId, setOpenScopeId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? connectors.filter((c) => c.name.toLowerCase().includes(q))
+    : connectors;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">无匹配项。</div>;
+  }
   return (
     <div className="space-y-2">
-      {connectors.map((c) => (
-        <div
-          key={c.id}
-          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-        >
-          <div className="flex items-start gap-2">
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm font-medium text-slate-900">
-                  {c.name}
-                </span>
-                <Pill tone="slate">{CONNECTOR_TYPE_LABEL[c.type]}</Pill>
-                <Pill tone={CONNECTOR_STATUS_TONE[c.status] || "slate"}>
-                  {CONNECTOR_STATUS_LABEL[c.status] || c.status}
-                </Pill>
-                <Pill tone={SENSITIVITY_TONE[c.sensitivity] || "slate"}>
-                  {c.sensitivityLabel || SENSITIVITY_LABEL_ZH[c.sensitivity]}
-                </Pill>
-              </div>
-              <div className="mt-1.5 flex items-center justify-between gap-2">
-                <a
-                  href={c.scopeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
-                >
-                  查看 OAuth 权限范围
-                  <ArrowUpRight className="w-3 h-3" />
-                </a>
-                {c.lastSync && (
-                  <span className="text-11 text-slate-500 font-mono tabular-nums">
-                    {c.lastSync}
+      {filtered.map((c) => {
+        const open = openScopeId === c.id;
+        const scopes = CONNECTOR_SCOPES[c.id] || [];
+        return (
+          <div
+            key={c.id}
+            className="border border-slate-200 rounded-md px-3 py-2.5 bg-white relative"
+          >
+            <div className="flex items-start gap-2">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-medium text-slate-900">
+                    {c.name}
                   </span>
+                  <Pill tone="slate">{CONNECTOR_TYPE_LABEL[c.type]}</Pill>
+                  <Pill tone={CONNECTOR_STATUS_TONE[c.status] || "slate"}>
+                    {CONNECTOR_STATUS_LABEL[c.status] || c.status}
+                  </Pill>
+                  <Pill tone={SENSITIVITY_TONE[c.sensitivity] || "slate"}>
+                    {c.sensitivityLabel || SENSITIVITY_LABEL_ZH[c.sensitivity]}
+                  </Pill>
+                </div>
+                <div className="mt-1.5 flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setOpenScopeId(open ? null : c.id)}
+                    className="inline-flex items-center gap-1 text-11 text-slate-600 hover:text-slate-900"
+                  >
+                    查看 OAuth 权限范围
+                    <ArrowUpRight className="w-3 h-3" />
+                  </button>
+                  {c.lastSync && (
+                    <span className="text-11 text-slate-500 font-mono tabular-nums">
+                      {c.lastSync}
+                    </span>
+                  )}
+                </div>
+                {open && (
+                  <div className="mt-2 border-t border-slate-200 pt-2">
+                    <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1.5">
+                      OAuth 权限范围
+                    </div>
+                    {scopes.length > 0 ? (
+                      <ul className="space-y-0.5">
+                        {scopes.map((s, i) => (
+                          <li
+                            key={i}
+                            className="text-11 text-slate-700 font-mono tabular-nums leading-snug"
+                          >
+                            · {s}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="text-11 text-slate-500">
+                        权限范围未登记。
+                      </div>
+                    )}
+                    <div className="mt-1.5 text-10 text-slate-500 leading-relaxed">
+                      要修改权限范围,在对话里说一句:"更新 {c.name} 的权限范围"。
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
       <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
         要新增连接器或修改权限范围,在对话里说一句:"连接 [服务]" 或 "更新 [服务] 的权限范围"。
       </div>
@@ -9380,63 +9463,263 @@ function DocFileIcon({ type }) {
   );
 }
 
-function UploadedDocsList({ docs }) {
+function UploadedDocsList({ docs, query }) {
+  const [menuOpenId, setMenuOpenId] = useState(null);
+  const [drawerMode, setDrawerMode] = useState(null);
+  const [drawerDocId, setDrawerDocId] = useState(null);
+  const [removePromptId, setRemovePromptId] = useState(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    if (!menuOpenId) return;
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpenId(null);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [menuOpenId]);
+
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? docs.filter((d) => d.filename.toLowerCase().includes(q))
+    : docs;
+
+  const drawerDoc = drawerDocId
+    ? docs.find((d) => d.id === drawerDocId) || null
+    : null;
+
+  const drawerPatterns =
+    drawerDoc && drawerMode === "patterns"
+      ? COMPANY_BRAIN.patterns.filter((p) =>
+          (p.detail.sourceList || []).some((row) =>
+            (row[0] || "").toLowerCase().includes(
+              drawerDoc.filename.replace(/\.[a-z]+$/i, "").toLowerCase().split("-")[0],
+            ),
+          ),
+        )
+      : [];
+
+  const closeDrawer = () => {
+    setDrawerMode(null);
+    setDrawerDocId(null);
+  };
+
   return (
     <div className="space-y-2">
-      {docs.map((d) => (
+      {filtered.length === 0 && (
+        <div className="text-11 text-slate-500 px-1 py-1">无匹配项。</div>
+      )}
+      {filtered.map((d) => (
         <div
           key={d.id}
-          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white flex items-start gap-2.5"
+          className="border border-slate-200 rounded-md px-3 py-2.5 bg-white relative"
         >
-          <DocFileIcon type={d.type} />
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium text-slate-900 truncate">
-              {d.filename}
+          <div className="flex items-start gap-2.5">
+            <DocFileIcon type={d.type} />
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium text-slate-900 truncate">
+                {d.filename}
+              </div>
+              <div className="mt-1 flex items-center gap-2 flex-wrap">
+                <Pill tone={DOC_STATUS_TONE[d.status] || "slate"}>
+                  {DOC_STATUS_LABEL[d.status] || d.status}
+                </Pill>
+                {d.patternsCount !== null && (
+                  <span
+                    className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-10 font-mono tabular-nums border ${
+                      d.patternsCount > 0
+                        ? "bg-slate-900 text-white border-slate-900"
+                        : "bg-slate-100 text-slate-600 border-slate-200"
+                    }`}
+                  >
+                    {d.patternsCount} 个模式
+                  </span>
+                )}
+                <Pill tone={SENSITIVITY_TONE[d.sensitivity] || "slate"}>
+                  {d.sensitivityLabel || SENSITIVITY_LABEL_ZH[d.sensitivity]}
+                </Pill>
+              </div>
+              <div className="mt-1 text-11 text-slate-500">
+                {d.uploadedAt} · 由 {d.uploadedBy} 上传
+              </div>
             </div>
-            <div className="mt-1 flex items-center gap-2 flex-wrap">
-              <Pill tone={DOC_STATUS_TONE[d.status] || "slate"}>
-                {DOC_STATUS_LABEL[d.status] || d.status}
-              </Pill>
-              {d.patternsCount !== null && (
-                <span
-                  className={`inline-flex items-center px-1.5 py-0.5 rounded-md text-10 font-mono tabular-nums border ${
-                    d.patternsCount > 0
-                      ? "bg-slate-900 text-white border-slate-900"
-                      : "bg-slate-100 text-slate-600 border-slate-200"
-                  }`}
-                >
-                  {d.patternsCount} 个模式
-                </span>
+            <div
+              className="flex-shrink-0 relative"
+              ref={menuOpenId === d.id ? menuRef : null}
+            >
+              <button
+                type="button"
+                onClick={() =>
+                  setMenuOpenId(menuOpenId === d.id ? null : d.id)
+                }
+                title="操作"
+                className="p-1 text-slate-500 hover:text-slate-900"
+              >
+                <MoreVertical className="w-4 h-4" />
+              </button>
+              {menuOpenId === d.id && (
+                <div className="absolute right-0 top-full mt-1 w-44 bg-white border border-slate-200 rounded-md shadow-lg z-20">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDrawerMode("source");
+                      setDrawerDocId(d.id);
+                      setMenuOpenId(null);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-11 text-slate-700 hover:bg-slate-50 border-b border-slate-100"
+                  >
+                    <Eye className="w-3.5 h-3.5 text-slate-500" />
+                    查看原文
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDrawerMode("patterns");
+                      setDrawerDocId(d.id);
+                      setMenuOpenId(null);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-11 text-slate-700 hover:bg-slate-50 border-b border-slate-100"
+                  >
+                    <ListTree className="w-3.5 h-3.5 text-slate-500" />
+                    查看提炼出的模式
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRemovePromptId(d.id);
+                      setMenuOpenId(null);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-left text-11 text-slate-700 hover:bg-slate-50"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-slate-500" />
+                    从 brain 中移除
+                  </button>
+                </div>
               )}
-              <Pill tone={SENSITIVITY_TONE[d.sensitivity] || "slate"}>
-                {d.sensitivityLabel || SENSITIVITY_LABEL_ZH[d.sensitivity]}
-              </Pill>
-            </div>
-            <div className="mt-1 text-11 text-slate-500">
-              {d.uploadedAt} · 由 {d.uploadedBy} 上传
             </div>
           </div>
-          <button
-            type="button"
-            disabled
-            title="查看原文 · 查看提炼出的模式 · 从 brain 中移除"
-            className="flex-shrink-0 p-1 text-slate-400 hover:text-slate-600 disabled:opacity-60 disabled:cursor-not-allowed"
-          >
-            <MoreVertical className="w-4 h-4" />
-          </button>
+          {removePromptId === d.id && (
+            <div className="mt-2 border-t border-slate-200 pt-2">
+              <div className="text-11 text-slate-700 leading-snug">
+                要移除文档,在对话里说一句:
+                <span className="font-mono text-slate-900">
+                  "把 {d.filename} 从 brain 里移除"
+                </span>
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRemovePromptId(null)}
+                  className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                >
+                  取消
+                </button>
+                <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
+                  已在对话中起草
+                  <ArrowUpRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       ))}
       <div className="mt-3 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-11 text-slate-600 leading-relaxed">
         要上传新文档,在对话里说一句:"上传 [文件名]",或者直接把文件拖进聊天框。
       </div>
+
+      <InspectionDrawer
+        open={!!drawerDoc && drawerMode === "source"}
+        onClose={closeDrawer}
+        title={drawerDoc?.filename}
+        methodologyDescription={
+          drawerDoc
+            ? `${DOC_STATUS_LABEL[drawerDoc.status] || drawerDoc.status} · ${drawerDoc.uploadedAt} 由 ${drawerDoc.uploadedBy} 上传。`
+            : undefined
+        }
+        tableHeaders={["字段", "取值"]}
+        columnWidths={["40%", "60%"]}
+        tableRows={
+          drawerDoc
+            ? [
+                ["文件名", drawerDoc.filename],
+                ["格式", drawerDoc.type.toUpperCase()],
+                ["状态", DOC_STATUS_LABEL[drawerDoc.status] || drawerDoc.status],
+                [
+                  "提炼出的模式",
+                  drawerDoc.patternsCount === null
+                    ? "解析中"
+                    : `${drawerDoc.patternsCount} 个`,
+                ],
+                ["上传人", drawerDoc.uploadedBy],
+                ["上传时间", drawerDoc.uploadedAt],
+                [
+                  "敏感度",
+                  drawerDoc.sensitivityLabel ||
+                    SENSITIVITY_LABEL_ZH[drawerDoc.sensitivity],
+                ],
+              ]
+            : []
+        }
+        definitionsList={
+          drawerDoc
+            ? [
+                {
+                  term: "原文存放位置",
+                  definition:
+                    "Company Brain · 原始文档存储(只读)。要替换或重新上传,通过对话发起。",
+                },
+              ]
+            : undefined
+        }
+        definitionsLabel="详情"
+      />
+
+      <InspectionDrawer
+        open={!!drawerDoc && drawerMode === "patterns"}
+        onClose={closeDrawer}
+        title={drawerDoc ? `${drawerDoc.filename} · 提炼出的模式` : undefined}
+        methodologyDescription={
+          drawerDoc
+            ? drawerDoc.patternsCount === 0
+              ? "该文档已索引但暂未提炼出任何模式。"
+              : `${drawerDoc.patternsCount} 个模式由该文档贡献证据。下表按置信度展示与该文档相关的模式。`
+            : undefined
+        }
+        tableHeaders={["模式", "类别", "置信度"]}
+        columnWidths={["52%", "24%", "24%"]}
+        tableRows={drawerPatterns.map((p) => [
+          p.name,
+          PATTERN_CATEGORY_LABEL[p.category] || p.category,
+          `${p.confidencePct}%`,
+        ])}
+        definitionsList={
+          drawerDoc && drawerPatterns.length === 0
+            ? [
+                {
+                  term: "未找到回链",
+                  definition:
+                    "该文档未在任何模式的来源列表中直接出现 — 见 '已捕获模式' 区分类浏览。",
+                },
+              ]
+            : undefined
+        }
+        definitionsLabel="提示"
+      />
     </div>
   );
 }
 
-function CapturedPatterns({ patterns, onSelect }) {
+function CapturedPatterns({ patterns, onSelect, query }) {
   const [filter, setFilter] = useState("All");
   const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
-  const filtered = filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
+  const q = (query || "").trim().toLowerCase();
+  const byCategory =
+    filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
+  const filtered = q
+    ? byCategory.filter((p) => p.name.toLowerCase().includes(q))
+    : byCategory;
   return (
     <div>
       <div className="flex flex-wrap gap-1.5 mb-3">
@@ -9498,7 +9781,7 @@ function CapturedPatterns({ patterns, onSelect }) {
         ))}
         {filtered.length === 0 && (
           <div className="text-11 text-slate-500 px-1 py-3">
-            当前类别下无模式。
+            {q ? "无匹配项。" : "当前类别下无模式。"}
           </div>
         )}
       </div>
@@ -9506,11 +9789,18 @@ function CapturedPatterns({ patterns, onSelect }) {
   );
 }
 
-function PlaybookList({ playbooks }) {
+function PlaybookList({ playbooks, query }) {
   const [openId, setOpenId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? playbooks.filter((pb) => pb.name.toLowerCase().includes(q))
+    : playbooks;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">无匹配项。</div>;
+  }
   return (
     <div className="space-y-2">
-      {playbooks.map((pb) => {
+      {filtered.map((pb) => {
         const open = openId === pb.id;
         const phasesCount = pb.phases.length;
         return (
@@ -9588,14 +9878,25 @@ function PlaybookList({ playbooks }) {
   );
 }
 
-function DecisionClassList({ classes }) {
+function DecisionClassList({ classes, query }) {
   const [revokedIds, setRevokedIds] = useState(new Set());
   const [confirmingId, setConfirmingId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const matches = (c) => !q || c.name.toLowerCase().includes(q);
 
   const isJustRevoked = (id) => revokedIds.has(id);
-  const active = classes.filter((c) => !c.revoked && !isJustRevoked(c.id));
-  const justRevoked = classes.filter((c) => !c.revoked && isJustRevoked(c.id));
-  const historicallyRevoked = classes.filter((c) => c.revoked);
+  const active = classes.filter(
+    (c) => !c.revoked && !isJustRevoked(c.id) && matches(c),
+  );
+  const justRevoked = classes.filter(
+    (c) => !c.revoked && isJustRevoked(c.id) && matches(c),
+  );
+  const historicallyRevoked = classes.filter((c) => c.revoked && matches(c));
+  const noResults =
+    q &&
+    active.length === 0 &&
+    justRevoked.length === 0 &&
+    historicallyRevoked.length === 0;
 
   const onConfirm = (id) => {
     setRevokedIds((s) => {
@@ -9606,84 +9907,90 @@ function DecisionClassList({ classes }) {
     setConfirmingId(null);
   };
 
+  if (noResults) {
+    return <div className="text-11 text-slate-500 px-1 py-1">无匹配项。</div>;
+  }
+
   return (
     <div className="space-y-4">
-      <div>
-        <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
-          活跃类别
-        </div>
-        <div className="space-y-2">
-          {active.map((dc) => (
-            <div
-              key={dc.id}
-              className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
-            >
-              <div className="flex items-start gap-2">
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-slate-900 leading-snug">
-                    {dc.name}
+      {active.length > 0 && (
+        <div>
+          <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            活跃类别
+          </div>
+          <div className="space-y-2">
+            {active.map((dc) => (
+              <div
+                key={dc.id}
+                className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
+              >
+                <div className="flex items-start gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-slate-900 leading-snug">
+                      {dc.name}
+                    </div>
+                    <div className="text-11 text-slate-600 mt-1 leading-snug">
+                      {dc.definition}
+                    </div>
+                    <div className="text-10 text-slate-500 mt-1">
+                      {dc.thresholdSummary}
+                    </div>
+                    <div className="text-10 text-slate-500 mt-1">
+                      近 30 天调用:{" "}
+                      <span className="font-mono tabular-nums text-slate-700">
+                        {dc.recentInvocations}
+                      </span>{" "}
+                      次 · 最近{" "}
+                      <span className="font-mono tabular-nums text-slate-700">
+                        {dc.lastInvoked}
+                      </span>
+                    </div>
+                    <div className="mt-1.5 flex items-center gap-2">
+                      <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
+                        {dc.sensitivityLabel || SENSITIVITY_LABEL_ZH[dc.sensitivity]}
+                      </Pill>
+                      <span className="text-10 text-slate-500">
+                        授权人 {dc.delegatedBy} · {dc.delegatedAt}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-11 text-slate-600 mt-1 leading-snug">
-                    {dc.definition}
-                  </div>
-                  <div className="text-10 text-slate-500 mt-1">
-                    {dc.thresholdSummary}
-                  </div>
-                  <div className="text-10 text-slate-500 mt-1">
-                    近 30 天调用:{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {dc.recentInvocations}
-                    </span>{" "}
-                    次 · 最近{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {dc.lastInvoked}
-                    </span>
-                  </div>
-                  <div className="mt-1.5 flex items-center gap-2">
-                    <Pill tone={SENSITIVITY_TONE[dc.sensitivity] || "slate"}>
-                      {dc.sensitivityLabel || SENSITIVITY_LABEL_ZH[dc.sensitivity]}
-                    </Pill>
-                    <span className="text-10 text-slate-500">
-                      授权人 {dc.delegatedBy} · {dc.delegatedAt}
-                    </span>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmingId(dc.id)}
+                    className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    撤回
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setConfirmingId(dc.id)}
-                  className="flex-shrink-0 inline-flex items-center gap-1 px-2 py-1 text-11 font-medium text-slate-700 border border-slate-300 rounded-md hover:bg-slate-50"
-                >
-                  <Trash2 className="w-3 h-3" />
-                  撤回
-                </button>
+                {confirmingId === dc.id && (
+                  <div className="mt-2 border-t border-slate-200 pt-2">
+                    <div className="text-11 text-slate-700 leading-snug">
+                      撤回 "{dc.name}"?今后 agent 执行这类动作前需要明确批准。
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setConfirmingId(null)}
+                        className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
+                      >
+                        取消
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => onConfirm(dc.id)}
+                        className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
+                      >
+                        确认撤回
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-              {confirmingId === dc.id && (
-                <div className="mt-2 border-t border-slate-200 pt-2">
-                  <div className="text-11 text-slate-700 leading-snug">
-                    撤回 "{dc.name}"?今后 agent 执行这类动作前需要明确批准。
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setConfirmingId(null)}
-                      className="px-2 py-1 text-11 font-medium text-slate-600 hover:text-slate-900"
-                    >
-                      取消
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => onConfirm(dc.id)}
-                      className="px-2 py-1 text-11 font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-md"
-                    >
-                      确认撤回
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {(justRevoked.length > 0 || historicallyRevoked.length > 0) && (
         <div>
@@ -9694,10 +10001,23 @@ function DecisionClassList({ classes }) {
             {justRevoked.map((dc) => (
               <div
                 key={dc.id}
-                className="border border-slate-200 rounded-md px-3 py-2 bg-slate-50/60"
+                className="border border-slate-200 rounded-md px-3 py-2.5 bg-slate-50/60"
               >
                 <div className="text-sm font-medium text-slate-500 line-through leading-snug">
                   {dc.name}
+                </div>
+                <div className="text-11 text-slate-500 mt-1 leading-snug line-through">
+                  {dc.definition}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  {dc.thresholdSummary}
+                </div>
+                <div className="text-10 text-slate-500 mt-1">
+                  撤回时累计调用{" "}
+                  <span className="font-mono tabular-nums text-slate-700">
+                    {dc.recentInvocations}
+                  </span>{" "}
+                  次 · 最后一次 {dc.lastInvoked}
                 </div>
                 <div className="text-10 text-slate-500 mt-1">刚刚撤回</div>
               </div>
@@ -9732,11 +10052,18 @@ function DecisionClassList({ classes }) {
   );
 }
 
-function BrandDefaultsList({ defaults }) {
+function BrandDefaultsList({ defaults, query }) {
   const [editId, setEditId] = useState(null);
+  const q = (query || "").trim().toLowerCase();
+  const filtered = q
+    ? defaults.filter((d) => d.key.toLowerCase().includes(q))
+    : defaults;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">无匹配项。</div>;
+  }
   return (
     <div className="space-y-2">
-      {defaults.map((d) => (
+      {filtered.map((d) => (
         <div
           key={d.id}
           className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
@@ -9769,14 +10096,17 @@ function BrandDefaultsList({ defaults }) {
             </button>
           </div>
           {editId === d.id && (
-            <div className="mt-2 border-t border-slate-200 pt-2">
-              <div className="text-11 text-slate-700 leading-snug">
-                在对话里说一句:
-                <span className="font-mono text-slate-900">
-                  "把 {d.key} 改为 [新值]"
-                </span>
+            <div className="mt-2 border-t border-slate-200 pt-2 space-y-2">
+              <div className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+                对话指令草稿
               </div>
-              <div className="mt-2 flex items-center gap-2">
+              <div className="font-mono text-11 text-slate-900 bg-slate-50 border border-slate-200 rounded-md px-2 py-1.5 leading-snug">
+                把 {d.key} 改为 ___ (当前:{d.value})
+              </div>
+              <div className="text-11 text-slate-500 leading-snug">
+                品牌默认值改动走对话以留下审计记录。
+              </div>
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setEditId(null)}
@@ -9785,7 +10115,7 @@ function BrandDefaultsList({ defaults }) {
                   取消
                 </button>
                 <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
-                  打开对话
+                  已在对话中起草
                   <ArrowUpRight className="w-3 h-3" />
                 </span>
               </div>
@@ -9797,44 +10127,66 @@ function BrandDefaultsList({ defaults }) {
   );
 }
 
-function RecentQueriesList({ queries, activeUser }) {
+function RecentQueriesList({ queries, activeUser, query, onOpenThread, threadIds }) {
+  const qStr = (query || "").trim().toLowerCase();
+  const filtered = qStr
+    ? queries.filter((rq) => rq.question.toLowerCase().includes(qStr))
+    : queries;
+  if (filtered.length === 0) {
+    return <div className="text-11 text-slate-500 px-1 py-1">无匹配项。</div>;
+  }
   return (
     <div className="space-y-2">
-      {queries.map((q) => {
-        const visible = canView(activeUser.clearance, q.sensitivity);
+      {filtered.map((rq) => {
+        const visible = canView(activeUser.clearance, rq.sensitivity);
+        const threadExists = threadIds.has(rq.threadId);
         return (
           <div
-            key={q.id}
+            key={rq.id}
             className="border border-slate-200 rounded-md px-3 py-2.5 bg-white"
           >
             <div className="text-sm font-medium text-slate-900 leading-snug flex items-start gap-2">
               <MessageSquare className="w-3.5 h-3.5 text-slate-500 flex-shrink-0 mt-0.5" />
               <span className="flex-1 min-w-0 truncate">
                 {visible
-                  ? q.question
+                  ? rq.question
                   : "[本问题在当前权限下受限 · 可联系 Maya Chen 或更高权限]"}
               </span>
             </div>
             <div className="mt-1.5 flex items-center gap-2 flex-wrap">
               <div className="w-5 h-5 rounded-full bg-slate-100 text-slate-700 font-semibold text-10 flex items-center justify-center flex-shrink-0">
-                {q.askerInitials}
+                {rq.askerInitials}
               </div>
-              <span className="text-11 text-slate-600">{q.asker}</span>
+              <span className="text-11 text-slate-600">{rq.asker}</span>
               <span className="text-10 text-slate-500 font-mono tabular-nums">
-                {q.askedAt}
+                {rq.askedAt}
               </span>
               <Pill
-                tone={SENSITIVITY_TONE[q.sensitivity] || "slate"}
+                tone={SENSITIVITY_TONE[rq.sensitivity] || "slate"}
                 className="ml-auto"
               >
-                {q.sensitivityLabel || SENSITIVITY_LABEL_ZH[q.sensitivity]}
+                {rq.sensitivityLabel || SENSITIVITY_LABEL_ZH[rq.sensitivity]}
               </Pill>
             </div>
             <div className="mt-1.5">
-              <span className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700">
-                打开对话
-                <ArrowRight className="w-3 h-3" />
-              </span>
+              {threadExists ? (
+                <button
+                  type="button"
+                  onClick={() => onOpenThread && onOpenThread(rq.threadId)}
+                  className="inline-flex items-center gap-1 text-11 font-medium text-emerald-700 hover:text-emerald-800"
+                >
+                  打开对话
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              ) : (
+                <span
+                  title="该会话不在当前演示中"
+                  className="inline-flex items-center gap-1 text-11 font-medium text-slate-400 cursor-default"
+                >
+                  打开对话
+                  <ArrowRight className="w-3 h-3" />
+                </span>
+              )}
             </div>
           </div>
         );
@@ -9843,12 +10195,14 @@ function RecentQueriesList({ queries, activeUser }) {
   );
 }
 
-function CompanyBrainContent({ activeUserId, onSwitchUser }) {
+function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread }) {
   const [openActivity, setOpenActivity] = useState(null);
   const [openPattern, setOpenPattern] = useState(null);
+  const [query, setQuery] = useState("");
   const identity = { ...COMPANY_BRAIN.identity, activeUserId };
   const activeUser =
     identity.users.find((u) => u.id === activeUserId) || identity.users[0];
+  const threadIds = new Set(THREADS.map((t) => t.id));
 
   const drawerRows = openActivity
     ? [
@@ -9864,6 +10218,28 @@ function CompanyBrainContent({ activeUserId, onSwitchUser }) {
     <>
       <div className="flex-1 overflow-y-auto">
         <IdentityCard identity={identity} onSwitchUser={onSwitchUser} />
+        <div className="px-4 pt-3 pb-3 border-b border-slate-200 bg-white">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="搜索品牌大脑..."
+              className="w-full bg-slate-50 border border-slate-200 rounded-md pl-8 pr-7 py-1.5 text-11 text-slate-900 placeholder-slate-500 focus:outline-none focus:border-slate-400"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900"
+                title="清除"
+              >
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+        </div>
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
           <BrainStatStrip />
         </div>
@@ -9882,62 +10258,75 @@ function CompanyBrainContent({ activeUserId, onSwitchUser }) {
           id="connectors"
           title="数据连接器"
           count={COMPANY_BRAIN.connectors.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <ConnectorList connectors={COMPANY_BRAIN.connectors} />
+          <ConnectorList
+            connectors={COMPANY_BRAIN.connectors}
+            query={query}
+          />
         </BrainSection>
         <BrainSection
           id="uploaded-docs"
           title="已上传文档"
           count={COMPANY_BRAIN.uploadedDocs.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <UploadedDocsList docs={COMPANY_BRAIN.uploadedDocs} />
+          <UploadedDocsList docs={COMPANY_BRAIN.uploadedDocs} query={query} />
         </BrainSection>
         <BrainSection
           id="captured-patterns"
           title="已捕获模式"
           count={COMPANY_BRAIN.patterns.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
           <CapturedPatterns
             patterns={COMPANY_BRAIN.patterns}
             onSelect={setOpenPattern}
+            query={query}
           />
         </BrainSection>
         <BrainSection
           id="playbooks"
           title="打法库"
           count={COMPANY_BRAIN.playbookList.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <PlaybookList playbooks={COMPANY_BRAIN.playbookList} />
+          <PlaybookList playbooks={COMPANY_BRAIN.playbookList} query={query} />
         </BrainSection>
         <BrainSection
           id="decision-classes"
           title="决策类别"
           count={COMPANY_BRAIN.decisionClassesDetail.filter((c) => !c.revoked).length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <DecisionClassList classes={COMPANY_BRAIN.decisionClassesDetail} />
+          <DecisionClassList
+            classes={COMPANY_BRAIN.decisionClassesDetail}
+            query={query}
+          />
         </BrainSection>
         <BrainSection
           id="brand-defaults"
           title="品牌默认值"
           count={COMPANY_BRAIN.brandDefaults.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
-          <BrandDefaultsList defaults={COMPANY_BRAIN.brandDefaults} />
+          <BrandDefaultsList
+            defaults={COMPANY_BRAIN.brandDefaults}
+            query={query}
+          />
         </BrainSection>
         <BrainSection
           id="recent-queries"
           title="近期问询"
           count={COMPANY_BRAIN.recentQueries.length}
-          defaultOpen={false}
+          defaultOpen={!!query}
         >
           <RecentQueriesList
             queries={COMPANY_BRAIN.recentQueries}
             activeUser={activeUser}
+            query={query}
+            onOpenThread={onOpenThread}
+            threadIds={threadIds}
           />
         </BrainSection>
       </div>
@@ -10040,6 +10429,7 @@ function InspectorPanel({
   onWidthChange,
   activeUserId,
   onSwitchUser,
+  onOpenThread,
 }) {
   if (!open) return null;
   const tabs = [
@@ -10097,6 +10487,7 @@ function InspectorPanel({
           <CompanyBrainContent
             activeUserId={activeUserId}
             onSwitchUser={onSwitchUser}
+            onOpenThread={onOpenThread}
           />
         )}
       </div>
@@ -10864,6 +11255,7 @@ export default function App({ locale, setLocale }) {
           onWidthChange={setInspectorWidth}
           activeUserId={activeUserId}
           onSwitchUser={setActiveUserId}
+          onOpenThread={setActiveId}
         />
       </div>
     </div>
