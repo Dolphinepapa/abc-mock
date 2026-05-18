@@ -170,7 +170,7 @@ const THREADS = [
         { id: "rpt-2026-05-13", canvasId: "report-2026-05-13", type: "daily", date: "5/13 Tue", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
         { id: "rpt-2026-05-14", canvasId: "report-2026-05-14", type: "daily", date: "5/14 Wed", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
         { id: "rpt-2026-05-15", canvasId: "report-2026-05-15", type: "daily", date: "5/15 Thu", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
-        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isToday: true },
+        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
       ],
     },
   },
@@ -9642,8 +9642,8 @@ function ChatPanel({ activeId, onSelect }) {
 
 function ReportCard({ report, selected, onClick }) {
   const isWeekly = report.type === "weekly";
-  const isToday = report.isToday;
-  const containerClass = isToday
+  const isLatest = report.isLatest;
+  const containerClass = isLatest
     ? "border-2 border-emerald-500 bg-emerald-50/40"
     : isWeekly
       ? "border-2 border-emerald-300 bg-white hover:border-emerald-400"
@@ -9667,9 +9667,9 @@ function ReportCard({ report, selected, onClick }) {
             Agent · {report.date} · {report.time}
           </span>
         </div>
-        {isToday && (
+        {isLatest && (
           <span className="text-10 text-emerald-700 font-semibold flex-shrink-0">
-            Today
+            Just in
           </span>
         )}
       </div>
@@ -9688,8 +9688,8 @@ function ReportCard({ report, selected, onClick }) {
           {report.summary.note}
         </div>
       )}
-      <div className={`mt-1.5 text-10 font-medium ${isToday ? "text-emerald-700" : "text-slate-500"}`}>
-        {isToday ? "Details on canvas →" : "[Open]"}
+      <div className={`mt-1.5 text-10 font-medium ${isLatest ? "text-emerald-700" : "text-slate-500"}`}>
+        {isLatest ? "Details on canvas →" : "[Open]"}
       </div>
     </button>
   );
@@ -9699,9 +9699,9 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const current = thread.reports.current;
   const latestWeekly = current.find((r) => r.type === "weekly");
-  const todayCard = current.find((r) => r.isToday);
+  const todayCard = current.find((r) => r.isLatest);
   const olderCurrent = current.filter(
-    (r) => r.type !== "weekly" && !r.isToday,
+    (r) => r.type !== "weekly" && !r.isLatest,
   );
   const olderTotal = thread.reports.historical.length + olderCurrent.length;
   return (
@@ -9773,7 +9773,7 @@ function ThreadCard({ thread, active, activeId, onSelect, tone }) {
     ? thread.reports.current[thread.reports.current.length - 1]
     : null;
   const previewBody = isReportFeed
-    ? `Today sales ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · ${latestReport.summary.anomalies} anomal${latestReport.summary.anomalies === 1 ? "y" : "ies"}`
+    ? `Yesterday's sales ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · ${latestReport.summary.anomalies} anomal${latestReport.summary.anomalies === 1 ? "y" : "ies"}`
     : lastTurn?.body || "";
 
   const handleHeaderClick = () => {
@@ -13634,7 +13634,7 @@ function buildListingTable(dayTotal, overrides = {}) {
 const DAILY_REPORTS_DATA = {
   "report-2026-05-16": {
     date: "Fri 5/16",
-    isToday: true,
+    isLatest: true,
     topline: { rev: 58420, spend: 11340, tacos: 19.4, orders: 412, aov: 141.80 },
     vsLast: {
       label: "vs last Friday (5/9)",
@@ -13681,7 +13681,7 @@ const DAILY_REPORTS_DATA = {
       authorityNote: "All 38 ops today within delegated authority. No autonomous moves outside scope.",
     },
     outlook: [
-      "Overall TACoS should land back in 18.8% - 19.4% (today's 19.4% is already in range)",
+      "Overall TACoS should stay in 18.8% - 19.4% today (yesterday's 19.4% already in range)",
       "SKU-117 Bed frame BSR should hold within #3 — assuming NightFox doesn't escalate further",
       "Once SKU-DR-12 new keyword is approved, first-day spend should be $200-300 at ACoS ≤ 22%",
       "Other 9 listings running on the known track — no expected change",
@@ -14066,7 +14066,7 @@ function formatSignedPct(v, suffix = "%") {
 function ReportDatePicker({ currentId, onSelect }) {
   const [open, setOpen] = useState(false);
   const options = [
-    { id: "report-2026-05-16", label: "5/16 Fri · today" },
+    { id: "report-2026-05-16", label: "5/16 Fri · latest" },
     { id: "report-2026-05-15", label: "5/15 Thu" },
     { id: "report-2026-05-14", label: "5/14 Wed" },
     { id: "report-2026-05-13", label: "5/13 Tue" },
@@ -14206,7 +14206,7 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
 
       {/* Section 1: data */}
       <div className="px-6 pt-6">
-        <SectionLabel kicker={vs.label}>Today · data</SectionLabel>
+        <SectionLabel kicker={vs.label}>Day · data</SectionLabel>
         <div className="grid grid-cols-5 gap-3">
           <ReportToplineCard
             label="Sales"
@@ -14243,7 +14243,7 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
         <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
           <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
             <div className="text-11 text-slate-600 font-medium">
-              12 delegated listings · today's sales
+              12 delegated listings · day's sales
             </div>
             <div className="text-10 text-slate-500 font-mono">
               Total ${t.rev.toLocaleString()}
@@ -14253,7 +14253,7 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
             <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
               <tr>
                 <th className="text-left font-medium px-4 py-2">SKU · name</th>
-                <th className="text-right font-medium px-3 py-2">Today's sales</th>
+                <th className="text-right font-medium px-3 py-2">Day's sales</th>
                 <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
                 <th className="text-left font-medium px-3 py-2">7-day trend</th>
               </tr>
@@ -14304,12 +14304,12 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
       {/* Section 2: what stood out */}
       <div className="px-6 pt-8">
         <SectionLabel kicker={`${data.insights.length} item${data.insights.length === 1 ? "" : "s"}`}>
-          Today · what stood out
+          Day · what stood out
         </SectionLabel>
         {data.insights.length === 0 ? (
           <div className="border border-dashed border-slate-200 rounded-md px-4 py-6 text-center bg-slate-50/40">
             <div className="text-xs text-slate-600">
-              No new signals today · all 12 listings running on the known track
+              No new signals that day · all 12 listings on the known track
             </div>
           </div>
         ) : (
@@ -14324,7 +14324,7 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
       {/* Section 3: actions */}
       <div className="px-6 pt-8">
         <SectionLabel kicker={`${data.actions.totalOps} ops · all within delegated authority`}>
-          Today · what I did on your behalf
+          Day · what I did on your behalf
         </SectionLabel>
         <div className="grid grid-cols-2 gap-4">
           <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
@@ -14385,7 +14385,7 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
 
       {/* Section 4: outlook */}
       <div className="px-6 pt-8">
-        <SectionLabel kicker="Tomorrow">Today · what's next</SectionLabel>
+        <SectionLabel kicker="Next day">Day · what's next</SectionLabel>
         <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
           <ul className="space-y-1.5">
             {data.outlook.map((line, i) => (

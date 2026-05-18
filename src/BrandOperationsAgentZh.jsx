@@ -169,7 +169,7 @@ const THREADS = [
         { id: "rpt-2026-05-13", canvasId: "report-2026-05-13", type: "daily", date: "5/13 周二", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
         { id: "rpt-2026-05-14", canvasId: "report-2026-05-14", type: "daily", date: "5/14 周三", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
         { id: "rpt-2026-05-15", canvasId: "report-2026-05-15", type: "daily", date: "5/15 周四", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
-        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 周五", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isToday: true },
+        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 周五", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
       ],
     },
   },
@@ -9678,8 +9678,8 @@ function ChatPanel({ activeId, onSelect }) {
 
 function ReportCard({ report, selected, onClick }) {
   const isWeekly = report.type === "weekly";
-  const isToday = report.isToday;
-  const containerClass = isToday
+  const isLatest = report.isLatest;
+  const containerClass = isLatest
     ? "border-2 border-emerald-500 bg-emerald-50/40"
     : isWeekly
       ? "border-2 border-emerald-300 bg-white hover:border-emerald-400"
@@ -9703,9 +9703,9 @@ function ReportCard({ report, selected, onClick }) {
             Agent · {report.date} · {report.time}
           </span>
         </div>
-        {isToday && (
+        {isLatest && (
           <span className="text-10 text-emerald-700 font-semibold flex-shrink-0">
-            今天
+            今早到
           </span>
         )}
       </div>
@@ -9724,8 +9724,8 @@ function ReportCard({ report, selected, onClick }) {
           {report.summary.note}
         </div>
       )}
-      <div className={`mt-1.5 text-10 font-medium ${isToday ? "text-emerald-700" : "text-slate-500"}`}>
-        {isToday ? "详情见画布 →" : "[打开查看]"}
+      <div className={`mt-1.5 text-10 font-medium ${isLatest ? "text-emerald-700" : "text-slate-500"}`}>
+        {isLatest ? "详情见画布 →" : "[打开查看]"}
       </div>
     </button>
   );
@@ -9735,9 +9735,9 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const current = thread.reports.current;
   const latestWeekly = current.find((r) => r.type === "weekly");
-  const todayCard = current.find((r) => r.isToday);
+  const todayCard = current.find((r) => r.isLatest);
   const olderCurrent = current.filter(
-    (r) => r.type !== "weekly" && !r.isToday,
+    (r) => r.type !== "weekly" && !r.isLatest,
   );
   const olderTotal = thread.reports.historical.length + olderCurrent.length;
   return (
@@ -9809,7 +9809,7 @@ function ThreadCard({ thread, active, activeId, onSelect, tone }) {
     ? thread.reports.current[thread.reports.current.length - 1]
     : null;
   const previewBody = isReportFeed
-    ? `今日 销售 ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · 异常 ${latestReport.summary.anomalies}`
+    ? `昨日销售 ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · 异常 ${latestReport.summary.anomalies}`
     : lastTurn?.body || "";
 
   const handleHeaderClick = () => {
@@ -13681,7 +13681,7 @@ const DAILY_REPORTS_DATA = {
   "report-2026-05-16": {
     date: "5/16 周五",
     weekday: "周五",
-    isToday: true,
+    isLatest: true,
     topline: {
       rev: 58420,
       spend: 11340,
@@ -13738,7 +13738,7 @@ const DAILY_REPORTS_DATA = {
       authorityNote: "今天 38 次操作全部在已委托范围内,没有超权限自主行为。",
     },
     outlook: [
-      "整体 TACoS 应回到 18.8% ~ 19.4% 区间(今天 19.4% 已经在区间内)",
+      "整体 TACoS 应稳在 18.8% ~ 19.4% 区间(昨日 19.4% 已经在区间内)",
       "SKU-117 床架 BSR 应守住 #3 以内 — 前提是 NightFox 不进一步加码",
       "SKU-DR-12 餐布新词授权批准后,首日跑量应在 $200-300,ACoS 应 ≤ 22%",
       "其他 9 个 listing 照常运转,无变化预期",
@@ -14177,7 +14177,7 @@ function formatSignedPct(v, suffix = "%") {
 function ReportDatePicker({ currentId, onSelect }) {
   const [open, setOpen] = useState(false);
   const options = [
-    { id: "report-2026-05-16", label: "5/16 周五 · 今天" },
+    { id: "report-2026-05-16", label: "5/16 周五 · 最新" },
     { id: "report-2026-05-15", label: "5/15 周四" },
     { id: "report-2026-05-14", label: "5/14 周三" },
     { id: "report-2026-05-13", label: "5/13 周二" },
