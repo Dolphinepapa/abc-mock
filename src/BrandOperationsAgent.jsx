@@ -8,8 +8,8 @@ const ROLE_KEY = "xnurta-mock-role";
 
 export default function App() {
   const [locale, setLocale] = useState(() => {
-    if (typeof window === "undefined") return "zh";
-    return window.localStorage.getItem(LOCALE_KEY) || "zh";
+    if (typeof window === "undefined") return "en";
+    return window.localStorage.getItem(LOCALE_KEY) || "en";
   });
 
   const [currentRole, setCurrentRole] = useState(() => {
