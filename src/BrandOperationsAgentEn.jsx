@@ -333,45 +333,6 @@ const THREADS = [
     ],
   },
   {
-    id: "connect-walmart",
-    canvasId: "connect-walmart",
-    initiator: "user",
-    initiatorName: "Devon Park",
-    initiatorRole: "Sr. Growth Manager",
-    initials: "DP",
-    initialTimestamp: "May 10, 14:18",
-    lastActivityTimestamp: "May 10, 14:42",
-    unread: false,
-    title: "Connect Walmart Connect API · Floor Lamps account",
-    category: "brain-ops",
-    turns: [
-      {
-        speaker: "user",
-        timestamp: "May 10, 14:18",
-        body: "Connect Walmart Connect API for our Floor Lamps account.",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 10, 14:21",
-        body: "Need OAuth authorization from a Walmart admin. Sending auth request to maya.chen@abchomegoods.com (account admin).",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 10, 14:30",
-        body: "Authorization received. Connection established. Ingesting last 90 days of data — should complete in ~12 minutes.",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 10, 14:42",
-        body: "Ingestion complete. 8 tables synced, 12,400 historical events indexed. Ready for analysis. Opening canvas with what's now accessible.",
-        canvasLink: true,
-      },
-    ],
-  },
-  {
     id: "qa-margins",
     canvasId: "qa-margins",
     initiator: "user",
@@ -9859,6 +9820,7 @@ function ChatPanel({
   }
 
   function renderCmoGroups() {
+    const dailyReport = threadById("daily-report");
     const pending = STRATEGIC_THREAD_IDS.filter(
       (id) => statusOf(id) === "pending",
     )
@@ -9901,6 +9863,20 @@ function ChatPanel({
     ];
     return (
       <>
+        {dailyReport && (
+          <div>
+            <SidebarGroupHeader label="Agent-flagged" />
+            <div className="space-y-2">
+              <ThreadCard
+                thread={dailyReport}
+                active={isThreadActive(dailyReport)}
+                activeId={activeId}
+                onSelect={onSelect}
+              />
+            </div>
+          </div>
+        )}
+
         <div>
           <SidebarGroupHeader
             label={`Needs your approval · ${pending.length}`}
@@ -16832,6 +16808,17 @@ export default function App({
         when:
           rev?.submittedAt ||
           (rev?.status === "pending" ? null : data?.cmoSubmittedAt),
+      };
+    }
+    if (
+      activeId === "daily-report" ||
+      activeId.startsWith("report-")
+    ) {
+      return {
+        kicker: "CMO viewer · daily ops report",
+        name: "12 delegated listings · daily push",
+        submitter: "Agent",
+        when: "07:00 PDT",
       };
     }
     return null;

@@ -333,45 +333,6 @@ const THREADS = [
     ],
   },
   {
-    id: "connect-walmart",
-    canvasId: "connect-walmart",
-    initiator: "user",
-    initiatorName: "Devon Park",
-    initiatorRole: "高级增长经理",
-    initials: "DP",
-    initialTimestamp: "May 10, 14:18",
-    lastActivityTimestamp: "May 10, 14:42",
-    unread: false,
-    title: "连接 Walmart Connect API · 落地灯账户",
-    category: "brain-ops",
-    turns: [
-      {
-        speaker: "user",
-        timestamp: "May 10, 14:18",
-        body: "为落地灯账户连接 Walmart Connect API。",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 10, 14:21",
-        body: "需要 Walmart admin 授权。已发送授权请求至 maya.chen@abchomegoods.com(账户管理员)。",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 10, 14:30",
-        body: "授权已收到。连接已建立。开始摄入过去 90 天数据 — 预计 12 分钟完成。",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 10, 14:42",
-        body: "摄入完成。8 个表已同步,12,400 条历史事件已索引。打开画布查看现在可访问的能力。",
-        canvasLink: true,
-      },
-    ],
-  },
-  {
     id: "qa-margins",
     canvasId: "qa-margins",
     initiator: "user",
@@ -9903,6 +9864,7 @@ function ChatPanel({
   }
 
   function renderCmoGroups() {
+    const dailyReport = threadById("daily-report");
     const pending = STRATEGIC_THREAD_IDS.filter(
       (id) => statusOf(id) === "pending",
     )
@@ -9939,6 +9901,20 @@ function ChatPanel({
     ];
     return (
       <>
+        {dailyReport && (
+          <div>
+            <SidebarGroupHeader label="Agent 提示" />
+            <div className="space-y-2">
+              <ThreadCard
+                thread={dailyReport}
+                active={isThreadActive(dailyReport)}
+                activeId={activeId}
+                onSelect={onSelect}
+              />
+            </div>
+          </div>
+        )}
+
         <div>
           <SidebarGroupHeader
             label={`待审批 · ${pending.length} 件`}
@@ -16930,6 +16906,18 @@ export default function App({
         when:
           rev?.submittedAt ||
           (rev?.status === "pending" ? null : data?.cmoSubmittedAt),
+      };
+    }
+    // Daily / weekly ops reports — agent-flagged thread
+    if (
+      activeId === "daily-report" ||
+      activeId.startsWith("report-")
+    ) {
+      return {
+        kicker: "CMO 视角 · 代运营日报",
+        name: "12 个 delegated listing · 每日推送",
+        submitter: "Agent",
+        when: "07:00 PDT",
       };
     }
     return null;

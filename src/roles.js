@@ -44,7 +44,6 @@ export const THREAD_OWNERS = {
   "razor-blade": "sara",
   "launch-cr": "jamal",
   "upload-q4": "maya",
-  "connect-walmart": "maya",
   "qa-margins": "sara",
 };
 
