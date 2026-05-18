@@ -83,6 +83,16 @@ export const SIDEBAR_PATTERN_IDS = [
   "pattern-razor-pricing",
 ];
 
+// Phase F · Which canvases cite which patterns. When CMO adopts or
+// parks a revision, every canvas listed here gets a top banner so the
+// reader (Maya/Devon) sees the precedent has moved underneath them.
+export const CANVAS_PATTERN_CITATIONS = {
+  strategy: ["pattern-brand-cpc"],
+  omnichannel: ["pattern-brand-cpc"],
+  defense: ["playbook-peak-defense"],
+  "razor-blade": ["pattern-razor-pricing"],
+};
+
 // Maya's direct reports — used to compute "你的团队" group.
 export const MAYA_REPORT_ROLES = ["devon", "sara", "jamal"];
 

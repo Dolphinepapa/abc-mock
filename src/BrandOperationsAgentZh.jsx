@@ -76,6 +76,7 @@ import {
   PATTERN_REVISION_BY_BRAIN_ID,
   PATTERN_AUDIT_PREFIX,
   SIDEBAR_PATTERN_IDS,
+  CANVAS_PATTERN_CITATIONS,
 } from "./roles.js";
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -15411,6 +15412,27 @@ const CMO_TEAM_RECENT = [
   },
 ];
 
+const CMO_TEAM_RECENT_OLDER = [
+  {
+    threadId: "auto-bid-raise-livingroom",
+    title: "出价上调 · 客厅词簇",
+    submittedBy: "Devon Park",
+    submittedAt: "5/10 上午 · Agent 自动执行",
+    summary: "28 个词 48 小时 CR > 目标 → 出价 +12%(决策类: 自主)",
+    metric: "+$1,420 / 14 天 · 0 回滚 · 信心 84%",
+    isSmall: true,
+  },
+  {
+    threadId: "auto-neg-kw-inflator",
+    title: "否定词抓取 · 充气泵",
+    submittedBy: "Jamal Hassan",
+    submittedAt: "5/9 下午 · Agent 自动执行",
+    summary: "28 个 0 转化、≥84 次点击词加入否定库",
+    metric: "回收浪费支出 $1,847 / 周 · 0 回滚 · 信心 87%",
+    isSmall: true,
+  },
+];
+
 const CMO_BRAIN_NEW = [
   {
     id: "pattern-brand-cpc",
@@ -15522,14 +15544,22 @@ function PendingApprovalCard({ row, onSelect }) {
 function TeamDecisionCard({ row, onSelect }) {
   return (
     <div
-      className={`rounded-lg border bg-white p-3.5 ${
+      className={`rounded-lg border bg-white ${
+        row.isSmall ? "p-2.5" : "p-3.5"
+      } ${
         row.freshlyApproved
           ? "border-emerald-300 border-l-4 border-l-emerald-500"
-          : "border-slate-200"
+          : row.isSmall
+            ? "border-slate-200 bg-slate-50/40"
+            : "border-slate-200"
       }`}
     >
       <div className="flex items-baseline justify-between gap-2 mb-1">
-        <div className="text-xs font-semibold text-slate-900">
+        <div
+          className={`font-semibold text-slate-900 ${
+            row.isSmall ? "text-11" : "text-xs"
+          }`}
+        >
           {row.title}
         </div>
         <span
@@ -15549,13 +15579,20 @@ function TeamDecisionCard({ row, onSelect }) {
       <div className="text-11 text-slate-600 font-mono mb-2.5">
         {row.metric}
       </div>
-      <button
-        type="button"
-        onClick={() => onSelect(row.threadId)}
-        className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
-      >
-        查看完整方案 <ArrowRight className="w-3 h-3" />
-      </button>
+      {!row.isSmall && onSelect && (
+        <button
+          type="button"
+          onClick={() => onSelect(row.threadId)}
+          className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
+        >
+          查看完整方案 <ArrowRight className="w-3 h-3" />
+        </button>
+      )}
+      {row.isSmall && (
+        <div className="text-10 text-slate-400">
+          自动执行 · 无独立 canvas, 见审计日志
+        </div>
+      )}
     </div>
   );
 }
@@ -15728,6 +15765,7 @@ function CmoSupervisionPanel({
   const approvedRows = CMO_PENDING.filter(
     (row) => proposalStates[row.threadId]?.status === "approved",
   );
+  const [showOlderDecisions, setShowOlderDecisions] = useState(false);
   return (
     <div className="px-6 py-6">
       <div className="max-w-3xl mx-auto">
@@ -15807,9 +15845,27 @@ function CmoSupervisionPanel({
                 onSelect={onSelect}
               />
             ))}
-            <div className="text-11 text-slate-400 px-1 pt-1">
-              + 2 个更早的决策(折叠)
-            </div>
+            {showOlderDecisions &&
+              CMO_TEAM_RECENT_OLDER.map((row) => (
+                <TeamDecisionCard key={row.threadId} row={row} />
+              ))}
+            <button
+              type="button"
+              onClick={() => setShowOlderDecisions((v) => !v)}
+              className="text-11 text-slate-500 hover:text-slate-700 px-1 pt-1 inline-flex items-center gap-1"
+            >
+              {showOlderDecisions ? (
+                <>
+                  <Minus className="w-3 h-3" />
+                  收起更早的决策
+                </>
+              ) : (
+                <>
+                  <Plus className="w-3 h-3" />
+                  + {CMO_TEAM_RECENT_OLDER.length} 个更早的决策(点击展开)
+                </>
+              )}
+            </button>
           </div>
         </section>
 
@@ -16256,6 +16312,42 @@ function ChallengeCanvas({ proposalId, role, onCmoAdopt, onCmoHold, decided }) {
           )}
         </section>
       </div>
+    </div>
+  );
+}
+
+function CitedPatternRevisedBanner({ items, onOpen }) {
+  return (
+    <div className="border-b border-amber-200 bg-amber-50 px-6 py-2.5 space-y-1.5">
+      {items.map(({ patternId, name, revisedAt, status, change }) => {
+        const parked = status === "parked";
+        return (
+          <div
+            key={patternId}
+            className="flex items-start gap-2 text-11 leading-snug"
+          >
+            {parked ? (
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-700 flex-shrink-0 mt-0.5" />
+            ) : (
+              <Edit3 className="w-3.5 h-3.5 text-amber-700 flex-shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1 text-amber-900">
+              此 canvas 引用的先例{" "}
+              <span className="font-medium">"{name}"</span>{" "}
+              {parked
+                ? "已被 CMO 标记待复盘 · 暂停引用 30 天"
+                : `已被 CMO 在 ${revisedAt} 修订 · ${change}`}
+            </div>
+            <button
+              type="button"
+              onClick={() => onOpen(patternId)}
+              className="text-11 text-amber-800 hover:text-amber-900 underline flex-shrink-0"
+            >
+              回顾 audit
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -17035,6 +17127,27 @@ export default function App({
       ? proposalStates[activeId].rejection
       : null;
 
+  // Phase F · cited-pattern revision banner. Fires for every role when
+  // the current canvas cites a pattern that CMO has adopted/parked.
+  const citedRevisionItems =
+    activeId && CANVAS_PATTERN_CITATIONS[activeId]
+      ? CANVAS_PATTERN_CITATIONS[activeId]
+          .map((pid) => {
+            const rev = patternRevisions[pid];
+            if (!rev || (rev.status !== "adopted" && rev.status !== "parked"))
+              return null;
+            const data = CMO_PATTERN_AUDITS[pid];
+            return {
+              patternId: pid,
+              name: data?.patternName,
+              revisedAt: rev.revisedAt,
+              status: rev.status,
+              change: data?.revision.mainChange,
+            };
+          })
+          .filter(Boolean)
+      : [];
+
   return (
     <div
       className="h-screen w-screen flex flex-col bg-slate-50 text-slate-900 overflow-hidden"
@@ -17089,6 +17202,12 @@ export default function App({
             )}
             {teamBanner && <TeamReadOnlyBanner thread={teamBanner} />}
             {mayaRejected && <CmoRejectedBanner rejection={mayaRejected} />}
+            {citedRevisionItems.length > 0 && (
+              <CitedPatternRevisedBanner
+                items={citedRevisionItems}
+                onOpen={(pid) => setActiveId(PATTERN_AUDIT_PREFIX + pid)}
+              />
+            )}
             <div className="flex-1">{canvas}</div>
             {cmoProposalMeta && (
               <CmoActionBar

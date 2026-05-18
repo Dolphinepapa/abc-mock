@@ -76,6 +76,7 @@ import {
   PATTERN_REVISION_BY_BRAIN_ID,
   PATTERN_AUDIT_PREFIX,
   SIDEBAR_PATTERN_IDS,
+  CANVAS_PATTERN_CITATIONS,
 } from "./roles.js";
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -15303,6 +15304,28 @@ const CMO_TEAM_RECENT_EN = [
   },
 ];
 
+const CMO_TEAM_RECENT_OLDER_EN = [
+  {
+    threadId: "auto-bid-raise-livingroom",
+    title: "Bid raise · Living-room cluster",
+    submittedBy: "Devon Park",
+    submittedAt: "5/10 AM · agent auto-executed",
+    summary:
+      "28 keywords held CR > target for 48h → bid +12% (decision class: autonomous)",
+    metric: "+$1,420 / 14 days · 0 rollbacks · confidence 84%",
+    isSmall: true,
+  },
+  {
+    threadId: "auto-neg-kw-inflator",
+    title: "Negative-keyword harvest · Tire inflator",
+    submittedBy: "Jamal Hassan",
+    submittedAt: "5/9 PM · agent auto-executed",
+    summary: "28 zero-conversion terms with ≥84 clicks added to negatives",
+    metric: "$1,847 / week wasted spend recovered · 0 rollbacks · confidence 87%",
+    isSmall: true,
+  },
+];
+
 const CMO_BRAIN_NEW_EN = [
   {
     id: "pattern-brand-cpc",
@@ -15415,14 +15438,22 @@ function PendingApprovalCard({ row, onSelect }) {
 function TeamDecisionCard({ row, onSelect }) {
   return (
     <div
-      className={`rounded-lg border bg-white p-3.5 ${
+      className={`rounded-lg border bg-white ${
+        row.isSmall ? "p-2.5" : "p-3.5"
+      } ${
         row.freshlyApproved
           ? "border-emerald-300 border-l-4 border-l-emerald-500"
-          : "border-slate-200"
+          : row.isSmall
+            ? "border-slate-200 bg-slate-50/40"
+            : "border-slate-200"
       }`}
     >
       <div className="flex items-baseline justify-between gap-2 mb-1">
-        <div className="text-xs font-semibold text-slate-900">
+        <div
+          className={`font-semibold text-slate-900 ${
+            row.isSmall ? "text-11" : "text-xs"
+          }`}
+        >
           {row.title}
         </div>
         <span
@@ -15442,13 +15473,20 @@ function TeamDecisionCard({ row, onSelect }) {
       <div className="text-11 text-slate-600 font-mono mb-2.5">
         {row.metric}
       </div>
-      <button
-        type="button"
-        onClick={() => onSelect(row.threadId)}
-        className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
-      >
-        View full plan <ArrowRight className="w-3 h-3" />
-      </button>
+      {!row.isSmall && onSelect && (
+        <button
+          type="button"
+          onClick={() => onSelect(row.threadId)}
+          className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
+        >
+          View full plan <ArrowRight className="w-3 h-3" />
+        </button>
+      )}
+      {row.isSmall && (
+        <div className="text-10 text-slate-400">
+          Auto-executed · no standalone canvas, see audit log
+        </div>
+      )}
     </div>
   );
 }
@@ -15621,6 +15659,7 @@ function CmoSupervisionPanel({
   const approvedRows = CMO_PENDING_EN.filter(
     (row) => proposalStates[row.threadId]?.status === "approved",
   );
+  const [showOlderDecisions, setShowOlderDecisions] = useState(false);
   return (
     <div className="px-6 py-6">
       <div className="max-w-3xl mx-auto">
@@ -15702,9 +15741,28 @@ function CmoSupervisionPanel({
                 onSelect={onSelect}
               />
             ))}
-            <div className="text-11 text-slate-400 px-1 pt-1">
-              + 2 earlier decisions (collapsed)
-            </div>
+            {showOlderDecisions &&
+              CMO_TEAM_RECENT_OLDER_EN.map((row) => (
+                <TeamDecisionCard key={row.threadId} row={row} />
+              ))}
+            <button
+              type="button"
+              onClick={() => setShowOlderDecisions((v) => !v)}
+              className="text-11 text-slate-500 hover:text-slate-700 px-1 pt-1 inline-flex items-center gap-1"
+            >
+              {showOlderDecisions ? (
+                <>
+                  <Minus className="w-3 h-3" />
+                  Collapse earlier decisions
+                </>
+              ) : (
+                <>
+                  <Plus className="w-3 h-3" />
+                  + {CMO_TEAM_RECENT_OLDER_EN.length} earlier decisions (click
+                  to expand)
+                </>
+              )}
+            </button>
           </div>
         </section>
 
@@ -16155,6 +16213,42 @@ function ChallengeCanvas({ proposalId, role, onCmoAdopt, onCmoHold, decided }) {
           )}
         </section>
       </div>
+    </div>
+  );
+}
+
+function CitedPatternRevisedBanner({ items, onOpen }) {
+  return (
+    <div className="border-b border-amber-200 bg-amber-50 px-6 py-2.5 space-y-1.5">
+      {items.map(({ patternId, name, revisedAt, status, change }) => {
+        const parked = status === "parked";
+        return (
+          <div
+            key={patternId}
+            className="flex items-start gap-2 text-11 leading-snug"
+          >
+            {parked ? (
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-700 flex-shrink-0 mt-0.5" />
+            ) : (
+              <Edit3 className="w-3.5 h-3.5 text-amber-700 flex-shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1 text-amber-900">
+              This canvas cites the precedent{" "}
+              <span className="font-medium">"{name}"</span>{" "}
+              {parked
+                ? "— CMO parked it for review · usage paused 30 days"
+                : `— revised by CMO ${revisedAt} · ${change}`}
+            </div>
+            <button
+              type="button"
+              onClick={() => onOpen(patternId)}
+              className="text-11 text-amber-800 hover:text-amber-900 underline flex-shrink-0"
+            >
+              Review audit
+            </button>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -16930,6 +17024,25 @@ export default function App({
       ? proposalStates[activeId].rejection
       : null;
 
+  const citedRevisionItems =
+    activeId && CANVAS_PATTERN_CITATIONS[activeId]
+      ? CANVAS_PATTERN_CITATIONS[activeId]
+          .map((pid) => {
+            const rev = patternRevisions[pid];
+            if (!rev || (rev.status !== "adopted" && rev.status !== "parked"))
+              return null;
+            const data = CMO_PATTERN_AUDITS_EN[pid];
+            return {
+              patternId: pid,
+              name: data?.patternName,
+              revisedAt: rev.revisedAt,
+              status: rev.status,
+              change: data?.revision.mainChange,
+            };
+          })
+          .filter(Boolean)
+      : [];
+
   return (
     <div
       className="h-screen w-screen flex flex-col bg-slate-50 text-slate-900 overflow-hidden"
@@ -16984,6 +17097,12 @@ export default function App({
             )}
             {teamBanner && <TeamReadOnlyBanner thread={teamBanner} />}
             {mayaRejected && <CmoRejectedBanner rejection={mayaRejected} />}
+            {citedRevisionItems.length > 0 && (
+              <CitedPatternRevisedBanner
+                items={citedRevisionItems}
+                onOpen={(pid) => setActiveId(PATTERN_AUDIT_PREFIX + pid)}
+              />
+            )}
             <div className="flex-1">{canvas}</div>
             {cmoProposalMeta && (
               <CmoActionBar
