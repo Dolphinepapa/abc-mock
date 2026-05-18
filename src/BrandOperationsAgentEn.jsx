@@ -9939,8 +9939,9 @@ function ChatPanel({ activeId, onSelect, currentRole }) {
                 key={h.id}
                 className="rounded-lg border border-slate-200 bg-slate-50/40 p-3"
               >
-                <div className="text-11 text-slate-700 leading-snug">
-                  ◇ {h.title}
+                <div className="text-11 text-slate-700 leading-snug flex items-start gap-1.5">
+                  <CircleDot className="w-3 h-3 mt-0.5 text-slate-400 flex-shrink-0" />
+                  <span>{h.title}</span>
                 </div>
               </div>
             ))}
@@ -15092,41 +15093,422 @@ function DevonEmptyCanvas() {
   );
 }
 
-function CmoSupervisionStub() {
+/* ─── CMO Supervision Panel (Phase C) ─────────────────────────────────── */
+
+const CMO_PENDING_EN = [
+  {
+    threadId: "strategy",
+    index: "①",
+    title: "Floor Lamp SKU-A · #2 → #1 proposal",
+    submittedBy: "Maya Chen",
+    submittedAt: "5/14 PM",
+    factLines: [
+      "Incremental budget request $48,000 · 12-week path",
+      "Goal: Floor Lamp category BSR #2 → #1",
+    ],
+    confidence: 78,
+    precedents: "Company Brain: 4 precedents",
+    precedentGap: null,
+    overReason: "Single-SKU incremental budget > $40K · needs CMO approval",
+  },
+  {
+    threadId: "razor-blade",
+    index: "②",
+    title: "Henry's razor · price-cut test",
+    submittedBy: "Sara Lin",
+    submittedAt: "5/14 AM",
+    factLines: [
+      "3-week A/B test · touches ~12,400 customers",
+      "Blended margin impact -3.2pp (14-day short term)",
+    ],
+    confidence: 71,
+    precedents: "Company Brain: 1 precedent",
+    precedentGap:
+      "Toothbrush case — attach-rate differs materially, can't copy directly",
+    overReason:
+      "Line-level margin impact > 2pp · needs CMO approval",
+  },
+];
+
+const CMO_TEAM_RECENT_EN = [
+  {
+    threadId: "defense",
+    title: "Defense · Bed frame SKU-117",
+    submittedBy: "Maya Chen",
+    submittedAt: "5/15 PM",
+    summary: 'Picked "Don\'t fight head-on · cut their flank" stance',
+    metric: "+$7,840 / 14 days · agent confidence 71%",
+  },
+  {
+    threadId: "omnichannel",
+    title: "Omnichannel · Portable charger",
+    submittedBy: "Devon Park",
+    submittedAt: "5/11 PM",
+    summary: "Allocated $100K incremental across 3 platforms",
+    metric: "Amazon +$28K · Walmart +$36K · TikTok +$36K",
+  },
+  {
+    threadId: "launch-cr",
+    title: "New launch CR · Tire inflator",
+    submittedBy: "Jamal Hassan",
+    submittedAt: "5/14 midday",
+    summary: "4 listing-content changes test plan",
+    metric: "Hero image / Title / A+ / Bullets",
+  },
+];
+
+const CMO_BRAIN_NEW_EN = [
+  {
+    id: "pattern-brand-cpc",
+    type: "Pattern",
+    title: "Sustained brand ads → CPC declines",
+    metric: "12 cases · confidence 76% · Internal",
+    usage: "Already referenced 4× (Maya × 2, Devon × 1, Sara × 1)",
+    confidenceLow: false,
+  },
+  {
+    id: "playbook-peak-defense",
+    type: "Playbook",
+    title: "Pre-peak organic-rank defense",
+    metric: "Bed frame category · confidence 78% · Sensitive",
+    usage: "Already referenced by the NightFox defense plan",
+    confidenceLow: false,
+  },
+  {
+    id: "pattern-razor-pricing",
+    type: "Pattern",
+    title: "Razor-blade pricing test method",
+    metric: "1 case · confidence 65% · Sensitive",
+    usage: "Low confidence — sample still accumulating",
+    confidenceLow: true,
+  },
+];
+
+const CMO_PORTFOLIO_EN = {
+  delegated: { total: 12, healthy: 11, amber: 1, rose: 0 },
+  training: { total: 35, healthy: 28, amber: 6, rose: 1 },
+  quarterly: { tacos: 17.4, tacosDeltaPp: -1.5 },
+  collab: { recsTotal: 142, acceptRate: 78 },
+};
+
+function PendingApprovalCard({ row, onSelect }) {
   return (
-    <div className="px-6 py-12">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-xs uppercase tracking-wider text-slate-500 font-medium mb-2">
-          CMO supervision panel
+    <div className="rounded-lg border border-slate-200 bg-white border-l-4 border-l-rose-500 p-4">
+      <div className="flex items-baseline gap-2 mb-1">
+        <span className="text-11 font-mono text-slate-400">{row.index}</span>
+        <div className="text-sm font-semibold text-slate-900 leading-snug">
+          {row.title}
         </div>
-        <div className="text-lg font-semibold text-slate-900 mb-1">
-          This week · 5/12 – 5/18
-        </div>
-        <div className="text-sm text-slate-600 mb-6">
-          The sidebar groups what needs your attention this week. Phase B
-          ships the sidebar; the 4-section supervision canvas (approvals
-          · team decisions · brain patterns · portfolio) lands in Phase C.
-        </div>
-        <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50/60 p-5">
-          <div className="text-11 uppercase tracking-wider text-slate-500 mb-2">
-            Pending preview
+      </div>
+      <div className="text-11 text-slate-500 mb-3">
+        Submitted by {row.submittedBy} · {row.submittedAt}
+      </div>
+
+      <div className="space-y-1 mb-3">
+        {row.factLines.map((line, i) => (
+          <div key={i} className="text-xs text-slate-700">
+            {line}
           </div>
-          <ul className="space-y-1.5 text-sm text-slate-700">
-            <li>
-              <span className="font-mono text-slate-500">①</span> SKU-A ·
-              #2 → #1 proposal (submitted by Maya, CMO decision needed)
-            </li>
-            <li>
-              <span className="font-mono text-slate-500">②</span> Henry's
-              razor · price-cut test (submitted by Sara, CMO decision
-              needed)
-            </li>
-          </ul>
-          <div className="text-10 text-slate-400 mt-4">
-            Click ①/② on the left to open the proposal canvas (Phase D
-            wires the approval banner and challenge flow).
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 mb-2 text-11 text-slate-600">
+        <span>
+          Agent confidence{" "}
+          <span className="font-mono font-medium text-slate-900">
+            {row.confidence}%
+          </span>
+        </span>
+        <span className="text-slate-300">·</span>
+        <span>{row.precedents}</span>
+      </div>
+      {row.precedentGap && (
+        <div className="text-11 text-rose-700 bg-rose-50 border border-rose-200 rounded px-2 py-1 mb-3 flex items-start gap-1.5">
+          <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+          <span>{row.precedentGap}</span>
+        </div>
+      )}
+
+      <div className="text-11 text-amber-900 bg-amber-50 border border-amber-200 rounded px-2 py-1.5 mb-3">
+        <span className="font-medium">Exceeds VP autonomy:</span>{" "}
+        {row.overReason}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => onSelect(row.threadId)}
+        className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1 mb-3"
+      >
+        Open the proposal <ArrowRight className="w-3 h-3" />
+      </button>
+
+      <div className="flex items-center gap-2 pt-3 border-t border-slate-100">
+        <button
+          type="button"
+          className="px-3 py-1.5 text-11 font-medium bg-emerald-600 text-white rounded hover:bg-emerald-700"
+        >
+          Approve
+        </button>
+        <button
+          type="button"
+          className="px-3 py-1.5 text-11 font-medium bg-white border border-slate-300 text-slate-700 rounded hover:bg-slate-50"
+        >
+          Challenge
+        </button>
+        <button
+          type="button"
+          className="px-2 py-1.5 text-11 text-slate-500 hover:text-slate-700"
+        >
+          Send back
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TeamDecisionCard({ row, onSelect }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3.5">
+      <div className="flex items-baseline justify-between gap-2 mb-1">
+        <div className="text-xs font-semibold text-slate-900">
+          {row.title}
+        </div>
+        <span className="text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.5 flex-shrink-0">
+          Auto-approved
+        </span>
+      </div>
+      <div className="text-11 text-slate-500 mb-2">
+        Decided by {row.submittedBy} · {row.submittedAt}
+      </div>
+      <div className="text-xs text-slate-700 mb-1">{row.summary}</div>
+      <div className="text-11 text-slate-600 font-mono mb-2.5">
+        {row.metric}
+      </div>
+      <button
+        type="button"
+        onClick={() => onSelect(row.threadId)}
+        className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
+      >
+        View full plan <ArrowRight className="w-3 h-3" />
+      </button>
+    </div>
+  );
+}
+
+function BrainPatternCard({ row }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3.5">
+      <div className="flex items-baseline gap-1.5 mb-1">
+        <span className="text-10 text-slate-500 font-mono uppercase tracking-wider">
+          {row.type}
+        </span>
+        <div className="text-xs font-semibold text-slate-900 leading-snug">
+          · {row.title}
+        </div>
+      </div>
+      <div className="text-11 text-slate-500 mb-1">{row.metric}</div>
+      <div
+        className={`text-11 mb-2.5 flex items-start gap-1.5 ${
+          row.confidenceLow ? "text-amber-800" : "text-slate-600"
+        }`}
+      >
+        {row.confidenceLow && (
+          <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+        )}
+        <span>{row.usage}</span>
+      </div>
+      <div className="flex items-center gap-2 pt-2.5 border-t border-slate-100">
+        <button
+          type="button"
+          className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
+        >
+          View full STAR <ArrowRight className="w-3 h-3" />
+        </button>
+        <span className="text-slate-300 text-11">·</span>
+        <button
+          type="button"
+          className="text-11 px-2 py-0.5 bg-white border border-slate-300 text-slate-700 rounded hover:bg-slate-50 inline-flex items-center gap-1"
+        >
+          <MessageSquare className="w-3 h-3" /> Challenge
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function PortfolioSection() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-slate-50/60"
+      >
+        <div className="flex items-center gap-2">
+          <ChevronDown
+            className={`w-3.5 h-3.5 text-slate-500 transition-transform ${
+              open ? "" : "-rotate-90"
+            }`}
+          />
+          <span className="text-sm font-medium text-slate-900">
+            Portfolio health overview
+          </span>
+        </div>
+        <span className="text-10 text-slate-400">
+          {open ? "Click to collapse" : "Click to expand"}
+        </span>
+      </button>
+      {open && (
+        <div className="border-t border-slate-100 px-4 py-3.5 space-y-2.5 text-xs text-slate-700">
+          <div>
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO_EN.delegated.total}
+            </span>{" "}
+            delegated listings ·{" "}
+            <span className="text-emerald-700">
+              {CMO_PORTFOLIO_EN.delegated.healthy} healthy
+            </span>{" "}
+            ·{" "}
+            <span className="text-amber-700">
+              {CMO_PORTFOLIO_EN.delegated.amber} amber
+            </span>
+          </div>
+          <div>
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO_EN.training.total}
+            </span>{" "}
+            training listings ·{" "}
+            <span className="text-emerald-700">
+              {CMO_PORTFOLIO_EN.training.healthy} healthy
+            </span>{" "}
+            ·{" "}
+            <span className="text-amber-700">
+              {CMO_PORTFOLIO_EN.training.amber} amber
+            </span>{" "}
+            ·{" "}
+            <span className="text-rose-700">
+              {CMO_PORTFOLIO_EN.training.rose} rose
+            </span>
+          </div>
+          <div>
+            Quarter-to-date Portfolio TACoS{" "}
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO_EN.quarterly.tacos}%
+            </span>{" "}
+            (
+            <span className="text-emerald-700 font-mono">
+              {CMO_PORTFOLIO_EN.quarterly.tacosDeltaPp}pp
+            </span>{" "}
+            vs last quarter)
+          </div>
+          <div>
+            Team-agent collaboration: agent surfaced{" "}
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO_EN.collab.recsTotal}
+            </span>{" "}
+            recommendations, accept rate{" "}
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO_EN.collab.acceptRate}%
+            </span>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function CmoSupervisionPanel({ onSelect }) {
+  return (
+    <div className="px-6 py-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="border-b border-slate-200 pb-4 mb-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            CMO supervision panel
+          </div>
+          <div className="text-lg font-semibold text-slate-900">
+            This week · 5/12 – 5/18
+          </div>
+        </div>
+
+        <section className="mb-8">
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Needs your approval
+            </h2>
+            <span className="text-11 text-rose-700 bg-rose-50 border border-rose-200 rounded-full px-2 py-0.5 font-medium">
+              {CMO_PENDING_EN.length}
+            </span>
+          </div>
+          <div className="space-y-3">
+            {CMO_PENDING_EN.map((row) => (
+              <PendingApprovalCard
+                key={row.threadId}
+                row={row}
+                onSelect={onSelect}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Team decisions
+            </h2>
+            <span className="text-11 text-slate-500">
+              · auto-approved, open to supervision
+            </span>
+          </div>
+          <div className="text-11 text-slate-600 mb-3">
+            6 VP-level decisions this week, 5 auto-approved (within team
+            scope).
+          </div>
+          <div className="space-y-2.5">
+            {CMO_TEAM_RECENT_EN.map((row) => (
+              <TeamDecisionCard
+                key={row.threadId}
+                row={row}
+                onSelect={onSelect}
+              />
+            ))}
+            <div className="text-11 text-slate-400 px-1 pt-1">
+              + 2 earlier decisions (collapsed)
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Company Brain · new entries
+            </h2>
+            <span className="text-11 text-slate-500">
+              · auto-approved, open to challenge
+            </span>
+          </div>
+          <div className="text-11 text-slate-600 mb-3">
+            {CMO_BRAIN_NEW_EN.length} methodologies entered the Brain this
+            week
+          </div>
+          <div className="space-y-2.5">
+            {CMO_BRAIN_NEW_EN.map((row) => (
+              <BrainPatternCard key={row.id} row={row} />
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              Portfolio
+            </h2>
+            <span className="text-11 text-slate-500">
+              · collapsed by default
+            </span>
+          </div>
+          <PortfolioSection />
+        </section>
       </div>
     </div>
   );
@@ -15251,7 +15633,8 @@ export default function App({ locale, setLocale, currentRole, setCurrentRole }) 
       case "qa-margins":
         return <QACanvas activeClearance={activeUser.clearance} />;
       default:
-        if (currentRole === "cmo") return <CmoSupervisionStub />;
+        if (currentRole === "cmo")
+          return <CmoSupervisionPanel onSelect={setActiveId} />;
         if (currentRole === "devon") return <DevonEmptyCanvas />;
         return <EmptyCanvas />;
     }

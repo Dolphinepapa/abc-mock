@@ -9974,8 +9974,9 @@ function ChatPanel({ activeId, onSelect, currentRole }) {
                 key={h.id}
                 className="rounded-lg border border-slate-200 bg-slate-50/40 p-3"
               >
-                <div className="text-11 text-slate-700 leading-snug">
-                  ◇ {h.title}
+                <div className="text-11 text-slate-700 leading-snug flex items-start gap-1.5">
+                  <CircleDot className="w-3 h-3 mt-0.5 text-slate-400 flex-shrink-0" />
+                  <span>{h.title}</span>
                 </div>
               </div>
             ))}
@@ -15199,37 +15200,415 @@ function DevonEmptyCanvas() {
   );
 }
 
-function CmoSupervisionStub() {
+/* ─── CMO Supervision Panel (Phase C) ─────────────────────────────────── */
+
+const CMO_PENDING = [
+  {
+    threadId: "strategy",
+    index: "①",
+    title: "Floor Lamp SKU-A · #2 → #1 提案",
+    submittedBy: "Maya Chen",
+    submittedAt: "5/14 下午",
+    factLines: [
+      "增量预算请求 $48,000 · 12 周路径",
+      "目标:Floor Lamp 类目 BSR 由 #2 → #1",
+    ],
+    confidence: 78,
+    precedents: "公司大脑 4 个先例",
+    precedentGap: null,
+    overReason: "单 SKU 增量预算 > $40K · 需 CMO 审批",
+  },
+  {
+    threadId: "razor-blade",
+    index: "②",
+    title: "Henry's 刮胡刀 · Razor 降价测试",
+    submittedBy: "Sara Lin",
+    submittedAt: "5/14 上午",
+    factLines: [
+      "3 周 A/B 测试 · 涉及 ~12,400 客户",
+      "影响产品线毛利 -3.2pp(短期 14 天)",
+    ],
+    confidence: 71,
+    precedents: "公司大脑 1 个先例",
+    precedentGap: "牙刷案例 — 绑定购买率差异显著, 不能直接复用",
+    overReason: "产品线毛利影响 > 2pp · 需 CMO 审批",
+  },
+];
+
+const CMO_TEAM_RECENT = [
+  {
+    threadId: "defense",
+    title: "Defense · 床架 SKU-117",
+    submittedBy: "Maya Chen",
+    submittedAt: "5/15 下午",
+    summary: '选择"不正面碰 · 抢他们后路"姿态',
+    metric: "+$7,840 / 14 天 · Agent 信心 71%",
+  },
+  {
+    threadId: "omnichannel",
+    title: "全渠道 · 移动充电宝",
+    submittedBy: "Devon Park",
+    submittedAt: "5/11 下午",
+    summary: "三平台分配 $100K 增量预算",
+    metric: "Amazon +$28K · Walmart +$36K · TikTok +$36K",
+  },
+  {
+    threadId: "launch-cr",
+    title: "新品 CR · 轮胎充气泵",
+    submittedBy: "Jamal Hassan",
+    submittedAt: "5/14 中午",
+    summary: "4 项 listing 内容改动测试方案",
+    metric: "主图 / 标题 / A+ / Bullet",
+  },
+];
+
+const CMO_BRAIN_NEW = [
+  {
+    id: "pattern-brand-cpc",
+    type: "Pattern",
+    title: "品牌广告持续投放 → CPC 下行",
+    metric: "12 个案例 · 信心 76% · 内部",
+    usage: "已被引用 4 次(Maya × 2, Devon × 1, Sara × 1)",
+    confidenceLow: false,
+  },
+  {
+    id: "playbook-peak-defense",
+    type: "Playbook",
+    title: "旺季前自然位防御",
+    metric: "床架品类 · 信心 78% · 敏感",
+    usage: "已被 NightFox 防御方案引用",
+    confidenceLow: false,
+  },
+  {
+    id: "pattern-razor-pricing",
+    type: "Pattern",
+    title: "razor-blade 定价测试方法",
+    metric: "1 个案例 · 信心 65% · 敏感",
+    usage: "信心度偏低 · 样本仍在积累",
+    confidenceLow: true,
+  },
+];
+
+const CMO_PORTFOLIO = {
+  delegated: { total: 12, healthy: 11, amber: 1, rose: 0 },
+  training: { total: 35, healthy: 28, amber: 6, rose: 1 },
+  quarterly: { tacos: 17.4, tacosDeltaPp: -1.5 },
+  collab: { recsTotal: 142, acceptRate: 78 },
+};
+
+function PendingApprovalCard({ row, onSelect }) {
   return (
-    <div className="px-6 py-12">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-xs uppercase tracking-wider text-slate-500 font-medium mb-2">
-          CMO 监督面板
+    <div className="rounded-lg border border-slate-200 bg-white border-l-4 border-l-rose-500 p-4">
+      <div className="flex items-baseline gap-2 mb-1">
+        <span className="text-11 font-mono text-slate-400">{row.index}</span>
+        <div className="text-sm font-semibold text-slate-900 leading-snug">
+          {row.title}
         </div>
-        <div className="text-lg font-semibold text-slate-900 mb-1">
-          本周 · 5/12 – 5/18
-        </div>
-        <div className="text-sm text-slate-600 mb-6">
-          左侧已经把本周需要你看的事按 4 段排好。Phase B 阶段先把侧栏装上,中间这块监督面板的 4 个 section(待审批卡 · 团队决策 · 大脑沉淀 · 整体盘子)在 Phase C 实现。
-        </div>
-        <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50/60 p-5">
-          <div className="text-11 uppercase tracking-wider text-slate-500 mb-2">
-            待办预览
+      </div>
+      <div className="text-11 text-slate-500 mb-3">
+        由 {row.submittedBy} 提交 · {row.submittedAt}
+      </div>
+
+      <div className="space-y-1 mb-3">
+        {row.factLines.map((line, i) => (
+          <div key={i} className="text-xs text-slate-700">
+            {line}
           </div>
-          <ul className="space-y-1.5 text-sm text-slate-700">
-            <li>
-              <span className="font-mono text-slate-500">①</span> SKU-A · #2
-              → #1 提案(Maya 提交,需 CMO 决策)
-            </li>
-            <li>
-              <span className="font-mono text-slate-500">②</span> Henry's
-              刮胡刀 · Razor 降价测试(Sara 提交,需 CMO 决策)
-            </li>
-          </ul>
-          <div className="text-10 text-slate-400 mt-4">
-            点左侧 ①/② 直接打开方案 canvas(Phase D 接审批 banner 和质疑流)。
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 mb-2 text-11 text-slate-600">
+        <span>
+          Agent 信心度{" "}
+          <span className="font-mono font-medium text-slate-900">
+            {row.confidence}%
+          </span>
+        </span>
+        <span className="text-slate-300">·</span>
+        <span>{row.precedents}</span>
+      </div>
+      {row.precedentGap && (
+        <div className="text-11 text-rose-700 bg-rose-50 border border-rose-200 rounded px-2 py-1 mb-3 flex items-start gap-1.5">
+          <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+          <span>{row.precedentGap}</span>
+        </div>
+      )}
+
+      <div className="text-11 text-amber-900 bg-amber-50 border border-amber-200 rounded px-2 py-1.5 mb-3">
+        <span className="font-medium">超出 VP 自主权限:</span> {row.overReason}
+      </div>
+
+      <button
+        type="button"
+        onClick={() => onSelect(row.threadId)}
+        className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1 mb-3"
+      >
+        打开方案查看 <ArrowRight className="w-3 h-3" />
+      </button>
+
+      <div className="flex items-center gap-2 pt-3 border-t border-slate-100">
+        <button
+          type="button"
+          className="px-3 py-1.5 text-11 font-medium bg-emerald-600 text-white rounded hover:bg-emerald-700"
+        >
+          批准
+        </button>
+        <button
+          type="button"
+          className="px-3 py-1.5 text-11 font-medium bg-white border border-slate-300 text-slate-700 rounded hover:bg-slate-50"
+        >
+          质疑
+        </button>
+        <button
+          type="button"
+          className="px-2 py-1.5 text-11 text-slate-500 hover:text-slate-700"
+        >
+          打回
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TeamDecisionCard({ row, onSelect }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3.5">
+      <div className="flex items-baseline justify-between gap-2 mb-1">
+        <div className="text-xs font-semibold text-slate-900">
+          {row.title}
+        </div>
+        <span className="text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.5 flex-shrink-0">
+          已自动通过
+        </span>
+      </div>
+      <div className="text-11 text-slate-500 mb-2">
+        由 {row.submittedBy} 决策 · {row.submittedAt}
+      </div>
+      <div className="text-xs text-slate-700 mb-1">{row.summary}</div>
+      <div className="text-11 text-slate-600 font-mono mb-2.5">
+        {row.metric}
+      </div>
+      <button
+        type="button"
+        onClick={() => onSelect(row.threadId)}
+        className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
+      >
+        查看完整方案 <ArrowRight className="w-3 h-3" />
+      </button>
+    </div>
+  );
+}
+
+function BrainPatternCard({ row }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3.5">
+      <div className="flex items-baseline gap-1.5 mb-1">
+        <span className="text-10 text-slate-500 font-mono uppercase tracking-wider">
+          {row.type}
+        </span>
+        <div className="text-xs font-semibold text-slate-900 leading-snug">
+          · {row.title}
+        </div>
+      </div>
+      <div className="text-11 text-slate-500 mb-1">{row.metric}</div>
+      <div
+        className={`text-11 mb-2.5 flex items-start gap-1.5 ${
+          row.confidenceLow ? "text-amber-800" : "text-slate-600"
+        }`}
+      >
+        {row.confidenceLow && (
+          <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
+        )}
+        <span>{row.usage}</span>
+      </div>
+      <div className="flex items-center gap-2 pt-2.5 border-t border-slate-100">
+        <button
+          type="button"
+          className="text-11 text-slate-700 hover:text-slate-900 inline-flex items-center gap-1"
+        >
+          查看完整 STAR <ArrowRight className="w-3 h-3" />
+        </button>
+        <span className="text-slate-300 text-11">·</span>
+        <button
+          type="button"
+          className="text-11 px-2 py-0.5 bg-white border border-slate-300 text-slate-700 rounded hover:bg-slate-50 inline-flex items-center gap-1"
+        >
+          <MessageSquare className="w-3 h-3" /> 质疑
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function PortfolioSection() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-slate-50/60"
+      >
+        <div className="flex items-center gap-2">
+          <ChevronDown
+            className={`w-3.5 h-3.5 text-slate-500 transition-transform ${
+              open ? "" : "-rotate-90"
+            }`}
+          />
+          <span className="text-sm font-medium text-slate-900">
+            Portfolio 健康度概览
+          </span>
+        </div>
+        <span className="text-10 text-slate-400">
+          {open ? "点击折叠" : "点击展开"}
+        </span>
+      </button>
+      {open && (
+        <div className="border-t border-slate-100 px-4 py-3.5 space-y-2.5 text-xs text-slate-700">
+          <div>
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO.delegated.total}
+            </span>{" "}
+            个 delegated listing ·{" "}
+            <span className="text-emerald-700">
+              {CMO_PORTFOLIO.delegated.healthy} 健康
+            </span>{" "}
+            ·{" "}
+            <span className="text-amber-700">
+              {CMO_PORTFOLIO.delegated.amber} amber
+            </span>
+          </div>
+          <div>
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO.training.total}
+            </span>{" "}
+            个 training listing ·{" "}
+            <span className="text-emerald-700">
+              {CMO_PORTFOLIO.training.healthy} 健康
+            </span>{" "}
+            ·{" "}
+            <span className="text-amber-700">
+              {CMO_PORTFOLIO.training.amber} amber
+            </span>{" "}
+            ·{" "}
+            <span className="text-rose-700">
+              {CMO_PORTFOLIO.training.rose} rose
+            </span>
+          </div>
+          <div>
+            本季度 Portfolio TACoS{" "}
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO.quarterly.tacos}%
+            </span>{" "}
+            (
+            <span className="text-emerald-700 font-mono">
+              {CMO_PORTFOLIO.quarterly.tacosDeltaPp}pp
+            </span>{" "}
+            vs 上季)
+          </div>
+          <div>
+            团队-Agent 协作:Agent 推荐{" "}
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO.collab.recsTotal}
+            </span>{" "}
+            次,接受率{" "}
+            <span className="font-mono text-slate-900">
+              {CMO_PORTFOLIO.collab.acceptRate}%
+            </span>
           </div>
         </div>
+      )}
+    </div>
+  );
+}
+
+function CmoSupervisionPanel({ onSelect }) {
+  return (
+    <div className="px-6 py-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="border-b border-slate-200 pb-4 mb-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            CMO 监督面板
+          </div>
+          <div className="text-lg font-semibold text-slate-900">
+            本周 · 5/12 – 5/18
+          </div>
+        </div>
+
+        <section className="mb-8">
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              需要你的审批
+            </h2>
+            <span className="text-11 text-rose-700 bg-rose-50 border border-rose-200 rounded-full px-2 py-0.5 font-medium">
+              {CMO_PENDING.length} 件
+            </span>
+          </div>
+          <div className="space-y-3">
+            {CMO_PENDING.map((row) => (
+              <PendingApprovalCard
+                key={row.threadId}
+                row={row}
+                onSelect={onSelect}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              团队近期决策
+            </h2>
+            <span className="text-11 text-slate-500">
+              · 自动通过,可监督
+            </span>
+          </div>
+          <div className="text-11 text-slate-600 mb-3">
+            本周 VP 级别决策共 6 项, 5 项已自动通过(在团队权限范围内)。
+          </div>
+          <div className="space-y-2.5">
+            {CMO_TEAM_RECENT.map((row) => (
+              <TeamDecisionCard
+                key={row.threadId}
+                row={row}
+                onSelect={onSelect}
+              />
+            ))}
+            <div className="text-11 text-slate-400 px-1 pt-1">
+              + 2 个更早的决策(折叠)
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              公司大脑新沉淀
+            </h2>
+            <span className="text-11 text-slate-500">
+              · 自动通过,可质疑
+            </span>
+          </div>
+          <div className="text-11 text-slate-600 mb-3">
+            本周新进入大脑的方法论 · {CMO_BRAIN_NEW.length} 条
+          </div>
+          <div className="space-y-2.5">
+            {CMO_BRAIN_NEW.map((row) => (
+              <BrainPatternCard key={row.id} row={row} />
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-sm font-semibold text-slate-900">
+              整体盘子
+            </h2>
+            <span className="text-11 text-slate-500">· 默认折叠</span>
+          </div>
+          <PortfolioSection />
+        </section>
       </div>
     </div>
   );
@@ -15354,7 +15733,8 @@ export default function App({ locale, setLocale, currentRole, setCurrentRole }) 
       case "qa-margins":
         return <QACanvas activeClearance={activeUser.clearance} />;
       default:
-        if (currentRole === "cmo") return <CmoSupervisionStub />;
+        if (currentRole === "cmo")
+          return <CmoSupervisionPanel onSelect={setActiveId} />;
         if (currentRole === "devon") return <DevonEmptyCanvas />;
         return <EmptyCanvas />;
     }
