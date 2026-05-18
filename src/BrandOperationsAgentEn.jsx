@@ -9777,6 +9777,10 @@ function ThreadCard({ thread, active, activeId, onSelect, tone }) {
     : lastTurn?.body || "";
 
   const handleHeaderClick = () => {
+    if (active) {
+      onSelect(null);
+      return;
+    }
     if (isReportFeed) {
       onSelect(latestReport.canvasId);
     } else {
