@@ -14535,29 +14535,49 @@ const Q2_TOTAL_WEEKS = 13;
 const Q2_CURRENT_WEEK = 7;
 
 function buildListingQ2Trajectory(listing) {
-  const weeklyForecast = listing.forecast.rev / Q2_TOTAL_WEEKS;
-  let actualCum = 0;
-  let actualToDate = 0;
+  const weeklyForecastRev = listing.forecast.rev / Q2_TOTAL_WEEKS;
+  const weeklyForecastSpend = listing.forecast.spend / Q2_TOTAL_WEEKS;
+  let actualRevCum = 0;
+  let actualSpendCum = 0;
+  let actualRevToDate = 0;
+  let actualSpendToDate = 0;
   for (let w = 0; w < Q2_CURRENT_WEEK; w++) {
-    actualToDate += listing.history[w]?.rev || 0;
+    actualRevToDate += listing.history[w]?.rev || 0;
+    actualSpendToDate += listing.history[w]?.spend || 0;
   }
-  const remainingProjected = listing.projected.rev - actualToDate;
-  const projectedWeeklyPace = remainingProjected / (Q2_TOTAL_WEEKS - Q2_CURRENT_WEEK);
+  const projectedRevWeeklyPace =
+    (listing.projected.rev - actualRevToDate) / (Q2_TOTAL_WEEKS - Q2_CURRENT_WEEK);
+  const projectedSpendWeeklyPace =
+    (listing.projected.spend - actualSpendToDate) / (Q2_TOTAL_WEEKS - Q2_CURRENT_WEEK);
   const data = [];
-  let projCum = 0;
+  let projRevCum = 0;
+  let projSpendCum = 0;
   for (let i = 0; i <= Q2_TOTAL_WEEKS; i++) {
+    const fRev = weeklyForecastRev * i;
+    const fSpend = weeklyForecastSpend * i;
     const point = {
       week: i === 0 ? "Q2 start" : i === Q2_TOTAL_WEEKS ? "EOQ" : `W${i}`,
-      forecast: Math.round(weeklyForecast * i),
+      forecast: Math.round(fRev),
+      forecastTacos: i === 0 ? null : (fSpend / fRev) * 100,
     };
     if (i <= Q2_CURRENT_WEEK) {
-      if (i > 0) actualCum += listing.history[i - 1]?.rev || 0;
-      point.actual = actualCum;
+      if (i > 0) {
+        actualRevCum += listing.history[i - 1]?.rev || 0;
+        actualSpendCum += listing.history[i - 1]?.spend || 0;
+      }
+      point.actual = actualRevCum;
+      point.actualTacos = actualRevCum > 0 ? (actualSpendCum / actualRevCum) * 100 : null;
     }
     if (i >= Q2_CURRENT_WEEK) {
-      if (i === Q2_CURRENT_WEEK) projCum = actualCum;
-      else projCum += projectedWeeklyPace;
-      point.projected = Math.round(projCum);
+      if (i === Q2_CURRENT_WEEK) {
+        projRevCum = actualRevCum;
+        projSpendCum = actualSpendCum;
+      } else {
+        projRevCum += projectedRevWeeklyPace;
+        projSpendCum += projectedSpendWeeklyPace;
+      }
+      point.projected = Math.round(projRevCum);
+      point.projectedTacos = projRevCum > 0 ? (projSpendCum / projRevCum) * 100 : null;
     }
     data.push(point);
   }
@@ -14572,14 +14592,44 @@ const Q2_TRAJECTORY = (() => {
   const data = [];
   for (let i = 0; i <= Q2_TOTAL_WEEKS; i++) {
     const refPoint = Q2_LISTINGS_WITH_PROJECTION[0].trajectory[i];
-    const sumAt = (key) =>
-      Q2_LISTINGS_WITH_PROJECTION.reduce(
-        (s, l) => s + (l.trajectory[i][key] ?? 0),
-        0,
-      );
-    const point = { week: refPoint.week, forecast: sumAt("forecast") };
-    if (i <= Q2_CURRENT_WEEK) point.actual = sumAt("actual");
-    if (i >= Q2_CURRENT_WEEK) point.projected = sumAt("projected");
+    let forecastSpend = 0;
+    let actualSpend = 0;
+    let projectedSpend = 0;
+    let forecastRev = 0;
+    let actualRev = 0;
+    let projectedRev = 0;
+    Q2_LISTINGS_WITH_PROJECTION.forEach((l) => {
+      const t = l.trajectory[i];
+      forecastRev += t.forecast || 0;
+      forecastSpend += (l.forecast.spend / Q2_TOTAL_WEEKS) * i;
+      if (i <= Q2_CURRENT_WEEK) {
+        actualRev += t.actual || 0;
+        let s = 0;
+        for (let w = 0; w < i; w++) s += l.history[w]?.spend || 0;
+        actualSpend += s;
+      }
+      if (i >= Q2_CURRENT_WEEK) {
+        projectedRev += t.projected || 0;
+        let toDateSpend = 0;
+        for (let w = 0; w < Q2_CURRENT_WEEK; w++) toDateSpend += l.history[w]?.spend || 0;
+        const pace =
+          (l.projected.spend - toDateSpend) / (Q2_TOTAL_WEEKS - Q2_CURRENT_WEEK);
+        projectedSpend += toDateSpend + pace * (i - Q2_CURRENT_WEEK);
+      }
+    });
+    const point = {
+      week: refPoint.week,
+      forecast: forecastRev,
+      forecastTacos: forecastRev > 0 ? (forecastSpend / forecastRev) * 100 : null,
+    };
+    if (i <= Q2_CURRENT_WEEK) {
+      point.actual = actualRev;
+      point.actualTacos = actualRev > 0 ? (actualSpend / actualRev) * 100 : null;
+    }
+    if (i >= Q2_CURRENT_WEEK) {
+      point.projected = projectedRev;
+      point.projectedTacos = projectedRev > 0 ? (projectedSpend / projectedRev) * 100 : null;
+    }
     data.push(point);
   }
   return data;
@@ -15538,8 +15588,23 @@ function WeeklyReportCanvas({ onJumpTo }) {
   );
 }
 
-function Q2TrajectoryChart({ trajectory, height = 280, compact = false }) {
+function Q2TrajectoryChart({ trajectory, height = 280, compact = false, kind = "rev" }) {
   const todayLabel = trajectory[Q2_CURRENT_WEEK]?.week;
+  const isTacos = kind === "tacos";
+  const keys = isTacos
+    ? { forecast: "forecastTacos", actual: "actualTacos", projected: "projectedTacos" }
+    : { forecast: "forecast", actual: "actual", projected: "projected" };
+  const yFormatter = isTacos
+    ? (v) => `${v.toFixed(1)}%`
+    : (v) =>
+        v >= 1000000
+          ? `$${(v / 1000000).toFixed(1)}M`
+          : v >= 1000
+            ? `$${Math.round(v / 1000)}K`
+            : `$${v}`;
+  const tooltipFormatter = isTacos
+    ? (value) => `${value.toFixed(1)}%`
+    : (value) => `$${value.toLocaleString()}`;
   return (
     <ResponsiveContainer width="100%" height={height}>
       <LineChart data={trajectory} margin={{ top: 8, right: 16, left: compact ? -20 : 0, bottom: 8 }}>
@@ -15555,14 +15620,9 @@ function Q2TrajectoryChart({ trajectory, height = 280, compact = false }) {
           tick={{ fill: "#64748b", fontSize: compact ? 9 : 11 }}
           axisLine={false}
           tickLine={false}
-          tickFormatter={(v) =>
-            v >= 1000000
-              ? `$${(v / 1000000).toFixed(1)}M`
-              : v >= 1000
-                ? `$${Math.round(v / 1000)}K`
-                : `$${v}`
-          }
+          tickFormatter={yFormatter}
           width={compact ? 36 : 56}
+          domain={isTacos ? ["dataMin - 1", "dataMax + 1"] : undefined}
         />
         {!compact && (
           <Tooltip
@@ -15574,7 +15634,7 @@ function Q2TrajectoryChart({ trajectory, height = 280, compact = false }) {
               color: "white",
             }}
             labelStyle={{ color: "#94a3b8" }}
-            formatter={(value) => `$${value.toLocaleString()}`}
+            formatter={tooltipFormatter}
           />
         )}
         <ReferenceLine
@@ -15585,7 +15645,7 @@ function Q2TrajectoryChart({ trajectory, height = 280, compact = false }) {
         />
         <Line
           type="monotone"
-          dataKey="forecast"
+          dataKey={keys.forecast}
           name="Forecast"
           stroke="#94a3b8"
           strokeWidth={compact ? 1.5 : 2}
@@ -15593,7 +15653,7 @@ function Q2TrajectoryChart({ trajectory, height = 280, compact = false }) {
         />
         <Line
           type="monotone"
-          dataKey="actual"
+          dataKey={keys.actual}
           name="Actual"
           stroke="#059669"
           strokeWidth={compact ? 1.5 : 2.5}
@@ -15601,7 +15661,7 @@ function Q2TrajectoryChart({ trajectory, height = 280, compact = false }) {
         />
         <Line
           type="monotone"
-          dataKey="projected"
+          dataKey={keys.projected}
           name="Projected"
           stroke="#059669"
           strokeWidth={compact ? 1.5 : 2}
@@ -15639,10 +15699,18 @@ function Q2ListingMiniCard({ listing }) {
       <Q2TrajectoryChart trajectory={listing.trajectory} height={72} compact />
       <div className="mt-1.5 flex items-baseline justify-between text-10">
         <span className="text-slate-500">
-          Forecast <span className="font-mono text-slate-700">${(listing.forecast.rev / 1000).toFixed(0)}K</span>
+          Sales fcst <span className="font-mono text-slate-700">${(listing.forecast.rev / 1000).toFixed(0)}K</span>
         </span>
         <span className="text-slate-500">
-          Projected <span className={`font-mono font-medium ${toneCls}`}>${(listing.projected.rev / 1000).toFixed(0)}K</span>
+          Proj <span className={`font-mono font-medium ${toneCls}`}>${(listing.projected.rev / 1000).toFixed(0)}K</span>
+        </span>
+      </div>
+      <div className="flex items-baseline justify-between text-10">
+        <span className="text-slate-500">
+          TACoS fcst <span className="font-mono text-slate-700">{(listing.forecast.tacos * 100).toFixed(1)}%</span>
+        </span>
+        <span className="text-slate-500">
+          Proj <span className="font-mono text-slate-700">{(listing.projected.tacos * 100).toFixed(1)}%</span>
         </span>
       </div>
     </div>
@@ -15711,20 +15779,46 @@ function Q2ForecastCanvas({ onJumpTo }) {
 
       {/* Section 2: Portfolio trajectory */}
       <div className="px-6 pt-8">
-        <SectionLabel kicker="Cumulative sales · weekly">This quarter · portfolio trajectory</SectionLabel>
-        <div className="border border-slate-200 rounded-md px-4 py-4 bg-white">
-          <div className="flex items-center gap-4 text-11 text-slate-600 mb-2">
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-3 h-0.5 bg-slate-400" /> Forecast
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-3 h-0.5 bg-emerald-600" /> Actual
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="inline-block w-3 h-0.5 border-t border-dashed border-emerald-600" /> Projected
-            </span>
+        <SectionLabel kicker="Cumulative · weekly">This quarter · portfolio trajectory</SectionLabel>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="border border-slate-200 rounded-md px-4 py-4 bg-white">
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-11 text-slate-500 font-medium uppercase tracking-wider">
+                Cumulative sales
+              </div>
+              <div className="flex items-center gap-3 text-10 text-slate-600">
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-3 h-0.5 bg-slate-400" /> Forecast
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-3 h-0.5 bg-emerald-600" /> Actual
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-3 h-0.5 border-t border-dashed border-emerald-600" /> Projected
+                </span>
+              </div>
+            </div>
+            <Q2TrajectoryChart trajectory={Q2_TRAJECTORY} kind="rev" height={240} />
           </div>
-          <Q2TrajectoryChart trajectory={Q2_TRAJECTORY} height={280} />
+          <div className="border border-slate-200 rounded-md px-4 py-4 bg-white">
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-11 text-slate-500 font-medium uppercase tracking-wider">
+                Cumulative {wrapMetric("TACoS")}
+              </div>
+              <div className="flex items-center gap-3 text-10 text-slate-600">
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-3 h-0.5 bg-slate-400" /> Forecast
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-3 h-0.5 bg-emerald-600" /> Actual
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="inline-block w-3 h-0.5 border-t border-dashed border-emerald-600" /> Projected
+                </span>
+              </div>
+            </div>
+            <Q2TrajectoryChart trajectory={Q2_TRAJECTORY} kind="tacos" height={240} />
+          </div>
         </div>
       </div>
 
