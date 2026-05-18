@@ -173,10 +173,11 @@ const THREADS = [
     lastActivityTimestamp: "today 7:00",
     unread: false,
     threadType: "report-feed",
-    title: "Daily ops report · pushed every morning",
+    title: "Ops reports · auto-pushed",
     reports: {
       historical: [],
       current: [
+        { id: "rpt-q2-2026", canvasId: "q2-forecast", type: "quarterly", date: "Q2 2026", time: "approved 4/3", coverRange: "4/1 - 6/30", summary: { quarter: "Q2 2026", rev: "$5.35M", variance: "+2.9%", note: "Bed frame +16% ahead · Floor lamp -11% behind" } },
         { id: "rpt-weekly-w19", canvasId: "weekly-report", type: "weekly", date: "5/12 Mon", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$408,940", tacos: "19.4%", note: "3 listings showing trend shifts" } },
         { id: "rpt-2026-05-16", canvasId: "daily-report", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
       ],
@@ -10264,14 +10265,17 @@ function ChatPanel({
 
 function ReportCard({ report, selected, onClick }) {
   const isWeekly = report.type === "weekly";
+  const isQuarterly = report.type === "quarterly";
   const isLatest = report.isLatest;
   const containerClass = isLatest
     ? "border-2 border-emerald-500 bg-emerald-50/40"
     : isWeekly
       ? "border-2 border-emerald-300 bg-white hover:border-emerald-400"
-      : selected
-        ? "border border-slate-400 bg-white"
-        : "border border-slate-200 bg-white hover:border-slate-300";
+      : isQuarterly
+        ? "border-2 border-blue-300 bg-white hover:border-blue-400"
+        : selected
+          ? "border border-slate-400 bg-white"
+          : "border border-slate-200 bg-white hover:border-slate-300";
   return (
     <button
       type="button"
@@ -10285,6 +10289,11 @@ function ReportCard({ report, selected, onClick }) {
               Weekly
             </span>
           )}
+          {isQuarterly && (
+            <span className="text-10 text-blue-700 bg-blue-100 border border-blue-300 rounded px-1 font-semibold flex-shrink-0">
+              Quarterly
+            </span>
+          )}
           <span className="text-10 text-slate-500 font-mono truncate">
             Agent · {report.date} · {report.time}
           </span>
@@ -10296,14 +10305,18 @@ function ReportCard({ report, selected, onClick }) {
         )}
       </div>
       <div className="text-xs font-semibold text-slate-900 mb-1">
-        {isWeekly
-          ? `Week recap · ${report.coverRange}`
-          : `Daily · ${report.date}`}
+        {isQuarterly
+          ? `${report.summary.quarter} forecast tracking · ${report.coverRange}`
+          : isWeekly
+            ? `Week recap · ${report.coverRange}`
+            : `Daily · ${report.date}`}
       </div>
       <div className="text-11 text-slate-600 leading-relaxed">
-        {isWeekly
-          ? `Weekly sales ${report.summary.rev} · weekly TACoS ${report.summary.tacos}`
-          : `Sales ${report.summary.rev} · TACoS ${report.summary.tacos} · ${report.summary.anomalies} anomal${report.summary.anomalies === 1 ? "y" : "ies"}`}
+        {isQuarterly
+          ? `Projected EOQ ${report.summary.rev} · vs forecast ${report.summary.variance}`
+          : isWeekly
+            ? `Weekly sales ${report.summary.rev} · weekly TACoS ${report.summary.tacos}`
+            : `Sales ${report.summary.rev} · TACoS ${report.summary.tacos} · ${report.summary.anomalies} anomal${report.summary.anomalies === 1 ? "y" : "ies"}`}
       </div>
       {report.summary.note && (
         <div className="text-11 text-slate-500 mt-1 leading-relaxed">
@@ -10320,30 +10333,33 @@ function ReportCard({ report, selected, onClick }) {
 function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const current = thread.reports.current;
+  const latestQuarterly = current.find((r) => r.type === "quarterly");
   const latestWeekly = current.find((r) => r.type === "weekly");
   const todayCard = current.find((r) => r.isLatest);
   const olderCurrent = current.filter(
-    (r) => r.type !== "weekly" && !r.isLatest,
+    (r) => r.type !== "weekly" && r.type !== "quarterly" && !r.isLatest,
   );
   const olderTotal = thread.reports.historical.length + olderCurrent.length;
   return (
     <div className="px-3 py-3">
       <div className="text-11 text-slate-500 mb-3 leading-relaxed px-1">
-        Auto-pushed at 7:00 every day · no notifications
+        Auto-pushed daily/weekly/quarterly · no notifications
       </div>
 
-      <button
-        type="button"
-        onClick={() => setHistoryOpen(!historyOpen)}
-        className="w-full text-11 text-slate-500 hover:text-slate-700 mb-2 flex items-center justify-center gap-1 py-1.5 border-y border-dashed border-slate-200"
-      >
-        {historyOpen ? (
-          <ChevronDown className="w-3 h-3" />
-        ) : (
-          <ChevronRight className="w-3 h-3" />
-        )}
-        Older daily reports ({olderTotal})
-      </button>
+      {olderTotal > 0 && (
+        <button
+          type="button"
+          onClick={() => setHistoryOpen(!historyOpen)}
+          className="w-full text-11 text-slate-500 hover:text-slate-700 mb-2 flex items-center justify-center gap-1 py-1.5 border-y border-dashed border-slate-200"
+        >
+          {historyOpen ? (
+            <ChevronDown className="w-3 h-3" />
+          ) : (
+            <ChevronRight className="w-3 h-3" />
+          )}
+          Older reports ({olderTotal})
+        </button>
+      )}
 
       {historyOpen && (
         <div className="space-y-2 mb-2">
@@ -10367,6 +10383,13 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
       )}
 
       <div className="space-y-2">
+        {latestQuarterly && (
+          <ReportCard
+            report={latestQuarterly}
+            selected={activeId === latestQuarterly.canvasId}
+            onClick={() => onSelect(latestQuarterly.canvasId)}
+          />
+        )}
         {latestWeekly && (
           <ReportCard
             report={latestWeekly}
@@ -10392,7 +10415,8 @@ function ThreadCard({ thread, active, activeId, onSelect, tone, teamView }) {
   const isReportFeed = thread.threadType === "report-feed";
   const lastTurn = thread.turns ? thread.turns[thread.turns.length - 1] : null;
   const latestReport = isReportFeed
-    ? thread.reports.current[thread.reports.current.length - 1]
+    ? thread.reports.current.find((r) => r.isLatest) ||
+      thread.reports.current[thread.reports.current.length - 1]
     : null;
   const previewBody = isReportFeed
     ? `Yesterday's sales ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · ${latestReport.summary.anomalies} anomal${latestReport.summary.anomalies === 1 ? "y" : "ies"}`
@@ -14415,6 +14439,152 @@ function buildWeeklyListingsWithHistory() {
 
 const WEEKLY_LISTINGS_WITH_HISTORY = buildWeeklyListingsWithHistory();
 
+// Q2 2026: 4/1 - 6/30 = 91 days. Today (5/18) = day 48. Pace ≈ 0.527.
+const Q2_DAYS_ELAPSED = 48;
+const Q2_DAYS_TOTAL = 91;
+const Q2_PACE = Q2_DAYS_ELAPSED / Q2_DAYS_TOTAL;
+
+const Q2_LISTING_VARIANCE = {
+  B0CK7BFRM4: 0.157,
+  B0CHNYFLR2: -0.111,
+  B0CDM3KNV9: 0.018,
+  B0CHRPTBL5: 0.103,
+  B0CN4WLLH8: -0.024,
+  B0CM5LNGCH: 0.034,
+  B0CT3STRG2: -0.041,
+  B0CL7PNDLP: 0.012,
+  B0CT2HRWPL: 0.025,
+  B0CD5CRUET: -0.018,
+  B0CV2VASE4: 0.046,
+  B0CB7BTHMT: -0.029,
+};
+
+function deriveQ2Listing(base) {
+  const forecast = {
+    impressions: base.impressions * Q2_DAYS_TOTAL,
+    clicks: base.clicks * Q2_DAYS_TOTAL,
+    orders: base.orders * Q2_DAYS_TOTAL,
+    rev: base.rev * Q2_DAYS_TOTAL,
+    spend: base.spend * Q2_DAYS_TOTAL,
+  };
+  const adSalesF = forecast.rev * AD_SALES_RATIO;
+  const forecastDerived = {
+    ...forecast,
+    ctr: forecast.clicks / forecast.impressions,
+    cvr: forecast.orders / forecast.clicks,
+    acos: forecast.spend / adSalesF,
+    tacos: forecast.spend / forecast.rev,
+    roas: adSalesF / forecast.spend,
+    aov: forecast.rev / forecast.orders,
+  };
+  const v = Q2_LISTING_VARIANCE[base.asin] || 0;
+  const projected = {
+    impressions: Math.round(forecast.impressions * (1 + v * 0.55)),
+    clicks:      Math.round(forecast.clicks      * (1 + v * 0.8)),
+    orders:      Math.round(forecast.orders      * (1 + v)),
+    rev:         Math.round(forecast.rev         * (1 + v)),
+    spend:       Math.round(forecast.spend       * (1 + v * 0.6)),
+  };
+  const adSalesP = projected.rev * AD_SALES_RATIO;
+  const projectedDerived = {
+    ...projected,
+    ctr: projected.clicks / projected.impressions,
+    cvr: projected.orders / projected.clicks,
+    acos: projected.spend / adSalesP,
+    tacos: projected.spend / projected.rev,
+    roas: adSalesP / projected.spend,
+    aov: projected.rev / projected.orders,
+  };
+  const actual = {
+    impressions: Math.round(projected.impressions * Q2_PACE),
+    clicks:      Math.round(projected.clicks      * Q2_PACE),
+    orders:      Math.round(projected.orders      * Q2_PACE),
+    rev:         Math.round(projected.rev         * Q2_PACE),
+    spend:       Math.round(projected.spend       * Q2_PACE),
+  };
+  return {
+    asin: base.asin,
+    line: base.line,
+    forecast: forecastDerived,
+    projected: projectedDerived,
+    actual,
+    variancePct: v * 100,
+    history: WEEKLY_LISTINGS_WITH_HISTORY.find((l) => l.asin === base.asin)?.history || [],
+  };
+}
+
+const Q2_LISTINGS_WITH_PROJECTION = REPORT_LISTINGS_BASE.map(deriveQ2Listing);
+
+const Q2_TOPLINE = (() => {
+  const sum = (key, slot) =>
+    Q2_LISTINGS_WITH_PROJECTION.reduce((s, l) => s + l[slot][key], 0);
+  const forecastRev = sum("rev", "forecast");
+  const actualRev = sum("rev", "actual");
+  const projectedRev = sum("rev", "projected");
+  const forecastSpend = sum("spend", "forecast");
+  const projectedSpend = sum("spend", "projected");
+  return {
+    forecast: { rev: forecastRev, spend: forecastSpend, tacos: forecastSpend / forecastRev },
+    actual: { rev: actualRev },
+    projected: { rev: projectedRev, spend: projectedSpend, tacos: projectedSpend / projectedRev },
+    variancePct: ((projectedRev - forecastRev) / forecastRev) * 100,
+  };
+})();
+
+const Q2_FORECAST_DATA = {
+  quarter: "Q2 2026",
+  coverRange: "4/1 - 6/30",
+  daysElapsed: Q2_DAYS_ELAPSED,
+  daysTotal: Q2_DAYS_TOTAL,
+  baselineNote: "Agent drafted · approved by Maya + CMO on 4/3",
+  insights: [
+    {
+      tone: "emerald",
+      title: "Bed frame line · projected $1.62M · +15.7% vs forecast",
+      body:
+        "NightFox's attack unexpectedly drove our hero-keyword impressions higher, with organic BSR holding through. Both organic and ad-attributed revenue on the bed frame line are running ahead of plan. If we hold the current BSR position past the 5/19 attack window, the +15% is defensible; if we lose it, expect a fall back to roughly +5%.",
+      jump: { key: "defense", label: "Jump to defense alert thread" },
+    },
+    {
+      tone: "amber",
+      title: "Floor lamp line · projected $640K · -11.1% vs forecast",
+      body:
+        "Bedroom keyword CTR has been below category baseline for 7 days, dragging the whole SKU-A floor lamp line. Two bid rounds didn't move it — confirmed listing-content problem. Waiting on brand team's bedroom-scene hero shoot (5/22) and ~2 weeks to live; Q2 can recover maybe a third of the gap.",
+      jump: { key: "strategy", label: "Jump to SKU-A thread" },
+    },
+    {
+      tone: "emerald",
+      title: "Table runner line · projected $640K · +10.3% vs forecast",
+      body:
+        "\"boho table runner\" category search +180% over 7 days. We launched the new keyword 5/16, first day $340 · ACoS 18%. If the window holds 4 weeks, Q2 could revise from +10% up to +13-15%.",
+      jump: null,
+    },
+    {
+      tone: "blue",
+      title: "Q2 overall · projected $5.35M · +2.9% vs forecast",
+      body:
+        "5 of 12 lines ahead, 3 behind, 4 roughly on plan. Overall within budget and TACoS targets. Recommend holding current pace through remaining 6 weeks — don't lever up. Bed frame's +15% carries NightFox uncertainty; not revising baseline on it yet.",
+      jump: null,
+    },
+  ],
+  nextStretch: [
+    "5/19 NightFox discount window expected to close — bed frame forecast revision pending the outcome",
+    "\"boho table runner\" enters week 2 observation · decision point 5/23 on whether to expand category budget",
+    "Floor lamp bedroom-keyword hero shoot 5/22 (brand team) · ~2-week window to live, results visible early June",
+    "Overall TACoS target 17-19% · currently 19.4% at the ceiling · avoid adding ad leverage in remaining 6 weeks",
+  ],
+  needYou: [
+    {
+      kind: "approve",
+      sku: "Bed frame line Q2 forecast",
+      title: "Revise down once NightFox attack ends?",
+      body:
+        "If NightFox pulls out 5/19 and bed-frame organic traffic falls back, Q2 line forecast revises from $1.62M to $1.49M (+7% rather than +16%). I've parked the draft revision — say the word and I'll commit it to baseline once the 5/19 window result is in.",
+      primary: "Authorize parked revision",
+    },
+  ],
+};
+
 const LISTING_METRIC_COLUMNS = [
   { key: "impressions", label: "Impressions", goodDirection: "up",   format: (v) => v.toLocaleString() },
   { key: "clicks",      label: "Clicks",      goodDirection: "up",   format: (v) => v.toLocaleString() },
@@ -15287,6 +15457,202 @@ function WeeklyReportCanvas({ onJumpTo }) {
       <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
         <div className="text-11 text-slate-500">
           Pushed Monday 7:00 · pending review
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            Question one of these
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            All good · mark reviewed
+          </button>
+        </div>
+      </div>
+
+      <ListingMetricHistoryDrawer
+        cell={drawerCell}
+        onClose={() => setDrawerCell(null)}
+        periodKind="week"
+      />
+    </>
+  );
+}
+
+function Q2ForecastCanvas({ onJumpTo }) {
+  const data = Q2_FORECAST_DATA;
+  const t = Q2_TOPLINE;
+  const [drawerCell, setDrawerCell] = useState(null);
+  const listings = Q2_LISTINGS_WITH_PROJECTION;
+  const paceLabel = `${data.daysElapsed}/${data.daysTotal} days elapsed (${Math.round((data.daysElapsed / data.daysTotal) * 100)}%)`;
+
+  return (
+    <>
+      <CanvasHeader
+        kicker={`Quarterly forecast tracking · ${data.quarter} · ${data.coverRange}`}
+        title={`${data.quarter} forecast vs actual`}
+        meta={
+          <>
+            <ReportExportPill />
+            <span
+              title="Demo locked · CMO override upload not enabled"
+              className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed"
+            >
+              <Lock className="w-3 h-3" />
+              CMO upload override · demo locked
+            </span>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-4">
+        <div className="text-11 text-slate-500 leading-relaxed">
+          {data.baselineNote} · {paceLabel} · actuals roll in daily · baseline locked
+        </div>
+      </div>
+
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="vs initial forecast">This quarter · data</SectionLabel>
+        <div className="grid grid-cols-4 gap-3">
+          <ReportToplineCard
+            label="Q2 forecast"
+            value={`$${(t.forecast.rev / 1000000).toFixed(2)}M`}
+            deltaLabel={<>{wrapMetric("TACoS")} forecast {(t.forecast.tacos * 100).toFixed(1)}%</>}
+          />
+          <ReportToplineCard
+            label={`Actual to date · ${Math.round(Q2_PACE * 100)}% in`}
+            value={`$${(t.actual.rev / 1000000).toFixed(2)}M`}
+            deltaLabel={`${((t.actual.rev / t.forecast.rev) * 100).toFixed(1)}% of forecast`}
+          />
+          <ReportToplineCard
+            label="Projected EOQ"
+            value={`$${(t.projected.rev / 1000000).toFixed(2)}M`}
+            deltaLabel={<>{wrapMetric("TACoS")} projected {(t.projected.tacos * 100).toFixed(1)}%</>}
+          />
+          <ReportToplineCard
+            label="Variance vs forecast"
+            value={`${t.variancePct >= 0 ? "+" : ""}${t.variancePct.toFixed(1)}%`}
+            deltaLabel={`$${(((t.projected.rev - t.forecast.rev) / 1000) | 0).toLocaleString()}K`}
+            deltaTone={t.variancePct >= 0 ? "good" : "bad"}
+          />
+        </div>
+
+        <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
+            <div className="text-11 text-slate-600 font-medium">
+              12 delegated listings · cell = projected EOQ · color = vs initial forecast
+            </div>
+            <div className="text-10 text-slate-500 font-mono">
+              Total projected EOQ sales ${t.projected.rev.toLocaleString()}
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="text-left font-medium px-4 py-2 sticky left-0 bg-slate-50/40">
+                    Product line / Parent ASIN
+                  </th>
+                  {LISTING_METRIC_COLUMNS.map((m) => (
+                    <th
+                      key={m.key}
+                      className="text-right font-medium px-3 py-2 whitespace-nowrap"
+                    >
+                      {m.key === "tacos" || m.key === "acos"
+                        ? wrapMetric(m.label)
+                        : m.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {listings.map((row) => (
+                  <tr
+                    key={row.asin}
+                    className="border-t border-slate-100"
+                    style={{ height: "32px" }}
+                  >
+                    <td className="px-4 py-1.5 sticky left-0 bg-white">
+                      <div className="text-xs text-slate-900 whitespace-nowrap">
+                        {row.line}{" "}
+                        <span className="font-mono text-10 text-slate-500">
+                          · {row.asin}
+                        </span>
+                      </div>
+                    </td>
+                    {LISTING_METRIC_COLUMNS.map((m) => (
+                      <td
+                        key={m.key}
+                        className="text-right px-3 py-1.5 whitespace-nowrap align-middle"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setDrawerCell({ listing: row, metric: m })}
+                          className="w-full flex flex-col items-end leading-tight hover:text-emerald-700 group"
+                        >
+                          <span className="font-mono tabular-nums text-slate-900 group-hover:underline decoration-dotted underline-offset-2">
+                            {m.format(row.projected[m.key])}
+                          </span>
+                          <MetricDelta
+                            current={row.projected[m.key]}
+                            prior={row.forecast[m.key]}
+                            goodDirection={m.goodDirection}
+                          />
+                        </button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.insights.length} item${data.insights.length === 1 ? "" : "s"}`}>
+          This quarter · what's driving the variance
+        </SectionLabel>
+        <div className="space-y-2.5">
+          {data.insights.map((ins, i) => (
+            <ReportInsightCard key={i} insight={ins} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="Remaining 6 weeks">This quarter · what's next</SectionLabel>
+        <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+          <ul className="space-y-1.5">
+            {data.nextStretch.map((line, i) => (
+              <li key={i} className="text-xs text-slate-700 leading-relaxed flex gap-2">
+                <span className="text-slate-400 flex-shrink-0">·</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.needYou.length} item${data.needYou.length === 1 ? "" : "s"}`}>
+          Need your decision
+        </SectionLabel>
+        <div className="space-y-3">
+          {data.needYou.map((item, i) => (
+            <NeedYouCard key={i} item={item} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          Actuals roll in nightly at 02:00 · next update 5/19 02:00
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -17077,6 +17443,8 @@ export default function App({
         return <DailyReportCanvas onJumpTo={handleJump} />;
       case "weekly-report":
         return <WeeklyReportCanvas onJumpTo={handleJump} />;
+      case "q2-forecast":
+        return <Q2ForecastCanvas onJumpTo={handleJump} />;
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":

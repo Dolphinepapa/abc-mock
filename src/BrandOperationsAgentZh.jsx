@@ -172,10 +172,11 @@ const THREADS = [
     lastActivityTimestamp: "今早 7:00",
     unread: false,
     threadType: "report-feed",
-    title: "代运营日报 · 每日推送",
+    title: "代运营报告 · 自动推送",
     reports: {
       historical: [],
       current: [
+        { id: "rpt-q2-2026", canvasId: "q2-forecast", type: "quarterly", date: "Q2 2026", time: "4/3 批准", coverRange: "4/1 - 6/30", summary: { quarter: "Q2 2026", rev: "$5.35M", variance: "+2.9%", note: "床架 +16% 领先 · 落地灯 -11% 滞后" } },
         { id: "rpt-weekly-w19", canvasId: "weekly-report", type: "weekly", date: "5/12 周一", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$408,940", tacos: "19.4%", note: "本周 3 个 listing 趋势变化" } },
         { id: "rpt-2026-05-16", canvasId: "daily-report", type: "daily", date: "5/16 周五", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
       ],
@@ -10153,14 +10154,17 @@ function ChatPanel({
 
 function ReportCard({ report, selected, onClick }) {
   const isWeekly = report.type === "weekly";
+  const isQuarterly = report.type === "quarterly";
   const isLatest = report.isLatest;
   const containerClass = isLatest
     ? "border-2 border-emerald-500 bg-emerald-50/40"
     : isWeekly
       ? "border-2 border-emerald-300 bg-white hover:border-emerald-400"
-      : selected
-        ? "border border-slate-400 bg-white"
-        : "border border-slate-200 bg-white hover:border-slate-300";
+      : isQuarterly
+        ? "border-2 border-blue-300 bg-white hover:border-blue-400"
+        : selected
+          ? "border border-slate-400 bg-white"
+          : "border border-slate-200 bg-white hover:border-slate-300";
   return (
     <button
       type="button"
@@ -10174,6 +10178,11 @@ function ReportCard({ report, selected, onClick }) {
               周报
             </span>
           )}
+          {isQuarterly && (
+            <span className="text-10 text-blue-700 bg-blue-100 border border-blue-300 rounded px-1 font-semibold flex-shrink-0">
+              季报
+            </span>
+          )}
           <span className="text-10 text-slate-500 font-mono truncate">
             Agent · {report.date} · {report.time}
           </span>
@@ -10185,14 +10194,18 @@ function ReportCard({ report, selected, onClick }) {
         )}
       </div>
       <div className="text-xs font-semibold text-slate-900 mb-1">
-        {isWeekly
-          ? `周回顾 · ${report.coverRange}`
-          : `日报 · ${report.date.split(" ")[0]}`}
+        {isQuarterly
+          ? `${report.summary.quarter} 预测追踪 · ${report.coverRange}`
+          : isWeekly
+            ? `周回顾 · ${report.coverRange}`
+            : `日报 · ${report.date.split(" ")[0]}`}
       </div>
       <div className="text-11 text-slate-600 leading-relaxed">
-        {isWeekly
-          ? `周销售 ${report.summary.rev} · 周 TACoS ${report.summary.tacos}`
-          : `销售 ${report.summary.rev} · TACoS ${report.summary.tacos} · 异常 ${report.summary.anomalies}`}
+        {isQuarterly
+          ? `推全季 ${report.summary.rev} · vs 预测 ${report.summary.variance}`
+          : isWeekly
+            ? `周销售 ${report.summary.rev} · 周 TACoS ${report.summary.tacos}`
+            : `销售 ${report.summary.rev} · TACoS ${report.summary.tacos} · 异常 ${report.summary.anomalies}`}
       </div>
       {report.summary.note && (
         <div className="text-11 text-slate-500 mt-1 leading-relaxed">
@@ -10209,16 +10222,17 @@ function ReportCard({ report, selected, onClick }) {
 function ReportFeedExpanded({ thread, activeId, onSelect }) {
   const [historyOpen, setHistoryOpen] = useState(false);
   const current = thread.reports.current;
+  const latestQuarterly = current.find((r) => r.type === "quarterly");
   const latestWeekly = current.find((r) => r.type === "weekly");
   const todayCard = current.find((r) => r.isLatest);
   const olderCurrent = current.filter(
-    (r) => r.type !== "weekly" && !r.isLatest,
+    (r) => r.type !== "weekly" && r.type !== "quarterly" && !r.isLatest,
   );
   const olderTotal = thread.reports.historical.length + olderCurrent.length;
   return (
     <div className="px-3 py-3">
       <div className="text-11 text-slate-500 mb-3 leading-relaxed px-1">
-        每日 7:00 自动推送 · 不打扰
+        日报 / 周报 / 季报 自动推送 · 不打扰
       </div>
 
       {olderTotal > 0 && (
@@ -10258,6 +10272,13 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
       )}
 
       <div className="space-y-2">
+        {latestQuarterly && (
+          <ReportCard
+            report={latestQuarterly}
+            selected={activeId === latestQuarterly.canvasId}
+            onClick={() => onSelect(latestQuarterly.canvasId)}
+          />
+        )}
         {latestWeekly && (
           <ReportCard
             report={latestWeekly}
@@ -10283,7 +10304,8 @@ function ThreadCard({ thread, active, activeId, onSelect, tone, teamView }) {
   const isReportFeed = thread.threadType === "report-feed";
   const lastTurn = thread.turns ? thread.turns[thread.turns.length - 1] : null;
   const latestReport = isReportFeed
-    ? thread.reports.current[thread.reports.current.length - 1]
+    ? thread.reports.current.find((r) => r.isLatest) ||
+      thread.reports.current[thread.reports.current.length - 1]
     : null;
   const previewBody = isReportFeed
     ? `昨日销售 ${latestReport.summary.rev} · TACoS ${latestReport.summary.tacos} · 异常 ${latestReport.summary.anomalies}`
@@ -14317,6 +14339,158 @@ function buildWeeklyListingsWithHistory() {
 
 const WEEKLY_LISTINGS_WITH_HISTORY = buildWeeklyListingsWithHistory();
 
+// Q2 2026: 4/1 - 6/30 = 91 days. Today (5/18) = day 48. Pace = 48/91 ≈ 0.527.
+const Q2_DAYS_ELAPSED = 48;
+const Q2_DAYS_TOTAL = 91;
+const Q2_PACE = Q2_DAYS_ELAPSED / Q2_DAYS_TOTAL;
+
+// Per-listing variance vs forecast (projected_eoq / forecast - 1). Chosen for storytelling:
+// bed frame ahead (defense windfall), floor lamp behind (bedroom CTR), table runner ahead (new keyword).
+const Q2_LISTING_VARIANCE = {
+  B0CK7BFRM4: 0.157,   // 床架 — NightFox 攻击意外推高自然位
+  B0CHNYFLR2: -0.111,  // 落地灯 — 卧室词问题
+  B0CDM3KNV9: 0.018,
+  B0CHRPTBL5: 0.103,   // 餐布 — boho table runner 新词
+  B0CN4WLLH8: -0.024,
+  B0CM5LNGCH: 0.034,
+  B0CT3STRG2: -0.041,
+  B0CL7PNDLP: 0.012,
+  B0CT2HRWPL: 0.025,
+  B0CD5CRUET: -0.018,
+  B0CV2VASE4: 0.046,
+  B0CB7BTHMT: -0.029,
+};
+
+function deriveQ2Listing(base) {
+  // Forecast (Q2 total) = daily base × 91 days
+  const forecast = {
+    impressions: base.impressions * Q2_DAYS_TOTAL,
+    clicks: base.clicks * Q2_DAYS_TOTAL,
+    orders: base.orders * Q2_DAYS_TOTAL,
+    rev: base.rev * Q2_DAYS_TOTAL,
+    spend: base.spend * Q2_DAYS_TOTAL,
+  };
+  const adSalesF = forecast.rev * AD_SALES_RATIO;
+  const forecastDerived = {
+    ...forecast,
+    ctr: forecast.clicks / forecast.impressions,
+    cvr: forecast.orders / forecast.clicks,
+    acos: forecast.spend / adSalesF,
+    tacos: forecast.spend / forecast.rev,
+    roas: adSalesF / forecast.spend,
+    aov: forecast.rev / forecast.orders,
+  };
+  // Projected EOQ = forecast × (1 + variance) for rev. Other cumulative metrics roughly track.
+  // Variance applied to all cumulative metrics; rates derived.
+  const v = Q2_LISTING_VARIANCE[base.asin] || 0;
+  const projected = {
+    impressions: Math.round(forecast.impressions * (1 + v * 0.55)),  // impressions less elastic
+    clicks:      Math.round(forecast.clicks      * (1 + v * 0.8)),
+    orders:      Math.round(forecast.orders      * (1 + v)),
+    rev:         Math.round(forecast.rev         * (1 + v)),
+    spend:       Math.round(forecast.spend       * (1 + v * 0.6)),
+  };
+  const adSalesP = projected.rev * AD_SALES_RATIO;
+  const projectedDerived = {
+    ...projected,
+    ctr: projected.clicks / projected.impressions,
+    cvr: projected.orders / projected.clicks,
+    acos: projected.spend / adSalesP,
+    tacos: projected.spend / projected.rev,
+    roas: adSalesP / projected.spend,
+    aov: projected.rev / projected.orders,
+  };
+  // Actual to-date = projected × pace
+  const actual = {
+    impressions: Math.round(projected.impressions * Q2_PACE),
+    clicks:      Math.round(projected.clicks      * Q2_PACE),
+    orders:      Math.round(projected.orders      * Q2_PACE),
+    rev:         Math.round(projected.rev         * Q2_PACE),
+    spend:       Math.round(projected.spend       * Q2_PACE),
+  };
+  return {
+    asin: base.asin,
+    line: base.line,
+    forecast: forecastDerived,
+    projected: projectedDerived,
+    actual,
+    variancePct: v * 100,
+    history: WEEKLY_LISTINGS_WITH_HISTORY.find((l) => l.asin === base.asin)?.history || [],
+  };
+}
+
+const Q2_LISTINGS_WITH_PROJECTION = REPORT_LISTINGS_BASE.map(deriveQ2Listing);
+
+const Q2_TOPLINE = (() => {
+  const sum = (key, slot) =>
+    Q2_LISTINGS_WITH_PROJECTION.reduce((s, l) => s + l[slot][key], 0);
+  const forecastRev = sum("rev", "forecast");
+  const actualRev = sum("rev", "actual");
+  const projectedRev = sum("rev", "projected");
+  const forecastSpend = sum("spend", "forecast");
+  const projectedSpend = sum("spend", "projected");
+  return {
+    forecast: { rev: forecastRev, spend: forecastSpend, tacos: forecastSpend / forecastRev },
+    actual: { rev: actualRev },
+    projected: { rev: projectedRev, spend: projectedSpend, tacos: projectedSpend / projectedRev },
+    variancePct: ((projectedRev - forecastRev) / forecastRev) * 100,
+  };
+})();
+
+const Q2_FORECAST_DATA = {
+  quarter: "Q2 2026",
+  coverRange: "4/1 - 6/30",
+  daysElapsed: Q2_DAYS_ELAPSED,
+  daysTotal: Q2_DAYS_TOTAL,
+  baselineNote: "季初 Agent 起草 · 4/3 由 Maya + CMO 批准",
+  insights: [
+    {
+      tone: "emerald",
+      title: "床架产品线 · 推全季 $1.62M · 高于预测 +15.7%",
+      body:
+        "NightFox 攻击意外推高了我方核心词的曝光,自然位 BSR 也稳了。整个产品线的自然流量 + 广告归因都比预测高。如果攻击窗口 5/19 到期后仍维持当前 BSR 位置,这个 +15% 全季能保住;如果失守,回落到 +5% 左右。",
+      jump: { key: "defense", label: "跳到防御警报会话" },
+    },
+    {
+      tone: "amber",
+      title: "落地灯产品线 · 推全季 $640K · 低于预测 -11.1%",
+      body:
+        "卧室词 CTR 持续 7 天低于品类基准,影响 SKU-A 整个落地灯产品线。两轮 bid 没起作用 — 确认是 listing 内容问题。等品牌团队 5/22 拍卧室场景主图,加上线 2 周窗口,Q2 剩余时间能追回 1/3 左右。",
+      jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
+    },
+    {
+      tone: "emerald",
+      title: "餐布产品线 · 推全季 $640K · 高于预测 +10.3%",
+      body:
+        "\"boho table runner\" 类目搜索量 7 天 +180%,我们 5/16 上了新词,首日 $340 · ACoS 18%。如果窗口能持续 4 周,Q2 可能从 +10% 上调到 +13~15%。",
+      jump: null,
+    },
+    {
+      tone: "blue",
+      title: "整体 Q2 · 推全季 $5.35M · 高于预测 +2.9%",
+      body:
+        "12 个产品线里 5 个领先、3 个落后、4 个基本符合。整体在预算和 TACoS 目标内。建议剩余 6 周维持当前节奏,不主动加杠杆 — 床架的 +15% 含 NightFox 不确定性,先不据此修订 baseline。",
+      jump: null,
+    },
+  ],
+  nextStretch: [
+    "5/19 NightFox 折扣窗口预计到期 — 床架产品线 forecast 是否需要下调,等窗口结果",
+    "\"boho table runner\" 进入第 2 周观察 · 决定要不要扩品类预算 (5/23 决策点)",
+    "落地灯卧室词主图拍摄 5/22 (品牌团队) · 上线大约 2 周窗口,6 月初看效果",
+    "整体 TACoS 目标 17-19% · 当前 19.4% 在上限 · 剩余 6 周避免再加广告杠杆",
+  ],
+  needYou: [
+    {
+      kind: "approve",
+      sku: "床架产品线 Q2 预测",
+      title: "下调 NightFox 攻击结束后的预测?",
+      body:
+        "如果 NightFox 5/19 撤,床架自然位流量回落,Q2 全季预测会从 $1.62M 修正到 $1.49M (+7% 而非 +16%)。我先暂存修订草稿,等 5/19 窗口结果再正式提交 — 你点头我就把修订入 baseline。",
+      primary: "授权暂存修订",
+    },
+  ],
+};
+
 const LISTING_METRIC_COLUMNS = [
   { key: "impressions", label: "展示",     goodDirection: "up",   format: (v) => v.toLocaleString() },
   { key: "clicks",      label: "点击",     goodDirection: "up",   format: (v) => v.toLocaleString() },
@@ -15198,6 +15372,206 @@ function WeeklyReportCanvas({ onJumpTo }) {
       <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
         <div className="text-11 text-slate-500">
           周一 7:00 自动推送 · 待审
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 rounded-md bg-white"
+          >
+            对某项有问题
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-emerald-600 hover:bg-emerald-700 rounded-md"
+          >
+            <Check className="w-3.5 h-3.5" />
+            就这样 OK · 标记已审
+          </button>
+        </div>
+      </div>
+
+      <ListingMetricHistoryDrawer
+        cell={drawerCell}
+        onClose={() => setDrawerCell(null)}
+        periodKind="week"
+      />
+    </>
+  );
+}
+
+function Q2ForecastCanvas({ onJumpTo }) {
+  const data = Q2_FORECAST_DATA;
+  const t = Q2_TOPLINE;
+  const [drawerCell, setDrawerCell] = useState(null);
+  const listings = Q2_LISTINGS_WITH_PROJECTION;
+  const paceLabel = `Q2 已过 ${data.daysElapsed}/${data.daysTotal} 天 (${Math.round((data.daysElapsed / data.daysTotal) * 100)}%)`;
+
+  return (
+    <>
+      <CanvasHeader
+        kicker={`季度预测追踪 · ${data.quarter} · ${data.coverRange}`}
+        title={`${data.quarter} 预测 vs 实际`}
+        meta={
+          <>
+            <ReportExportPill />
+            <span
+              title="演示锁定 · CMO 上传修订未启用"
+              className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-500 border-slate-200 cursor-not-allowed"
+            >
+              <Lock className="w-3 h-3" />
+              CMO 上传修订 · 演示锁定
+            </span>
+          </>
+        }
+      />
+
+      <div className="px-6 pt-4">
+        <div className="text-11 text-slate-500 leading-relaxed">
+          {data.baselineNote} · {paceLabel} · 实际数据按日自动滚动 · 预测 baseline 锁定不变
+        </div>
+      </div>
+
+      {/* Section 1: 现状 */}
+      <div className="px-6 pt-6">
+        <SectionLabel kicker="对比季初预测">这一季 · 数据</SectionLabel>
+        <div className="grid grid-cols-4 gap-3">
+          <ReportToplineCard
+            label="Q2 计划"
+            value={`$${(t.forecast.rev / 1000000).toFixed(2)}M`}
+            deltaLabel={`${wrapMetric("TACoS")} 计划 ${(t.forecast.tacos * 100).toFixed(1)}%`}
+          />
+          <ReportToplineCard
+            label={`已实现 · ${Math.round(Q2_PACE * 100)}% 进度`}
+            value={`$${(t.actual.rev / 1000000).toFixed(2)}M`}
+            deltaLabel={`占计划 ${((t.actual.rev / t.forecast.rev) * 100).toFixed(1)}%`}
+          />
+          <ReportToplineCard
+            label="按节奏推全季"
+            value={`$${(t.projected.rev / 1000000).toFixed(2)}M`}
+            deltaLabel={`${wrapMetric("TACoS")} 预计 ${(t.projected.tacos * 100).toFixed(1)}%`}
+          />
+          <ReportToplineCard
+            label="偏差 vs 计划"
+            value={`${t.variancePct >= 0 ? "+" : ""}${t.variancePct.toFixed(1)}%`}
+            deltaLabel={`$${(((t.projected.rev - t.forecast.rev) / 1000) | 0).toLocaleString()}K`}
+            deltaTone={t.variancePct >= 0 ? "good" : "bad"}
+          />
+        </div>
+
+        <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
+            <div className="text-11 text-slate-600 font-medium">
+              12 个 delegated listing · 单元格 = 推全季值 · 颜色 = vs 季初预测
+            </div>
+            <div className="text-10 text-slate-500 font-mono">
+              合计推全季销售 ${t.projected.rev.toLocaleString()}
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="text-left font-medium px-4 py-2 sticky left-0 bg-slate-50/40">
+                    产品线 / Parent ASIN
+                  </th>
+                  {LISTING_METRIC_COLUMNS.map((m) => (
+                    <th
+                      key={m.key}
+                      className="text-right font-medium px-3 py-2 whitespace-nowrap"
+                    >
+                      {m.key === "tacos" || m.key === "acos"
+                        ? wrapMetric(m.label)
+                        : m.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {listings.map((row) => (
+                  <tr
+                    key={row.asin}
+                    className="border-t border-slate-100"
+                    style={{ height: "32px" }}
+                  >
+                    <td className="px-4 py-1.5 sticky left-0 bg-white">
+                      <div className="text-xs text-slate-900 whitespace-nowrap">
+                        {row.line}{" "}
+                        <span className="font-mono text-10 text-slate-500">
+                          · {row.asin}
+                        </span>
+                      </div>
+                    </td>
+                    {LISTING_METRIC_COLUMNS.map((m) => (
+                      <td
+                        key={m.key}
+                        className="text-right px-3 py-1.5 whitespace-nowrap align-middle"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setDrawerCell({ listing: row, metric: m })}
+                          className="w-full flex flex-col items-end leading-tight hover:text-emerald-700 group"
+                        >
+                          <span className="font-mono tabular-nums text-slate-900 group-hover:underline decoration-dotted underline-offset-2">
+                            {m.format(row.projected[m.key])}
+                          </span>
+                          <MetricDelta
+                            current={row.projected[m.key]}
+                            prior={row.forecast[m.key]}
+                            goodDirection={m.goodDirection}
+                          />
+                        </button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 2: 偏离驱动 */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.insights.length} 条`}>
+          这一季 · 偏离驱动
+        </SectionLabel>
+        <div className="space-y-2.5">
+          {data.insights.map((ins, i) => (
+            <ReportInsightCard key={i} insight={ins} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      {/* Section 3: 剩余 Q2 怎么走 */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="剩余 6 周">这一季 · 接下来怎么走</SectionLabel>
+        <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
+          <ul className="space-y-1.5">
+            {data.nextStretch.map((line, i) => (
+              <li key={i} className="text-xs text-slate-700 leading-relaxed flex gap-2">
+                <span className="text-slate-400 flex-shrink-0">·</span>
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Section 4: 需要你 */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker={`${data.needYou.length} 件`}>
+          需要你决策的
+        </SectionLabel>
+        <div className="space-y-3">
+          {data.needYou.map((item, i) => (
+            <NeedYouCard key={i} item={item} onJumpTo={onJumpTo} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 border-t border-slate-200 bg-slate-50/50 px-6 py-4 flex items-center justify-between">
+        <div className="text-11 text-slate-500">
+          实际数据每晚 02:00 自动滚动 · 下次更新 5/19 02:00
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -16976,6 +17350,8 @@ export default function App({
         return <DailyReportCanvas onJumpTo={handleJump} />;
       case "weekly-report":
         return <WeeklyReportCanvas onJumpTo={handleJump} />;
+      case "q2-forecast":
+        return <Q2ForecastCanvas onJumpTo={handleJump} />;
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
