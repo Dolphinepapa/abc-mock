@@ -14346,7 +14346,6 @@ const DAILY_REPORTS_DATA = {
       ordersPct: -5.8,
       aovPct: 1.6,
     },
-    listings: buildListingTable(58420),
     insights: [
       {
         tone: "amber",
