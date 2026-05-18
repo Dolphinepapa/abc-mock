@@ -63,7 +63,14 @@ import {
 } from "recharts";
 import MetricTerm from "./MetricTerm.jsx";
 import InspectionDrawer from "./InspectionDrawer.jsx";
-import { ROLES, ROLE_IDS, ROLE_LABELS } from "./roles.js";
+import {
+  ROLES,
+  ROLE_IDS,
+  ROLE_LABELS,
+  THREAD_OWNERS,
+  STRATEGIC_THREAD_IDS,
+  MAYA_REPORT_ROLES,
+} from "./roles.js";
 
 /* ────────────────────────────────────────────────────────────────────────── */
 /*  Mock data                                                                 */
@@ -9637,16 +9644,31 @@ function TopBar({
   );
 }
 
-function ChatPanel({ activeId, onSelect }) {
-  const agentFlagged = THREADS.filter((t) => t.initiator === "agent");
-  const userThreads = THREADS.filter(
-    (t) => t.initiator === "user" && t.category !== "brain-ops",
+function SidebarGroupHeader({ label, badge, badgeTone = "slate" }) {
+  const toneClass =
+    badgeTone === "emerald"
+      ? "text-emerald-700 bg-emerald-50 border-emerald-200"
+      : badgeTone === "rose"
+        ? "text-rose-700 bg-rose-50 border-rose-200"
+        : "text-slate-600 bg-slate-50 border-slate-200";
+  return (
+    <div className="px-1 mb-2 flex items-center gap-2">
+      <ChevronDown className="w-3 h-3 text-slate-500" />
+      <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+        {label}
+      </span>
+      {badge && (
+        <span
+          className={`text-10 border rounded-full px-1.5 font-medium ${toneClass}`}
+        >
+          {badge}
+        </span>
+      )}
+    </div>
   );
-  const brainOpsThreads = THREADS.filter(
-    (t) => t.initiator === "user" && t.category === "brain-ops",
-  );
-  const newCount = agentFlagged.filter((t) => t.unread).length;
+}
 
+function ChatPanel({ activeId, onSelect, currentRole }) {
   const isThreadActive = (thread) => {
     if (thread.threadType === "report-feed") {
       const allIds = [
@@ -9657,32 +9679,62 @@ function ChatPanel({ activeId, onSelect }) {
     }
     return activeId === thread.id;
   };
+  const threadById = (id) => THREADS.find((t) => t.id === id);
 
-  return (
-    <aside className="w-80 flex-shrink-0 border-r border-slate-200 bg-white flex flex-col">
-      <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
-        <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-          Conversations
-        </div>
-        <div className="text-11 text-slate-400 font-mono">
-          {THREADS.length} threads
+  let groups;
+  let count;
+  if (currentRole === "cmo") {
+    groups = renderCmoGroups();
+    count = "Supervision";
+  } else if (currentRole === "devon") {
+    const own = THREADS.filter((t) => THREAD_OWNERS[t.id] === "devon");
+    groups = (
+      <div>
+        <SidebarGroupHeader label="Your conversations" />
+        <div className="space-y-2">
+          {own.map((thread) => (
+            <ThreadCard
+              key={thread.id}
+              thread={thread}
+              active={isThreadActive(thread)}
+              activeId={activeId}
+              onSelect={onSelect}
+            />
+          ))}
         </div>
       </div>
-
-      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5">
+    );
+    count = `${own.length} thread${own.length === 1 ? "" : "s"}`;
+  } else {
+    const agentFlagged = THREADS.filter(
+      (t) => t.initiator === "agent" && THREAD_OWNERS[t.id] === "maya",
+    );
+    const ownThreads = THREADS.filter(
+      (t) =>
+        t.initiator !== "agent" &&
+        THREAD_OWNERS[t.id] === "maya" &&
+        t.category !== "brain-ops",
+    );
+    const teamThreads = THREADS.filter(
+      (t) =>
+        t.initiator !== "agent" &&
+        MAYA_REPORT_ROLES.includes(THREAD_OWNERS[t.id]) &&
+        t.category !== "brain-ops",
+    );
+    const brainOpsThreads = THREADS.filter(
+      (t) =>
+        THREAD_OWNERS[t.id] === "maya" && t.category === "brain-ops",
+    );
+    const newCount = agentFlagged.filter((t) => t.unread).length;
+    groups = (
+      <>
         {agentFlagged.length > 0 && (
           <div>
-            <div className="px-1 mb-2 flex items-center gap-2">
-              <ChevronDown className="w-3 h-3 text-slate-500" />
-              <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Agent-flagged
-              </span>
-              {newCount > 0 && (
-                <span className="text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-full px-1.5 font-medium">
-                  {newCount} new
-                </span>
-              )}
-            </div>
+            <SidebarGroupHeader
+              label="Agent-flagged"
+              badge={newCount > 0 ? `${newCount} new` : null}
+              badgeTone="emerald"
+            />
             <div className="space-y-2">
               {agentFlagged.map((thread) => (
                 <ThreadCard
@@ -9696,16 +9748,10 @@ function ChatPanel({ activeId, onSelect }) {
             </div>
           </div>
         )}
-
         <div>
-          <div className="px-1 mb-2 flex items-center gap-2">
-            <ChevronDown className="w-3 h-3 text-slate-500" />
-            <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-              Your conversations
-            </span>
-          </div>
+          <SidebarGroupHeader label="Your conversations" />
           <div className="space-y-2">
-            {userThreads.map((thread) => (
+            {ownThreads.map((thread) => (
               <ThreadCard
                 key={thread.id}
                 thread={thread}
@@ -9716,15 +9762,26 @@ function ChatPanel({ activeId, onSelect }) {
             ))}
           </div>
         </div>
-
+        {teamThreads.length > 0 && (
+          <div>
+            <SidebarGroupHeader label="Your team" />
+            <div className="space-y-2">
+              {teamThreads.map((thread) => (
+                <ThreadCard
+                  key={thread.id}
+                  thread={thread}
+                  active={isThreadActive(thread)}
+                  activeId={activeId}
+                  onSelect={onSelect}
+                  teamView
+                />
+              ))}
+            </div>
+          </div>
+        )}
         {brainOpsThreads.length > 0 && (
           <div>
-            <div className="px-1 mb-2 flex items-center gap-2">
-              <ChevronDown className="w-3 h-3 text-slate-500" />
-              <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-                Brain operations
-              </span>
-            </div>
+            <SidebarGroupHeader label="Brain operations" />
             <div className="space-y-2">
               {brainOpsThreads.map((thread) => (
                 <ThreadCard
@@ -9739,24 +9796,189 @@ function ChatPanel({ activeId, onSelect }) {
             </div>
           </div>
         )}
-      </div>
+      </>
+    );
+    const visible =
+      agentFlagged.length +
+      ownThreads.length +
+      teamThreads.length +
+      brainOpsThreads.length;
+    count = `${visible} thread${visible === 1 ? "" : "s"}`;
+  }
 
-      <div className="border-t border-slate-200 p-3 bg-slate-50/50 flex-shrink-0">
-        <div className="relative">
-          <input
-            type="text"
-            disabled
-            placeholder="Start new conversation…"
-            className="w-full pl-3 pr-20 py-2.5 text-xs bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
+  function renderCmoGroups() {
+    const pending = STRATEGIC_THREAD_IDS.map(threadById).filter(Boolean);
+    const teamRecent = [
+      { id: "defense", subtitle: "Maya · 5/15" },
+      { id: "omnichannel", subtitle: "Devon · 5/11" },
+      { id: "launch-cr", subtitle: "Jamal · 5/14" },
+    ];
+    const brainPatterns = [
+      {
+        id: "pattern-brand-cpc",
+        title: "Pattern · Brand ads → CPC declines",
+        meta: "12 cases · confidence 76% · Internal",
+      },
+      {
+        id: "playbook-peak-defense",
+        title: "Playbook · Pre-peak organic-rank defense",
+        meta: "Bed frame category · confidence 78% · Sensitive",
+      },
+      {
+        id: "pattern-razor-pricing",
+        title: "Pattern · Razor-blade pricing test method",
+        meta: "1 case · confidence 65% · Sensitive",
+      },
+    ];
+    const cmoHistory = [
+      {
+        id: "hist-q4-pricing",
+        title: 'Challenged "Q4 holiday pricing playbook" (Apr)',
+      },
+      {
+        id: "hist-bedframe-expansion",
+        title: 'Approved "Bed frame category expansion" (Mar)',
+      },
+    ];
+    return (
+      <>
+        <div>
+          <SidebarGroupHeader
+            label={`Needs your approval · ${pending.length}`}
+            badge="Decision needed"
+            badgeTone="rose"
           />
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
-            <Lock className="w-3 h-3 text-slate-400" />
-            <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
-              Demo locked
-            </span>
+          <div className="space-y-2">
+            {pending.map((thread, i) => (
+              <button
+                key={thread.id}
+                type="button"
+                onClick={() => onSelect(thread.id)}
+                className={`w-full text-left rounded-lg border p-3 transition-colors ${
+                  activeId === thread.id
+                    ? "bg-slate-50 border-slate-300"
+                    : "bg-white border-slate-200 hover:border-slate-300"
+                } border-l-2 border-l-rose-500`}
+              >
+                <div className="flex items-baseline gap-2">
+                  <span className="text-11 font-mono text-slate-400">
+                    {i === 0 ? "①" : "②"}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-slate-900 truncate">
+                      {thread.title}
+                    </div>
+                    <div className="text-10 text-slate-500 mt-0.5">
+                      {thread.initiatorName} ·{" "}
+                      {thread.lastActivityTimestamp}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
+
+        <div>
+          <SidebarGroupHeader label="Team decisions · auto-approved" />
+          <div className="space-y-2">
+            {teamRecent.map((row) => {
+              const t = threadById(row.id);
+              if (!t) return null;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => onSelect(t.id)}
+                  className={`w-full text-left rounded-lg border p-3 transition-colors ${
+                    activeId === t.id
+                      ? "bg-slate-50 border-slate-300"
+                      : "bg-white border-slate-200 hover:border-slate-300"
+                  }`}
+                >
+                  <div className="text-xs font-semibold text-slate-900 truncate">
+                    {t.title}
+                  </div>
+                  <div className="text-10 text-slate-500 mt-0.5">
+                    {row.subtitle}
+                  </div>
+                </button>
+              );
+            })}
+            <div className="text-10 text-slate-400 px-1 pt-1">
+              + 2 earlier decisions (collapsed)
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <SidebarGroupHeader label="Company Brain · open to challenge" />
+          <div className="space-y-2">
+            {brainPatterns.map((p) => (
+              <div
+                key={p.id}
+                className="rounded-lg border border-slate-200 bg-white p-3"
+              >
+                <div className="text-xs font-semibold text-slate-900 leading-snug">
+                  {p.title}
+                </div>
+                <div className="text-10 text-slate-500 mt-0.5">{p.meta}</div>
+                <div className="text-10 text-slate-400 mt-1.5">
+                  [View STAR] · [Challenge] · Phase E
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <SidebarGroupHeader label="CMO action history" />
+          <div className="space-y-2">
+            {cmoHistory.map((h) => (
+              <div
+                key={h.id}
+                className="rounded-lg border border-slate-200 bg-slate-50/40 p-3"
+              >
+                <div className="text-11 text-slate-700 leading-snug">
+                  ◇ {h.title}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <aside className="w-80 flex-shrink-0 border-r border-slate-200 bg-white flex flex-col">
+      <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between flex-shrink-0">
+        <div className="text-xs uppercase tracking-wider text-slate-500 font-medium">
+          Conversations
+        </div>
+        <div className="text-11 text-slate-400 font-mono">{count}</div>
       </div>
+
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-5">{groups}</div>
+
+      {currentRole !== "cmo" && (
+        <div className="border-t border-slate-200 p-3 bg-slate-50/50 flex-shrink-0">
+          <div className="relative">
+            <input
+              type="text"
+              disabled
+              placeholder="Start new conversation…"
+              className="w-full pl-3 pr-20 py-2.5 text-xs bg-white border border-slate-200 rounded-md text-slate-400 placeholder-slate-400 cursor-not-allowed"
+            />
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+              <Lock className="w-3 h-3 text-slate-400" />
+              <span className="text-10 uppercase tracking-wider text-slate-400 font-medium">
+                Demo locked
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </aside>
   );
 }
@@ -9885,7 +10107,7 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
   );
 }
 
-function ThreadCard({ thread, active, activeId, onSelect, tone }) {
+function ThreadCard({ thread, active, activeId, onSelect, tone, teamView }) {
   const isAgent = thread.initiator === "agent";
   const isBrainOps = tone === "brain-ops";
   const isReportFeed = thread.threadType === "report-feed";
@@ -9939,8 +10161,13 @@ function ThreadCard({ thread, active, activeId, onSelect, tone }) {
           )}
           <div className="flex-1 min-w-0">
             <div className="flex items-baseline justify-between gap-2">
-              <div className="text-xs font-semibold text-slate-900 truncate">
-                {thread.title}
+              <div className="flex items-center gap-1.5 min-w-0">
+                {teamView && (
+                  <Users className="w-3 h-3 text-slate-400 flex-shrink-0" />
+                )}
+                <div className="text-xs font-semibold text-slate-900 truncate">
+                  {thread.title}
+                </div>
               </div>
               <div className="text-10 text-slate-400 font-mono flex-shrink-0">
                 {thread.lastActivityTimestamp}
@@ -9948,6 +10175,9 @@ function ThreadCard({ thread, active, activeId, onSelect, tone }) {
             </div>
             <div className="text-11 text-slate-500 truncate mt-0.5">
               {thread.initiatorName} · {thread.initiatorRole}
+              {teamView && (
+                <span className="text-slate-400"> · read-only</span>
+              )}
             </div>
             {isAgent && (
               <div className="mt-1.5 flex flex-wrap items-center gap-1">
@@ -14843,6 +15073,81 @@ function EmptyCanvas() {
   );
 }
 
+function DevonEmptyCanvas() {
+  return (
+    <div className="px-6 py-24 flex items-start justify-center">
+      <div className="max-w-md text-center">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-slate-900 mb-5">
+          <Sparkles className="w-5 h-5 text-emerald-400" />
+        </div>
+        <div className="text-base font-semibold text-slate-900 mb-3 leading-snug">
+          Open the conversation on the left
+        </div>
+        <div className="text-sm text-slate-600 leading-relaxed">
+          Portable charger · $100K incremental budget allocation — last
+          touched the Walmart incrementality test with the agent.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CmoSupervisionStub() {
+  return (
+    <div className="px-6 py-12">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-xs uppercase tracking-wider text-slate-500 font-medium mb-2">
+          CMO supervision panel
+        </div>
+        <div className="text-lg font-semibold text-slate-900 mb-1">
+          This week · 5/12 – 5/18
+        </div>
+        <div className="text-sm text-slate-600 mb-6">
+          The sidebar groups what needs your attention this week. Phase B
+          ships the sidebar; the 4-section supervision canvas (approvals
+          · team decisions · brain patterns · portfolio) lands in Phase C.
+        </div>
+        <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50/60 p-5">
+          <div className="text-11 uppercase tracking-wider text-slate-500 mb-2">
+            Pending preview
+          </div>
+          <ul className="space-y-1.5 text-sm text-slate-700">
+            <li>
+              <span className="font-mono text-slate-500">①</span> SKU-A ·
+              #2 → #1 proposal (submitted by Maya, CMO decision needed)
+            </li>
+            <li>
+              <span className="font-mono text-slate-500">②</span> Henry's
+              razor · price-cut test (submitted by Sara, CMO decision
+              needed)
+            </li>
+          </ul>
+          <div className="text-10 text-slate-400 mt-4">
+            Click ①/② on the left to open the proposal canvas (Phase D
+            wires the approval banner and challenge flow).
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TeamReadOnlyBanner({ thread }) {
+  return (
+    <div className="border-b border-amber-200 bg-amber-50 px-6 py-2.5 flex items-center gap-2.5">
+      <Eye className="w-3.5 h-3.5 text-amber-700 flex-shrink-0" />
+      <div className="text-11 text-amber-900">
+        <span className="font-medium">View mode</span>
+        <span className="text-amber-700"> · </span>
+        decided by {thread.initiatorName} (you're read-only)
+      </div>
+      <span className="text-10 text-amber-600 ml-auto font-mono">
+        Phase D · [Challenge]
+      </span>
+    </div>
+  );
+}
+
 export default function App({ locale, setLocale, currentRole, setCurrentRole }) {
   const [activeId, setActiveId] = useState(null);
   const [inspectorOpen, setInspectorOpen] = useState(false);
@@ -14946,9 +15251,18 @@ export default function App({ locale, setLocale, currentRole, setCurrentRole }) 
       case "qa-margins":
         return <QACanvas activeClearance={activeUser.clearance} />;
       default:
+        if (currentRole === "cmo") return <CmoSupervisionStub />;
+        if (currentRole === "devon") return <DevonEmptyCanvas />;
         return <EmptyCanvas />;
     }
   })();
+
+  const teamBanner =
+    currentRole === "maya" &&
+    activeId &&
+    MAYA_REPORT_ROLES.includes(THREAD_OWNERS[activeId])
+      ? THREADS.find((t) => t.id === activeId)
+      : null;
 
   return (
     <div
@@ -14980,12 +15294,17 @@ export default function App({ locale, setLocale, currentRole, setCurrentRole }) 
       />
 
       <div className="flex-1 flex min-h-0">
-        <ChatPanel activeId={activeId} onSelect={setActiveId} />
+        <ChatPanel
+          activeId={activeId}
+          onSelect={setActiveId}
+          currentRole={currentRole}
+        />
         <main className="flex-1 overflow-y-auto">
           <div
             className="mx-auto bg-white border-x border-slate-200 min-h-full"
             style={{ maxWidth: "1200px" }}
           >
+            {teamBanner && <TeamReadOnlyBanner thread={teamBanner} />}
             {canvas}
           </div>
         </main>

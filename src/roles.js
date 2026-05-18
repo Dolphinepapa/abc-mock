@@ -33,6 +33,28 @@ export const ROLES = {
   },
 };
 
+// Thread ownership — maps thread.id → role.id of the human who owns it.
+// Drives sidebar filtering: Maya sees own + team, Devon sees own only,
+// CMO sees a bespoke supervision sidebar (not derived from this map).
+export const THREAD_OWNERS = {
+  defense: "maya",
+  "daily-report": "maya",
+  strategy: "maya",
+  omnichannel: "devon",
+  "razor-blade": "sara",
+  "launch-cr": "jamal",
+  "upload-q4": "maya",
+  "connect-walmart": "maya",
+  "qa-margins": "sara",
+};
+
+// Items that exceed VP autonomous authority and need CMO approval.
+// Drives the "待审批 · 2 件" group at the top of the CMO sidebar.
+export const STRATEGIC_THREAD_IDS = ["strategy", "razor-blade"];
+
+// Maya's direct reports — used to compute "你的团队" group.
+export const MAYA_REPORT_ROLES = ["devon", "sara", "jamal"];
+
 export const ROLE_LABELS = {
   zh: {
     cmo: {
