@@ -147,7 +147,7 @@ const THREADS = [
         speaker: "user",
         name: "Devon Park",
         initials: "DP",
-        role: "高级增长经理",
+        role: "运营",
         timestamp: "刚刚",
         body: "给我看下方案。",
         canvasLink: false,
@@ -220,7 +220,7 @@ const THREADS = [
     canvasId: "omnichannel",
     initiator: "user",
     initiatorName: "Devon Park",
-    initiatorRole: "高级增长经理",
+    initiatorRole: "运营",
     initials: "DP",
     initialTimestamp: "May 11, 16:42",
     lastActivityTimestamp: "May 11, 16:48",
@@ -247,7 +247,7 @@ const THREADS = [
     id: "razor-blade",
     canvasId: "razor-blade",
     initiator: "user",
-    initiatorName: "Sara Lin",
+    initiatorName: "Maya Chen",
     initiatorRole: "投资组合负责人",
     initials: "SL",
     initialTimestamp: "May 13, 10:08",
@@ -275,7 +275,7 @@ const THREADS = [
     id: "launch-cr",
     canvasId: "launch-cr",
     initiator: "user",
-    initiatorName: "Jamal Hassan",
+    initiatorName: "Devon Park",
     initiatorRole: "运营经理",
     initials: "JH",
     initialTimestamp: "May 15, 08:31",
@@ -336,7 +336,7 @@ const THREADS = [
     id: "qa-margins",
     canvasId: "qa-margins",
     initiator: "user",
-    initiatorName: "Sara Lin",
+    initiatorName: "Maya Chen",
     initiatorRole: "投资组合负责人",
     initials: "SL",
     initialTimestamp: "May 13, 10:14",
@@ -1149,7 +1149,7 @@ const OMNICHANNEL = {
 /* Razor-and-blade pricing canvas — 刮胡刀产品线 */
 const RAZOR_BLADE = {
   sku: "刮胡刀产品线",
-  initiator: "Sara Lin",
+  initiator: "Maya Chen",
   confirmedOn: "May 13",
   economics: {
     razor: {
@@ -1455,7 +1455,7 @@ const RAZOR_BLADE = {
 /* Launch CR 缺口画布 — 轮胎充气泵(皮卡市场) */
 const LAUNCH_CR = {
   sku: "SKU-TI-A · 轮胎充气泵(皮卡)",
-  initiator: "Jamal Hassan",
+  initiator: "Devon Park",
   confirmedOn: "May 15",
   constraint:
     "注意和产品团队确认产品的真实能力,夸大销售会导致差评和退货。",
@@ -1597,19 +1597,23 @@ const LAUNCH_CR = {
   ],
   agentDiagnosis: {
     summary:
-      "我们 listing 没有给皮卡买家他们要看的三个信号。主图里没有卡车。标题没说「为皮卡设计」。A+ 没放在皮卡胎上的性能数据。三个加在一起,皮卡买家扫一眼就知道这不是给他们的 — 即便产品其实完全能用。",
+      "OlarHike 在三层都比我们做得密。橱窗图: 越野胎背景 + 大字 spec(2X faster, 6000mAh, 105 inflations, US Patent), 一图能读完性能。标题: 塞了 5 个 feature claim(Dual Power, 6000mAh & 12V DC, Cordless, LED & Digital Pressure Gauge, Auto Shut-off)。Bullets: 全是测量数字(55 sec, 18 条胎, 11 条 SUV 胎, 4 种预设模式)。我们三层都偏稀: 主图多场景但没有皮卡专属画面、也没有 spec 大字; 标题只有 Portable / Cordless / Digital Display / 150 PSI 几个泛词; bullets 是「4 inflations / compact」这种宽泛 statement。皮卡集群 CR 上不去, 是这三层一起欠的, 不是单一原因 — 这就意味着我们能动的入口至少 4 个。",
     signals: [
       {
-        label: "视觉场景",
-        gap: "主图没有皮卡 · 白底纯产品图",
+        label: "视觉信号",
+        gap: "OlarHike 围图打满 spec 大字 + 越野胎; 我方多场景但缺皮卡画面 + 缺 spec 大字",
       },
       {
-        label: "标题信号",
-        gap: "标题前 30 字没出现 truck / pickup / heavy duty",
+        label: "标题密度",
+        gap: "OlarHike 标题塞 5 个 feature claim; 我方只有 4 个泛词, 缺 Dual Power / 电池容量 / Auto Shut-off 这种可量化的卖点",
       },
       {
-        label: "A+ 证据",
-        gap: "A+ 没有皮卡胎性能数据 · 没出现 F-150 / Silverado / Ram",
+        label: "Bullet 具体性",
+        gap: "OlarHike bullets 全是测量数字(55 sec / 18 条胎 / 11 条 SUV); 我方 bullets 没说时间也没说容量上限",
+      },
+      {
+        label: "A+ 内容",
+        gap: "OlarHike A+ 首屏是配件 + 场景全列; 我方 A+ 是泛 feature carousel, 一条没提皮卡",
       },
     ],
   },
@@ -1618,9 +1622,9 @@ const LAUNCH_CR = {
       id: "h1",
       label: "H1",
       priority: "P0",
-      title: "主图重做 · 加入皮卡场景",
+      title: "主图重做 · 加皮卡场景 + spec 大字",
       treatment:
-        "拍一张新主图:黑色 F-150,充气泵接在前驾驶位胎上。标题和 A+ 保持现状。",
+        "拍一张新主图:黑色 F-150 在使用充气泵 + 屏幕大字 PSI 读数 + 角标 \"55 sec\" 充气时间标注 + 小图标 SUV/摩托/球类。一图同时给 \"皮卡能用\" 和 \"性能可量化\" 两个信号 — 当前缺这两点。",
       variableControl:
         "只换主图。标题、bullets、A+ 全部保持当前状态 — 这样信号读起来干净。",
       sampleSize: "皮卡集群每组 8,400 曝光 · 按检测 5pp 提升量定的",
@@ -1632,15 +1636,15 @@ const LAUNCH_CR = {
       typeLabel: "主图",
       confidence: 78,
       confidenceLabel:
-        "9 次同品类(车配)主图更换历史 · 场景化主图能稳定带来 3-7pp CR 提升",
+        "9 次同品类(车配)主图更换历史 · 加场景 + spec 大字能稳定带来 3-7pp CR 提升",
     },
     {
       id: "h2",
       label: "H2",
       priority: "P0",
-      title: "标题改写 · 前 30 字插入「Heavy Duty for Truck/SUV」",
+      title: "标题改写 · 前 30 字塞 feature claim",
       treatment:
-        "把「Heavy Duty for Truck/SUV」挪到标题最前。标题其余部分不动。",
+        "标题改成 \"Dual Power Tire Inflator · 6000mAh Cordless + 12V DC · Auto Shut-off · 18 Inflations per Charge · for Cars / SUV / Pickup\"。把可量化 spec(电池容量、充气次数、自动停止)挪到前 30 字, 学 OlarHike 的密度。",
       variableControl:
         "只改标题。主图、A+、bullets 在测试期内一律不动。",
       sampleSize: "Listing 级 · 皮卡集群的自然 + 付费流量",
@@ -1652,35 +1656,35 @@ const LAUNCH_CR = {
       typeLabel: "标题",
       confidence: 74,
       confidenceLabel:
-        "12 次历史标题改写测试 · 前 30 字带核心词能可靠地拉高品类匹配相关性",
+        "12 次历史标题改写测试 · 前 30 字带可量化卖点能可靠地拉高 CTR 和品类相关性",
     },
     {
       id: "h3",
       label: "H3",
       priority: "P1",
-      title: "A+ 模块 · F-150 充气性能数据",
+      title: "A+ 模块 · what-you-get + 皮卡场景充气表",
       treatment:
-        "新增 A+ 第一模块:「Inflates an F-150 stock tire from 20 to 35 PSI in 4 min 30 sec」 — 大字号数字 + 配产品图。",
+        "A+ 首屏换成 OlarHike 那种风格:配件全列(气管 / 喷嘴 / 球针 / 收纳袋)+ 充气时间表(195/65 R15 → 55 sec, 235/65 R17 → 2.2 min, F-150 stock tire → 实测时间)。",
       variableControl:
         "只动 A+。前两项测试的主图和标题在本测试期间保持冻结。",
       sampleSize: "皮卡集群的详情页流量 · Listing 级读数",
       duration: "21 天",
       successMetric: "皮卡集群 CR 提升 + 详情页跳出率下降",
       expectedImpact:
-        "解决「这玩意儿在我皮卡上到底行不行」的疑问 — 在皮卡买家点进详情页后补上证据。",
+        "解决「这玩意儿在我皮卡上到底行不行」的疑问 — 在皮卡买家点进详情页后补上证据 + 把 OlarHike 的 spec 优势抵掉。",
       type: "aplus",
       typeLabel: "A+",
       confidence: 68,
       confidenceLabel:
-        "7 次历史 A+ 首模块改写 · 对 CR 的拉动比图/标题小,但方向稳定",
+        "7 次历史 A+ 首模块改写 · 对 CR 的拉动比图/标题小, 但方向稳定",
     },
     {
       id: "h4",
       label: "H4",
       priority: "P1",
-      title: "Bullets 重排 · 皮卡证据提到第 1 条",
+      title: "Bullets 重写 · 把宽泛 statement 换成测量数据",
       treatment:
-        "把「inflates a 33\" pickup tire in under 5 min」挪到第 1 条 bullet。无线电池那条往下挤到第 4。",
+        "5 条 bullets 全部改成可量化版本: \"55 sec 充满 195/65 R15 / 2.2 min 充 235/65 R17\" / \"6000mAh 单充 18 条胎\" / \"Dual Power · 电池或 12V 双供电\" / \"自动停止 + 双 LED 屏\" / \"4 种预设模式 + 单位一键切换\"。每条带数字, 跟 OlarHike 对齐 + 多说一条皮卡相关。",
       variableControl:
         "只动 bullets。上面几项的状态保持当前。",
       sampleSize: "皮卡集群的详情页流量",
@@ -2109,9 +2113,9 @@ const EXECUTION = {
     { ts: "May 14 · 22:11", type: "预算",         kind: "approved",   delta: "SP-Category-Exact 日预算上调 $480 → $640",        reason: "最近 9 天有 7 天触顶;曝光份额被压制约 6pp。",        approver: "由 Maya Chen 批准",                       status: "线上" },
     { ts: "May 14 · 14:08", type: "关键词",        kind: "approved",   delta: "从搜索词报告中新增 6 个长尾关键词", reason: "过去 14 天 CR > 9%;此前仅靠自动定位覆盖。",                  approver: "由 Devon Park 批准",                      status: "线上" },
     { ts: "May 13 · 16:42", type: "出价调整",       kind: "autonomous", delta: '"tripod floor lamp" 出价下调 $1.95 → $1.70',           reason: "ACoS 连续 72 小时超目标 12pp;在授权类别内。",           approver: "自主执行 · 类别:bid_lower_under_15pct",   status: "线上" },
-    { ts: "May 13 · 09:22", type: "重构",    kind: "approved",   delta: "将 SP-Category-Broad 拆分为广泛 + 词组两层",          reason: "仅词组的子集在中部漏斗词上预计 +14% 效率。",        approver: "由 Sara Lin 批准",                        status: "线上" },
+    { ts: "May 13 · 09:22", type: "重构",    kind: "approved",   delta: "将 SP-Category-Broad 拆分为广泛 + 词组两层",          reason: "仅词组的子集在中部漏斗词上预计 +14% 效率。",        approver: "由 Maya Chen 批准",                        status: "线上" },
     { ts: "May 12 · 18:34", type: "预算",         kind: "approved",   delta: "将 $320/天 从 SP-Branded 重分配至 SP-Category-Exact",   reason: "品牌词曝光份额已饱和至 98%;边际预算用在他处更有效。",   approver: "由 Maya Chen 批准",                       status: "线上" },
-    { ts: "May 11 · 11:15", type: "关键词",        kind: "approved",   delta: '新增否定词:"lava lamp"、"salt lamp"、"lamp shade"',    reason: "搜索词报告中识别出高曝光零转化词。", approver: "由 Jamal Hassan 批准",                    status: "线上" },
+    { ts: "May 11 · 11:15", type: "关键词",        kind: "approved",   delta: '新增否定词:"lava lamp"、"salt lamp"、"lamp shade"',    reason: "搜索词报告中识别出高曝光零转化词。", approver: "由 Devon Park 批准",                    status: "线上" },
     { ts: "May 10 · 14:52", type: "出价调整",       kind: "autonomous", delta: '"reading floor lamp modern" 出价上调 $1.40 → $1.62',   reason: "CR 连续 48 小时高于目标;出价上调在授权类别内。",                  approver: "自主执行 · 类别:bid_raise_under_15pct",   status: "线上" },
     { ts: "May 09 · 10:08", type: "出价调整",       kind: "autonomous", delta: '"corner floor lamp" 出价下调 $1.25 → $1.10',          reason: "ACoS 飙升 +14pp 持续 72 小时;自动节流已启动。",               approver: "自主执行 · 类别:bid_lower_under_15pct",   status: "线上" },
   ],
@@ -2210,7 +2214,7 @@ const COMPANY_BRAIN = {
         id: "devon",
         name: "Devon Park",
         initials: "DP",
-        role: "高级增长经理",
+        role: "运营",
         level: "L6",
         clearance: "Internal",
         clearanceLabel: "内部",
@@ -2273,7 +2277,7 @@ const COMPANY_BRAIN = {
       },
       story: {
         context:
-          "2026 Q1,团队对 razor-blade 定价机制(怎么定刀头复购价、能撑多大降价区间)的判断主要靠 Sara 个人经验,品牌大脑里没有系统化的 pattern。Maya 把 Q4 2025 的内部复盘 PDF 上传过来,要求 agent 提炼方法学,而不是让人一页页看。",
+          "2026 Q1,团队对 razor-blade 定价机制(怎么定刀头复购价、能撑多大降价区间)的判断主要靠 Maya 个人经验,品牌大脑里没有系统化的 pattern。Maya 把 Q4 2025 的内部复盘 PDF 上传过来,要求 agent 提炼方法学,而不是让人一页页看。",
         problem:
           "47 页的复盘文档,人读 3-4 小时,中间有大量项目背景和 SKU 名单。需要从里面把「可复用的操作决策」挑出来,剩下的背景 / 现状描述忽略掉。",
         action:
@@ -2331,11 +2335,11 @@ const COMPANY_BRAIN = {
         context:
           "agent 从 2025 Q3 起对「曝光份额 >85% 的 SKU dayparting 调整」有自主权限。当时 Maya 授权的逻辑是:IS >85% 说明我们在低 CR 时段也在抢曝光,dayparting 可以剪掉浪费。",
         problem:
-          "11 周后,跨 SKU-A 和 SKU-117 累计 IS 提升只有 0.4 pt。同时这些 dayparting 决策给归因分析加了噪声 — Sara 在 Q1 复盘里反复要解释「这个 SKU 凌晨 3 点停了 2 小时」。收益太小,审计成本太高。",
+          "11 周后,跨 SKU-A 和 SKU-117 累计 IS 提升只有 0.4 pt。同时这些 dayparting 决策给归因分析加了噪声 — Maya 在 Q1 复盘里反复要解释「这个 SKU 凌晨 3 点停了 2 小时」。收益太小,审计成本太高。",
         action:
           "Maya 在 chat 里发起 revoke。Agent 把该类别从 Active 移到 Recently revoked。取消了 3 个排队中的 dayparting 操作(5 月 8 日晚原本要执行)。后续所有针对 IS 饱和 SKU 的 dayparting 都需团队逐次批准。",
         results:
-          "5 月 8 日起 0 个 dayparting 自主操作。该类别显示在 Recently revoked 区,Maya 标为撤回人。撤回后 IS 净影响 -0.1 pt(在噪声范围内)。Sara 没有再投诉归因可读性问题。",
+          "5 月 8 日起 0 个 dayparting 自主操作。该类别显示在 Recently revoked 区,Maya 标为撤回人。撤回后 IS 净影响 -0.1 pt(在噪声范围内)。Maya 没有再投诉归因可读性问题。",
         takeaway:
           "我现在对「申请自主权限」的门槛提高了 — 至少需要历史案例支持 8 周内 IS 提升 ≥1 pt,且操作不会跟同小时的 budget / bid 调整复合污染归因。dayparting 我现在默认按「团队逐批批准」处理,不再作为自主候选。",
       },
@@ -2490,7 +2494,7 @@ const COMPANY_BRAIN = {
       status: "indexed",
       patternsCount: 2,
       uploadedAt: "Apr 28",
-      uploadedBy: "Sara Lin",
+      uploadedBy: "Maya Chen",
       sensitivity: "Confidential",
       sensitivityLabel: "机密",
     },
@@ -2847,7 +2851,7 @@ const COMPANY_BRAIN = {
       sensitivity: "Sensitive",
       sensitivityLabel: "敏感",
       phases: [
-        { label: "阶段 1", focus: "手柄毛利下限 + 刀片绑定基线", durationWeeks: 1, exitGate: "毛利下限由 Sara 签字" },
+        { label: "阶段 1", focus: "手柄毛利下限 + 刀片绑定基线", durationWeeks: 1, exitGate: "毛利下限由 Maya 签字" },
         { label: "阶段 2", focus: "7 天手柄促销 · 3 个价格点", durationWeeks: 3, exitGate: "每个价格点 ≥ 200 名买家" },
         { label: "阶段 3", focus: "促销后 28 天窗口测绑定", durationWeeks: 2, exitGate: "绑定差异置信区间 ≤ ±0.8 pt" },
       ],
@@ -3175,7 +3179,7 @@ const COMPANY_BRAIN = {
       categoryLabel: "预算",
       rationale: "跨越成熟到激进上新姿态。",
       lastModified: "Feb 14",
-      modifiedBy: "Sara Lin",
+      modifiedBy: "Maya Chen",
     },
     {
       id: "bd-voice",
@@ -3205,7 +3209,7 @@ const COMPANY_BRAIN = {
       categoryLabel: "预算",
       rationale: "匹配 Amazon 典型促销节奏。",
       lastModified: "Apr 10",
-      modifiedBy: "Sara Lin",
+      modifiedBy: "Maya Chen",
     },
     {
       id: "bd-paused-review",
@@ -3243,7 +3247,7 @@ const COMPANY_BRAIN = {
     {
       id: "rq-razor-toothbrush",
       question: "对比 razor 和牙刷产品线的毛利",
-      asker: "Sara Lin",
+      asker: "Maya Chen",
       askerInitials: "SL",
       askedAt: "1 天前",
       sensitivity: "Confidential",
@@ -3303,7 +3307,7 @@ const COMPANY_BRAIN = {
     {
       id: "rq-razor-attach-range",
       question: "我们品牌 razor-blade 的绑定购买率典型范围?",
-      asker: "Sara Lin",
+      asker: "Maya Chen",
       askerInitials: "SL",
       askedAt: "11 天前",
       sensitivity: "Confidential",
@@ -3586,7 +3590,7 @@ const BRAIN_OPS = {
     sensitivity: "Confidential",
     sensitivityLabel: "机密",
     minClearance: "Sensitive",
-    asker: "Sara Lin",
+    asker: "Maya Chen",
     askedAt: "May 13, 10:14",
     queryLatency: "1.2 秒",
     answer: {
@@ -3607,11 +3611,11 @@ const BRAIN_OPS = {
         label: "Pricing-Strategy-2026.xlsx · pp. 12–14",
         kind: "doc",
         detail: {
-          methodology: "Sara Lin 维护的产品线毛利定价模型。每季度更新一次。",
+          methodology: "Maya Chen 维护的产品线毛利定价模型。每季度更新一次。",
           rows: [
             ["所属文档", "Pricing-Strategy-2026.xlsx"],
             ["页码", "pp. 12–14"],
-            ["上传人", "Sara Lin · Apr 28"],
+            ["上传人", "Maya Chen · Apr 28"],
             ["敏感度", "机密"],
           ],
         },
@@ -9800,18 +9804,16 @@ function ChatPanel({
     const agentFlagged = THREADS.filter(
       (t) => t.initiator === "agent" && THREAD_OWNERS[t.id] === "maya",
     );
+    // Maya + Devon collaborate flat: VP sees her own threads + Devon's
+    // ops threads in one "你的会话" group, full edit (no read-only).
     const ownThreads = THREADS.filter(
       (t) =>
         t.initiator !== "agent" &&
-        THREAD_OWNERS[t.id] === "maya" &&
+        (THREAD_OWNERS[t.id] === "maya" ||
+          THREAD_OWNERS[t.id] === "devon") &&
         t.category !== "brain-ops",
     );
-    const teamThreads = THREADS.filter(
-      (t) =>
-        t.initiator !== "agent" &&
-        MAYA_REPORT_ROLES.includes(THREAD_OWNERS[t.id]) &&
-        t.category !== "brain-ops",
-    );
+    const teamThreads = [];
     const brainOpsThreads = THREADS.filter(
       (t) =>
         THREAD_OWNERS[t.id] === "maya" && t.category === "brain-ops",
@@ -15414,7 +15416,7 @@ const CMO_PENDING = [
     threadId: "razor-blade",
     index: "②",
     title: "Henry's 刮胡刀 · Razor 降价测试",
-    submittedBy: "Sara Lin",
+    submittedBy: "Maya Chen",
     submittedAt: "5/14 上午",
     factLines: [
       "3 周 A/B 测试 · 涉及 ~12,400 客户",
@@ -15447,7 +15449,7 @@ const CMO_TEAM_RECENT = [
   {
     threadId: "launch-cr",
     title: "新品 CR · 轮胎充气泵",
-    submittedBy: "Jamal Hassan",
+    submittedBy: "Devon Park",
     submittedAt: "5/14 中午",
     summary: "4 项 listing 内容改动测试方案",
     metric: "主图 / 标题 / A+ / Bullet",
@@ -15467,7 +15469,7 @@ const CMO_TEAM_RECENT_OLDER = [
   {
     threadId: "auto-neg-kw-inflator",
     title: "否定词抓取 · 充气泵",
-    submittedBy: "Jamal Hassan",
+    submittedBy: "Devon Park",
     submittedAt: "5/9 下午 · Agent 自动执行",
     summary: "28 个 0 转化、≥84 次点击词加入否定库",
     metric: "回收浪费支出 $1,847 / 周 · 0 回滚 · 信心 87%",
@@ -15481,7 +15483,7 @@ const CMO_BRAIN_NEW = [
     type: "Pattern",
     title: "品牌广告持续投放 → CPC 下行",
     metric: "12 个案例 · 信心 76% · 内部",
-    usage: "已被引用 4 次(Maya × 2, Devon × 1, Sara × 1)",
+    usage: "已被引用 4 次(Maya × 3, Devon × 1)",
     confidenceLow: false,
   },
   {
@@ -16423,7 +16425,7 @@ const CMO_PATTERN_AUDITS = {
     currentState: {
       confidence: 76,
       sampleSummary: "12 个 brand-ad scale-up 案例",
-      applied: "已应用于 4 个方案 (Maya × 2, Devon × 1, Sara × 1)",
+      applied: "已应用于 4 个方案 (Maya × 3, Devon × 1)",
       lastUpdated: "5/14",
       sensitivity: "内部",
     },
@@ -16521,12 +16523,12 @@ const CMO_PATTERN_AUDITS = {
     currentState: {
       confidence: 65,
       sampleSummary: "1 个案例(牙刷 + 刷头)",
-      applied: "Sara 的 Henry's Razor 方案正在引用",
+      applied: "Maya 的 Henry's Razor 方案正在引用",
       lastUpdated: "5/12",
       sensitivity: "敏感",
     },
     prefilledQuestion:
-      "1 个案例做支撑信心 65% 太薄了。Henry's 跑完前要不要标记「研究中」, 别让 Sara 直接拿这条当依据?",
+      "1 个案例做支撑信心 65% 太薄了。Henry's 跑完前要不要标记「研究中」, 别让 Maya 直接拿这条当依据?",
     cmoSubmittedAt: "5/16 16:14",
     agentSubmittedAt: "5/16 16:16",
     agentPreamble: "你说得对。我重新评估了这条 pattern 的样本质量:",
@@ -16941,7 +16943,7 @@ export default function App({
     const teamMeta = {
       defense: { name: "Defense · 床架 SKU-117", who: "Maya Chen", when: "5/15 下午" },
       omnichannel: { name: "全渠道 · 移动充电宝", who: "Devon Park", when: "5/11 下午" },
-      "launch-cr": { name: "新品 CR · 轮胎充气泵", who: "Jamal Hassan", when: "5/14 中午" },
+      "launch-cr": { name: "新品 CR · 轮胎充气泵", who: "Devon Park", when: "5/14 中午" },
     }[activeId];
     if (teamMeta) {
       return {
@@ -17162,15 +17164,7 @@ export default function App({
     }
   })();
 
-  // Maya read-only banner — fires when she opens a thread owned by one of
-  // her direct reports. Phase D's CMO action bar lives in the same slot
-  // for CMO views; the two banners are mutually exclusive in practice.
-  const teamBanner =
-    currentRole === "maya" &&
-    activeId &&
-    MAYA_REPORT_ROLES.includes(THREAD_OWNERS[activeId])
-      ? THREADS.find((t) => t.id === activeId)
-      : null;
+  // Maya + Devon collaborate flat — no read-only team banner anymore.
 
   // Maya · rejected-by-CMO banner — when Maya opens her own proposal canvas
   // that the CMO sent back. Spec D.5: "mock 里只演示视觉".
@@ -17254,7 +17248,6 @@ export default function App({
                 onBack={() => setActiveId(null)}
               />
             )}
-            {teamBanner && <TeamReadOnlyBanner thread={teamBanner} />}
             {mayaRejected && <CmoRejectedBanner rejection={mayaRejected} />}
             {citedRevisionItems.length > 0 && (
               <CitedPatternRevisedBanner

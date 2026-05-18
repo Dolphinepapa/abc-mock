@@ -41,10 +41,10 @@ export const THREAD_OWNERS = {
   "daily-report": "maya",
   strategy: "maya",
   omnichannel: "devon",
-  "razor-blade": "sara",
-  "launch-cr": "jamal",
+  "razor-blade": "maya",
+  "launch-cr": "devon",
   "upload-q4": "maya",
-  "qa-margins": "sara",
+  "qa-margins": "maya",
 };
 
 // Items that exceed VP autonomous authority and need CMO approval.
@@ -93,7 +93,7 @@ export const CANVAS_PATTERN_CITATIONS = {
 };
 
 // Maya's direct reports — used to compute "你的团队" group.
-export const MAYA_REPORT_ROLES = ["devon", "sara", "jamal"];
+export const MAYA_REPORT_ROLES = ["devon"];
 
 export const ROLE_LABELS = {
   zh: {
@@ -107,13 +107,13 @@ export const ROLE_LABELS = {
       name: "Maya Chen",
       title: "电商副总裁",
       clearance: "敏感",
-      scope: "自己的 SKU + 3 个下属",
+      scope: "全产品线 · 战略 + 毛利",
     },
     devon: {
       name: "Devon Park",
-      title: "高级增长经理",
+      title: "运营",
       clearance: "内部",
-      scope: "移动充电宝",
+      scope: "执行 · 投放 / 新品 / 日常运营",
     },
     header: "当前以 {{name}} 身份查看",
     sectionTitle: "切换演示账号",
@@ -130,13 +130,13 @@ export const ROLE_LABELS = {
       name: "Maya Chen",
       title: "VP eCommerce",
       clearance: "Sensitive",
-      scope: "Own SKUs + 3 direct reports",
+      scope: "Portfolio-wide · strategy + margin",
     },
     devon: {
       name: "Devon Park",
-      title: "Sr Growth Manager",
+      title: "Operator",
       clearance: "Internal",
-      scope: "Portable charger",
+      scope: "Execution · paid media / launches / daily ops",
     },
     header: "Viewing as {{name}}",
     sectionTitle: "Switch demo account",

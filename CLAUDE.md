@@ -46,7 +46,7 @@ The agent talks like an experienced operator, not a strategy consultant.
 ## Content rules
 
 - **Brand**: ABC Home Goods (no Co./Inc.). Products = SKU + descriptor ("SKU-A · Floor Lamp", "Bed frame · SKU-117").
-- **Team**: Maya Chen (VP eCommerce / MC) · Devon Park (Sr. Growth / DP) · Sara Lin (Portfolio Lead / SL) · Jamal Hassan (Ops Manager / JH). **Do not invent new team members** or generic roles like "品牌运营助手". Route by case: BSR/strategy/VP-level → Maya · paid media tactics → Devon · pricing/LTV → Sara · launches → Jamal.
+- **Team**: CMO (oversight + approval) · Maya Chen (VP eCommerce / MC, owns portfolio + strategy + margin / LTV calls) · Devon Park (Operator / DP, owns paid media + launches + day-to-day ops). **Do not invent new team members** or generic roles like "品牌运营助手". Route by case: strategy / BSR / pricing / margin → Maya · launches / paid-media tactics / daily ops → Devon.
 - **Numbers**: never round. Use 37.4% not 25%, $1.04M not $1M, 94 keywords not 100. Exception: user-stated budgets/goals stay round.
 - **Date**: today is May 15, 2026. Q2 2026 is current.
 - **Jargon**: wrap operational terms in `<MetricTerm definition>...</MetricTerm>`. Definitions in `METRIC_DEFINITIONS` map. Common: TACoS, ACoS, LTV, blended margin, attach rate, contribution margin, SOV, CTR, CR, cohort revenue, incrementality, geographic holdout test, cost cap bidding.

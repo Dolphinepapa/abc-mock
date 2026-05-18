@@ -148,7 +148,7 @@ const THREADS = [
         speaker: "user",
         name: "Devon Park",
         initials: "DP",
-        role: "Sr Growth Manager",
+        role: "Operator",
         timestamp: "just now",
         body: "Show me the plan.",
         canvasLink: false,
@@ -220,7 +220,7 @@ const THREADS = [
     canvasId: "omnichannel",
     initiator: "user",
     initiatorName: "Devon Park",
-    initiatorRole: "Sr Growth Manager",
+    initiatorRole: "Operator",
     initials: "DP",
     initialTimestamp: "May 11, 16:42",
     lastActivityTimestamp: "May 11, 16:48",
@@ -247,7 +247,7 @@ const THREADS = [
     id: "razor-blade",
     canvasId: "razor-blade",
     initiator: "user",
-    initiatorName: "Sara Lin",
+    initiatorName: "Maya Chen",
     initiatorRole: "Portfolio Lead",
     initials: "SL",
     initialTimestamp: "May 13, 10:08",
@@ -275,7 +275,7 @@ const THREADS = [
     id: "launch-cr",
     canvasId: "launch-cr",
     initiator: "user",
-    initiatorName: "Jamal Hassan",
+    initiatorName: "Devon Park",
     initiatorRole: "Ops Manager",
     initials: "JH",
     initialTimestamp: "May 15, 08:31",
@@ -336,7 +336,7 @@ const THREADS = [
     id: "qa-margins",
     canvasId: "qa-margins",
     initiator: "user",
-    initiatorName: "Sara Lin",
+    initiatorName: "Maya Chen",
     initiatorRole: "Portfolio Lead",
     initials: "SL",
     initialTimestamp: "May 13, 10:14",
@@ -1158,7 +1158,7 @@ const OMNICHANNEL = {
 /* Razor-and-blade pricing canvas — razor product line */
 const RAZOR_BLADE = {
   sku: "Razor product line",
-  initiator: "Sara Lin",
+  initiator: "Maya Chen",
   confirmedOn: "May 13",
   economics: {
     razor: {
@@ -1464,7 +1464,7 @@ const RAZOR_BLADE = {
 /* Launch CR diagnosis canvas — tire inflator (pickup truck market) */
 const LAUNCH_CR = {
   sku: "SKU-TI-A · tire inflator (pickup)",
-  initiator: "Jamal Hassan",
+  initiator: "Devon Park",
   confirmedOn: "May 15",
   constraint:
     "Confirm real product capability with the product team before any listing change goes live. Over-claiming drives negative reviews and returns.",
@@ -1606,19 +1606,23 @@ const LAUNCH_CR = {
   ],
   agentDiagnosis: {
     summary:
-      "Our listing isn't giving pickup buyers the three signals they scan for. The main image has no truck. The title doesn't say 'for pickups.' The A+ doesn't show truck-tire performance numbers. Stack those three together and a pickup buyer takes one look and decides this isn't for them — even though it physically works fine.",
+      "OlarHike out-detailed us at three layers at once. Gallery: off-road tire backdrop with big-type specs in the frame (2X faster, 6000mAh, 105 inflations, US Patent) — the performance pitch reads in one scroll. Title: five feature claims stacked (Dual Power, 6000mAh & 12V DC, Cordless, LED & Digital Pressure Gauge, Auto Shut-off). Bullets: every line carries a measured number (55 sec to fill a car tire, 18 car tires per charge, 11 SUV tires per charge, 4 preset modes). We're thin at all three: gallery covers multiple vehicles but has no pickup-specific scene and no big-type spec; title is just Portable / Cordless / Digital Display / 150 PSI; bullets are vague (\"4 inflations / compact\"). Pickup-cluster CR is low because all three are thin at once — which means there are at least 4 distinct optimization angles, not one.",
     signals: [
       {
-        label: "Visual context",
-        gap: "No truck in main image · generic white-background product shot",
+        label: "Visual density",
+        gap: "OlarHike gallery layers big-type specs over an off-road tire; ours covers multi-vehicle but lacks both a pickup scene and any spec callout",
       },
       {
-        label: "Title targeting",
-        gap: "No 'truck' / 'pickup' / 'heavy duty' in first 30 characters",
+        label: "Title density",
+        gap: "OlarHike packs 5 feature claims; we have 4 generic words — missing Dual Power, battery capacity, Auto Shut-off and other quantifiable hooks",
       },
       {
-        label: "A+ proof",
-        gap: "No truck-tire performance data · no F-150 / Silverado / Ram reference",
+        label: "Bullet specificity",
+        gap: "OlarHike bullets are all measured numbers (55 sec / 18 tires / 11 SUV tires); ours say neither inflation time nor capacity ceiling",
+      },
+      {
+        label: "A+ content",
+        gap: "OlarHike A+ opens with full accessory layout + use-case grid; ours is a generic feature carousel, nothing pickup-specific",
       },
     ],
   },
@@ -1627,9 +1631,9 @@ const LAUNCH_CR = {
       id: "h1",
       label: "H1",
       priority: "P0",
-      title: "Main image rework · add pickup scene",
+      title: "Main image rework · pickup scene + big-type spec",
       treatment:
-        "Shoot a new main image: black F-150 with the inflator deployed on the front-driver tire. Keep the current title and A+ unchanged.",
+        "Shoot a new main image: black F-150 in use with the inflator + big-type PSI readout on the device screen + corner callout \"55 sec to fill\" + small icons (SUV / motorcycle / ball). One image gives both signals we're missing — pickup-fit AND quantified performance.",
       variableControl:
         "Image-only change. Title, bullets, and A+ stay current — keeps the read clean.",
       sampleSize: "8,400 pickup-cluster impressions per arm · sized for 5pp lift detection",
@@ -1641,15 +1645,15 @@ const LAUNCH_CR = {
       typeLabel: "Main image",
       confidence: 78,
       confidenceLabel:
-        "9 prior main-image swaps in vehicle-accessory category · scene-context lifts CR 3-7pp on the target cluster",
+        "9 prior main-image swaps in vehicle-accessory category · scene + big-type spec lifts CR 3-7pp",
     },
     {
       id: "h2",
       label: "H2",
       priority: "P0",
-      title: "Title rewrite · 'Heavy Duty for Truck/SUV' in first 30 chars",
+      title: "Title rewrite · pack feature claims in first 30 chars",
       treatment:
-        "Move 'Heavy Duty for Truck/SUV' into the leading position of the title. Keep the rest of the title unchanged.",
+        "Rewrite title as: \"Dual Power Tire Inflator · 6000mAh Cordless + 12V DC · Auto Shut-off · 18 Inflations per Charge · for Cars / SUV / Pickup\". Move quantified specs (battery capacity, inflation count, auto-stop) into the first 30 characters to match OlarHike's density.",
       variableControl:
         "Title-only change. Main image, A+, and bullets all hold still during this test.",
       sampleSize: "Listing-level · organic + paid traffic on the pickup cluster",
@@ -1661,35 +1665,35 @@ const LAUNCH_CR = {
       typeLabel: "Title",
       confidence: 74,
       confidenceLabel:
-        "12 prior title-rewrite tests · keyword-in-first-30-chars lifts category match relevance reliably",
+        "12 prior title-rewrite tests · quantified-spec leads lift CTR and category relevance reliably",
     },
     {
       id: "h3",
       label: "H3",
       priority: "P1",
-      title: "A+ module · F-150 inflation hero data",
+      title: "A+ module · what-you-get + pickup inflation chart",
       treatment:
-        "Add a new A+ first module: 'Inflates an F-150 stock tire from 20 to 35 PSI in 4 min 30 sec' — large numbers, supporting product shot.",
+        "Rebuild A+ first module in OlarHike's style: full accessory layout (hose / nozzle / ball needle / storage bag) + an inflation-time chart (195/65 R15 → 55 sec, 235/65 R17 → 2.2 min, F-150 stock tire → measured time).",
       variableControl:
         "A+ only. Image and title from earlier tests stay frozen during this window.",
       sampleSize: "Detail-page traffic from pickup cluster · listing-level read",
       duration: "21 days",
       successMetric: "Pickup-cluster CR lift + detail-page bounce-rate drop",
       expectedImpact:
-        "Closes the proof gap once a pickup buyer clicks in — addresses the 'will this actually work on my truck' question.",
+        "Closes the proof gap once a pickup buyer clicks in + neutralizes OlarHike's spec-density advantage.",
       type: "aplus",
       typeLabel: "A+ content",
       confidence: 68,
       confidenceLabel:
-        "7 prior A+ first-module rewrites · effect on CR is smaller than image/title but consistently positive",
+        "7 prior A+ first-module rewrites · CR lift is smaller than image/title but consistently positive",
     },
     {
       id: "h4",
       label: "H4",
       priority: "P1",
-      title: "Bullet reorder · pickup proof to position 1",
+      title: "Bullet rewrite · vague statements → measured numbers",
       treatment:
-        "Move the 'inflates a 33\" pickup tire in under 5 min' bullet to position 1. Push the cordless-battery bullet down to position 4.",
+        "Rewrite all 5 bullets with measured data: \"55 sec to fill a 195/65 R15 car tire / 2.2 min for a 235/65 R17 SUV\" / \"6000mAh battery → 18 car tires per charge\" / \"Dual Power · battery cordless or 12V continuous\" / \"Auto-stop + dual LED display, prevents over-inflation\" / \"4 preset modes + 1-touch unit switching\". Every line carries a number — matches OlarHike + adds a pickup-relevant line.",
       variableControl:
         "Bullets only. Everything else above stays in its by-then-current state.",
       sampleSize: "Detail-page traffic on the pickup cluster",
@@ -2125,9 +2129,9 @@ const EXECUTION = {
     { ts: "May 14 · 22:11", type: "Budget",         kind: "approved",   delta: "Daily budget on SP-Category-Exact raised $480 → $640",        reason: "Hit cap on 7 of last 9 days; impression share suppressed by ~6pp.",        approver: "Approved by Maya Chen",                       status: "Live" },
     { ts: "May 14 · 14:08", type: "Keyword",        kind: "approved",   delta: "Added 6 long-tail keywords harvested from search-term report", reason: "CR > 9% in past 14 days; currently auto-targeting only.",                  approver: "Approved by Devon Park",                      status: "Live" },
     { ts: "May 13 · 16:42", type: "Bid edit",       kind: "autonomous", delta: 'Bid on "tripod floor lamp" lowered $1.95 → $1.70',           reason: "ACoS exceeded target by 12pp for 72hr; within delegated class.",           approver: "Autonomous · class: bid_lower_under_15pct",   status: "Live" },
-    { ts: "May 13 · 09:22", type: "Restructure",    kind: "approved",   delta: "Split SP-Category-Broad into Broad + Phrase tiers",          reason: "Phrase-only subset projected +14% efficiency on mid-funnel terms.",        approver: "Approved by Sara Lin",                        status: "Live" },
+    { ts: "May 13 · 09:22", type: "Restructure",    kind: "approved",   delta: "Split SP-Category-Broad into Broad + Phrase tiers",          reason: "Phrase-only subset projected +14% efficiency on mid-funnel terms.",        approver: "Approved by Maya Chen",                        status: "Live" },
     { ts: "May 12 · 18:34", type: "Budget",         kind: "approved",   delta: "Reallocated $320/day from SP-Branded → SP-Category-Exact",   reason: "Branded impression share saturated at 98%; marginal $ better deployed.",   approver: "Approved by Maya Chen",                       status: "Live" },
-    { ts: "May 11 · 11:15", type: "Keyword",        kind: "approved",   delta: 'Negatives added: "lava lamp", "salt lamp", "lamp shade"',    reason: "High-impression, zero-conversion terms identified in search-term report.", approver: "Approved by Jamal Hassan",                    status: "Live" },
+    { ts: "May 11 · 11:15", type: "Keyword",        kind: "approved",   delta: 'Negatives added: "lava lamp", "salt lamp", "lamp shade"',    reason: "High-impression, zero-conversion terms identified in search-term report.", approver: "Approved by Devon Park",                    status: "Live" },
     { ts: "May 10 · 14:52", type: "Bid edit",       kind: "autonomous", delta: 'Bid on "reading floor lamp modern" raised $1.40 → $1.62',   reason: "CR > target for 48hr; bid raise within delegated class.",                  approver: "Autonomous · class: bid_raise_under_15pct",   status: "Live" },
     { ts: "May 09 · 10:08", type: "Bid edit",       kind: "autonomous", delta: 'Bid on "corner floor lamp" lowered $1.25 → $1.10',          reason: "ACoS spike of +14pp sustained 72hr; auto-throttle engaged.",               approver: "Autonomous · class: bid_lower_under_15pct",   status: "Live" },
   ],
@@ -2226,7 +2230,7 @@ const COMPANY_BRAIN = {
         id: "devon",
         name: "Devon Park",
         initials: "DP",
-        role: "Sr Growth Manager",
+        role: "Operator",
         level: "L6",
         clearance: "Internal",
         clearanceLabel: "Internal",
@@ -2287,7 +2291,7 @@ const COMPANY_BRAIN = {
       },
       story: {
         context:
-          "Going into Q1 2026, the team's judgment on razor-blade pricing mechanics (how to price blade refills, how much discount headroom is safe) lived mostly in Sara's head — no systematic pattern in the brain. Maya uploaded the Q4 2025 internal retrospective PDF and asked me to distill the methodology rather than read it page by page.",
+          "Going into Q1 2026, the team's judgment on razor-blade pricing mechanics (how to price blade refills, how much discount headroom is safe) lived mostly in Maya's head — no systematic pattern in the brain. Maya uploaded the Q4 2025 internal retrospective PDF and asked me to distill the methodology rather than read it page by page.",
         problem:
           "47-page retrospective. Reading it cover to cover takes 3-4 hours, and most of the document is project context + SKU listings. The job: surface 'reusable operational decisions' from inside the noise and ignore the rest.",
         action:
@@ -2343,11 +2347,11 @@ const COMPANY_BRAIN = {
         context:
           "Agent had autonomy on dayparting moves for SKUs at impression share > 85% since Q3 2025. Maya's original rationale: IS > 85% means we're paying for low-CR-hour tail impressions, dayparting can cut the waste.",
         problem:
-          "After 11 weeks running autonomously across SKU-A and SKU-117, cumulative IS gain was only 0.4 pt. Meanwhile the dayparting decisions added noise to attribution analysis — Sara kept having to explain 'this SKU was paused 2hr at 3am' in her Q1 retrospective. Marginal lift too small to justify the attribution-readability cost.",
+          "After 11 weeks running autonomously across SKU-A and SKU-117, cumulative IS gain was only 0.4 pt. Meanwhile the dayparting decisions added noise to attribution analysis — Maya kept having to explain 'this SKU was paused 2hr at 3am' in her Q1 retrospective. Marginal lift too small to justify the attribution-readability cost.",
         action:
           "Maya opened a revoke action via chat. Agent moved the class from Active to Recently revoked. 3 in-flight dayparting actions (queued for the night of May 8) were cancelled. All future dayparting on IS-saturated SKUs now requires explicit per-action team approval.",
         results:
-          "Zero autonomous dayparting actions since May 8. The class shows in Recently revoked with Maya as the revoker. Net IS impact since revocation: -0.1 pt (within noise). Sara hasn't raised attribution-readability complaints since.",
+          "Zero autonomous dayparting actions since May 8. The class shows in Recently revoked with Maya as the revoker. Net IS impact since revocation: -0.1 pt (within noise). Maya hasn't raised attribution-readability complaints since.",
         takeaway:
           "I now hold a higher bar before proposing an autonomy class — at least one historical case showing ≥1 pt IS gain in 8 weeks AND the action can't compound with same-hour budget / bid changes (which contaminate attribution). Dayparting specifically I now treat as 'team approves each batch', not as an autonomy candidate.",
       },
@@ -2492,7 +2496,7 @@ const COMPANY_BRAIN = {
       status: "indexed",
       patternsCount: 2,
       uploadedAt: "Apr 28",
-      uploadedBy: "Sara Lin",
+      uploadedBy: "Maya Chen",
       sensitivity: "Confidential",
     },
     {
@@ -2828,7 +2832,7 @@ const COMPANY_BRAIN = {
       basedOnCases: 4,
       sensitivity: "Sensitive",
       phases: [
-        { label: "Phase 1", focus: "Handle margin floor + blade attach baseline", durationWeeks: 1, exitGate: "Margin floor signed off by Sara" },
+        { label: "Phase 1", focus: "Handle margin floor + blade attach baseline", durationWeeks: 1, exitGate: "Margin floor signed off by Maya" },
         { label: "Phase 2", focus: "Test 7-day handle promo · 3 price points", durationWeeks: 3, exitGate: "Each price point hit ≥ 200 buyers" },
         { label: "Phase 3", focus: "Attach measurement · 28d window post-promo", durationWeeks: 2, exitGate: "Attach delta computed with CI ≤ ±0.8 pt" },
       ],
@@ -2954,7 +2958,7 @@ const COMPANY_BRAIN = {
           preGradStats: { totalRecs: 52, approved: 49, modified: 3, declined: 0, approvalRate: 94 },
           preGradWeeklyApprovalRate: [88, 91, 93, 95, 98, 100],
           graduatedBy: "Devon Park",
-          graduatedByRole: "Sr Growth",
+          graduatedByRole: "Operator",
           graduatedDate: "Feb 4, 2026",
           threshold: { decisions: 30, approvalRate: 92 },
           authority: "Class executes autonomously; agent surfaces exceptions (outcomes > 1.5σ from prediction)",
@@ -3137,7 +3141,7 @@ const COMPANY_BRAIN = {
       category: "Budget",
       rationale: "Spans Mature to Aggressive launch postures.",
       lastModified: "Feb 14",
-      modifiedBy: "Sara Lin",
+      modifiedBy: "Maya Chen",
     },
     {
       id: "bd-voice",
@@ -3164,7 +3168,7 @@ const COMPANY_BRAIN = {
       category: "Budget",
       rationale: "Matches typical Amazon promo flight.",
       lastModified: "Apr 10",
-      modifiedBy: "Sara Lin",
+      modifiedBy: "Maya Chen",
     },
     {
       id: "bd-paused-review",
@@ -3199,7 +3203,7 @@ const COMPANY_BRAIN = {
     {
       id: "rq-razor-toothbrush",
       question: "Compare razor and toothbrush product line margins",
-      asker: "Sara Lin",
+      asker: "Maya Chen",
       askerInitials: "SL",
       askedAt: "1d ago",
       sensitivity: "Confidential",
@@ -3253,7 +3257,7 @@ const COMPANY_BRAIN = {
     {
       id: "rq-razor-attach-range",
       question: "What's the typical attach rate range for razor-blade in our brand?",
-      asker: "Sara Lin",
+      asker: "Maya Chen",
       askerInitials: "SL",
       askedAt: "11d ago",
       sensitivity: "Confidential",
@@ -3532,7 +3536,7 @@ const BRAIN_OPS = {
     question: "Compare razor and toothbrush product line margins.",
     sensitivity: "Confidential",
     minClearance: "Sensitive",
-    asker: "Sara Lin",
+    asker: "Maya Chen",
     askedAt: "May 13, 10:14",
     queryLatency: "1.2s",
     answer: {
@@ -3553,11 +3557,11 @@ const BRAIN_OPS = {
         label: "Pricing-Strategy-2026.xlsx · pp. 12–14",
         kind: "doc",
         detail: {
-          methodology: "Margin pricing model maintained by Sara Lin. Refreshed quarterly.",
+          methodology: "Margin pricing model maintained by Maya Chen. Refreshed quarterly.",
           rows: [
             ["Source doc", "Pricing-Strategy-2026.xlsx"],
             ["Pages", "pp. 12–14"],
-            ["Uploaded by", "Sara Lin · Apr 28"],
+            ["Uploaded by", "Maya Chen · Apr 28"],
             ["Sensitivity", "Confidential"],
           ],
         },
@@ -9905,18 +9909,16 @@ function ChatPanel({
     const agentFlagged = THREADS.filter(
       (t) => t.initiator === "agent" && THREAD_OWNERS[t.id] === "maya",
     );
+    // Maya + Devon collaborate flat: VP sees own threads + Devon's ops
+    // threads in one "Your conversations" group, full edit (no read-only).
     const ownThreads = THREADS.filter(
       (t) =>
         t.initiator !== "agent" &&
-        THREAD_OWNERS[t.id] === "maya" &&
+        (THREAD_OWNERS[t.id] === "maya" ||
+          THREAD_OWNERS[t.id] === "devon") &&
         t.category !== "brain-ops",
     );
-    const teamThreads = THREADS.filter(
-      (t) =>
-        t.initiator !== "agent" &&
-        MAYA_REPORT_ROLES.includes(THREAD_OWNERS[t.id]) &&
-        t.category !== "brain-ops",
-    );
+    const teamThreads = [];
     const brainOpsThreads = THREADS.filter(
       (t) =>
         THREAD_OWNERS[t.id] === "maya" && t.category === "brain-ops",
@@ -15453,7 +15455,7 @@ const CMO_PENDING_EN = [
     threadId: "razor-blade",
     index: "②",
     title: "Henry's razor · price-cut test",
-    submittedBy: "Sara Lin",
+    submittedBy: "Maya Chen",
     submittedAt: "5/14 AM",
     factLines: [
       "3-week A/B test · touches ~12,400 customers",
@@ -15488,7 +15490,7 @@ const CMO_TEAM_RECENT_EN = [
   {
     threadId: "launch-cr",
     title: "New launch CR · Tire inflator",
-    submittedBy: "Jamal Hassan",
+    submittedBy: "Devon Park",
     submittedAt: "5/14 midday",
     summary: "4 listing-content changes test plan",
     metric: "Hero image / Title / A+ / Bullets",
@@ -15509,7 +15511,7 @@ const CMO_TEAM_RECENT_OLDER_EN = [
   {
     threadId: "auto-neg-kw-inflator",
     title: "Negative-keyword harvest · Tire inflator",
-    submittedBy: "Jamal Hassan",
+    submittedBy: "Devon Park",
     submittedAt: "5/9 PM · agent auto-executed",
     summary: "28 zero-conversion terms with ≥84 clicks added to negatives",
     metric: "$1,847 / week wasted spend recovered · 0 rollbacks · confidence 87%",
@@ -15523,7 +15525,7 @@ const CMO_BRAIN_NEW_EN = [
     type: "Pattern",
     title: "Sustained brand ads → CPC declines",
     metric: "12 cases · confidence 76% · Internal",
-    usage: "Already referenced 4× (Maya × 2, Devon × 1, Sara × 1)",
+    usage: "Already referenced 4× (Maya × 3, Devon × 1)",
     confidenceLow: false,
   },
   {
@@ -16473,7 +16475,7 @@ const CMO_PATTERN_AUDITS_EN = {
     currentState: {
       confidence: 76,
       sampleSummary: "12 brand-ad scale-up cases",
-      applied: "Used in 4 plans (Maya × 2, Devon × 1, Sara × 1)",
+      applied: "Used in 4 plans (Maya × 3, Devon × 1)",
       lastUpdated: "5/14",
       sensitivity: "Internal",
     },
@@ -16576,12 +16578,12 @@ const CMO_PATTERN_AUDITS_EN = {
     currentState: {
       confidence: 65,
       sampleSummary: "1 case (toothbrush + brush head)",
-      applied: "Cited by Sara's Henry's Razor plan",
+      applied: "Cited by Maya's Henry's Razor plan",
       lastUpdated: "5/12",
       sensitivity: "Sensitive",
     },
     prefilledQuestion:
-      "65% confidence on a single case is thin. Should we tag this 'under research' before Henry's wraps, so Sara doesn't lean on it as-is?",
+      "65% confidence on a single case is thin. Should we tag this 'under research' before Henry's wraps, so Maya doesn't lean on it as-is?",
     cmoSubmittedAt: "5/16 16:14",
     agentSubmittedAt: "5/16 16:16",
     agentPreamble: "Fair. I re-evaluated the sample quality:",
@@ -16994,7 +16996,7 @@ export default function App({
     const teamMeta = {
       defense: { name: "Defense · Bed frame SKU-117", who: "Maya Chen", when: "5/15 PM · auto-approved" },
       omnichannel: { name: "Omnichannel · Portable charger", who: "Devon Park", when: "5/11 PM · auto-approved" },
-      "launch-cr": { name: "New launch CR · Tire inflator", who: "Jamal Hassan", when: "5/14 midday · auto-approved" },
+      "launch-cr": { name: "New launch CR · Tire inflator", who: "Devon Park", when: "5/14 midday · auto-approved" },
     }[activeId];
     if (teamMeta) {
       return {
@@ -17212,12 +17214,7 @@ export default function App({
     }
   })();
 
-  const teamBanner =
-    currentRole === "maya" &&
-    activeId &&
-    MAYA_REPORT_ROLES.includes(THREAD_OWNERS[activeId])
-      ? THREADS.find((t) => t.id === activeId)
-      : null;
+  // Maya + Devon collaborate flat — no read-only team banner anymore.
 
   const mayaRejected =
     currentRole === "maya" &&
@@ -17297,7 +17294,6 @@ export default function App({
                 onBack={() => setActiveId(null)}
               />
             )}
-            {teamBanner && <TeamReadOnlyBanner thread={teamBanner} />}
             {mayaRejected && <CmoRejectedBanner rejection={mayaRejected} />}
             {citedRevisionItems.length > 0 && (
               <CitedPatternRevisedBanner
