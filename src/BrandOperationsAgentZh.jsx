@@ -14666,7 +14666,7 @@ function DailyReportCanvas({ onJumpTo }) {
                         <button
                           type="button"
                           onClick={() => setDrawerCell({ listing: row, metric: m })}
-                          className="flex flex-col items-end leading-tight hover:text-emerald-700 group"
+                          className="w-full flex flex-col items-end leading-tight hover:text-emerald-700 group"
                         >
                           <span className="font-mono tabular-nums text-slate-900 group-hover:underline decoration-dotted underline-offset-2">
                             {m.format(row.today[m.key])}
@@ -15077,7 +15077,7 @@ function WeeklyReportCanvas({ onJumpTo }) {
                         <button
                           type="button"
                           onClick={() => setDrawerCell({ listing: row, metric: m })}
-                          className="flex flex-col items-end leading-tight hover:text-emerald-700 group"
+                          className="w-full flex flex-col items-end leading-tight hover:text-emerald-700 group"
                         >
                           <span className="font-mono tabular-nums text-slate-900 group-hover:underline decoration-dotted underline-offset-2">
                             {m.format(row.today[m.key])}
