@@ -63,6 +63,7 @@ import {
 } from "recharts";
 import MetricTerm from "./MetricTerm.jsx";
 import InspectionDrawer from "./InspectionDrawer.jsx";
+import { ROLES, ROLE_IDS, ROLE_LABELS } from "./roles.js";
 
 /* ────────────────────────────────────────────────────────────────────────── */
 /*  Mock data                                                                 */
@@ -9367,12 +9368,130 @@ function PulseDot() {
   );
 }
 
+function RoleSwitcher({ currentRole, setCurrentRole, locale }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+  const labels = ROLE_LABELS[locale] || ROLE_LABELS.en;
+  const current = ROLES[currentRole];
+  const currentLabels = labels[currentRole];
+
+  useEffect(() => {
+    if (!open) return;
+    function onDocClick(e) {
+      if (rootRef.current && !rootRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [open]);
+
+  function pick(roleId) {
+    setOpen(false);
+    if (roleId !== currentRole) setCurrentRole(roleId);
+  }
+
+  return (
+    <div ref={rootRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={`flex items-center gap-1.5 px-1.5 py-0.5 rounded-full border ${
+          open
+            ? "border-slate-400 bg-slate-50"
+            : "border-slate-200 hover:bg-slate-50"
+        }`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+      >
+        <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-11 font-medium text-slate-700">
+          {current.initials}
+        </div>
+        <ChevronDown className="w-3 h-3 text-slate-500" />
+      </button>
+
+      {open && (
+        <div
+          className="absolute right-0 top-full mt-1.5 w-72 rounded-md border border-slate-200 bg-white shadow-lg z-50"
+          role="listbox"
+        >
+          <div className="px-3 pt-2.5 pb-1.5 border-b border-slate-100">
+            <div className="text-10 uppercase tracking-wide text-slate-400 font-medium">
+              {labels.header.replace("{{name}}", currentLabels.name)}
+            </div>
+            <div className="text-11 text-slate-600 mt-1.5">
+              {labels.sectionTitle}
+            </div>
+          </div>
+
+          <div className="py-1">
+            {ROLE_IDS.map((rid) => {
+              const r = ROLES[rid];
+              const rLabel = labels[rid];
+              const selected = rid === currentRole;
+              return (
+                <button
+                  key={rid}
+                  type="button"
+                  onClick={() => pick(rid)}
+                  className={`w-full text-left px-2 py-1.5 flex items-start gap-2.5 ${
+                    selected ? "" : "hover:bg-slate-50"
+                  }`}
+                  role="option"
+                  aria-selected={selected}
+                >
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-11 font-medium flex-shrink-0 ${
+                      selected
+                        ? "bg-emerald-50 border-2 border-emerald-500 text-emerald-800"
+                        : "bg-slate-100 border border-slate-200 text-slate-700"
+                    }`}
+                  >
+                    {r.initials}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
+                      <span className="text-11 font-medium text-slate-900">
+                        {rLabel.name}
+                      </span>
+                      <span className="text-10 text-slate-500">
+                        · {rLabel.title}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-0.5 text-10 text-slate-500">
+                      <span className="font-mono">{r.level}</span>
+                      <span className="text-slate-300">·</span>
+                      <span>{rLabel.clearance}</span>
+                    </div>
+                    <div className="text-10 text-slate-500 mt-0.5">
+                      {rLabel.scope}
+                    </div>
+                  </div>
+                  {selected && (
+                    <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-1.5" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="px-3 py-1.5 border-t border-slate-100 text-10 text-slate-500">
+            {labels.footnote}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function TopBar({
   onToggleTab,
   inspectorOpen,
   inspectorTab,
   locale,
   setLocale,
+  currentRole,
+  setCurrentRole,
 }) {
   const adArchActive = inspectorOpen && inspectorTab === "ad-architecture";
   const brainActive = inspectorOpen && inspectorTab === "company-brain";
@@ -9508,9 +9627,11 @@ function TopBar({
             中
           </button>
         </div>
-        <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-11 font-medium text-slate-700">
-          MC
-        </div>
+        <RoleSwitcher
+          currentRole={currentRole}
+          setCurrentRole={setCurrentRole}
+          locale={locale}
+        />
       </div>
     </header>
   );
@@ -14722,7 +14843,7 @@ function EmptyCanvas() {
   );
 }
 
-export default function App({ locale, setLocale }) {
+export default function App({ locale, setLocale, currentRole, setCurrentRole }) {
   const [activeId, setActiveId] = useState(null);
   const [inspectorOpen, setInspectorOpen] = useState(false);
   const [inspectorTab, setInspectorTab] = useState("ad-architecture");
@@ -14854,6 +14975,8 @@ export default function App({ locale, setLocale }) {
         inspectorTab={inspectorTab}
         locale={locale}
         setLocale={setLocale}
+        currentRole={currentRole}
+        setCurrentRole={setCurrentRole}
       />
 
       <div className="flex-1 flex min-h-0">
