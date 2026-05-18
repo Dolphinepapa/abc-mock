@@ -31,6 +31,16 @@ export default function App() {
     },
   });
 
+  // Phase E · pattern revision state for the 3 Company-Brain entries.
+  // status: 'pending' | 'challenged' | 'adopted' | 'held' | 'parked'
+  // Adopted/parked revisions propagate to the Company Brain inspector
+  // panel and (Phase F) the reference-precedent cards inside canvases.
+  const [patternRevisions, setPatternRevisions] = useState({
+    "pattern-brand-cpc": { status: "pending" },
+    "playbook-peak-defense": { status: "pending" },
+    "pattern-razor-pricing": { status: "pending" },
+  });
+
   useEffect(() => {
     window.localStorage.setItem(LOCALE_KEY, locale);
     document.title =
@@ -58,6 +68,8 @@ export default function App() {
       setCurrentRole={setCurrentRole}
       proposalStates={proposalStates}
       setProposalStates={setProposalStates}
+      patternRevisions={patternRevisions}
+      setPatternRevisions={setPatternRevisions}
     />
   ) : (
     <AppZh
@@ -68,6 +80,8 @@ export default function App() {
       setCurrentRole={setCurrentRole}
       proposalStates={proposalStates}
       setProposalStates={setProposalStates}
+      patternRevisions={patternRevisions}
+      setPatternRevisions={setPatternRevisions}
     />
   );
 }

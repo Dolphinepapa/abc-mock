@@ -64,6 +64,25 @@ export const PROPOSAL_FOR_CHALLENGE = {
   "challenge-razor-blade": "razor-blade",
 };
 
+// Phase E · CMO sidebar pattern id → Company Brain panel pattern id.
+// Only brand-ad CPC is already in brain.patterns; the other two are
+// new entries this week and will land in brain.patterns in Phase G.
+export const BRAIN_PATTERN_ID = {
+  "pattern-brand-cpc": "pat-brand-ad-cpc",
+};
+export const PATTERN_REVISION_BY_BRAIN_ID = Object.fromEntries(
+  Object.entries(BRAIN_PATTERN_ID).map(([sidebar, brain]) => [brain, sidebar]),
+);
+
+// Pattern-audit "thread" ids — analogous to challenge thread ids.
+// activeId='pattern-audit-<sidebarId>' opens the PatternAuditCanvas.
+export const PATTERN_AUDIT_PREFIX = "pattern-audit-";
+export const SIDEBAR_PATTERN_IDS = [
+  "pattern-brand-cpc",
+  "playbook-peak-defense",
+  "pattern-razor-pricing",
+];
+
 // Maya's direct reports — used to compute "你的团队" group.
 export const MAYA_REPORT_ROLES = ["devon", "sara", "jamal"];
 

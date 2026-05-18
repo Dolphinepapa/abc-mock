@@ -72,6 +72,10 @@ import {
   MAYA_REPORT_ROLES,
   CHALLENGE_THREAD_IDS,
   PROPOSAL_FOR_CHALLENGE,
+  BRAIN_PATTERN_ID,
+  PATTERN_REVISION_BY_BRAIN_ID,
+  PATTERN_AUDIT_PREFIX,
+  SIDEBAR_PATTERN_IDS,
 } from "./roles.js";
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -9924,6 +9928,13 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
         meta: "1 案例 · 信心 65% · 敏感",
       },
     ];
+    const auditsInFlight = brainPatterns
+      .map((row) => ({
+        id: row.id,
+        row,
+        status: (patternRevisions || {})[row.id]?.status || "pending",
+      }))
+      .filter((a) => a.status !== "pending");
     const cmoHistory = [
       { id: "hist-q4-pricing", title: '质疑过 "Q4 holiday 定价 playbook" (4 月)' },
       { id: "hist-bedframe-expansion", title: '批准过 "床架品类扩品提案" (3 月)' },
@@ -10051,23 +10062,92 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
           </div>
         </div>
 
+        {auditsInFlight.length > 0 && (
+          <div>
+            <SidebarGroupHeader
+              label={`Pattern audit · 进行中 · ${auditsInFlight.length}`}
+              badge="等你决策"
+              badgeTone="slate"
+            />
+            <div className="space-y-2">
+              {auditsInFlight.map(({ id, row, status }) => {
+                const cid = PATTERN_AUDIT_PREFIX + id;
+                const active = activeId === cid;
+                const decided = ["adopted", "held", "parked"].includes(status);
+                return (
+                  <button
+                    key={cid}
+                    type="button"
+                    onClick={() => onSelect(cid)}
+                    className={`w-full text-left rounded-lg border p-3 transition-colors ${
+                      active
+                        ? "bg-slate-50 border-slate-300"
+                        : "bg-white border-slate-200 hover:border-slate-300"
+                    } border-l-2 ${
+                      decided
+                        ? status === "adopted"
+                          ? "border-l-emerald-500"
+                          : status === "parked"
+                            ? "border-l-amber-500"
+                            : "border-l-slate-500"
+                        : "border-l-slate-700"
+                    }`}
+                  >
+                    <div className="text-xs font-semibold text-slate-900 truncate">
+                      Audit · {row.title}
+                    </div>
+                    <div className="text-10 text-slate-500 mt-0.5">
+                      {decided
+                        ? status === "adopted"
+                          ? "已采纳修订 · 公司大脑已更新"
+                          : status === "parked"
+                            ? "已标记待复盘 · 暂停 30 天"
+                            : "维持原 pattern · 备注已附加"
+                        : "Agent 已起草修订 · 等你决策"}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div>
           <SidebarGroupHeader label="公司大脑动态 · 可质疑" />
           <div className="space-y-2">
-            {brainPatterns.map((p) => (
-              <div
-                key={p.id}
-                className="rounded-lg border border-slate-200 bg-white p-3"
-              >
-                <div className="text-xs font-semibold text-slate-900 leading-snug">
-                  {p.title}
-                </div>
-                <div className="text-10 text-slate-500 mt-0.5">{p.meta}</div>
-                <div className="text-10 text-slate-400 mt-1.5">
-                  [查看 STAR] · [质疑] · Phase E 接入
-                </div>
-              </div>
-            ))}
+            {brainPatterns.map((p) => {
+              const rev = proposalStates && proposalStates;
+              const r = (patternRevisions || {})[p.id];
+              const auditActive =
+                activeId === PATTERN_AUDIT_PREFIX + p.id;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => onSelect(PATTERN_AUDIT_PREFIX + p.id)}
+                  className={`w-full text-left rounded-lg border p-3 transition-colors ${
+                    auditActive
+                      ? "bg-slate-50 border-slate-300"
+                      : "bg-white border-slate-200 hover:border-slate-300"
+                  }`}
+                >
+                  <div className="text-xs font-semibold text-slate-900 leading-snug">
+                    {p.title}
+                  </div>
+                  <div className="text-10 text-slate-500 mt-0.5">{p.meta}</div>
+                  <div className="text-10 text-slate-400 mt-1.5 inline-flex items-center gap-1">
+                    <MessageSquare className="w-2.5 h-2.5" />
+                    {r?.status === "adopted"
+                      ? "已采纳修订"
+                      : r?.status === "parked"
+                        ? "已标记待复盘"
+                        : r?.status === "challenged"
+                          ? "Audit 进行中"
+                          : "点开发起 audit"}
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -11500,7 +11580,13 @@ function UploadedDocsList({ docs, query, activeClearance }) {
   );
 }
 
-function CapturedPatterns({ patterns, onSelect, query, activeClearance }) {
+function CapturedPatterns({
+  patterns,
+  onSelect,
+  query,
+  activeClearance,
+  patternRevisions = {},
+}) {
   const [filter, setFilter] = useState("All");
   const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
   const q = (query || "").trim().toLowerCase();
@@ -11533,27 +11619,69 @@ function CapturedPatterns({ patterns, onSelect, query, activeClearance }) {
       <div className="space-y-2">
         {filtered.map((p) => {
           const visible = canView(activeClearance, p.sensitivity);
+          const sidebarId = PATTERN_REVISION_BY_BRAIN_ID[p.id];
+          const revision = sidebarId ? patternRevisions[sidebarId] : null;
+          const adopted = revision?.status === "adopted";
+          const parked = revision?.status === "parked";
+          const auditData = sidebarId
+            ? CMO_PATTERN_AUDITS[sidebarId]
+            : null;
+          const displayedConfidence =
+            adopted && auditData
+              ? auditData.revision.confidenceAfter
+              : p.confidencePct;
           return (
             <button
               key={p.id}
               type="button"
               onClick={() => onSelect(p)}
-              className="w-full text-left border border-slate-200 rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white"
+              className={`w-full text-left border rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white ${
+                adopted
+                  ? "border-amber-300"
+                  : parked
+                    ? "border-amber-300 bg-amber-50/40"
+                    : "border-slate-200"
+              }`}
             >
               {visible ? (
                 <>
                   <div className="text-sm font-medium text-slate-900 leading-snug">
                     {p.name}
                   </div>
+                  {adopted && auditData && (
+                    <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
+                      <Edit3 className="w-2.5 h-2.5" />
+                      CMO 在 {revision.revisedAt} 修订 ·{" "}
+                      {auditData.revision.mainChange}
+                    </div>
+                  )}
+                  {parked && (
+                    <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
+                      <AlertTriangle className="w-2.5 h-2.5" />
+                      已标记待复盘 · 暂停引用 30 天
+                    </div>
+                  )}
                   <div className="mt-1.5 flex items-center gap-2 flex-wrap">
                     <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
                       {PATTERN_CATEGORY_LABEL[p.category]}
                     </Pill>
                     <span className="text-11 text-slate-600">
                       置信度{" "}
-                      <span className="font-mono tabular-nums text-slate-900">
-                        {p.confidencePct}%
+                      <span
+                        className={`font-mono tabular-nums ${
+                          adopted &&
+                          displayedConfidence !== p.confidencePct
+                            ? "text-emerald-700"
+                            : "text-slate-900"
+                        }`}
+                      >
+                        {displayedConfidence}%
                       </span>
+                      {adopted && displayedConfidence !== p.confidencePct && (
+                        <span className="text-10 text-slate-400 ml-1">
+                          (修订前 {p.confidencePct}%)
+                        </span>
+                      )}
                     </span>
                     <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
                       {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
@@ -12386,7 +12514,7 @@ function RecentQueriesList({ queries, activeUser, query, onOpenThread, threadIds
   );
 }
 
-function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread, onTabChange }) {
+function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread, onTabChange, patternRevisions = {} }) {
   const [openActivity, setOpenActivity] = useState(null);
   const [openPattern, setOpenPattern] = useState(null);
   const [query, setQuery] = useState("");
@@ -12494,6 +12622,7 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread, onTabCh
             onSelect={setOpenPattern}
             query={query}
             activeClearance={activeClearance}
+            patternRevisions={patternRevisions}
           />
         </BrainSection>
         <BrainSection
@@ -13187,6 +13316,7 @@ function InspectorPanel({
   activeUserId,
   onSwitchUser,
   onOpenThread,
+  patternRevisions = {},
 }) {
   if (!open) return null;
   const tabs = [
@@ -13251,6 +13381,7 @@ function InspectorPanel({
             onSwitchUser={onSwitchUser}
             onOpenThread={onOpenThread}
             onTabChange={onTabChange}
+            patternRevisions={patternRevisions}
           />
         ) : (
           <OutcomesContent
@@ -15516,9 +15647,22 @@ function TeamDecisionCard({ row, onSelect }) {
   );
 }
 
-function BrainPatternCard({ row }) {
+function BrainPatternCard({ row, onChallenge, revision }) {
+  const status = revision?.status || "pending";
+  const inFlight = status === "challenged";
+  const decided = ["adopted", "held", "parked"].includes(status);
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-3.5">
+    <div
+      className={`rounded-lg border bg-white p-3.5 ${
+        decided
+          ? status === "adopted"
+            ? "border-emerald-300"
+            : status === "parked"
+              ? "border-amber-300"
+              : "border-slate-300"
+          : "border-slate-200"
+      }`}
+    >
       <div className="flex items-baseline gap-1.5 mb-1">
         <span className="text-10 text-slate-500 font-mono uppercase tracking-wider">
           {row.type}
@@ -15538,6 +15682,24 @@ function BrainPatternCard({ row }) {
         )}
         <span>{row.usage}</span>
       </div>
+      {inFlight && (
+        <div className="text-10 text-slate-700 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5 mb-2 inline-flex items-center gap-1">
+          <MessageSquare className="w-2.5 h-2.5" />
+          Audit 进行中 · 等你决策
+        </div>
+      )}
+      {status === "adopted" && (
+        <div className="text-10 text-emerald-800 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.5 mb-2 inline-flex items-center gap-1">
+          <Check className="w-2.5 h-2.5" />
+          你已采纳修订 · 公司大脑已更新
+        </div>
+      )}
+      {status === "parked" && (
+        <div className="text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 mb-2 inline-flex items-center gap-1">
+          <AlertTriangle className="w-2.5 h-2.5" />
+          已标记待复盘 · 暂停 30 天
+        </div>
+      )}
       <div className="flex items-center gap-2 pt-2.5 border-t border-slate-100">
         <button
           type="button"
@@ -15548,9 +15710,11 @@ function BrainPatternCard({ row }) {
         <span className="text-slate-300 text-11">·</span>
         <button
           type="button"
+          onClick={() => onChallenge && onChallenge(row.id)}
           className="text-11 px-2 py-0.5 bg-white border border-slate-300 text-slate-700 rounded hover:bg-slate-50 inline-flex items-center gap-1"
         >
-          <MessageSquare className="w-3 h-3" /> 质疑
+          <MessageSquare className="w-3 h-3" />
+          {inFlight || decided ? "重新打开 audit" : "质疑"}
         </button>
       </div>
     </div>
@@ -15639,7 +15803,12 @@ function PortfolioSection() {
   );
 }
 
-function CmoSupervisionPanel({ onSelect, proposalStates = {} }) {
+function CmoSupervisionPanel({
+  onSelect,
+  proposalStates = {},
+  patternRevisions = {},
+  onChallengePattern,
+}) {
   const pendingRows = CMO_PENDING.filter(
     (row) => (proposalStates[row.threadId]?.status || "pending") === "pending",
   );
@@ -15745,7 +15914,12 @@ function CmoSupervisionPanel({ onSelect, proposalStates = {} }) {
           </div>
           <div className="space-y-2.5">
             {CMO_BRAIN_NEW.map((row) => (
-              <BrainPatternCard key={row.id} row={row} />
+              <BrainPatternCard
+                key={row.id}
+                row={row}
+                revision={patternRevisions[row.id]}
+                onChallenge={onChallengePattern}
+              />
             ))}
           </div>
         </section>
@@ -16193,6 +16367,426 @@ function CmoRejectedBanner({ rejection }) {
   );
 }
 
+/* ─── Phase E · Pattern audit flow ─────────────────────────────────────── */
+
+const CMO_PATTERN_AUDITS = {
+  "pattern-brand-cpc": {
+    title: "Pattern Audit · 品牌广告持续投放 → CPC 下行",
+    patternType: "Pattern",
+    patternName: "品牌广告持续投放 → CPC 下行",
+    currentState: {
+      confidence: 76,
+      sampleSummary: "12 个 brand-ad scale-up 案例",
+      applied: "已应用于 4 个方案 (Maya × 2, Devon × 1, Sara × 1)",
+      lastUpdated: "5/14",
+      sensitivity: "内部",
+    },
+    prefilledQuestion:
+      "Q4 我们在高价位段试过类似打法, 效果差很多。这条 pattern 是不是应该加价位段 caveat?",
+    cmoSubmittedAt: "5/16 14:38",
+    agentSubmittedAt: "5/16 14:40",
+    agentPreamble: "我把 12 个原案例按价位段拆分了:",
+    analysis: [
+      {
+        range: "$40 – $180",
+        count: "8 个案例",
+        summary: "CPC 下行平均 22.4% · 全部成功",
+        tone: "good",
+      },
+      {
+        range: "$180 – $400",
+        count: "3 个案例",
+        summary: "CPC 下行平均 14.2% · 2 个成功 1 个失败",
+        tone: "warn",
+      },
+      {
+        range: "$400+",
+        count: "1 个案例",
+        summary: "CPC 下行仅 6.2% · 边际成功",
+        tone: "bad",
+      },
+    ],
+    agentConclusion: "确实有显著的价位段差异。你的质疑成立。",
+    revision: {
+      mainPattern: "持续投品牌广告 4-6 周后, CPC 自然下行",
+      mainChange: "限定适用价位段 $40 – $180",
+      subPattern: {
+        name: "高价位段 ($180+) 同方法 CPC 下行有限",
+        confidence: 55,
+        note: "仅作参考",
+      },
+      confidenceBefore: 76,
+      confidenceAfter: 82,
+      confidenceNote: "限定范围后, 样本更纯, 信心反而上升",
+    },
+  },
+  "playbook-peak-defense": {
+    title: "Pattern Audit · 旺季前自然位防御",
+    patternType: "Playbook",
+    patternName: "旺季前自然位防御",
+    currentState: {
+      confidence: 78,
+      sampleSummary: "床架品类 · 3 次历史防御",
+      applied: "已被 NightFox 防御方案引用",
+      lastUpdated: "5/13",
+      sensitivity: "敏感",
+    },
+    prefilledQuestion:
+      "床架旺季防御做过 3 次, 都是赢的吗?有没有失败案例的复盘?",
+    cmoSubmittedAt: "5/16 15:02",
+    agentSubmittedAt: "5/16 15:04",
+    agentPreamble: "我把 3 次防御按结果拆开了:",
+    analysis: [
+      {
+        range: "2024 Q2 旺季",
+        count: "1 次",
+        summary: "守住 · SOV 71% · 竞品没打折券",
+        tone: "good",
+      },
+      {
+        range: "2024 Q3 返校季",
+        count: "1 次",
+        summary: "部分失败 · SOV 跌 9pp · 竞品同期挂 22% 折扣券",
+        tone: "bad",
+      },
+      {
+        range: "2025 Q2 旺季",
+        count: "1 次",
+        summary: "守住 · SOV 升 4pp · 我们跟挂 14% 券",
+        tone: "good",
+      },
+    ],
+    agentConclusion:
+      "失败案例确实没在原 playbook 里突出。关键变量是「竞品是否同期挂券」。",
+    revision: {
+      mainPattern: "旺季前 4 周扩量品牌广告防御自然位",
+      mainChange:
+        "加 caveat: 竞品同期挂 ≥ 15% 折扣券时, 防御效率 -38%, 需配跟随促销",
+      subPattern: null,
+      confidenceBefore: 78,
+      confidenceAfter: 74,
+      confidenceNote: "加 caveat 后从「都赢」调到「条件性赢」",
+    },
+  },
+  "pattern-razor-pricing": {
+    title: "Pattern Audit · razor-blade 定价测试方法",
+    patternType: "Pattern",
+    patternName: "razor-blade 定价测试方法",
+    currentState: {
+      confidence: 65,
+      sampleSummary: "1 个案例(牙刷 + 刷头)",
+      applied: "Sara 的 Henry's Razor 方案正在引用",
+      lastUpdated: "5/12",
+      sensitivity: "敏感",
+    },
+    prefilledQuestion:
+      "1 个案例做支撑信心 65% 太薄了。Henry's 跑完前要不要标记「研究中」, 别让 Sara 直接拿这条当依据?",
+    cmoSubmittedAt: "5/16 16:14",
+    agentSubmittedAt: "5/16 16:16",
+    agentPreamble: "你说得对。我重新评估了这条 pattern 的样本质量:",
+    analysis: [
+      {
+        range: "牙刷(唯一案例)",
+        count: "1 个",
+        summary: "绑定率 38.4% · 降价 8% / 14 天 → 60 天净毛利 +1.8pp",
+        tone: "good",
+      },
+      {
+        range: "刮胡刀 vs 牙刷差异",
+        count: "—",
+        summary: "绑定率 21.7% 远低于 38.4% · 不可类比",
+        tone: "bad",
+      },
+    ],
+    agentConclusion:
+      "1 个案例不足以作为「方法」入库。建议降级到 Hypothesis · 研究中, 等 Henry's 跑完再回看。",
+    revision: {
+      mainPattern: "razor-blade 模式 · 降价提刀头销量",
+      mainChange:
+        "状态从 Pattern 降级为 Hypothesis · 研究中, 加 low-sample 标签",
+      subPattern: null,
+      confidenceBefore: 65,
+      confidenceAfter: 65,
+      confidenceNote: "信心未变, 但样本质量打回起点",
+    },
+  },
+};
+
+function AnalysisRow({ row }) {
+  const tone =
+    row.tone === "good"
+      ? "border-emerald-200 bg-emerald-50/40"
+      : row.tone === "warn"
+        ? "border-amber-200 bg-amber-50/40"
+        : "border-rose-200 bg-rose-50/40";
+  const dotTone =
+    row.tone === "good"
+      ? "text-emerald-700"
+      : row.tone === "warn"
+        ? "text-amber-700"
+        : "text-rose-700";
+  return (
+    <div className={`rounded border ${tone} px-3 py-2`}>
+      <div className="flex items-baseline justify-between gap-2 mb-0.5">
+        <span className={`text-11 font-medium ${dotTone}`}>{row.range}</span>
+        <span className="text-10 text-slate-500 font-mono">{row.count}</span>
+      </div>
+      <div className="text-xs text-slate-800">{row.summary}</div>
+    </div>
+  );
+}
+
+function PatternAuditCanvas({
+  patternId,
+  role,
+  revision,
+  onSubmit,
+  onAdopt,
+  onHold,
+  onPark,
+}) {
+  const data = CMO_PATTERN_AUDITS[patternId];
+  if (!data) return null;
+  const status = revision?.status || "pending";
+  const submitted = status !== "pending";
+  const decided = ["adopted", "held", "parked"].includes(status);
+  const [questionText, setQuestionText] = useState(
+    revision?.question || data.prefilledQuestion,
+  );
+
+  return (
+    <div className="px-6 py-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="border-b border-slate-200 pb-4 mb-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
+            Pattern Audit
+          </div>
+          <div className="text-lg font-semibold text-slate-900">
+            {data.title}
+          </div>
+        </div>
+
+        <section className="mb-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            1. 当前 Pattern 状态
+          </div>
+          <div className="rounded-lg border border-slate-200 bg-white p-4 grid grid-cols-2 gap-y-2 gap-x-4 text-xs text-slate-700">
+            <div>
+              <span className="text-slate-500">信心度</span>:{" "}
+              <span className="font-mono text-slate-900">
+                {data.currentState.confidence}%
+              </span>
+            </div>
+            <div>
+              <span className="text-slate-500">样本来源</span>:{" "}
+              {data.currentState.sampleSummary}
+            </div>
+            <div>
+              <span className="text-slate-500">敏感度</span>:{" "}
+              {data.currentState.sensitivity}
+            </div>
+            <div>
+              <span className="text-slate-500">最后更新</span>:{" "}
+              <span className="font-mono">{data.currentState.lastUpdated}</span>
+            </div>
+            <div className="col-span-2">
+              <span className="text-slate-500">已应用于</span>:{" "}
+              {data.currentState.applied}
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-6">
+          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+            2. CMO 质疑
+          </div>
+          {!submitted && role === "cmo" ? (
+            <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <div className="text-11 text-slate-600 mb-2">
+                可以从样本量、信心度、适用范围、潜在副作用、最近表现等角度提出疑问。
+              </div>
+              <textarea
+                value={questionText}
+                onChange={(e) => setQuestionText(e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 text-sm bg-white border border-slate-300 rounded-md text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-500"
+              />
+              <div className="flex items-center justify-end gap-2 mt-3">
+                <button
+                  type="button"
+                  disabled={questionText.trim().length === 0}
+                  onClick={() => onSubmit && onSubmit(questionText.trim())}
+                  className="px-3 py-1.5 text-11 font-medium bg-slate-900 text-white rounded hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed"
+                >
+                  提交质疑 → 触发 Pattern Audit
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <div className="text-11 text-slate-500 mb-2">
+                CMO · {data.cmoSubmittedAt}
+              </div>
+              <div className="text-sm text-slate-800 leading-relaxed">
+                "{revision?.question || data.prefilledQuestion}"
+              </div>
+            </div>
+          )}
+        </section>
+
+        {submitted && (
+          <>
+            <section className="mb-6">
+              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+                3. Agent 重新审查
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-11 text-slate-500 mb-2">
+                  Agent · {data.agentSubmittedAt}
+                </div>
+                <div className="text-sm text-slate-800 leading-relaxed mb-3">
+                  {data.agentPreamble}
+                </div>
+                <div className="space-y-2 mb-3">
+                  {data.analysis.map((row, i) => (
+                    <AnalysisRow key={i} row={row} />
+                  ))}
+                </div>
+                <div className="text-sm text-slate-800 leading-relaxed pt-2 border-t border-slate-100">
+                  {data.agentConclusion}
+                </div>
+              </div>
+            </section>
+
+            <section className="mb-6">
+              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+                4. 建议修订
+              </div>
+              <div className="rounded-lg border border-slate-300 bg-slate-50/60 p-4 space-y-3">
+                <div>
+                  <div className="text-10 uppercase tracking-wider text-slate-500 mb-1">
+                    主 Pattern
+                  </div>
+                  <div className="text-sm text-slate-800">
+                    {data.revision.mainPattern}
+                  </div>
+                  <div className="text-sm text-emerald-800 mt-1 flex items-start gap-1.5">
+                    <ArrowRight className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-emerald-700" />
+                    <span>{data.revision.mainChange}</span>
+                  </div>
+                </div>
+                {data.revision.subPattern && (
+                  <div className="pt-3 border-t border-slate-200">
+                    <div className="text-10 uppercase tracking-wider text-slate-500 mb-1">
+                      子 Pattern(新)
+                    </div>
+                    <div className="text-sm text-slate-800">
+                      {data.revision.subPattern.name}
+                    </div>
+                    <div className="text-11 text-slate-600 mt-1">
+                      信心度{" "}
+                      <span className="font-mono text-slate-900">
+                        {data.revision.subPattern.confidence}%
+                      </span>{" "}
+                      · {data.revision.subPattern.note}
+                    </div>
+                  </div>
+                )}
+                <div className="pt-3 border-t border-slate-200 text-11 text-slate-700">
+                  主 Pattern 信心度:{" "}
+                  <span className="font-mono text-slate-700">
+                    {data.revision.confidenceBefore}%
+                  </span>{" "}
+                  →{" "}
+                  <span
+                    className={`font-mono ${
+                      data.revision.confidenceAfter >
+                      data.revision.confidenceBefore
+                        ? "text-emerald-700"
+                        : data.revision.confidenceAfter <
+                            data.revision.confidenceBefore
+                          ? "text-amber-700"
+                          : "text-slate-700"
+                    }`}
+                  >
+                    {data.revision.confidenceAfter}%
+                  </span>{" "}
+                  <span className="text-slate-500">
+                    ({data.revision.confidenceNote})
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
+                5. CMO 决策
+              </div>
+              {role === "cmo" && !decided && (
+                <div className="rounded-lg border border-slate-200 bg-white p-4 space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => onAdopt && onAdopt()}
+                    className="w-full text-left px-3 py-2.5 text-sm font-medium bg-emerald-600 text-white rounded hover:bg-emerald-700 inline-flex items-center gap-2"
+                  >
+                    <Check className="w-4 h-4" /> 采纳修订 → 更新公司大脑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onHold && onHold()}
+                    className="w-full text-left px-3 py-2.5 text-sm bg-white border border-slate-300 text-slate-700 rounded hover:bg-slate-50"
+                  >
+                    维持原 pattern → 添加你的备注
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onPark && onPark()}
+                    className="w-full text-left px-3 py-2.5 text-sm text-amber-800 hover:bg-amber-50 rounded"
+                  >
+                    标记待复盘 → 暂停 pattern 引用 30 天
+                  </button>
+                </div>
+              )}
+              {role === "cmo" && decided && (
+                <div
+                  className={`rounded-lg border p-3.5 flex items-start gap-2 ${
+                    status === "adopted"
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-900"
+                      : status === "parked"
+                        ? "border-amber-200 bg-amber-50 text-amber-900"
+                        : "border-slate-200 bg-slate-50 text-slate-800"
+                  }`}
+                >
+                  {status === "adopted" ? (
+                    <Check className="w-4 h-4 text-emerald-700 mt-0.5 flex-shrink-0" />
+                  ) : status === "parked" ? (
+                    <AlertTriangle className="w-4 h-4 text-amber-700 mt-0.5 flex-shrink-0" />
+                  ) : (
+                    <CircleDot className="w-4 h-4 text-slate-600 mt-0.5 flex-shrink-0" />
+                  )}
+                  <div className="text-sm leading-snug">
+                    {status === "adopted" &&
+                      "已采纳修订, 公司大脑里的 pattern 已更新, 引用过的方案会看到「先例已被 CMO 修订」标记。"}
+                    {status === "held" &&
+                      "维持原 pattern (你的备注已附加, 信心度未变)。"}
+                    {status === "parked" &&
+                      "Pattern 已标记为待复盘 · 暂停引用 30 天。"}
+                  </div>
+                </div>
+              )}
+              {role !== "cmo" && (
+                <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3.5 text-sm text-slate-700">
+                  此 audit 由 CMO 触发, 决策权在 CMO 这里。等待结果。
+                </div>
+              )}
+            </section>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function App({
   locale,
   setLocale,
@@ -16200,6 +16794,8 @@ export default function App({
   setCurrentRole,
   proposalStates,
   setProposalStates,
+  patternRevisions,
+  setPatternRevisions,
 }) {
   const [activeId, setActiveId] = useState(null);
   const [inspectorOpen, setInspectorOpen] = useState(false);
@@ -16255,6 +16851,11 @@ export default function App({
   const challengeProposalId = isChallengeView
     ? PROPOSAL_FOR_CHALLENGE[activeId]
     : null;
+  const isPatternAuditView =
+    activeId && activeId.startsWith(PATTERN_AUDIT_PREFIX);
+  const auditPatternId = isPatternAuditView
+    ? activeId.slice(PATTERN_AUDIT_PREFIX.length)
+    : null;
   const cmoProposalMeta =
     currentRole === "cmo" &&
     proposalStates[activeId]?.status === "pending" &&
@@ -16307,6 +16908,40 @@ export default function App({
     }));
   }
 
+  function handlePatternSubmit(text) {
+    const pid = auditPatternId;
+    setPatternRevisions((s) => ({
+      ...s,
+      [pid]: {
+        ...s[pid],
+        status: "challenged",
+        question: text,
+        submittedAt: "5/16 14:38",
+      },
+    }));
+  }
+  function handlePatternAdopt() {
+    const pid = auditPatternId;
+    setPatternRevisions((s) => ({
+      ...s,
+      [pid]: { ...s[pid], status: "adopted", revisedAt: "5/16" },
+    }));
+  }
+  function handlePatternHold() {
+    const pid = auditPatternId;
+    setPatternRevisions((s) => ({
+      ...s,
+      [pid]: { ...s[pid], status: "held", revisedAt: "5/16" },
+    }));
+  }
+  function handlePatternPark() {
+    const pid = auditPatternId;
+    setPatternRevisions((s) => ({
+      ...s,
+      [pid]: { ...s[pid], status: "parked", revisedAt: "5/16" },
+    }));
+  }
+
   const canvas = (() => {
     if (isChallengeView) {
       return (
@@ -16316,6 +16951,19 @@ export default function App({
           onCmoAdopt={handleCmoAdopt}
           onCmoHold={handleCmoHold}
           decided={proposalStates[challengeProposalId]?.cmoDecision}
+        />
+      );
+    }
+    if (isPatternAuditView) {
+      return (
+        <PatternAuditCanvas
+          patternId={auditPatternId}
+          role={currentRole}
+          revision={patternRevisions[auditPatternId]}
+          onSubmit={handlePatternSubmit}
+          onAdopt={handlePatternAdopt}
+          onHold={handlePatternHold}
+          onPark={handlePatternPark}
         />
       );
     }
@@ -16375,6 +17023,10 @@ export default function App({
             <CmoSupervisionPanel
               onSelect={setActiveId}
               proposalStates={proposalStates}
+              patternRevisions={patternRevisions}
+              onChallengePattern={(pid) =>
+                setActiveId(PATTERN_AUDIT_PREFIX + pid)
+              }
             />
           );
         if (currentRole === "devon") return <DevonEmptyCanvas />;
@@ -16436,6 +17088,7 @@ export default function App({
           onSelect={setActiveId}
           currentRole={currentRole}
           proposalStates={proposalStates}
+          patternRevisions={patternRevisions}
         />
         <main className="flex-1 overflow-y-auto">
           <div
@@ -16472,6 +17125,7 @@ export default function App({
           activeUserId={activeUserId}
           onSwitchUser={setActiveUserId}
           onOpenThread={setActiveId}
+          patternRevisions={patternRevisions}
         />
       </div>
     </div>
