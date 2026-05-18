@@ -9705,7 +9705,8 @@ function TopBar({
   );
 }
 
-function SidebarGroupHeader({ label, badge, badgeTone = "slate" }) {
+function SidebarGroup({ label, badge, badgeTone = "slate", defaultOpen = true, children }) {
+  const [open, setOpen] = useState(defaultOpen);
   const toneClass =
     badgeTone === "emerald"
       ? "text-emerald-700 bg-emerald-50 border-emerald-200"
@@ -9713,18 +9714,29 @@ function SidebarGroupHeader({ label, badge, badgeTone = "slate" }) {
         ? "text-rose-700 bg-rose-50 border-rose-200"
         : "text-slate-600 bg-slate-50 border-slate-200";
   return (
-    <div className="px-1 mb-2 flex items-center gap-2">
-      <ChevronDown className="w-3 h-3 text-slate-500" />
-      <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
-        {label}
-      </span>
-      {badge && (
-        <span
-          className={`text-10 border rounded-full px-1.5 font-medium ${toneClass}`}
-        >
-          {badge}
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full px-1 mb-2 flex items-center gap-2 hover:opacity-70"
+      >
+        {open ? (
+          <ChevronDown className="w-3 h-3 text-slate-500" />
+        ) : (
+          <ChevronRight className="w-3 h-3 text-slate-500" />
+        )}
+        <span className="text-10 uppercase tracking-wider text-slate-500 font-medium">
+          {label}
         </span>
-      )}
+        {badge && (
+          <span
+            className={`text-10 border rounded-full px-1.5 font-medium ${toneClass}`}
+          >
+            {badge}
+          </span>
+        )}
+      </button>
+      {open && children}
     </div>
   );
 }
@@ -9770,8 +9782,7 @@ function ChatPanel({
   } else if (currentRole === "devon") {
     const own = THREADS.filter((t) => THREAD_OWNERS[t.id] === "devon");
     groups = (
-      <div>
-        <SidebarGroupHeader label="你的会话" />
+      <SidebarGroup label="你的会话">
         <div className="space-y-2">
           {own.map((thread) => (
             <ThreadCard
@@ -9783,7 +9794,7 @@ function ChatPanel({
             />
           ))}
         </div>
-      </div>
+      </SidebarGroup>
     );
     count = `${own.length} 个会话`;
   } else {
@@ -9809,12 +9820,11 @@ function ChatPanel({
     groups = (
       <>
         {agentFlagged.length > 0 && (
-          <div>
-            <SidebarGroupHeader
-              label="Agent 提示"
-              badge={newCount > 0 ? `${newCount} 新` : null}
-              badgeTone="emerald"
-            />
+          <SidebarGroup
+            label="Agent 提示"
+            badge={newCount > 0 ? `${newCount} 新` : null}
+            badgeTone="emerald"
+          >
             <div className="space-y-2">
               {agentFlagged.map((thread) => (
                 <ThreadCard
@@ -9826,10 +9836,9 @@ function ChatPanel({
                 />
               ))}
             </div>
-          </div>
+          </SidebarGroup>
         )}
-        <div>
-          <SidebarGroupHeader label="你的会话" />
+        <SidebarGroup label="你的会话">
           <div className="space-y-2">
             {ownThreads.map((thread) => (
               <ThreadCard
@@ -9873,10 +9882,9 @@ function ChatPanel({
                 );
               })}
           </div>
-        </div>
+        </SidebarGroup>
         {teamThreads.length > 0 && (
-          <div>
-            <SidebarGroupHeader label="你的团队" />
+          <SidebarGroup label="你的团队">
             <div className="space-y-2">
               {teamThreads.map((thread) => (
                 <ThreadCard
@@ -9889,11 +9897,10 @@ function ChatPanel({
                 />
               ))}
             </div>
-          </div>
+          </SidebarGroup>
         )}
         {brainOpsThreads.length > 0 && (
-          <div>
-            <SidebarGroupHeader label="品牌大脑操作" />
+          <SidebarGroup label="品牌大脑操作">
             <div className="space-y-2">
               {brainOpsThreads.map((thread) => (
                 <ThreadCard
@@ -9906,7 +9913,7 @@ function ChatPanel({
                 />
               ))}
             </div>
-          </div>
+          </SidebarGroup>
         )}
       </>
     );
@@ -9957,8 +9964,7 @@ function ChatPanel({
     return (
       <>
         {dailyReport && (
-          <div>
-            <SidebarGroupHeader label="Agent 提示" />
+          <SidebarGroup label="Agent 提示">
             <div className="space-y-2">
               <ThreadCard
                 thread={dailyReport}
@@ -9967,15 +9973,14 @@ function ChatPanel({
                 onSelect={onSelect}
               />
             </div>
-          </div>
+          </SidebarGroup>
         )}
 
-        <div>
-          <SidebarGroupHeader
-            label={`待审批 · ${pending.length} 件`}
-            badge={pending.length > 0 ? "需要决策" : null}
-            badgeTone="rose"
-          />
+        <SidebarGroup
+          label={`待审批 · ${pending.length} 件`}
+          badge={pending.length > 0 ? "需要决策" : null}
+          badgeTone="rose"
+        >
           {pending.length === 0 ? (
             <div className="text-11 text-slate-400 px-1 py-2">
               本周没有待你审批的方案
@@ -10011,15 +10016,14 @@ function ChatPanel({
               ))}
             </div>
           )}
-        </div>
+        </SidebarGroup>
 
         {challenged.length > 0 && (
-          <div>
-            <SidebarGroupHeader
-              label={`你的质疑进行中 · ${challenged.length}`}
-              badge="等 Maya 回应"
-              badgeTone="slate"
-            />
+          <SidebarGroup
+            label={`你的质疑进行中 · ${challenged.length}`}
+            badge="等 Maya 回应"
+            badgeTone="slate"
+          >
             <div className="space-y-2">
               {challenged.map((thread) => {
                 const cid = CHALLENGE_THREAD_IDS[thread.id];
@@ -10044,16 +10048,15 @@ function ChatPanel({
                 );
               })}
             </div>
-          </div>
+          </SidebarGroup>
         )}
 
         {auditsInFlight.length > 0 && (
-          <div>
-            <SidebarGroupHeader
-              label={`模式复盘 · 进行中 · ${auditsInFlight.length}`}
-              badge="等你决策"
-              badgeTone="slate"
-            />
+          <SidebarGroup
+            label={`模式复盘 · 进行中 · ${auditsInFlight.length}`}
+            badge="等你决策"
+            badgeTone="slate"
+          >
             <div className="space-y-2">
               {auditsInFlight.map(({ id, row, status }) => {
                 const cid = PATTERN_AUDIT_PREFIX + id;
@@ -10093,11 +10096,10 @@ function ChatPanel({
                 );
               })}
             </div>
-          </div>
+          </SidebarGroup>
         )}
 
-        <div>
-          <SidebarGroupHeader label="CMO 操作历史" />
+        <SidebarGroup label="CMO 操作历史">
           <div className="space-y-2">
             {cmoHistory.map((h) => (
               <div
@@ -10111,7 +10113,7 @@ function ChatPanel({
               </div>
             ))}
           </div>
-        </div>
+        </SidebarGroup>
       </>
     );
   }
