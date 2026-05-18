@@ -62,6 +62,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import MetricTerm from "./MetricTerm.jsx";
+import MetricDelta from "./MetricDelta.jsx";
 import InspectionDrawer from "./InspectionDrawer.jsx";
 import {
   ROLES,
@@ -14413,15 +14414,15 @@ function buildWeeklyListingsWithHistory() {
 const WEEKLY_LISTINGS_WITH_HISTORY = buildWeeklyListingsWithHistory();
 
 const LISTING_METRIC_COLUMNS = [
-  { key: "impressions", label: "Impressions", align: "right", format: (v) => v.toLocaleString() },
-  { key: "clicks",      label: "Clicks",      align: "right", format: (v) => v.toLocaleString() },
-  { key: "ctr",         label: "CTR",         align: "right", format: (v) => `${(v * 100).toFixed(2)}%` },
-  { key: "cvr",         label: "CVR",         align: "right", format: (v) => `${(v * 100).toFixed(2)}%` },
-  { key: "acos",        label: "ACoS",        align: "right", format: (v) => `${(v * 100).toFixed(1)}%` },
-  { key: "tacos",       label: "TACoS",       align: "right", format: (v) => `${(v * 100).toFixed(1)}%` },
-  { key: "roas",        label: "ROAS",        align: "right", format: (v) => v.toFixed(2) },
-  { key: "rev",         label: "Revenue",     align: "right", format: (v) => `$${v.toLocaleString()}` },
-  { key: "aov",         label: "AOV",         align: "right", format: (v) => `$${v.toFixed(0)}` },
+  { key: "impressions", label: "Impressions", goodDirection: "up",   format: (v) => v.toLocaleString() },
+  { key: "clicks",      label: "Clicks",      goodDirection: "up",   format: (v) => v.toLocaleString() },
+  { key: "ctr",         label: "CTR",         goodDirection: "up",   format: (v) => `${(v * 100).toFixed(2)}%` },
+  { key: "cvr",         label: "CVR",         goodDirection: "up",   format: (v) => `${(v * 100).toFixed(2)}%` },
+  { key: "acos",        label: "ACoS",        goodDirection: "down", format: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "tacos",       label: "TACoS",       goodDirection: "down", format: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "roas",        label: "ROAS",        goodDirection: "up",   format: (v) => v.toFixed(2) },
+  { key: "rev",         label: "Revenue",     goodDirection: "up",   format: (v) => `$${v.toLocaleString()}` },
+  { key: "aov",         label: "AOV",         goodDirection: "up",   format: (v) => `$${v.toFixed(0)}` },
 ];
 
 const DAILY_REPORTS_DATA = {
@@ -14809,14 +14810,21 @@ function DailyReportCanvas({ onJumpTo }) {
                     {LISTING_METRIC_COLUMNS.map((m) => (
                       <td
                         key={m.key}
-                        className="text-right px-3 py-1.5 whitespace-nowrap"
+                        className="text-right px-3 py-1.5 whitespace-nowrap align-middle"
                       >
                         <button
                           type="button"
                           onClick={() => setDrawerCell({ listing: row, metric: m })}
-                          className="font-mono tabular-nums text-slate-900 hover:text-emerald-700 hover:underline decoration-dotted underline-offset-2"
+                          className="flex flex-col items-end leading-tight hover:text-emerald-700 group"
                         >
-                          {m.format(row.today[m.key])}
+                          <span className="font-mono tabular-nums text-slate-900 group-hover:underline decoration-dotted underline-offset-2">
+                            {m.format(row.today[m.key])}
+                          </span>
+                          <MetricDelta
+                            current={row.today[m.key]}
+                            prior={row.history[6][m.key]}
+                            goodDirection={m.goodDirection}
+                          />
                         </button>
                       </td>
                     ))}
@@ -15153,14 +15161,21 @@ function WeeklyReportCanvas({ onJumpTo }) {
                     {LISTING_METRIC_COLUMNS.map((m) => (
                       <td
                         key={m.key}
-                        className="text-right px-3 py-1.5 whitespace-nowrap"
+                        className="text-right px-3 py-1.5 whitespace-nowrap align-middle"
                       >
                         <button
                           type="button"
                           onClick={() => setDrawerCell({ listing: row, metric: m })}
-                          className="font-mono tabular-nums text-slate-900 hover:text-emerald-700 hover:underline decoration-dotted underline-offset-2"
+                          className="flex flex-col items-end leading-tight hover:text-emerald-700 group"
                         >
-                          {m.format(row.today[m.key])}
+                          <span className="font-mono tabular-nums text-slate-900 group-hover:underline decoration-dotted underline-offset-2">
+                            {m.format(row.today[m.key])}
+                          </span>
+                          <MetricDelta
+                            current={row.today[m.key]}
+                            prior={row.history[5][m.key]}
+                            goodDirection={m.goodDirection}
+                          />
                         </button>
                       </td>
                     ))}
