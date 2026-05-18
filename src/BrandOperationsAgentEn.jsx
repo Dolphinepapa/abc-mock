@@ -174,18 +174,10 @@ const THREADS = [
     threadType: "report-feed",
     title: "Daily ops report · pushed every morning",
     reports: {
-      historical: [
-        { id: "rpt-2026-05-08", canvasId: "report-2026-05-08", type: "daily", date: "5/8 Fri", time: "7:00", summary: { rev: "$56,180", tacos: "17.4%", anomalies: 0 } },
-        { id: "rpt-2026-05-09", canvasId: "report-2026-05-09", type: "daily", date: "5/9 Sat", time: "7:00", summary: { rev: "$48,240", tacos: "16.8%", anomalies: 1 } },
-        { id: "rpt-2026-05-10", canvasId: "report-2026-05-10", type: "daily", date: "5/10 Sun", time: "7:00", summary: { rev: "$44,720", tacos: "16.5%", anomalies: 0 } },
-      ],
+      historical: [],
       current: [
-        { id: "rpt-weekly-w19", canvasId: "report-weekly-w19", type: "weekly", date: "5/12 Mon", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$402,180", tacos: "17.6%", note: "3 listings showing trend shifts" } },
-        { id: "rpt-2026-05-12", canvasId: "report-2026-05-12", type: "daily", date: "5/12 Mon", time: "7:30", summary: { rev: "$54,240", tacos: "18.2%", anomalies: 1 } },
-        { id: "rpt-2026-05-13", canvasId: "report-2026-05-13", type: "daily", date: "5/13 Tue", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
-        { id: "rpt-2026-05-14", canvasId: "report-2026-05-14", type: "daily", date: "5/14 Wed", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
-        { id: "rpt-2026-05-15", canvasId: "report-2026-05-15", type: "daily", date: "5/15 Thu", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
-        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
+        { id: "rpt-weekly-w19", canvasId: "weekly-report", type: "weekly", date: "5/12 Mon", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$408,940", tacos: "19.4%", note: "3 listings showing trend shifts" } },
+        { id: "rpt-2026-05-16", canvasId: "daily-report", type: "daily", date: "5/16 Fri", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
       ],
     },
   },
@@ -14286,36 +14278,151 @@ function QACanvas({ activeClearance }) {
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
-const REPORT_LISTING_TEMPLATE = [
-  { sku: "SKU-117", name: "Bed frame", share: 15240 / 58420, tacos: 15.2, trend7d: [14800, 15100, 15300, 15600, 15400, 15500, 15240] },
-  { sku: "SKU-A", name: "Floor lamp", share: 7920 / 58420, tacos: 16.7, trend7d: [7820, 7880, 7910, 7940, 7900, 7920, 7920] },
-  { sku: "SKU-K22", name: "Kitchen knife", share: 6820 / 58420, tacos: 17.8, trend7d: [6780, 6810, 6830, 6850, 6820, 6820, 6820] },
-  { sku: "SKU-DR-12", name: "Table runner", share: 6380 / 58420, tacos: 19.0, trend7d: [5980, 6050, 6120, 6200, 6280, 6340, 6380] },
-  { sku: "SKU-WD-08", name: "Wall hanging", share: 4860 / 58420, tacos: 19.0, trend7d: [4820, 4840, 4860, 4870, 4860, 4860, 4860] },
-  { sku: "SKU-LH-04", name: "Lounge chair", share: 4320 / 58420, tacos: 17.0, trend7d: [4280, 4300, 4310, 4330, 4320, 4320, 4320] },
-  { sku: "SKU-OS-03", name: "Storage cabinet", share: 3360 / 58420, tacos: 18.0, trend7d: [3320, 3340, 3360, 3360, 3360, 3360, 3360] },
-  { sku: "SKU-PL-21", name: "Pendant lamp", share: 3180 / 58420, tacos: 19.0, trend7d: [3140, 3160, 3170, 3180, 3180, 3180, 3180] },
-  { sku: "SKU-TR-09", name: "Throw pillow", share: 2720 / 58420, tacos: 19.0, trend7d: [2900, 2860, 2820, 2790, 2760, 2740, 2720] },
-  { sku: "SKU-CD-15", name: "Cruet", share: 1540 / 58420, tacos: 19.0, trend7d: [1520, 1530, 1540, 1540, 1540, 1540, 1540] },
-  { sku: "SKU-VS-04", name: "Vase", share: 1180 / 58420, tacos: 18.0, trend7d: [1160, 1170, 1180, 1180, 1180, 1180, 1180] },
-  { sku: "SKU-BR-07", name: "Bath mat", share: 900 / 58420, tacos: 19.0, trend7d: [890, 895, 900, 900, 900, 900, 900] },
+const REPORT_LISTINGS_BASE = [
+  { asin: "B0CK7BFRM4", line: "Bed frame line",       impressions: 117000, clicks: 1400, orders: 30,  rev: 15240, spend: 2750 },
+  { asin: "B0CHNYFLR2", line: "Floor lamp line",      impressions: 160000, clicks: 3200, orders: 40,  rev: 7920,  spend: 1480 },
+  { asin: "B0CDM3KNV9", line: "Kitchen knife line",   impressions: 155000, clicks: 2800, orders: 76,  rev: 6820,  spend: 1215 },
+  { asin: "B0CHRPTBL5", line: "Table runner line",    impressions: 136000, clicks: 3400, orders: 106, rev: 6380,  spend: 1212 },
+  { asin: "B0CN4WLLH8", line: "Wall hanging line",    impressions: 119000, clicks: 1900, orders: 44,  rev: 4860,  spend: 923  },
+  { asin: "B0CM5LNGCH", line: "Lounge chair line",    impressions: 51000,  clicks: 720,  orders: 11,  rev: 4320,  spend: 734  },
+  { asin: "B0CT3STRG2", line: "Storage cabinet line", impressions: 52000,  clicks: 880,  orders: 12,  rev: 3360,  spend: 605  },
+  { asin: "B0CL7PNDLP", line: "Pendant lamp line",    impressions: 69000,  clicks: 1100, orders: 20,  rev: 3180,  spend: 604  },
+  { asin: "B0CT2HRWPL", line: "Throw pillow line",    impressions: 73000,  clicks: 1750, orders: 54,  rev: 2720,  spend: 517  },
+  { asin: "B0CD5CRUET", line: "Cruet line",           impressions: 42000,  clicks: 920,  orders: 39,  rev: 1540,  spend: 293  },
+  { asin: "B0CV2VASE4", line: "Vase line",            impressions: 38000,  clicks: 640,  orders: 18,  rev: 1180,  spend: 212  },
+  { asin: "B0CB7BTHMT", line: "Bath mat line",        impressions: 29000,  clicks: 580,  orders: 23,  rev: 900,   spend: 171  },
 ];
 
-function buildListingTable(dayTotal, overrides = {}) {
-  const raw = REPORT_LISTING_TEMPLATE.map((r) => {
-    const o = overrides[r.sku] || {};
+const AD_SALES_RATIO = 0.82;
+
+function deriveListingMetrics(base) {
+  const adSales = base.rev * AD_SALES_RATIO;
+  return {
+    impressions: base.impressions,
+    clicks: base.clicks,
+    orders: base.orders,
+    rev: base.rev,
+    spend: base.spend,
+    ctr: base.clicks / base.impressions,
+    cvr: base.orders / base.clicks,
+    acos: base.spend / adSales,
+    tacos: base.spend / base.rev,
+    roas: adSales / base.spend,
+    aov: base.rev / base.orders,
+  };
+}
+
+function listingDayJitter(asin, daysAgo, metricSeed) {
+  if (daysAgo === 0) return 1;
+  const seed = (asin.charCodeAt(3) + asin.charCodeAt(6)) * 9301 + daysAgo * 49297 + metricSeed * 233;
+  const x = Math.sin(seed) * 233280;
+  return 0.92 + (x - Math.floor(x)) * 0.16;
+}
+
+function dayLabel(daysAgo) {
+  const d = new Date(2026, 4, 16);
+  d.setDate(d.getDate() - daysAgo);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function buildListingsWithHistory() {
+  return REPORT_LISTINGS_BASE.map((base) => {
+    const history = [];
+    for (let daysAgo = 13; daysAgo >= 0; daysAgo--) {
+      const day = {
+        impressions: Math.round(base.impressions * listingDayJitter(base.asin, daysAgo, 1)),
+        clicks:      Math.round(base.clicks      * listingDayJitter(base.asin, daysAgo, 2)),
+        orders:      Math.max(1, Math.round(base.orders * listingDayJitter(base.asin, daysAgo, 3))),
+        rev:         Math.round(base.rev         * listingDayJitter(base.asin, daysAgo, 4)),
+        spend:       Math.round(base.spend       * listingDayJitter(base.asin, daysAgo, 5)),
+      };
+      const adSales = day.rev * AD_SALES_RATIO;
+      history.push({
+        date: dayLabel(daysAgo),
+        daysAgo,
+        ...day,
+        ctr: day.clicks / day.impressions,
+        cvr: day.orders / day.clicks,
+        acos: day.spend / adSales,
+        tacos: day.spend / day.rev,
+        roas: adSales / day.spend,
+        aov: day.rev / day.orders,
+      });
+    }
     return {
-      ...r,
-      rev: Math.round(r.share * dayTotal),
-      tacos: o.tacos ?? r.tacos,
-      trend: o.trend || (r.trend7d[6] > r.trend7d[0] ? "up" : r.trend7d[6] < r.trend7d[0] ? "down" : "flat"),
+      asin: base.asin,
+      line: base.line,
+      today: deriveListingMetrics(base),
+      history,
     };
   });
-  const sum = raw.reduce((s, r) => s + r.rev, 0);
-  const diff = dayTotal - sum;
-  raw[0].rev += diff;
-  return raw;
 }
+
+const LISTINGS_WITH_HISTORY = buildListingsWithHistory();
+
+function listingWeekJitter(asin, weeksAgo, metricSeed) {
+  if (weeksAgo === 0) return 1;
+  const seed = (asin.charCodeAt(4) + asin.charCodeAt(7)) * 9301 + weeksAgo * 39301 + metricSeed * 311;
+  const x = Math.sin(seed) * 233280;
+  return 0.92 + (x - Math.floor(x)) * 0.16;
+}
+
+function weekLabel(weeksAgo) {
+  const monday = new Date(2026, 4, 5);
+  monday.setDate(monday.getDate() - weeksAgo * 7);
+  const sunday = new Date(monday);
+  sunday.setDate(sunday.getDate() + 6);
+  const weekNum = 19 - weeksAgo;
+  const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
+  return `W${weekNum} · ${fmt(monday)}-${fmt(sunday)}`;
+}
+
+function buildWeeklyListingsWithHistory() {
+  return REPORT_LISTINGS_BASE.map((base) => {
+    const history = [];
+    for (let weeksAgo = 6; weeksAgo >= 0; weeksAgo--) {
+      const w = {
+        impressions: Math.round(base.impressions * 7 * listingWeekJitter(base.asin, weeksAgo, 1)),
+        clicks:      Math.round(base.clicks * 7      * listingWeekJitter(base.asin, weeksAgo, 2)),
+        orders: Math.max(1, Math.round(base.orders * 7 * listingWeekJitter(base.asin, weeksAgo, 3))),
+        rev:         Math.round(base.rev * 7         * listingWeekJitter(base.asin, weeksAgo, 4)),
+        spend:       Math.round(base.spend * 7       * listingWeekJitter(base.asin, weeksAgo, 5)),
+      };
+      const adSales = w.rev * AD_SALES_RATIO;
+      history.push({
+        date: weekLabel(weeksAgo),
+        daysAgo: weeksAgo,
+        ...w,
+        ctr: w.clicks / w.impressions,
+        cvr: w.orders / w.clicks,
+        acos: w.spend / adSales,
+        tacos: w.spend / w.rev,
+        roas: adSales / w.spend,
+        aov: w.rev / w.orders,
+      });
+    }
+    return {
+      asin: base.asin,
+      line: base.line,
+      today: history[history.length - 1],
+      history,
+    };
+  });
+}
+
+const WEEKLY_LISTINGS_WITH_HISTORY = buildWeeklyListingsWithHistory();
+
+const LISTING_METRIC_COLUMNS = [
+  { key: "impressions", label: "Impressions", align: "right", format: (v) => v.toLocaleString() },
+  { key: "clicks",      label: "Clicks",      align: "right", format: (v) => v.toLocaleString() },
+  { key: "ctr",         label: "CTR",         align: "right", format: (v) => `${(v * 100).toFixed(2)}%` },
+  { key: "cvr",         label: "CVR",         align: "right", format: (v) => `${(v * 100).toFixed(2)}%` },
+  { key: "acos",        label: "ACoS",        align: "right", format: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "tacos",       label: "TACoS",       align: "right", format: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "roas",        label: "ROAS",        align: "right", format: (v) => v.toFixed(2) },
+  { key: "rev",         label: "Revenue",     align: "right", format: (v) => `$${v.toLocaleString()}` },
+  { key: "aov",         label: "AOV",         align: "right", format: (v) => `$${v.toFixed(0)}` },
+];
 
 const DAILY_REPORTS_DATA = {
   "report-2026-05-16": {
@@ -14326,7 +14433,6 @@ const DAILY_REPORTS_DATA = {
       label: "vs last Friday (5/9)",
       revPct: -4.2, spendPct: -2.1, tacosPp: 0.6, ordersPct: -5.8, aovPct: 1.6,
     },
-    listings: buildListingTable(58420),
     insights: [
       {
         tone: "amber",
@@ -14389,223 +14495,12 @@ const DAILY_REPORTS_DATA = {
       },
     ],
   },
-  "report-2026-05-15": {
-    date: "Thu 5/15",
-    topline: { rev: 59820, spend: 10940, tacos: 18.3, orders: 423, aov: 141.42 },
-    vsLast: {
-      label: "vs last Thursday (5/8)",
-      revPct: 6.5, spendPct: 3.2, tacosPp: -0.5, ordersPct: 4.2, aovPct: 2.1,
-    },
-    listings: buildListingTable(59820, { "SKU-A": { tacos: 17.2 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A Floor lamp · bedroom keyword CTR day 4",
-        body:
-          "CTR still ~1.1%, category baseline 2.8%. I've tried two bid rounds — no effect. Re-confirming this is a listing content problem, not a bid problem.",
-        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
-      },
-      {
-        tone: "emerald",
-        title: "SKU-DR-12 Table runner · new keyword signal first surfaced",
-        body:
-          "\"boho table runner\" category search volume showed its first clear lift today (+62%). Not enough conviction to launch ads yet, but worth 2-3 more days of observation.",
-        jump: null,
-      },
-    ],
-    actions: {
-      totalOps: 38,
-      breakdown: [
-        { label: "Bid tweaks", count: 23, note: "" },
-        { label: "Negative keyword harvest", count: 10, note: "" },
-        { label: "Budget reallocation", count: 5, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 Bed frame", count: 11, note: "NightFox attack response" },
-        { sku: "SKU-A Floor lamp", count: 8, note: "second bid round on bedroom keywords" },
-        { sku: "SKU-DR-12 Table runner", count: 5, note: "" },
-        { sku: "SKU-K22 Kitchen knife", count: 4, note: "" },
-        { sku: "Other 8 listings", count: 10, note: "" },
-      ],
-      authorityNote: "All within delegated authority.",
-    },
-    outlook: [
-      "Overall TACoS should stay in 18% - 19%",
-      "SKU-117 defense plan continues — NightFox discount window has ~5 days left",
-      "SKU-DR-12 new keyword needs 2-3 more days of observation before deciding to ask for authorization",
-    ],
-    needYou: [
-      {
-        kind: "info",
-        sku: "SKU-DR-12 Table runner",
-        title: "New keyword observation · FYI",
-        body: "\"boho table runner\" category search volume hit its first clear lift. I'll watch for 3 more days before asking you to authorize a new-keyword budget. No action needed today.",
-      },
-    ],
-  },
-  "report-2026-05-14": {
-    date: "Wed 5/14",
-    topline: { rev: 61240, spend: 10900, tacos: 17.8, orders: 432, aov: 141.76 },
-    vsLast: {
-      label: "vs last Wednesday (5/7)",
-      revPct: 8.4, spendPct: 4.1, tacosPp: -0.7, ordersPct: 5.8, aovPct: 2.4,
-    },
-    listings: buildListingTable(61240, { "SKU-A": { tacos: 17.0 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A Floor lamp · bedroom keyword CTR day 3",
-        body:
-          "Bedroom keyword CTR still ~1.1%. One bid round didn't help — confirmed it's a content problem. Needs a new hero image.",
-        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
-      },
-      {
-        tone: "blue",
-        title: "SKU-117 Bed frame · NightFox attack day 2",
-        body:
-          "They escalated a bit today (bids on 2 core keywords up another 6-8%). We matched and held rank. The defense plan is running in-window.",
-        jump: { key: "defense", label: "Jump to defense alert thread" },
-      },
-    ],
-    actions: {
-      totalOps: 45,
-      breakdown: [
-        { label: "Bid tweaks", count: 28, note: "incl. defense bid matching" },
-        { label: "Negative keyword harvest", count: 12, note: "" },
-        { label: "Budget reallocation", count: 5, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 Bed frame", count: 16, note: "dense NightFox attack response" },
-        { sku: "SKU-A Floor lamp", count: 9, note: "" },
-        { sku: "SKU-DR-12 Table runner", count: 4, note: "" },
-        { sku: "SKU-K22 Kitchen knife", count: 5, note: "" },
-        { sku: "Other 8 listings", count: 11, note: "" },
-      ],
-      authorityNote: "All within delegated authority. Attack response stayed in scope — bid matching plus negative keyword harvest only.",
-    },
-    outlook: [
-      "NightFox attack continues — we keep watching",
-      "SKU-A bedroom keyword data should recover once the hero image test goes live",
-      "Overall TACoS should sit at 17.5% - 18.5%",
-    ],
-    needYou: [],
-  },
-  "report-2026-05-13": {
-    date: "Tue 5/13",
-    topline: { rev: 58420, spend: 10000, tacos: 17.1, orders: 418, aov: 139.76 },
-    vsLast: {
-      label: "vs last Tuesday (5/6)",
-      revPct: 5.2, spendPct: 2.4, tacosPp: -0.5, ordersPct: 3.4, aovPct: 1.7,
-    },
-    listings: buildListingTable(58420, { "SKU-A": { tacos: 16.9 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A Floor lamp · bedroom keyword CTR day 2",
-        body:
-          "Yesterday's bedroom keyword CTR gap didn't close. 1.1% is still well below category baseline 2.8%. I'll try a bid round first, but it's more likely a content problem.",
-        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
-      },
-      {
-        tone: "rose",
-        title: "SKU-117 Bed frame · NightFox attack started",
-        body:
-          "Today we caught NightFox concentrating bid raises on our 7 hero keywords, plus they just dropped an 18% coupon. This is organized share grab. I opened a separate defense alert thread.",
-        jump: { key: "defense", label: "Jump to defense alert thread" },
-      },
-    ],
-    actions: {
-      totalOps: 41,
-      breakdown: [
-        { label: "Bid tweaks", count: 26, note: "incl. defense bid matching" },
-        { label: "Negative keyword harvest", count: 10, note: "" },
-        { label: "Budget reallocation", count: 5, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 Bed frame", count: 14, note: "NightFox attack initial response" },
-        { sku: "SKU-A Floor lamp", count: 7, note: "" },
-        { sku: "SKU-DR-12 Table runner", count: 4, note: "" },
-        { sku: "SKU-K22 Kitchen knife", count: 5, note: "" },
-        { sku: "Other 8 listings", count: 11, note: "" },
-      ],
-      authorityNote: "All within delegated authority. Attack defense didn't use any out-of-scope authority — just routine bid matching.",
-    },
-    outlook: [
-      "NightFox attack window estimated 5-7 days",
-      "SKU-117 rank should hold within top 3, assuming we match their bids",
-      "If one more SKU-A bedroom bid round doesn't move CTR, escalate to brand team",
-    ],
-    needYou: [
-      {
-        kind: "jump",
-        sku: "SKU-117 Bed frame",
-        title: "NightFox attack response",
-        body: "1 item for your confirmation today: the NightFox attack response. I drafted 3 postures in the defense thread — recommended posture is highlighted. Best to decide today or tomorrow.",
-        jump: { key: "defense", label: "Jump to defense alert thread" },
-      },
-    ],
-  },
-  "report-2026-05-12": {
-    date: "Mon 5/12",
-    topline: { rev: 54240, spend: 9870, tacos: 18.2, orders: 384, aov: 141.25 },
-    vsLast: {
-      label: "vs last Monday (5/5)",
-      revPct: 3.8, spendPct: 2.6, tacosPp: -0.2, ordersPct: 2.4, aovPct: 1.4,
-    },
-    listings: buildListingTable(54240, { "SKU-A": { tacos: 16.4 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A Floor lamp · bedroom keyword CTR day 1",
-        body:
-          "First time seeing SKU-A's CTR run abnormally low on bedroom-scene keywords (1.1%, category baseline 2.8%). Observing for a day — if it's still like this tomorrow I'll try a bid round.",
-        jump: { key: "strategy", label: "Jump to SKU-A Floor lamp thread" },
-      },
-    ],
-    actions: {
-      totalOps: 33,
-      breakdown: [
-        { label: "Bid tweaks", count: 20, note: "" },
-        { label: "Negative keyword harvest", count: 9, note: "" },
-        { label: "Budget reallocation", count: 4, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 Bed frame", count: 8, note: "" },
-        { sku: "SKU-A Floor lamp", count: 6, note: "" },
-        { sku: "SKU-K22 Kitchen knife", count: 5, note: "" },
-        { sku: "SKU-DR-12 Table runner", count: 3, note: "" },
-        { sku: "Other 8 listings", count: 11, note: "" },
-      ],
-      authorityNote: "All within delegated authority.",
-    },
-    outlook: [
-      "SKU-A bedroom keyword needs one more day of observation before deciding to adjust bid",
-      "Overall TACoS should stay near 18%",
-      "Other 11 listings running on the known track",
-    ],
-    needYou: [],
-  },
 };
 
 const WEEKLY_REPORT_DATA = {
-  coverRange: "5/5 - 5/11",
   weekLabel: "W19 · 5/5 - 5/11",
-  topline: { rev: 402180, spend: 70820, tacos: 17.6, dailyOrders: 412 },
+  topline: { rev: 408940, spend: 79380, tacos: 19.4, orders: 2884 },
   vsLast: { revPct: 6.2, spendPct: 4.1, tacosPp: -0.3, ordersPct: 3.4 },
-  listings: [
-    { sku: "SKU-117", name: "Bed frame", weekRev: 104680, tacos: 15.4, trend: "up", tag: "Under attack" },
-    { sku: "SKU-A", name: "Floor lamp", weekRev: 55420, tacos: 16.8, trend: "flat", tag: "Bedroom keyword issue" },
-    { sku: "SKU-K22", name: "Kitchen knife", weekRev: 47180, tacos: 17.4, trend: "flat", tag: "Steady" },
-    { sku: "SKU-DR-12", name: "Table runner", weekRev: 43680, tacos: 18.9, trend: "up", tag: "New keyword window" },
-    { sku: "SKU-WD-08", name: "Wall hanging", weekRev: 33420, tacos: 18.6, trend: "flat", tag: "Steady" },
-    { sku: "SKU-LH-04", name: "Lounge chair", weekRev: 29680, tacos: 17.2, trend: "flat", tag: "Steady" },
-    { sku: "SKU-OS-03", name: "Storage cabinet", weekRev: 23120, tacos: 17.9, trend: "flat", tag: "Steady" },
-    { sku: "SKU-PL-21", name: "Pendant lamp", weekRev: 21860, tacos: 18.8, trend: "flat", tag: "Steady" },
-    { sku: "SKU-TR-09", name: "Throw pillow", weekRev: 18620, tacos: 18.4, trend: "flat", tag: "Steady" },
-    { sku: "SKU-CD-15", name: "Cruet", weekRev: 10580, tacos: 18.7, trend: "flat", tag: "Steady" },
-    { sku: "SKU-VS-04", name: "Vase", weekRev: 7820, tacos: 17.6, trend: "flat", tag: "Steady" },
-    { sku: "SKU-BR-07", name: "Bath mat", weekRev: 6120, tacos: 18.9, trend: "flat", tag: "Steady" },
-  ],
   insights: [
     {
       tone: "rose",
@@ -14749,56 +14644,6 @@ function formatSignedPct(v, suffix = "%") {
   return `${sign}${v.toFixed(1)}${suffix}`;
 }
 
-function ReportDatePicker({ currentId, onSelect }) {
-  const [open, setOpen] = useState(false);
-  const options = [
-    { id: "report-2026-05-16", label: "5/16 Fri · latest" },
-    { id: "report-2026-05-15", label: "5/15 Thu" },
-    { id: "report-2026-05-14", label: "5/14 Wed" },
-    { id: "report-2026-05-13", label: "5/13 Tue" },
-    { id: "report-2026-05-12", label: "5/12 Mon" },
-    { id: "report-weekly-w19", label: "W19 weekly · 5/5-5/11" },
-    { id: "report-2026-05-10", label: "5/10 Sun · archived" },
-    { id: "report-2026-05-09", label: "5/9 Sat · archived" },
-    { id: "report-2026-05-08", label: "5/8 Fri · archived" },
-  ];
-  const currentLabel =
-    options.find((o) => o.id === currentId)?.label.split(" · ")[0] || "Pick date";
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
-      >
-        <Calendar className="w-3 h-3" />
-        {currentLabel} ⌄
-      </button>
-      {open && (
-        <div className="absolute right-0 top-full mt-1 z-20 w-56 bg-white border border-slate-200 rounded-md shadow-lg py-1">
-          {options.map((o) => (
-            <button
-              key={o.id}
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                onSelect && onSelect(o.id);
-              }}
-              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-slate-50 ${
-                o.id === currentId
-                  ? "text-emerald-700 font-medium"
-                  : "text-slate-700"
-              }`}
-            >
-              {o.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function ReportExportPill() {
   return (
     <span
@@ -14873,27 +14718,25 @@ function NeedYouCard({ item, onJumpTo }) {
   );
 }
 
-function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
-  const data = DAILY_REPORTS_DATA[reportId] || DAILY_REPORTS_DATA["report-2026-05-16"];
+function DailyReportCanvas({ onJumpTo }) {
+  const data = DAILY_REPORTS_DATA["report-2026-05-16"];
   const t = data.topline;
   const vs = data.vsLast;
+  const [drawerCell, setDrawerCell] = useState(null);
+  const listings = LISTINGS_WITH_HISTORY;
+  const totalRev = listings.reduce((s, l) => s + l.today.rev, 0);
   return (
     <>
       <CanvasHeader
         kicker="Daily ops report · pushed every morning"
         title={`Daily ops report · ${data.date}`}
-        meta={
-          <>
-            <ReportExportPill />
-            <ReportDatePicker currentId={reportId} onSelect={onSelectDate} />
-          </>
-        }
+        meta={<ReportExportPill />}
       />
 
       {/* Section 1: data */}
       <div className="px-6 pt-6">
         <SectionLabel kicker={vs.label}>Day · data</SectionLabel>
-        <div className="grid grid-cols-5 gap-3">
+        <div className="grid grid-cols-4 gap-3">
           <ReportToplineCard
             label="Sales"
             value={`$${t.rev.toLocaleString()}`}
@@ -14918,72 +14761,70 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
             deltaLabel={`${formatSignedPct(vs.ordersPct)} vs last week`}
             deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
           />
-          <ReportToplineCard
-            label="AOV"
-            value={`$${t.aov.toFixed(2)}`}
-            deltaLabel={`${formatSignedPct(vs.aovPct)} vs last week`}
-            deltaTone={vs.aovPct >= 0 ? "good" : "bad"}
-          />
         </div>
 
         <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
           <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
             <div className="text-11 text-slate-600 font-medium">
-              12 delegated listings · day's sales
+              12 delegated listings · click any cell for 14-day history
             </div>
             <div className="text-10 text-slate-500 font-mono">
-              Total ${t.rev.toLocaleString()}
+              Total sales ${totalRev.toLocaleString()}
             </div>
           </div>
-          <table className="w-full text-xs">
-            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
-              <tr>
-                <th className="text-left font-medium px-4 py-2">SKU · name</th>
-                <th className="text-right font-medium px-3 py-2">Day's sales</th>
-                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
-                <th className="text-left font-medium px-3 py-2">7-day trend</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.listings.map((row) => (
-                <tr
-                  key={row.sku}
-                  className="border-t border-slate-100"
-                  style={{ height: "32px" }}
-                >
-                  <td className="px-4 py-1.5">
-                    <div className="text-xs text-slate-900">
-                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
-                      · {row.name}
-                    </div>
-                  </td>
-                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
-                    ${row.rev.toLocaleString()}
-                  </td>
-                  <td className="text-right px-3 py-1.5">
-                    <TacosValue value={row.tacos} size="sm" />
-                  </td>
-                  <td className="px-3 py-1.5">
-                    <div className="flex items-center gap-2">
-                      <Sparkline
-                        data={row.trend7d}
-                        width={80}
-                        height={18}
-                        color={
-                          row.trend === "up"
-                            ? "emerald"
-                            : row.trend === "down"
-                              ? "rose"
-                              : "slate"
-                        }
-                      />
-                      <ReportTrendArrow trend={row.trend} />
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="text-left font-medium px-4 py-2 sticky left-0 bg-slate-50/40">
+                    Product line / Parent ASIN
+                  </th>
+                  {LISTING_METRIC_COLUMNS.map((m) => (
+                    <th
+                      key={m.key}
+                      className="text-right font-medium px-3 py-2 whitespace-nowrap"
+                    >
+                      {m.key === "tacos" || m.key === "acos"
+                        ? wrapMetric(m.label)
+                        : m.label}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {listings.map((row) => (
+                  <tr
+                    key={row.asin}
+                    className="border-t border-slate-100"
+                    style={{ height: "32px" }}
+                  >
+                    <td className="px-4 py-1.5 sticky left-0 bg-white">
+                      <div className="text-xs text-slate-900 whitespace-nowrap">
+                        {row.line}{" "}
+                        <span className="font-mono text-10 text-slate-500">
+                          · {row.asin}
+                        </span>
+                      </div>
+                    </td>
+                    {LISTING_METRIC_COLUMNS.map((m) => (
+                      <td
+                        key={m.key}
+                        className="text-right px-3 py-1.5 whitespace-nowrap"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setDrawerCell({ listing: row, metric: m })}
+                          className="font-mono tabular-nums text-slate-900 hover:text-emerald-700 hover:underline decoration-dotted underline-offset-2"
+                        >
+                          {m.format(row.today[m.key])}
+                        </button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -15125,32 +14966,116 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
           </button>
         </div>
       </div>
+
+      <ListingMetricHistoryDrawer
+        cell={drawerCell}
+        onClose={() => setDrawerCell(null)}
+      />
     </>
   );
 }
 
-function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
+function ListingMetricHistoryDrawer({ cell, onClose, periodKind = "day" }) {
+  const listing = cell?.listing;
+  const metric = cell?.metric;
+  const last7 = listing ? listing.history.slice(-7) : [];
+  const sparkValues = last7.map((d) => d[metric?.key]);
+  const todayVal = last7[last7.length - 1]?.[metric?.key];
+  const weekAgoVal = last7[0]?.[metric?.key];
+  const delta =
+    typeof todayVal === "number" && typeof weekAgoVal === "number" && weekAgoVal !== 0
+      ? ((todayVal - weekAgoVal) / Math.abs(weekAgoVal)) * 100
+      : null;
+  const unitWord = periodKind === "week" ? "weeks" : "days";
+  const currentWord = periodKind === "week" ? "This week" : "Today";
+  const dateHeader = periodKind === "week" ? "Week" : "Date";
+
+  return (
+    <InspectionDrawer
+      open={!!cell}
+      onClose={onClose}
+      title={listing ? `${listing.line} · ${metric.label}` : ""}
+      headerMeta={
+        listing && (
+          <span className="font-mono text-slate-500">{listing.asin}</span>
+        )
+      }
+      methodologyDescription={
+        listing
+          ? `Last 7 ${unitWord} of ${metric.label} · ${currentWord} ${metric.format(todayVal)}${
+              delta !== null
+                ? ` · vs 7 ${unitWord} ago ${formatSignedPct(delta)}`
+                : ""
+            }`
+          : ""
+      }
+      bodyOverride={
+        listing && (
+          <div className="space-y-4">
+            <div className="border border-slate-200 rounded-md px-4 py-4 bg-slate-50/40">
+              <Sparkline
+                data={sparkValues}
+                width={640}
+                height={64}
+                color={delta !== null && delta < 0 ? "rose" : "emerald"}
+              />
+            </div>
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-slate-200 text-10 uppercase tracking-wider text-slate-500">
+                  <th className="text-left py-2 px-2 font-medium">{dateHeader}</th>
+                  <th className="text-right py-2 px-2 font-medium">
+                    {metric.label}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...last7].reverse().map((d) => (
+                  <tr key={d.date} className="border-b border-slate-100">
+                    <td className="text-left py-1.5 px-2 text-slate-700">
+                      {d.date}
+                      {d.daysAgo === 0 && (
+                        <span className="ml-2 text-10 text-emerald-700 font-medium">
+                          {currentWord}
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-right py-1.5 px-2 font-mono tabular-nums text-slate-900">
+                      {metric.format(d[metric.key])}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              type="button"
+              disabled
+              title="Demo locked · full history not enabled"
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-400 border border-slate-200 rounded-md bg-slate-50 cursor-not-allowed"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              Expand more history · demo locked
+            </button>
+          </div>
+        )
+      }
+    />
+  );
+}
+
+function WeeklyReportCanvas({ onJumpTo }) {
   const data = WEEKLY_REPORT_DATA;
   const t = data.topline;
   const vs = data.vsLast;
-  const tagTone = {
-    Steady: "slate",
-    "Under attack": "amber",
-    "Bedroom keyword issue": "amber",
-    "New keyword window": "emerald",
-    Rising: "emerald",
-  };
+  const [drawerCell, setDrawerCell] = useState(null);
+  const listings = WEEKLY_LISTINGS_WITH_HISTORY;
+  const totalRev = listings.reduce((s, l) => s + l.today.rev, 0);
   return (
     <>
       <CanvasHeader
         kicker="Weekly ops report · pushed Mondays"
         title={`Weekly ops report · ${data.weekLabel}`}
-        meta={
-          <>
-            <ReportExportPill />
-            <ReportDatePicker currentId="report-weekly-w19" onSelect={onSelectDate} />
-          </>
-        }
+        meta={<ReportExportPill />}
       />
 
       <div className="px-6 pt-6">
@@ -15175,8 +15100,8 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
             deltaTone={vs.tacosPp <= 0 ? "good" : "bad"}
           />
           <ReportToplineCard
-            label="Daily orders"
-            value={t.dailyOrders}
+            label="Weekly orders"
+            value={t.orders.toLocaleString()}
             deltaLabel={`${formatSignedPct(vs.ordersPct)} vs last week`}
             deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
           />
@@ -15185,47 +15110,65 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
         <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
           <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
             <div className="text-11 text-slate-600 font-medium">
-              12 delegated listings · weekly sales
+              12 delegated listings · click any cell for 7-week history
             </div>
             <div className="text-10 text-slate-500 font-mono">
-              Total ${t.rev.toLocaleString()}
+              Total weekly sales ${totalRev.toLocaleString()}
             </div>
           </div>
-          <table className="w-full text-xs">
-            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
-              <tr>
-                <th className="text-left font-medium px-4 py-2">SKU · name</th>
-                <th className="text-right font-medium px-3 py-2">Weekly sales</th>
-                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
-                <th className="text-left font-medium px-3 py-2">Trend</th>
-                <th className="text-left font-medium px-3 py-2">Tag this week</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.listings.map((row) => (
-                <tr key={row.sku} className="border-t border-slate-100" style={{ height: "32px" }}>
-                  <td className="px-4 py-1.5">
-                    <div className="text-xs text-slate-900">
-                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
-                      · {row.name}
-                    </div>
-                  </td>
-                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
-                    ${row.weekRev.toLocaleString()}
-                  </td>
-                  <td className="text-right px-3 py-1.5">
-                    <TacosValue value={row.tacos} size="sm" />
-                  </td>
-                  <td className="px-3 py-1.5">
-                    <ReportTrendArrow trend={row.trend} />
-                  </td>
-                  <td className="px-3 py-1.5">
-                    <Pill tone={tagTone[row.tag] || "slate"}>{row.tag}</Pill>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="text-left font-medium px-4 py-2 sticky left-0 bg-slate-50/40">
+                    Product line / Parent ASIN
+                  </th>
+                  {LISTING_METRIC_COLUMNS.map((m) => (
+                    <th
+                      key={m.key}
+                      className="text-right font-medium px-3 py-2 whitespace-nowrap"
+                    >
+                      {m.key === "tacos" || m.key === "acos"
+                        ? wrapMetric(m.label)
+                        : m.label}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {listings.map((row) => (
+                  <tr
+                    key={row.asin}
+                    className="border-t border-slate-100"
+                    style={{ height: "32px" }}
+                  >
+                    <td className="px-4 py-1.5 sticky left-0 bg-white">
+                      <div className="text-xs text-slate-900 whitespace-nowrap">
+                        {row.line}{" "}
+                        <span className="font-mono text-10 text-slate-500">
+                          · {row.asin}
+                        </span>
+                      </div>
+                    </td>
+                    {LISTING_METRIC_COLUMNS.map((m) => (
+                      <td
+                        key={m.key}
+                        className="text-right px-3 py-1.5 whitespace-nowrap"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setDrawerCell({ listing: row, metric: m })}
+                          className="font-mono tabular-nums text-slate-900 hover:text-emerald-700 hover:underline decoration-dotted underline-offset-2"
+                        >
+                          {m.format(row.today[m.key])}
+                        </button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -15344,45 +15287,12 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
           </button>
         </div>
       </div>
-    </>
-  );
-}
 
-const ARCHIVED_REPORT_LABELS = {
-  "report-2026-05-08": "5/8 Fri",
-  "report-2026-05-09": "5/9 Sat",
-  "report-2026-05-10": "5/10 Sun",
-};
-
-function ArchivedReportCanvas({ reportId, onJumpTo }) {
-  const dateLabel = ARCHIVED_REPORT_LABELS[reportId] || "Historical report";
-  return (
-    <>
-      <CanvasHeader
-        kicker="Daily ops report · archived"
-        title={`Daily ops report · ${dateLabel} · archived`}
-        meta={<ReportExportPill />}
+      <ListingMetricHistoryDrawer
+        cell={drawerCell}
+        onClose={() => setDrawerCell(null)}
+        periodKind="week"
       />
-      <div className="px-6 py-10">
-        <div className="border border-slate-200 rounded-lg px-6 py-8 bg-slate-50/40 max-w-2xl mx-auto">
-          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            Historical report · {dateLabel}
-          </div>
-          <div className="text-sm font-semibold text-slate-900 mb-2">
-            Data archived
-          </div>
-          <div className="text-xs text-slate-600 leading-relaxed mb-4">
-            Detailed reports archive after 7 days. For specific ops records on this date, see Operation log under Ad architecture.
-          </div>
-          <button
-            type="button"
-            onClick={() => onJumpTo && onJumpTo("op-log")}
-            className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800 border border-emerald-300 hover:bg-emerald-50 rounded-md px-3 py-1.5 bg-white"
-          >
-            Ad architecture → Operation log <ArrowUpRight className="w-3 h-3" />
-          </button>
-        </div>
-      </div>
     </>
   );
 }
@@ -17147,38 +17057,9 @@ export default function App({
       case "defense":
         return <DefenseCanvas />;
       case "daily-report":
-        return (
-          <DailyReportCanvas
-            reportId="report-2026-05-16"
-            onJumpTo={handleJump}
-            onSelectDate={setActiveId}
-          />
-        );
-      case "report-2026-05-16":
-      case "report-2026-05-15":
-      case "report-2026-05-14":
-      case "report-2026-05-13":
-      case "report-2026-05-12":
-        return (
-          <DailyReportCanvas
-            reportId={activeId}
-            onJumpTo={handleJump}
-            onSelectDate={setActiveId}
-          />
-        );
-      case "report-weekly-w19":
-        return (
-          <WeeklyReportCanvas
-            onJumpTo={handleJump}
-            onSelectDate={setActiveId}
-          />
-        );
-      case "report-2026-05-08":
-      case "report-2026-05-09":
-      case "report-2026-05-10":
-        return (
-          <ArchivedReportCanvas reportId={activeId} onJumpTo={handleJump} />
-        );
+        return <DailyReportCanvas onJumpTo={handleJump} />;
+      case "weekly-report":
+        return <WeeklyReportCanvas onJumpTo={handleJump} />;
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":

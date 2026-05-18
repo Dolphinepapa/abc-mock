@@ -173,18 +173,10 @@ const THREADS = [
     threadType: "report-feed",
     title: "代运营日报 · 每日推送",
     reports: {
-      historical: [
-        { id: "rpt-2026-05-08", canvasId: "report-2026-05-08", type: "daily", date: "5/8 周五", time: "7:00", summary: { rev: "$56,180", tacos: "17.4%", anomalies: 0 } },
-        { id: "rpt-2026-05-09", canvasId: "report-2026-05-09", type: "daily", date: "5/9 周六", time: "7:00", summary: { rev: "$48,240", tacos: "16.8%", anomalies: 1 } },
-        { id: "rpt-2026-05-10", canvasId: "report-2026-05-10", type: "daily", date: "5/10 周日", time: "7:00", summary: { rev: "$44,720", tacos: "16.5%", anomalies: 0 } },
-      ],
+      historical: [],
       current: [
-        { id: "rpt-weekly-w19", canvasId: "report-weekly-w19", type: "weekly", date: "5/12 周一", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$402,180", tacos: "17.6%", note: "3 个 listing 出现趋势变化" } },
-        { id: "rpt-2026-05-12", canvasId: "report-2026-05-12", type: "daily", date: "5/12 周一", time: "7:30", summary: { rev: "$54,240", tacos: "18.2%", anomalies: 1 } },
-        { id: "rpt-2026-05-13", canvasId: "report-2026-05-13", type: "daily", date: "5/13 周二", time: "7:00", summary: { rev: "$58,420", tacos: "17.1%", anomalies: 1 } },
-        { id: "rpt-2026-05-14", canvasId: "report-2026-05-14", type: "daily", date: "5/14 周三", time: "7:00", summary: { rev: "$61,240", tacos: "17.8%", anomalies: 0 } },
-        { id: "rpt-2026-05-15", canvasId: "report-2026-05-15", type: "daily", date: "5/15 周四", time: "7:00", summary: { rev: "$59,820", tacos: "18.3%", anomalies: 2 } },
-        { id: "rpt-2026-05-16", canvasId: "report-2026-05-16", type: "daily", date: "5/16 周五", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
+        { id: "rpt-weekly-w19", canvasId: "weekly-report", type: "weekly", date: "5/12 周一", time: "7:00", coverRange: "5/5 - 5/11", summary: { rev: "$408,940", tacos: "19.4%", note: "本周 3 个 listing 趋势变化" } },
+        { id: "rpt-2026-05-16", canvasId: "daily-report", type: "daily", date: "5/16 周五", time: "7:00", summary: { rev: "$58,420", tacos: "19.4%", anomalies: 2 }, isLatest: true },
       ],
     },
   },
@@ -10226,18 +10218,20 @@ function ReportFeedExpanded({ thread, activeId, onSelect }) {
         每日 7:00 自动推送 · 不打扰
       </div>
 
-      <button
-        type="button"
-        onClick={() => setHistoryOpen(!historyOpen)}
-        className="w-full text-11 text-slate-500 hover:text-slate-700 mb-2 flex items-center justify-center gap-1 py-1.5 border-y border-dashed border-slate-200"
-      >
-        {historyOpen ? (
-          <ChevronDown className="w-3 h-3" />
-        ) : (
-          <ChevronRight className="w-3 h-3" />
-        )}
-        往上翻看历史日报 ({olderTotal} 篇)
-      </button>
+      {olderTotal > 0 && (
+        <button
+          type="button"
+          onClick={() => setHistoryOpen(!historyOpen)}
+          className="w-full text-11 text-slate-500 hover:text-slate-700 mb-2 flex items-center justify-center gap-1 py-1.5 border-y border-dashed border-slate-200"
+        >
+          {historyOpen ? (
+            <ChevronDown className="w-3 h-3" />
+          ) : (
+            <ChevronRight className="w-3 h-3" />
+          )}
+          往上翻看历史日报 ({olderTotal} 篇)
+        </button>
+      )}
 
       {historyOpen && (
         <div className="space-y-2 mb-2">
@@ -14184,37 +14178,153 @@ function QACanvas({ activeClearance }) {
 /*  App                                                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
-const REPORT_LISTING_TEMPLATE = [
-  { sku: "SKU-117", name: "床架 / Bed frame", share: 15240 / 58420, tacos: 15.2, trend7d: [14800, 15100, 15300, 15600, 15400, 15500, 15240] },
-  { sku: "SKU-A", name: "落地灯 / Floor lamp", share: 7920 / 58420, tacos: 16.7, trend7d: [7820, 7880, 7910, 7940, 7900, 7920, 7920] },
-  { sku: "SKU-K22", name: "厨刀 / Kitchen knife", share: 6820 / 58420, tacos: 17.8, trend7d: [6780, 6810, 6830, 6850, 6820, 6820, 6820] },
-  { sku: "SKU-DR-12", name: "餐布 / Table runner", share: 6380 / 58420, tacos: 19.0, trend7d: [5980, 6050, 6120, 6200, 6280, 6340, 6380] },
-  { sku: "SKU-WD-08", name: "壁挂 / Wall hanging", share: 4860 / 58420, tacos: 19.0, trend7d: [4820, 4840, 4860, 4870, 4860, 4860, 4860] },
-  { sku: "SKU-LH-04", name: "沙发椅 / Lounge chair", share: 4320 / 58420, tacos: 17.0, trend7d: [4280, 4300, 4310, 4330, 4320, 4320, 4320] },
-  { sku: "SKU-OS-03", name: "收纳柜 / Storage cabinet", share: 3360 / 58420, tacos: 18.0, trend7d: [3320, 3340, 3360, 3360, 3360, 3360, 3360] },
-  { sku: "SKU-PL-21", name: "吊灯 / Pendant lamp", share: 3180 / 58420, tacos: 19.0, trend7d: [3140, 3160, 3170, 3180, 3180, 3180, 3180] },
-  { sku: "SKU-TR-09", name: "抱枕 / Throw pillow", share: 2720 / 58420, tacos: 19.0, trend7d: [2900, 2860, 2820, 2790, 2760, 2740, 2720] },
-  { sku: "SKU-CD-15", name: "餐瓶 / Cruet", share: 1540 / 58420, tacos: 19.0, trend7d: [1520, 1530, 1540, 1540, 1540, 1540, 1540] },
-  { sku: "SKU-VS-04", name: "花瓶 / Vase", share: 1180 / 58420, tacos: 18.0, trend7d: [1160, 1170, 1180, 1180, 1180, 1180, 1180] },
-  { sku: "SKU-BR-07", name: "浴垫 / Bath mat", share: 900 / 58420, tacos: 19.0, trend7d: [890, 895, 900, 900, 900, 900, 900] },
+const REPORT_LISTINGS_BASE = [
+  { asin: "B0CK7BFRM4", line: "床架产品线",   impressions: 117000, clicks: 1400, orders: 30,  rev: 15240, spend: 2750 },
+  { asin: "B0CHNYFLR2", line: "落地灯产品线", impressions: 160000, clicks: 3200, orders: 40,  rev: 7920,  spend: 1480 },
+  { asin: "B0CDM3KNV9", line: "厨刀产品线",   impressions: 155000, clicks: 2800, orders: 76,  rev: 6820,  spend: 1215 },
+  { asin: "B0CHRPTBL5", line: "餐布产品线",   impressions: 136000, clicks: 3400, orders: 106, rev: 6380,  spend: 1212 },
+  { asin: "B0CN4WLLH8", line: "壁挂产品线",   impressions: 119000, clicks: 1900, orders: 44,  rev: 4860,  spend: 923  },
+  { asin: "B0CM5LNGCH", line: "沙发椅产品线", impressions: 51000,  clicks: 720,  orders: 11,  rev: 4320,  spend: 734  },
+  { asin: "B0CT3STRG2", line: "收纳柜产品线", impressions: 52000,  clicks: 880,  orders: 12,  rev: 3360,  spend: 605  },
+  { asin: "B0CL7PNDLP", line: "吊灯产品线",   impressions: 69000,  clicks: 1100, orders: 20,  rev: 3180,  spend: 604  },
+  { asin: "B0CT2HRWPL", line: "抱枕产品线",   impressions: 73000,  clicks: 1750, orders: 54,  rev: 2720,  spend: 517  },
+  { asin: "B0CD5CRUET", line: "餐瓶产品线",   impressions: 42000,  clicks: 920,  orders: 39,  rev: 1540,  spend: 293  },
+  { asin: "B0CV2VASE4", line: "花瓶产品线",   impressions: 38000,  clicks: 640,  orders: 18,  rev: 1180,  spend: 212  },
+  { asin: "B0CB7BTHMT", line: "浴垫产品线",   impressions: 29000,  clicks: 580,  orders: 23,  rev: 900,   spend: 171  },
 ];
 
-function buildListingTable(dayTotal, overrides = {}) {
-  const raw = REPORT_LISTING_TEMPLATE.map((r) => {
-    const o = overrides[r.sku] || {};
+const AD_SALES_RATIO = 0.82; // fraction of revenue attributed to ads — splits ACoS vs TACoS for demo
+
+function deriveListingMetrics(base) {
+  const adSales = base.rev * AD_SALES_RATIO;
+  return {
+    impressions: base.impressions,
+    clicks: base.clicks,
+    orders: base.orders,
+    rev: base.rev,
+    spend: base.spend,
+    ctr: base.clicks / base.impressions,
+    cvr: base.orders / base.clicks,
+    acos: base.spend / adSales,
+    tacos: base.spend / base.rev,
+    roas: adSales / base.spend,
+    aov: base.rev / base.orders,
+  };
+}
+
+function listingDayJitter(asin, daysAgo, metricSeed) {
+  // Deterministic ±8% jitter; daysAgo = 0 is today, anchor to base values exactly.
+  if (daysAgo === 0) return 1;
+  const seed = (asin.charCodeAt(3) + asin.charCodeAt(6)) * 9301 + daysAgo * 49297 + metricSeed * 233;
+  const x = Math.sin(seed) * 233280;
+  return 0.92 + (x - Math.floor(x)) * 0.16;
+}
+
+function dayLabel(daysAgo) {
+  const d = new Date(2026, 4, 16);
+  d.setDate(d.getDate() - daysAgo);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function buildListingsWithHistory() {
+  return REPORT_LISTINGS_BASE.map((base) => {
+    const history = [];
+    for (let daysAgo = 13; daysAgo >= 0; daysAgo--) {
+      const day = {
+        impressions: Math.round(base.impressions * listingDayJitter(base.asin, daysAgo, 1)),
+        clicks:      Math.round(base.clicks      * listingDayJitter(base.asin, daysAgo, 2)),
+        orders:      Math.max(1, Math.round(base.orders * listingDayJitter(base.asin, daysAgo, 3))),
+        rev:         Math.round(base.rev         * listingDayJitter(base.asin, daysAgo, 4)),
+        spend:       Math.round(base.spend       * listingDayJitter(base.asin, daysAgo, 5)),
+      };
+      const adSales = day.rev * AD_SALES_RATIO;
+      history.push({
+        date: dayLabel(daysAgo),
+        daysAgo,
+        ...day,
+        ctr: day.clicks / day.impressions,
+        cvr: day.orders / day.clicks,
+        acos: day.spend / adSales,
+        tacos: day.spend / day.rev,
+        roas: adSales / day.spend,
+        aov: day.rev / day.orders,
+      });
+    }
     return {
-      ...r,
-      rev: Math.round(r.share * dayTotal),
-      tacos: o.tacos ?? r.tacos,
-      trend: o.trend || (r.trend7d[6] > r.trend7d[0] ? "up" : r.trend7d[6] < r.trend7d[0] ? "down" : "flat"),
+      asin: base.asin,
+      line: base.line,
+      today: deriveListingMetrics(base),
+      history, // oldest → today
     };
   });
-  // Adjust the largest row so the total matches exactly.
-  const sum = raw.reduce((s, r) => s + r.rev, 0);
-  const diff = dayTotal - sum;
-  raw[0].rev += diff;
-  return raw;
 }
+
+const LISTINGS_WITH_HISTORY = buildListingsWithHistory();
+
+function listingWeekJitter(asin, weeksAgo, metricSeed) {
+  if (weeksAgo === 0) return 1;
+  const seed = (asin.charCodeAt(4) + asin.charCodeAt(7)) * 9301 + weeksAgo * 39301 + metricSeed * 311;
+  const x = Math.sin(seed) * 233280;
+  return 0.92 + (x - Math.floor(x)) * 0.16;
+}
+
+function weekLabel(weeksAgo) {
+  // weeksAgo=0 → W19 covering 5/5-5/11 (most recent completed week as of 5/16 Friday)
+  const monday = new Date(2026, 4, 5);
+  monday.setDate(monday.getDate() - weeksAgo * 7);
+  const sunday = new Date(monday);
+  sunday.setDate(sunday.getDate() + 6);
+  const weekNum = 19 - weeksAgo;
+  const fmt = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
+  return `W${weekNum} · ${fmt(monday)}-${fmt(sunday)}`;
+}
+
+function buildWeeklyListingsWithHistory() {
+  return REPORT_LISTINGS_BASE.map((base) => {
+    const history = [];
+    for (let weeksAgo = 6; weeksAgo >= 0; weeksAgo--) {
+      const w = {
+        impressions: Math.round(base.impressions * 7 * listingWeekJitter(base.asin, weeksAgo, 1)),
+        clicks:      Math.round(base.clicks * 7      * listingWeekJitter(base.asin, weeksAgo, 2)),
+        orders: Math.max(1, Math.round(base.orders * 7 * listingWeekJitter(base.asin, weeksAgo, 3))),
+        rev:         Math.round(base.rev * 7         * listingWeekJitter(base.asin, weeksAgo, 4)),
+        spend:       Math.round(base.spend * 7       * listingWeekJitter(base.asin, weeksAgo, 5)),
+      };
+      const adSales = w.rev * AD_SALES_RATIO;
+      history.push({
+        date: weekLabel(weeksAgo),
+        daysAgo: weeksAgo, // re-used field name so drawer can treat day/week uniformly
+        ...w,
+        ctr: w.clicks / w.impressions,
+        cvr: w.orders / w.clicks,
+        acos: w.spend / adSales,
+        tacos: w.spend / w.rev,
+        roas: adSales / w.spend,
+        aov: w.rev / w.orders,
+      });
+    }
+    return {
+      asin: base.asin,
+      line: base.line,
+      today: history[history.length - 1],
+      history,
+    };
+  });
+}
+
+const WEEKLY_LISTINGS_WITH_HISTORY = buildWeeklyListingsWithHistory();
+
+const LISTING_METRIC_COLUMNS = [
+  { key: "impressions", label: "展示",     align: "right", format: (v) => v.toLocaleString() },
+  { key: "clicks",      label: "点击",     align: "right", format: (v) => v.toLocaleString() },
+  { key: "ctr",         label: "CTR",     align: "right", format: (v) => `${(v * 100).toFixed(2)}%` },
+  { key: "cvr",         label: "CVR",     align: "right", format: (v) => `${(v * 100).toFixed(2)}%` },
+  { key: "acos",        label: "ACoS",    align: "right", format: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "tacos",       label: "TACoS",   align: "right", format: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "roas",        label: "ROAS",    align: "right", format: (v) => v.toFixed(2) },
+  { key: "rev",         label: "销售",     align: "right", format: (v) => `$${v.toLocaleString()}` },
+  { key: "aov",         label: "AOV",     align: "right", format: (v) => `$${v.toFixed(0)}` },
+];
 
 const DAILY_REPORTS_DATA = {
   "report-2026-05-16": {
@@ -14299,297 +14409,32 @@ const DAILY_REPORTS_DATA = {
       },
     ],
   },
-  "report-2026-05-15": {
-    date: "5/15 周四",
-    weekday: "周四",
-    topline: {
-      rev: 59820,
-      spend: 10940,
-      tacos: 18.3,
-      orders: 423,
-      aov: 141.42,
-    },
-    vsLast: {
-      label: "对比上周四 (5/8)",
-      revPct: 6.5,
-      spendPct: 3.2,
-      tacosPp: -0.5,
-      ordersPct: 4.2,
-      aovPct: 2.1,
-    },
-    listings: buildListingTable(59820, { "SKU-A": { tacos: 17.2 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A 落地灯 · 卧室词 CTR 问题第 4 天",
-        body:
-          "CTR 仍在 1.1% 上下,品类基准 2.8%。我已经调过两轮 bid,没起作用。再次确认这是 listing 内容问题,不是出价。",
-        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
-      },
-      {
-        tone: "emerald",
-        title: "SKU-DR-12 餐布 · 新词信号第一次出现",
-        body:
-          "\"boho table runner\" 类目搜索量今天首次出现明显涨幅(+62%)。还没到出广告的把握,但值得多观察 2-3 天。",
-        jump: null,
-      },
-    ],
-    actions: {
-      totalOps: 38,
-      breakdown: [
-        { label: "出价微调", count: 23, note: "" },
-        { label: "负向关键词收割", count: 10, note: "" },
-        { label: "预算重分配", count: 5, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 床架", count: 11, note: "NightFox 攻击响应中" },
-        { sku: "SKU-A 落地灯", count: 8, note: "卧室词 bid 第二轮调整" },
-        { sku: "SKU-DR-12 餐布", count: 5, note: "" },
-        { sku: "SKU-K22 厨刀", count: 4, note: "" },
-        { sku: "其余 8 个 listing", count: 10, note: "" },
-      ],
-      authorityNote: "全部在已委托范围内。",
-    },
-    outlook: [
-      "整体 TACoS 应继续在 18% ~ 19% 区间",
-      "SKU-117 防御方案继续,NightFox 折扣期还有 ~5 天",
-      "SKU-DR-12 新词需再观察 2-3 天再决定要不要找你授权",
-    ],
-    needYou: [
-      {
-        kind: "info",
-        sku: "SKU-DR-12 餐布",
-        title: "新词观察 · 信息同步",
-        body: "\"boho table runner\" 类目搜索量首次明显涨幅。我打算再观察 3 天再决定要不要找你批新词预算。这条今天不用回。",
-      },
-    ],
-  },
-  "report-2026-05-14": {
-    date: "5/14 周三",
-    weekday: "周三",
-    topline: {
-      rev: 61240,
-      spend: 10900,
-      tacos: 17.8,
-      orders: 432,
-      aov: 141.76,
-    },
-    vsLast: {
-      label: "对比上周三 (5/7)",
-      revPct: 8.4,
-      spendPct: 4.1,
-      tacosPp: -0.7,
-      ordersPct: 5.8,
-      aovPct: 2.4,
-    },
-    listings: buildListingTable(61240, { "SKU-A": { tacos: 17.0 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A 落地灯 · 卧室词 CTR 第 3 天",
-        body:
-          "卧室词 CTR 还在 1.1% 附近。bid 已经调了一轮没用,确认是内容问题。需要新主图。",
-        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
-      },
-      {
-        tone: "blue",
-        title: "SKU-117 床架 · NightFox 攻击第 2 天",
-        body:
-          "他们今天稍微加码了一点(2 个核心词的 bid 又上了 6-8%)。我们出价跟齐,排名守住了。防御方案在窗口期内运转。",
-        jump: { key: "defense", label: "跳到防御警报会话" },
-      },
-    ],
-    actions: {
-      totalOps: 45,
-      breakdown: [
-        { label: "出价微调", count: 28, note: "含防御出价跟齐" },
-        { label: "负向关键词收割", count: 12, note: "" },
-        { label: "预算重分配", count: 5, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 床架", count: 16, note: "NightFox 攻击响应密集" },
-        { sku: "SKU-A 落地灯", count: 9, note: "" },
-        { sku: "SKU-DR-12 餐布", count: 4, note: "" },
-        { sku: "SKU-K22 厨刀", count: 5, note: "" },
-        { sku: "其余 8 个 listing", count: 11, note: "" },
-      ],
-      authorityNote: "全部在已委托范围内。攻击响应没有超权限,都是出价跟齐+负词收割。",
-    },
-    outlook: [
-      "SKU-117 NightFox 还会持续,我们继续盯",
-      "SKU-A 卧室词主图测试一上线,数据应该会回",
-      "整体 TACoS 应在 17.5% ~ 18.5% 区间",
-    ],
-    needYou: [],
-  },
-  "report-2026-05-13": {
-    date: "5/13 周二",
-    weekday: "周二",
-    topline: {
-      rev: 58420,
-      spend: 10000,
-      tacos: 17.1,
-      orders: 418,
-      aov: 139.76,
-    },
-    vsLast: {
-      label: "对比上周二 (5/6)",
-      revPct: 5.2,
-      spendPct: 2.4,
-      tacosPp: -0.5,
-      ordersPct: 3.4,
-      aovPct: 1.7,
-    },
-    listings: buildListingTable(58420, { "SKU-A": { tacos: 16.9 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A 落地灯 · 卧室词 CTR 第 2 天",
-        body:
-          "昨天发现的卧室词 CTR 缺口今天没回。1.1% 仍远低于品类基准 2.8%。我先尝试调高一轮 bid 看效果,但更可能是内容问题。",
-        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
-      },
-      {
-        tone: "rose",
-        title: "SKU-117 床架 · NightFox 开始攻击",
-        body:
-          "今天监控到 NightFox 在我们 7 个核心词上集中抬 bid,加上他们刚挂的 18% 折扣券。这是有组织的份额抢占。我已经把这条单独开为防御警报会话。",
-        jump: { key: "defense", label: "跳到防御警报会话" },
-      },
-    ],
-    actions: {
-      totalOps: 41,
-      breakdown: [
-        { label: "出价微调", count: 26, note: "含防御出价跟齐" },
-        { label: "负向关键词收割", count: 10, note: "" },
-        { label: "预算重分配", count: 5, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 床架", count: 14, note: "NightFox 攻击启动响应" },
-        { sku: "SKU-A 落地灯", count: 7, note: "" },
-        { sku: "SKU-DR-12 餐布", count: 4, note: "" },
-        { sku: "SKU-K22 厨刀", count: 5, note: "" },
-        { sku: "其余 8 个 listing", count: 11, note: "" },
-      ],
-      authorityNote: "全部在已委托范围内。攻击防御没有动用超权限,只是常规出价跟齐。",
-    },
-    outlook: [
-      "NightFox 攻击窗口期预计 5-7 天",
-      "SKU-117 排名应能守住前 3,前提是我们跟齐出价",
-      "SKU-A 卧室词如果再 bid 一轮没起色,需要升级到品牌团队",
-    ],
-    needYou: [
-      {
-        kind: "jump",
-        sku: "SKU-117 床架",
-        title: "NightFox 攻击响应方案",
-        body: "今天有 1 件待你确认:NightFox 攻击响应方案。我已经按防御警报会话起草了 3 种姿态,推荐姿态已高亮。建议今天/明天就决策。",
-        jump: { key: "defense", label: "跳到防御警报会话" },
-      },
-    ],
-  },
-  "report-2026-05-12": {
-    date: "5/12 周一",
-    weekday: "周一",
-    topline: {
-      rev: 54240,
-      spend: 9870,
-      tacos: 18.2,
-      orders: 384,
-      aov: 141.25,
-    },
-    vsLast: {
-      label: "对比上周一 (5/5)",
-      revPct: 3.8,
-      spendPct: 2.6,
-      tacosPp: -0.2,
-      ordersPct: 2.4,
-      aovPct: 1.4,
-    },
-    listings: buildListingTable(54240, { "SKU-A": { tacos: 16.4 } }),
-    insights: [
-      {
-        tone: "amber",
-        title: "SKU-A 落地灯 · 卧室词 CTR 第 1 天",
-        body:
-          "今天首次发现 SKU-A 在卧室场景关键词上的 CTR 异常低(1.1%,品类基准 2.8%)。先观察一天,如果明天还是这样,我会调一轮 bid 看效果。",
-        jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
-      },
-    ],
-    actions: {
-      totalOps: 33,
-      breakdown: [
-        { label: "出价微调", count: 20, note: "" },
-        { label: "负向关键词收割", count: 9, note: "" },
-        { label: "预算重分配", count: 4, note: "" },
-      ],
-      topListings: [
-        { sku: "SKU-117 床架", count: 8, note: "" },
-        { sku: "SKU-A 落地灯", count: 6, note: "" },
-        { sku: "SKU-K22 厨刀", count: 5, note: "" },
-        { sku: "SKU-DR-12 餐布", count: 3, note: "" },
-        { sku: "其余 8 个 listing", count: 11, note: "" },
-      ],
-      authorityNote: "全部在已委托范围内。",
-    },
-    outlook: [
-      "SKU-A 卧室词需要再观察 1 天再决定要不要调 bid",
-      "整体 TACoS 应继续在 18% 上下",
-      "其他 11 个 listing 照常运转",
-    ],
-    needYou: [],
-  },
 };
 
 const WEEKLY_REPORT_DATA = {
-  coverRange: "5/5 - 5/11",
   weekLabel: "W19 · 5/5 - 5/11",
-  topline: {
-    rev: 402180,
-    spend: 70820,
-    tacos: 17.6,
-    dailyOrders: 412,
-  },
-  vsLast: {
-    revPct: 6.2,
-    spendPct: 4.1,
-    tacosPp: -0.3,
-    ordersPct: 3.4,
-  },
-  listings: [
-    { sku: "SKU-117", name: "床架 / Bed frame", weekRev: 104680, tacos: 15.4, trend: "up", tag: "受攻击" },
-    { sku: "SKU-A", name: "落地灯 / Floor lamp", weekRev: 55420, tacos: 16.8, trend: "flat", tag: "卧室词问题持续" },
-    { sku: "SKU-K22", name: "厨刀 / Kitchen knife", weekRev: 47180, tacos: 17.4, trend: "flat", tag: "平稳" },
-    { sku: "SKU-DR-12", name: "餐布 / Table runner", weekRev: 43680, tacos: 18.9, trend: "up", tag: "新词机会期" },
-    { sku: "SKU-WD-08", name: "壁挂 / Wall hanging", weekRev: 33420, tacos: 18.6, trend: "flat", tag: "平稳" },
-    { sku: "SKU-LH-04", name: "沙发椅 / Lounge chair", weekRev: 29680, tacos: 17.2, trend: "flat", tag: "平稳" },
-    { sku: "SKU-OS-03", name: "收纳柜 / Storage cabinet", weekRev: 23120, tacos: 17.9, trend: "flat", tag: "平稳" },
-    { sku: "SKU-PL-21", name: "吊灯 / Pendant lamp", weekRev: 21860, tacos: 18.8, trend: "flat", tag: "平稳" },
-    { sku: "SKU-TR-09", name: "抱枕 / Throw pillow", weekRev: 18620, tacos: 18.4, trend: "flat", tag: "平稳" },
-    { sku: "SKU-CD-15", name: "餐瓶 / Cruet", weekRev: 10580, tacos: 18.7, trend: "flat", tag: "平稳" },
-    { sku: "SKU-VS-04", name: "花瓶 / Vase", weekRev: 7820, tacos: 17.6, trend: "flat", tag: "平稳" },
-    { sku: "SKU-BR-07", name: "浴垫 / Bath mat", weekRev: 6120, tacos: 18.9, trend: "flat", tag: "平稳" },
-  ],
+  topline: { rev: 408940, spend: 79380, tacos: 19.4, orders: 2884 },
+  vsLast: { revPct: 6.2, spendPct: 4.1, tacosPp: -0.3, ordersPct: 3.4 },
   insights: [
     {
       tone: "rose",
-      title: "SKU-117 床架 · 从平稳期进入受攻击期",
+      title: "SKU-117 床架 · 平稳期结束,本周开始被攻击",
       body:
-        "攻击始于周三 (5/7),NightFox 在 7 个核心词上集中抬 bid。本周末仍在窗口内。详见防御警报会话。",
+        "攻击周三 (5/7) 开始 — NightFox 在 7 个核心词上集中加价。本周末仍在窗口期内。详见防御警报会话。",
       jump: { key: "defense", label: "跳到防御警报会话" },
     },
     {
       tone: "amber",
-      title: "SKU-A 落地灯 · 卧室词问题已 5 天连续",
+      title: "SKU-A 落地灯 · 卧室词问题持续 5 天",
       body:
-        "累计影响销售估算 $1,200/周。bid 调整已尝试两轮无效,确认是 listing 内容问题。建议升级到品牌团队优先级。",
-      jump: { key: "strategy", label: "跳到 SKU-A 会话" },
+        "估算累计销售影响 ~$1,200/周。两轮 bid 没起作用 — 确认是 listing 内容问题。建议交由品牌团队优先处理。",
+      jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
     },
     {
       tone: "emerald",
-      title: "SKU-DR-12 餐布 · 新词机会期",
+      title: "SKU-DR-12 餐布 · 新词窗口",
       body:
-        "\"boho table runner\" 类目搜索量 7 天连续上扬。新词授权周四批准,周五已经跑了首日数据($340 · ACoS 18%)。",
+        "\"boho table runner\" 类目搜索量 7 天连续上升。周四已批准新词,周五首日 $340 · ACoS 18%。",
       jump: null,
     },
   ],
@@ -14598,39 +14443,39 @@ const WEEKLY_REPORT_DATA = {
     overAuthority: 0,
     exceptions: 5,
     typeBreakdown: [
-      { label: "出价微调", count: 148, pct: 60 },
-      { label: "负向关键词收割", count: 68, pct: 28 },
-      { label: "预算重分配", count: 19, pct: 8 },
-      { label: "分时调价", count: 12, pct: 5 },
+      { label: "出价微调",       count: 148, pct: 60 },
+      { label: "负向关键词收割", count: 68,  pct: 28 },
+      { label: "预算重分配",     count: 19,  pct: 8 },
+      { label: "分时段投放",     count: 12,  pct: 5 },
     ],
     listingBreakdown: [
-      { sku: "SKU-117 床架", count: 64, note: "含 NightFox 攻击的密集调整" },
-      { sku: "SKU-DR-12 餐布", count: 52, note: "" },
-      { sku: "SKU-A 落地灯", count: 38, note: "" },
-      { sku: "其他 9 个 listing", count: 93, note: "" },
+      { sku: "SKU-117 床架",        count: 64, note: "含 NightFox 攻击期间的密集调整" },
+      { sku: "SKU-DR-12 餐布",      count: 52, note: "" },
+      { sku: "SKU-A 落地灯",        count: 38, note: "" },
+      { sku: "其余 9 个 listing",   count: 93, note: "" },
     ],
   },
   nextWeek: [
-    "NightFox 折扣窗口预计 5/19 结束,关键节点",
-    "SKU-A 落地灯新主图测试预计 5/22 上线(品牌团队)",
-    "4 个 listing 进入旺季前预热期(床架 / 灯具品类)",
-    "\"boho table runner\" 进入第 2 周观察期",
+    "NightFox 折扣窗口预计 5/19 到期 — 关键日期",
+    "SKU-A 落地灯新主图测试预计 5/22 (品牌团队)",
+    "4 个 listing 进入旺季预热 (床架 / 灯具品类)",
+    "\"boho table runner\" 进入第 2 周观察",
   ],
   needYou: [
     {
       kind: "jump",
       sku: "SKU-A 落地灯",
-      title: "主图测试 sign off",
-      body: "品牌团队需要你确认拍摄方案。建议周一前回复,周二开拍。",
-      jump: { key: "strategy", label: "跳到 SKU-A 会话" },
+      title: "主图测试需要签字",
+      body: "品牌团队需要你对拍摄方案签字。建议周一前回复,他们周二可以拍。",
+      jump: { key: "strategy", label: "跳到 SKU-A 落地灯会话" },
     },
     {
       kind: "jump",
-      sku: "决策类别升级评估",
+      sku: "决策类升级审查",
       title: "bid_raise on velocity SKUs",
       body:
-        "已积累 28/30 次执行,预计本周达 graduation 阈值。届时需要你审批是否升级到自主执行。",
-      jump: { key: "decision-classes", label: "跳到决策类别" },
+        "30 次执行中已累计 28 次 — 本周可能触发毕业阈值。届时需要你批准是否升级为自主执行。",
+      jump: { key: "decision-classes", label: "跳到决策类" },
     },
   ],
 };
@@ -14713,56 +14558,6 @@ function formatSignedPct(v, suffix = "%") {
   return `${sign}${v.toFixed(1)}${suffix}`;
 }
 
-function ReportDatePicker({ currentId, onSelect }) {
-  const [open, setOpen] = useState(false);
-  const options = [
-    { id: "report-2026-05-16", label: "5/16 周五 · 最新" },
-    { id: "report-2026-05-15", label: "5/15 周四" },
-    { id: "report-2026-05-14", label: "5/14 周三" },
-    { id: "report-2026-05-13", label: "5/13 周二" },
-    { id: "report-2026-05-12", label: "5/12 周一" },
-    { id: "report-weekly-w19", label: "W19 周报 · 5/5-5/11" },
-    { id: "report-2026-05-10", label: "5/10 周日 · 归档" },
-    { id: "report-2026-05-09", label: "5/9 周六 · 归档" },
-    { id: "report-2026-05-08", label: "5/8 周五 · 归档" },
-  ];
-  const currentLabel =
-    options.find((o) => o.id === currentId)?.label.split(" · ")[0] || "选日期";
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-md border bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200"
-      >
-        <Calendar className="w-3 h-3" />
-        {currentLabel} ⌄
-      </button>
-      {open && (
-        <div className="absolute right-0 top-full mt-1 z-20 w-56 bg-white border border-slate-200 rounded-md shadow-lg py-1">
-          {options.map((o) => (
-            <button
-              key={o.id}
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                onSelect && onSelect(o.id);
-              }}
-              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-slate-50 ${
-                o.id === currentId
-                  ? "text-emerald-700 font-medium"
-                  : "text-slate-700"
-              }`}
-            >
-              {o.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function ReportExportPill() {
   return (
     <span
@@ -14775,27 +14570,25 @@ function ReportExportPill() {
   );
 }
 
-function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
-  const data = DAILY_REPORTS_DATA[reportId] || DAILY_REPORTS_DATA["report-2026-05-16"];
+function DailyReportCanvas({ onJumpTo }) {
+  const data = DAILY_REPORTS_DATA["report-2026-05-16"];
   const t = data.topline;
   const vs = data.vsLast;
+  const [drawerCell, setDrawerCell] = useState(null); // { listing, metric } | null
+  const listings = LISTINGS_WITH_HISTORY;
+  const totalRev = listings.reduce((s, l) => s + l.today.rev, 0);
   return (
     <>
       <CanvasHeader
         kicker="代运营日报 · 每日推送"
         title={`代运营日报 · ${data.date}`}
-        meta={
-          <>
-            <ReportExportPill />
-            <ReportDatePicker currentId={reportId} onSelect={onSelectDate} />
-          </>
-        }
+        meta={<ReportExportPill />}
       />
 
       {/* Section 1: 现状 */}
       <div className="px-6 pt-6">
         <SectionLabel kicker={vs.label}>这一天 · 数据</SectionLabel>
-        <div className="grid grid-cols-5 gap-3">
+        <div className="grid grid-cols-4 gap-3">
           <ReportToplineCard
             label="销售"
             value={`$${t.rev.toLocaleString()}`}
@@ -14820,72 +14613,70 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
             deltaLabel={`${formatSignedPct(vs.ordersPct)} vs 上周同日`}
             deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
           />
-          <ReportToplineCard
-            label="客单价 AOV"
-            value={`$${t.aov.toFixed(2)}`}
-            deltaLabel={`${formatSignedPct(vs.aovPct)} vs 上周同日`}
-            deltaTone={vs.aovPct >= 0 ? "good" : "bad"}
-          />
         </div>
 
         <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
           <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
             <div className="text-11 text-slate-600 font-medium">
-              12 个 delegated listing · 当日销售
+              12 个 delegated listing · 每格可点开看 14 天历史
             </div>
             <div className="text-10 text-slate-500 font-mono">
-              合计 ${t.rev.toLocaleString()}
+              合计销售 ${totalRev.toLocaleString()}
             </div>
           </div>
-          <table className="w-full text-xs">
-            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
-              <tr>
-                <th className="text-left font-medium px-4 py-2">SKU · 名称</th>
-                <th className="text-right font-medium px-3 py-2">当日销售</th>
-                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
-                <th className="text-left font-medium px-3 py-2">7 日趋势</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.listings.map((row) => (
-                <tr
-                  key={row.sku}
-                  className="border-t border-slate-100"
-                  style={{ height: "32px" }}
-                >
-                  <td className="px-4 py-1.5">
-                    <div className="text-xs text-slate-900">
-                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
-                      · {row.name}
-                    </div>
-                  </td>
-                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
-                    ${row.rev.toLocaleString()}
-                  </td>
-                  <td className="text-right px-3 py-1.5">
-                    <TacosValue value={row.tacos} size="sm" />
-                  </td>
-                  <td className="px-3 py-1.5">
-                    <div className="flex items-center gap-2">
-                      <Sparkline
-                        data={row.trend7d}
-                        width={80}
-                        height={18}
-                        color={
-                          row.trend === "up"
-                            ? "emerald"
-                            : row.trend === "down"
-                              ? "rose"
-                              : "slate"
-                        }
-                      />
-                      <ReportTrendArrow trend={row.trend} />
-                    </div>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="text-left font-medium px-4 py-2 sticky left-0 bg-slate-50/40">
+                    产品线 / Parent ASIN
+                  </th>
+                  {LISTING_METRIC_COLUMNS.map((m) => (
+                    <th
+                      key={m.key}
+                      className="text-right font-medium px-3 py-2 whitespace-nowrap"
+                    >
+                      {m.key === "tacos" || m.key === "acos"
+                        ? wrapMetric(m.label)
+                        : m.label}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {listings.map((row) => (
+                  <tr
+                    key={row.asin}
+                    className="border-t border-slate-100"
+                    style={{ height: "32px" }}
+                  >
+                    <td className="px-4 py-1.5 sticky left-0 bg-white">
+                      <div className="text-xs text-slate-900 whitespace-nowrap">
+                        {row.line}{" "}
+                        <span className="font-mono text-10 text-slate-500">
+                          · {row.asin}
+                        </span>
+                      </div>
+                    </td>
+                    {LISTING_METRIC_COLUMNS.map((m) => (
+                      <td
+                        key={m.key}
+                        className="text-right px-3 py-1.5 whitespace-nowrap"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setDrawerCell({ listing: row, metric: m })}
+                          className="font-mono tabular-nums text-slate-900 hover:text-emerald-700 hover:underline decoration-dotted underline-offset-2"
+                        >
+                          {m.format(row.today[m.key])}
+                        </button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -15025,7 +14816,100 @@ function DailyReportCanvas({ reportId, onJumpTo, onSelectDate }) {
           </button>
         </div>
       </div>
+
+      <ListingMetricHistoryDrawer
+        cell={drawerCell}
+        onClose={() => setDrawerCell(null)}
+      />
     </>
+  );
+}
+
+function ListingMetricHistoryDrawer({ cell, onClose, periodKind = "day" }) {
+  const listing = cell?.listing;
+  const metric = cell?.metric;
+  const last7 = listing ? listing.history.slice(-7) : [];
+  const sparkValues = last7.map((d) => d[metric?.key]);
+  const todayVal = last7[last7.length - 1]?.[metric?.key];
+  const weekAgoVal = last7[0]?.[metric?.key];
+  const delta =
+    typeof todayVal === "number" && typeof weekAgoVal === "number" && weekAgoVal !== 0
+      ? ((todayVal - weekAgoVal) / Math.abs(weekAgoVal)) * 100
+      : null;
+  const unitWord = periodKind === "week" ? "周" : "天";
+  const currentWord = periodKind === "week" ? "本周" : "今天";
+  const dateHeader = periodKind === "week" ? "周次" : "日期";
+
+  return (
+    <InspectionDrawer
+      open={!!cell}
+      onClose={onClose}
+      title={listing ? `${listing.line} · ${metric.label}` : ""}
+      headerMeta={
+        listing && (
+          <span className="font-mono text-slate-500">{listing.asin}</span>
+        )
+      }
+      methodologyDescription={
+        listing
+          ? `最近 7 ${unitWord} ${metric.label} 走势 · ${currentWord} ${metric.format(todayVal)}${
+              delta !== null
+                ? ` · 对比 7 ${unitWord}前 ${formatSignedPct(delta)}`
+                : ""
+            }`
+          : ""
+      }
+      bodyOverride={
+        listing && (
+          <div className="space-y-4">
+            <div className="border border-slate-200 rounded-md px-4 py-4 bg-slate-50/40">
+              <Sparkline
+                data={sparkValues}
+                width={640}
+                height={64}
+                color={delta !== null && delta < 0 ? "rose" : "emerald"}
+              />
+            </div>
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-slate-200 text-10 uppercase tracking-wider text-slate-500">
+                  <th className="text-left py-2 px-2 font-medium">{dateHeader}</th>
+                  <th className="text-right py-2 px-2 font-medium">
+                    {metric.label}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {[...last7].reverse().map((d) => (
+                  <tr key={d.date} className="border-b border-slate-100">
+                    <td className="text-left py-1.5 px-2 text-slate-700">
+                      {d.date}
+                      {d.daysAgo === 0 && (
+                        <span className="ml-2 text-10 text-emerald-700 font-medium">
+                          {currentWord}
+                        </span>
+                      )}
+                    </td>
+                    <td className="text-right py-1.5 px-2 font-mono tabular-nums text-slate-900">
+                      {metric.format(d[metric.key])}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              type="button"
+              disabled
+              title="演示锁定 · 完整历史未启用"
+              className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-400 border border-slate-200 rounded-md bg-slate-50 cursor-not-allowed"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              展开更多历史 · 演示锁定
+            </button>
+          </div>
+        )
+      }
+    />
   );
 }
 
@@ -15091,32 +14975,23 @@ function NeedYouCard({ item, onJumpTo }) {
   );
 }
 
-function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
+function WeeklyReportCanvas({ onJumpTo }) {
   const data = WEEKLY_REPORT_DATA;
   const t = data.topline;
   const vs = data.vsLast;
-  const tagTone = {
-    平稳: "slate",
-    "受攻击": "amber",
-    "卧室词问题持续": "amber",
-    "新词机会期": "emerald",
-    上升: "emerald",
-  };
+  const [drawerCell, setDrawerCell] = useState(null);
+  const listings = WEEKLY_LISTINGS_WITH_HISTORY;
+  const totalRev = listings.reduce((s, l) => s + l.today.rev, 0);
   return (
     <>
       <CanvasHeader
         kicker="代运营周报 · 周一推送"
         title={`代运营周报 · ${data.weekLabel}`}
-        meta={
-          <>
-            <ReportExportPill />
-            <ReportDatePicker currentId="report-weekly-w19" onSelect={onSelectDate} />
-          </>
-        }
+        meta={<ReportExportPill />}
       />
 
       <div className="px-6 pt-6">
-        <SectionLabel kicker="vs 上一周">这一周整体</SectionLabel>
+        <SectionLabel kicker="对比上周">这一周 · 数据</SectionLabel>
         <div className="grid grid-cols-4 gap-3">
           <ReportToplineCard
             label="周销售"
@@ -15131,14 +15006,14 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
             deltaTone={vs.spendPct <= 0 ? "good" : "bad"}
           />
           <ReportToplineCard
-            label={<>{wrapMetric("TACoS")} 周</>}
+            label={<>{wrapMetric("TACoS")} · 周</>}
             value={`${t.tacos.toFixed(1)}%`}
             deltaLabel={`${formatSignedPct(vs.tacosPp, "pp")} vs 上周`}
             deltaTone={vs.tacosPp <= 0 ? "good" : "bad"}
           />
           <ReportToplineCard
-            label="日均订单"
-            value={t.dailyOrders}
+            label="周订单数"
+            value={t.orders.toLocaleString()}
             deltaLabel={`${formatSignedPct(vs.ordersPct)} vs 上周`}
             deltaTone={vs.ordersPct >= 0 ? "good" : "bad"}
           />
@@ -15147,52 +15022,70 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
         <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
           <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
             <div className="text-11 text-slate-600 font-medium">
-              12 个 delegated listing · 本周销售
+              12 个 delegated listing · 每格可点开看 7 周历史
             </div>
             <div className="text-10 text-slate-500 font-mono">
-              合计 ${t.rev.toLocaleString()}
+              合计周销售 ${totalRev.toLocaleString()}
             </div>
           </div>
-          <table className="w-full text-xs">
-            <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
-              <tr>
-                <th className="text-left font-medium px-4 py-2">SKU · 名称</th>
-                <th className="text-right font-medium px-3 py-2">本周销售</th>
-                <th className="text-right font-medium px-3 py-2">{wrapMetric("TACoS")}</th>
-                <th className="text-left font-medium px-3 py-2">趋势</th>
-                <th className="text-left font-medium px-3 py-2">本周标签</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.listings.map((row) => (
-                <tr key={row.sku} className="border-t border-slate-100" style={{ height: "32px" }}>
-                  <td className="px-4 py-1.5">
-                    <div className="text-xs text-slate-900">
-                      <span className="font-mono text-slate-700">{row.sku}</span>{" "}
-                      · {row.name}
-                    </div>
-                  </td>
-                  <td className="text-right px-3 py-1.5 font-mono tabular-nums text-slate-900">
-                    ${row.weekRev.toLocaleString()}
-                  </td>
-                  <td className="text-right px-3 py-1.5">
-                    <TacosValue value={row.tacos} size="sm" />
-                  </td>
-                  <td className="px-3 py-1.5">
-                    <ReportTrendArrow trend={row.trend} />
-                  </td>
-                  <td className="px-3 py-1.5">
-                    <Pill tone={tagTone[row.tag] || "slate"}>{row.tag}</Pill>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="text-left font-medium px-4 py-2 sticky left-0 bg-slate-50/40">
+                    产品线 / Parent ASIN
+                  </th>
+                  {LISTING_METRIC_COLUMNS.map((m) => (
+                    <th
+                      key={m.key}
+                      className="text-right font-medium px-3 py-2 whitespace-nowrap"
+                    >
+                      {m.key === "tacos" || m.key === "acos"
+                        ? wrapMetric(m.label)
+                        : m.label}
+                    </th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {listings.map((row) => (
+                  <tr
+                    key={row.asin}
+                    className="border-t border-slate-100"
+                    style={{ height: "32px" }}
+                  >
+                    <td className="px-4 py-1.5 sticky left-0 bg-white">
+                      <div className="text-xs text-slate-900 whitespace-nowrap">
+                        {row.line}{" "}
+                        <span className="font-mono text-10 text-slate-500">
+                          · {row.asin}
+                        </span>
+                      </div>
+                    </td>
+                    {LISTING_METRIC_COLUMNS.map((m) => (
+                      <td
+                        key={m.key}
+                        className="text-right px-3 py-1.5 whitespace-nowrap"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setDrawerCell({ listing: row, metric: m })}
+                          className="font-mono tabular-nums text-slate-900 hover:text-emerald-700 hover:underline decoration-dotted underline-offset-2"
+                        >
+                          {m.format(row.today[m.key])}
+                        </button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
       <div className="px-6 pt-8">
-        <SectionLabel kicker="3 条">这一周的发现</SectionLabel>
+        <SectionLabel kicker={`${data.insights.length} 条`}>这一周 · 发现</SectionLabel>
         <div className="space-y-2.5">
           {data.insights.map((ins, i) => (
             <ReportInsightCard key={i} insight={ins} onJumpTo={onJumpTo} />
@@ -15202,9 +15095,9 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
 
       <div className="px-6 pt-8">
         <SectionLabel
-          kicker={`${data.actions.totalOps} 次操作 · ${data.actions.overAuthority} 次超权限 · ${data.actions.exceptions} 次异常挂起(你已 review)`}
+          kicker={`${data.actions.totalOps} 次操作 · ${data.actions.overAuthority} 次超权限 · ${data.actions.exceptions} 次例外(已审)`}
         >
-          这一周代你做的事
+          这一周 · 我代你做的事
         </SectionLabel>
         <div className="grid grid-cols-2 gap-4">
           <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
@@ -15262,7 +15155,7 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
       </div>
 
       <div className="px-6 pt-8">
-        <SectionLabel kicker="下周">下周关注</SectionLabel>
+        <SectionLabel kicker="下周">下一周 · 接下来怎么走</SectionLabel>
         <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
           <ul className="space-y-1.5">
             {data.nextWeek.map((line, i) => (
@@ -15276,7 +15169,9 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
       </div>
 
       <div className="px-6 pt-8">
-        <SectionLabel kicker={`${data.needYou.length} 件`}>需要你下周做的事</SectionLabel>
+        <SectionLabel kicker={`${data.needYou.length} 件`}>
+          下周需要你回的
+        </SectionLabel>
         <div className="space-y-3">
           {data.needYou.map((item, i) => (
             <NeedYouCard key={i} item={item} onJumpTo={onJumpTo} />
@@ -15304,47 +15199,12 @@ function WeeklyReportCanvas({ onJumpTo, onSelectDate }) {
           </button>
         </div>
       </div>
-    </>
-  );
-}
 
-const ARCHIVED_REPORT_LABELS = {
-  "report-2026-05-08": "5/8 周五",
-  "report-2026-05-09": "5/9 周六",
-  "report-2026-05-10": "5/10 周日",
-};
-
-function ArchivedReportCanvas({ reportId, onJumpTo }) {
-  const dateLabel = ARCHIVED_REPORT_LABELS[reportId] || "历史日报";
-  return (
-    <>
-      <CanvasHeader
-        kicker="代运营日报 · 历史"
-        title={`代运营日报 · ${dateLabel} · 已归档`}
-        meta={
-          <ReportExportPill />
-        }
+      <ListingMetricHistoryDrawer
+        cell={drawerCell}
+        onClose={() => setDrawerCell(null)}
+        periodKind="week"
       />
-      <div className="px-6 py-10">
-        <div className="border border-slate-200 rounded-lg px-6 py-8 bg-slate-50/40 max-w-2xl mx-auto">
-          <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-2">
-            历史报告 · {dateLabel}
-          </div>
-          <div className="text-sm font-semibold text-slate-900 mb-2">
-            数据已归档
-          </div>
-          <div className="text-xs text-slate-600 leading-relaxed mb-4">
-            详细日报内容超过 7 天后归档。如需查询当日的具体操作记录,使用广告架构下的操作日志。
-          </div>
-          <button
-            type="button"
-            onClick={() => onJumpTo && onJumpTo("op-log")}
-            className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700 hover:text-emerald-800 border border-emerald-300 hover:bg-emerald-50 rounded-md px-3 py-1.5 bg-white"
-          >
-            广告架构 → 操作日志 <ArrowUpRight className="w-3 h-3" />
-          </button>
-        </div>
-      </div>
     </>
   );
 }
@@ -17097,38 +16957,9 @@ export default function App({
       case "defense":
         return <DefenseCanvas />;
       case "daily-report":
-        return (
-          <DailyReportCanvas
-            reportId="report-2026-05-16"
-            onJumpTo={handleJump}
-            onSelectDate={setActiveId}
-          />
-        );
-      case "report-2026-05-16":
-      case "report-2026-05-15":
-      case "report-2026-05-14":
-      case "report-2026-05-13":
-      case "report-2026-05-12":
-        return (
-          <DailyReportCanvas
-            reportId={activeId}
-            onJumpTo={handleJump}
-            onSelectDate={setActiveId}
-          />
-        );
-      case "report-weekly-w19":
-        return (
-          <WeeklyReportCanvas
-            onJumpTo={handleJump}
-            onSelectDate={setActiveId}
-          />
-        );
-      case "report-2026-05-08":
-      case "report-2026-05-09":
-      case "report-2026-05-10":
-        return (
-          <ArchivedReportCanvas reportId={activeId} onJumpTo={handleJump} />
-        );
+        return <DailyReportCanvas onJumpTo={handleJump} />;
+      case "weekly-report":
+        return <WeeklyReportCanvas onJumpTo={handleJump} />;
       case "omnichannel":
         return <OmnichannelCanvas />;
       case "razor-blade":
