@@ -148,7 +148,7 @@ const THREADS = [
         speaker: "user",
         name: "Devon Park",
         initials: "DP",
-        role: "Sr. Growth Manager",
+        role: "Sr Growth Manager",
         timestamp: "just now",
         body: "Show me the plan.",
         canvasLink: false,
@@ -220,7 +220,7 @@ const THREADS = [
     canvasId: "omnichannel",
     initiator: "user",
     initiatorName: "Devon Park",
-    initiatorRole: "Sr. Growth Manager",
+    initiatorRole: "Sr Growth Manager",
     initials: "DP",
     initialTimestamp: "May 11, 16:42",
     lastActivityTimestamp: "May 11, 16:48",
@@ -2221,7 +2221,7 @@ const COMPANY_BRAIN = {
         id: "devon",
         name: "Devon Park",
         initials: "DP",
-        role: "Sr. Growth Manager",
+        role: "Sr Growth Manager",
         level: "L6",
         clearance: "Internal",
         clearanceLabel: "Internal",
@@ -2949,7 +2949,7 @@ const COMPANY_BRAIN = {
           preGradStats: { totalRecs: 52, approved: 49, modified: 3, declined: 0, approvalRate: 94 },
           preGradWeeklyApprovalRate: [88, 91, 93, 95, 98, 100],
           graduatedBy: "Devon Park",
-          graduatedByRole: "Sr. Growth",
+          graduatedByRole: "Sr Growth",
           graduatedDate: "Feb 4, 2026",
           threshold: { decisions: 30, approvalRate: 92 },
           authority: "Class executes autonomously; agent surfaces exceptions (outcomes > 1.5σ from prediction)",
@@ -7157,12 +7157,12 @@ function RazorBladeCanvas() {
         {/* PHASE 1 */}
         <PhaseSection
           index="1"
-          kicker="Phase 1 · Baseline diagnosis"
+          kicker="Where we sit today"
           title="Where the product line sits today"
           badge={
             <Pill tone="emerald">
               <Check className="w-3 h-3" />
-              Diagnostic
+              Problem aligned
             </Pill>
           }
         >
@@ -7170,7 +7170,7 @@ function RazorBladeCanvas() {
             {/* Section A: Economics */}
             <div>
               <SectionLabel kicker="Our economics · last 30 days">
-                Section A · Razor + blade unit economics
+                Razor + blade unit economics
               </SectionLabel>
               <div className="grid grid-cols-2 gap-3">
                 <EconomicsCard
@@ -7251,7 +7251,7 @@ function RazorBladeCanvas() {
             {/* Section B: Competitor baselines */}
             <div>
               <SectionLabel kicker="Scraped pricing + Amazon Brand Analytics inference">
-                Section B · Competitor baselines
+                Competitor baselines
               </SectionLabel>
               <div className="grid grid-cols-2 gap-3">
                 {R.competitors.map((c, i) => (
@@ -7297,7 +7297,7 @@ function RazorBladeCanvas() {
             {/* Section C: Headroom */}
             <div>
               <SectionLabel kicker="Margin floor at 15%">
-                Section C · Headroom calculation
+                Headroom · how far can we cut
               </SectionLabel>
               <Card className="p-5">
                 <HeadroomBar
@@ -7316,7 +7316,7 @@ function RazorBladeCanvas() {
         {/* PHASE 2 */}
         <PhaseSection
           index="2"
-          kicker="Phase 2 · Pricing experiments"
+          kicker="Three pricing experiments in parallel"
           title="Three concurrent tests · A / B / C"
           badge={
             <Pill tone="emerald">
@@ -7378,13 +7378,13 @@ function RazorBladeCanvas() {
         {/* PHASE 3 — disabled */}
         <PhaseSection
           index="3"
-          kicker="Phase 3 · Activated after Phase 2 test conclusion"
+          kicker="Decision tree · once the test wraps"
           title="Conditional next step · decision tree"
           disabled
           badge={
             <Pill tone="amber">
               <Clock className="w-3 h-3" />
-              Pending Phase 2 results
+              Waiting on test results
             </Pill>
           }
         >
@@ -7535,6 +7535,214 @@ function ClusterStatCard({ cluster, label }) {
   );
 }
 
+function PickupSceneIllustration() {
+  return (
+    <svg
+      viewBox="0 0 200 100"
+      preserveAspectRatio="xMidYMid meet"
+      className="w-full h-full"
+    >
+      {/* Ground line */}
+      <line
+        x1="0"
+        y1="83"
+        x2="200"
+        y2="83"
+        stroke="rgb(148 163 184)"
+        strokeWidth="0.6"
+        strokeDasharray="2 3"
+      />
+      {/* F-150 silhouette · bed */}
+      <rect
+        x="42"
+        y="48"
+        width="58"
+        height="27"
+        rx="2"
+        fill="rgb(100 116 139)"
+        opacity="0.18"
+      />
+      {/* Cab */}
+      <path
+        d="M 92 48 L 104 30 L 132 30 L 142 48 Z"
+        fill="rgb(100 116 139)"
+        opacity="0.25"
+      />
+      {/* Window */}
+      <path
+        d="M 99 36 L 108 32 L 128 32 L 136 41 L 99 41 Z"
+        fill="white"
+        opacity="0.55"
+      />
+      {/* Hood */}
+      <rect
+        x="138"
+        y="48"
+        width="22"
+        height="27"
+        rx="2"
+        fill="rgb(100 116 139)"
+        opacity="0.25"
+      />
+      {/* Grille */}
+      <line
+        x1="158"
+        y1="58"
+        x2="158"
+        y2="70"
+        stroke="rgb(71 85 105)"
+        strokeWidth="1"
+      />
+      {/* Wheels (truck) */}
+      <circle cx="58" cy="78" r="7" fill="rgb(71 85 105)" opacity="0.55" />
+      <circle cx="148" cy="78" r="7" fill="rgb(71 85 105)" opacity="0.55" />
+      <circle cx="58" cy="78" r="2.5" fill="white" opacity="0.9" />
+      <circle cx="148" cy="78" r="2.5" fill="white" opacity="0.9" />
+      {/* Inflator unit */}
+      <rect
+        x="162"
+        y="62"
+        width="10"
+        height="16"
+        rx="1.5"
+        fill="rgb(71 85 105)"
+        opacity="0.45"
+      />
+      <rect
+        x="164"
+        y="65"
+        width="6"
+        height="3"
+        rx="0.5"
+        fill="white"
+        opacity="0.7"
+      />
+      {/* Hose */}
+      <path
+        d="M 172 72 Q 178 72 181 75"
+        stroke="rgb(71 85 105)"
+        strokeWidth="1.1"
+        fill="none"
+        opacity="0.55"
+      />
+      {/* Loose tire being inflated */}
+      <circle cx="186" cy="78" r="10" fill="rgb(71 85 105)" opacity="0.4" />
+      <circle cx="186" cy="78" r="4" fill="white" opacity="0.85" />
+    </svg>
+  );
+}
+
+function ProductOnlyIllustration() {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid meet"
+      className="w-full h-full"
+    >
+      {/* Carry handle */}
+      <rect
+        x="39"
+        y="20"
+        width="22"
+        height="9"
+        rx="2.5"
+        fill="rgb(244 114 182)"
+        opacity="0.25"
+      />
+      <rect
+        x="48"
+        y="26"
+        width="4"
+        height="6"
+        fill="rgb(244 114 182)"
+        opacity="0.35"
+      />
+      {/* Body */}
+      <rect
+        x="34"
+        y="30"
+        width="32"
+        height="48"
+        rx="3"
+        fill="rgb(244 114 182)"
+        opacity="0.2"
+      />
+      <rect
+        x="37"
+        y="33"
+        width="26"
+        height="42"
+        rx="2"
+        fill="rgb(244 114 182)"
+        opacity="0.12"
+      />
+      {/* Digital display */}
+      <rect
+        x="41"
+        y="38"
+        width="18"
+        height="10"
+        rx="1"
+        fill="rgb(244 114 182)"
+        opacity="0.6"
+      />
+      <line
+        x1="44"
+        y1="43"
+        x2="46"
+        y2="43"
+        stroke="white"
+        strokeWidth="1.2"
+      />
+      <line
+        x1="48"
+        y1="43"
+        x2="50"
+        y2="43"
+        stroke="white"
+        strokeWidth="1.2"
+      />
+      <line
+        x1="52"
+        y1="43"
+        x2="55"
+        y2="43"
+        stroke="white"
+        strokeWidth="1.2"
+      />
+      {/* Buttons */}
+      <circle cx="44" cy="56" r="1.8" fill="rgb(244 114 182)" opacity="0.5" />
+      <circle cx="50" cy="56" r="1.8" fill="rgb(244 114 182)" opacity="0.5" />
+      <circle cx="56" cy="56" r="1.8" fill="rgb(244 114 182)" opacity="0.5" />
+      {/* Nozzle base */}
+      <rect
+        x="42"
+        y="65"
+        width="16"
+        height="7"
+        rx="1"
+        fill="rgb(244 114 182)"
+        opacity="0.35"
+      />
+      {/* Hose stub */}
+      <path
+        d="M 50 72 L 50 78 L 47 82 L 53 82 L 50 78 Z"
+        fill="rgb(244 114 182)"
+        opacity="0.4"
+      />
+      {/* Ground shadow */}
+      <ellipse
+        cx="50"
+        cy="90"
+        rx="22"
+        ry="2"
+        fill="rgb(244 114 182)"
+        opacity="0.15"
+      />
+    </svg>
+  );
+}
+
 function CompetitorMainImage({ competitor }) {
   const isSelf = competitor.type === "self";
   return (
@@ -7546,27 +7754,22 @@ function CompetitorMainImage({ competitor }) {
       }`}
     >
       <div
-        className="flex flex-col items-center justify-center gap-2 px-3"
+        className="relative"
         style={{ aspectRatio: "3 / 2" }}
       >
-        {isSelf ? (
-          <>
-            <ImageIcon className="w-9 h-9 text-rose-400" strokeWidth={1.5} />
-            <div className="text-11 uppercase tracking-wider font-medium text-rose-700 text-center">
-              Product-only · white background
-            </div>
-          </>
-        ) : (
-          <>
-            <Truck className="w-9 h-9 text-slate-500" strokeWidth={1.5} />
-            <div className="text-11 uppercase tracking-wider font-medium text-slate-600 text-center">
-              Pickup-context staging
-            </div>
-          </>
-        )}
-      </div>
-      <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
-        schematic · no live image
+        <div
+          className={`absolute top-2 left-3 text-10 uppercase tracking-wider font-medium ${
+            isSelf ? "text-rose-700" : "text-slate-600"
+          }`}
+        >
+          {isSelf ? "Product-only · white background" : "Pickup-context staging"}
+        </div>
+        <div className="absolute inset-x-2 bottom-1 top-7 flex items-center justify-center">
+          {isSelf ? <ProductOnlyIllustration /> : <PickupSceneIllustration />}
+        </div>
+        <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
+          schematic · no live image
+        </div>
       </div>
     </div>
   );

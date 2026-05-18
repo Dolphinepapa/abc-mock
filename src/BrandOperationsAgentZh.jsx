@@ -266,7 +266,7 @@ const THREADS = [
         speaker: "agent",
         timestamp: "May 13, 10:14",
         body:
-          "已起草 3 阶段方案:Phase 1 基线诊断 · Phase 2 三组并行定价实验 · Phase 3 待 Phase 2 结果激活的决策树。打开画布查看。",
+          "起了个三阶段方案:先看自己的产品线现状 · 三组并行定价测试 · 决策树(等测试结果出来再激活)。打开画布看。",
         canvasLink: true,
       },
     ],
@@ -281,7 +281,7 @@ const THREADS = [
     initialTimestamp: "May 15, 08:31",
     lastActivityTimestamp: "May 15, 08:38",
     unread: false,
-    title: "新品 CR 诊断 · 轮胎充气泵",
+    title: "新品 CR 缺口 · 轮胎充气泵",
     turns: [
       {
         speaker: "user",
@@ -294,7 +294,7 @@ const THREADS = [
         speaker: "agent",
         timestamp: "May 15, 08:38",
         body:
-          "已完成搜索词分群与竞品 listing 对比拆解,识别 4 个假设(2 个 P0:主图重做 + 标题重写;2 个 P1:A+ 模块 + bullet 重排)。打开画布查看测试计划。",
+          "搜索词分群 + 竞品 listing 拆完了, 出了 4 个假设(P0 两个:主图重做 + 标题重写;P1 两个:A+ 模块 + bullet 重排)。打开画布看测试计划。",
         canvasLink: true,
       },
     ],
@@ -768,7 +768,7 @@ const STRATEGY = {
     },
     {
       idx: 2,
-      label: "广告架构提升",
+      label: "广告架构重构",
       target: "核心关键词进入自然 Top-3 · SOV 14% → 26%",
       window: "第 1–4 周",
       dependsOn: "Agent · 来自洞察 #2 计划",
@@ -797,7 +797,7 @@ const STRATEGY = {
       "从既定目标出发:90 天内争取 BS。",
       "分析当前 listing 健康度:排名 #2,销售额 $138K/月,TACoS 18.1% — 在目标区间内。Listing 处于成熟期且运行高效。仅靠广告架构调整难以追到 #1。",
       "审计当前广告架构(5 个广告活动,合计日预算 $848)。在广告活动层面未发现结构性低效。",
-      "扫描 listing 的薄弱环节,识别出卧室场景搜索词为最高影响的 CTR 缺口 — 但其解决需要 listing 内容修改,不在 agent 执行范围内(已作为洞察 #1 呈现)。",
+      "扫了 listing 的薄弱环节, 卧室场景词是影响最大的 CTR 缺口 — 改主图、改详情页需要品牌团队上手, 我只能把这条作为洞察 #1 呈现。",
       "从公司大脑中调取 9 个过往 #2 → #1 案例,其中 7 个使用了短期提高广告预算 + 促销打法。最佳匹配:2025 Q4 床架 SKU-117(相同生命周期阶段、可比竞争烈度、相邻价格带)。",
       "基于该打法起草 3 阶段计划(洞察 #2)。BS 标签与回落阶段的产出基于观测到的过往结果建模。",
       "编排顺序里程碑路径:listing 修复(团队)+ 短期提高广告预算(agent)→ 拿下 #1 → 恢复目标 TACoS。",
@@ -1135,7 +1135,7 @@ const OMNICHANNEL = {
         "客户多出 $100K 增量预算,要求全部投出。三个 channel 的 allocation 不按比例切,按边际回报和战略适配度排:",
         "Walmart 现状最小但边际最陡 — CPC 较 Amazon 低 42%,品牌广告占比仅 8%,有结构性扩量空间。+$36K 主要投入对比图测试 + 品牌广告扩量 + 商品页面广告扩量三个具体动作。",
         "TikTok 是 0 → 1 验证投资。+$36K 跑 7 DMA holdout test(8 周),验证下游 Amazon + Walmart lift。如果验证通过,Q3 再决定是否全量扩。",
-        "Amazon 现状最大、接近饱和。+$28K 不走 Bed Frame 打法(价格锁定下不兼容),改走「品牌广告持续扩量 → CPC 下行」pattern。12 周内不一定完成 BSR ≤ 5 目标,但建立的品牌词 SOV 和广告效率改善是长期资产。",
+        "Amazon 现状最大、接近饱和。+$28K 不走 Bed Frame 打法(价格锁定下不兼容), 改走「品牌广告持续扩量 → CPC 下行」打法。12 周内 BSR ≤ 5 不一定到, 但品牌词 SOV 建起来后 CPC 长期下行, 这 8 周的花费有回报。",
         "Week 4 复盘:重点看 TikTok holdout 早期信号方向。如 lift 显著低于预期,Week 5-8 可考虑把 TikTok 剩余预算挪到 Walmart 加码品牌广告。",
         "价格锁定约束是硬约束 — 任何依赖促销 / 降价的方案都被排除。三个 channel 的方案全部基于「流量效率 + 广告结构」改进。",
         "Walmart +$36K + TikTok +$36K + Amazon +$28K = $100K 增量,无储备。合并后月度总投入 $153K,Q3 预算审议前可调整。",
@@ -1452,7 +1452,7 @@ const RAZOR_BLADE = {
   },
 };
 
-/* Launch CR 诊断画布 — 轮胎充气泵(皮卡市场) */
+/* Launch CR 缺口画布 — 轮胎充气泵(皮卡市场) */
 const LAUNCH_CR = {
   sku: "SKU-TI-A · 轮胎充气泵(皮卡)",
   initiator: "Jamal Hassan",
@@ -2582,7 +2582,7 @@ const COMPANY_BRAIN = {
     },
     {
       id: "pat-bedroom-ctr",
-      name: "卧室词簇 CTR 诊断模式",
+      name: "卧室词簇 CTR 缺口模式",
       category: "Optimization",
       confidencePct: 73,
       usedInCount: 3,
@@ -2591,7 +2591,7 @@ const COMPANY_BRAIN = {
       sensitivityLabel: "内部",
       addedAt: "Mar 9",
       detail: {
-        definition: "当卧室场景关键词 CTR 在 1.1–1.4%、类目基准是 2.8% 时,根因几乎总是主图场景错位(客厅 vs 卧室)。",
+        definition: "当卧室场景关键词 CTR 在 1.1–1.4%、类目基准是 2.8% 时, 问题几乎总是主图场景错位(客厅 vs 卧室)。",
         lineage: "ABC 4 个 SKU(落地灯、床架)出现同样模式;改完主图后 4/4 都修好了。",
         sourceList: [
           ["SKU-A 落地灯 · 2025 年 2 月", "卧室 CTR 1.2% → 2.6%,换了卧室主图后"],
@@ -2752,7 +2752,7 @@ const COMPANY_BRAIN = {
     },
     {
       id: "pat-pickup-cr",
-      name: "Pickup-truck 词簇 CR 诊断模式",
+      name: "皮卡场景词簇 CR 缺口模式",
       category: "Optimization",
       confidencePct: 76,
       usedInCount: 2,
@@ -2766,7 +2766,7 @@ const COMPANY_BRAIN = {
         sourceList: [
           ["工具车案例 · 2025 年 4 月", "调价后 CR 0.9% → 2.1%"],
           ["户外灯案例 · 2024 年 8 月", "做场景组合后 CR 1.1% → 2.4%"],
-          ["另含 1 个案例", "同样诊断成立"],
+          ["另含 1 个案例", "同样问题, 改完都修好了"],
         ],
         appliedIn: ["优化画布(冷门场景)"],
       },
@@ -3489,7 +3489,7 @@ const BRAIN_OPS = {
     failureLessons: [
       {
         id: "fail-cluster-validation",
-        title: "新品上线前必须做关键词分群验证,不要 launch 后才补 CR 诊断",
+        title: "新品上线前必须做关键词分群验证, 不要 launch 后才补 CR 缺口",
         source: "SKU-TI-A 充气泵 · pickup-tire-inflator cluster 上线后才发现 CR 2.0%,远低于品类 4.1%",
         appliesWhen: "面向新场景词 cluster 的 launch · 尤其是细分子类",
       },
@@ -7199,12 +7199,12 @@ function RazorBladeCanvas() {
         {/* PHASE 1 */}
         <PhaseSection
           index="1"
-          kicker="Phase 1 · 基线诊断"
+          kicker="先看自己 · 产品线现状"
           title="产品线当前所在位置"
           badge={
             <Pill tone="emerald">
               <Check className="w-3 h-3" />
-              诊断
+              问题已对齐
             </Pill>
           }
         >
@@ -7321,7 +7321,7 @@ function RazorBladeCanvas() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-11 uppercase tracking-wider text-emerald-400 font-semibold mb-1.5">
-                    诊断
+                    问题在哪
                   </div>
                   <div className="text-sm font-semibold text-white mb-1.5 leading-snug">
                     {wrapProse(R.diagnosis.headline, ["绑定购买率", "LTV"])}
@@ -7358,7 +7358,7 @@ function RazorBladeCanvas() {
         {/* PHASE 2 */}
         <PhaseSection
           index="2"
-          kicker="Phase 2 · 定价实验"
+          kicker="三组并行定价测试"
           title="3 个并行测试 · A / B / C"
           badge={
             <Pill tone="emerald">
@@ -7420,13 +7420,13 @@ function RazorBladeCanvas() {
         {/* PHASE 3 — disabled */}
         <PhaseSection
           index="3"
-          kicker="Phase 3 · Phase 2 测试结束后激活"
+          kicker="测试结果出来后再决定"
           title="条件下一步 · 决策树"
           disabled
           badge={
             <Pill tone="amber">
               <Clock className="w-3 h-3" />
-              待 Phase 2 结果
+              等测试结果
             </Pill>
           }
         >
@@ -7514,7 +7514,7 @@ function RazorBladeCanvas() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
-/*  Launch CR 诊断画布 — 轮胎充气泵(皮卡)                                       */
+/*  Launch CR 缺口画布 — 轮胎充气泵(皮卡)                                       */
 /* ────────────────────────────────────────────────────────────────────────── */
 
 const TEST_TYPE_STYLE = {
@@ -7577,6 +7577,65 @@ function ClusterStatCard({ cluster, label }) {
   );
 }
 
+function PickupSceneIllustration() {
+  return (
+    <svg
+      viewBox="0 0 200 100"
+      preserveAspectRatio="xMidYMid meet"
+      className="w-full h-full"
+    >
+      <line
+        x1="0"
+        y1="83"
+        x2="200"
+        y2="83"
+        stroke="rgb(148 163 184)"
+        strokeWidth="0.6"
+        strokeDasharray="2 3"
+      />
+      <rect x="42" y="48" width="58" height="27" rx="2" fill="rgb(100 116 139)" opacity="0.18" />
+      <path d="M 92 48 L 104 30 L 132 30 L 142 48 Z" fill="rgb(100 116 139)" opacity="0.25" />
+      <path d="M 99 36 L 108 32 L 128 32 L 136 41 L 99 41 Z" fill="white" opacity="0.55" />
+      <rect x="138" y="48" width="22" height="27" rx="2" fill="rgb(100 116 139)" opacity="0.25" />
+      <line x1="158" y1="58" x2="158" y2="70" stroke="rgb(71 85 105)" strokeWidth="1" />
+      <circle cx="58" cy="78" r="7" fill="rgb(71 85 105)" opacity="0.55" />
+      <circle cx="148" cy="78" r="7" fill="rgb(71 85 105)" opacity="0.55" />
+      <circle cx="58" cy="78" r="2.5" fill="white" opacity="0.9" />
+      <circle cx="148" cy="78" r="2.5" fill="white" opacity="0.9" />
+      <rect x="162" y="62" width="10" height="16" rx="1.5" fill="rgb(71 85 105)" opacity="0.45" />
+      <rect x="164" y="65" width="6" height="3" rx="0.5" fill="white" opacity="0.7" />
+      <path d="M 172 72 Q 178 72 181 75" stroke="rgb(71 85 105)" strokeWidth="1.1" fill="none" opacity="0.55" />
+      <circle cx="186" cy="78" r="10" fill="rgb(71 85 105)" opacity="0.4" />
+      <circle cx="186" cy="78" r="4" fill="white" opacity="0.85" />
+    </svg>
+  );
+}
+
+function ProductOnlyIllustration() {
+  return (
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid meet"
+      className="w-full h-full"
+    >
+      <rect x="39" y="20" width="22" height="9" rx="2.5" fill="rgb(244 114 182)" opacity="0.25" />
+      <rect x="48" y="26" width="4" height="6" fill="rgb(244 114 182)" opacity="0.35" />
+      <rect x="34" y="30" width="32" height="48" rx="3" fill="rgb(244 114 182)" opacity="0.2" />
+      <rect x="37" y="33" width="26" height="42" rx="2" fill="rgb(244 114 182)" opacity="0.12" />
+      <rect x="41" y="38" width="18" height="10" rx="1" fill="rgb(244 114 182)" opacity="0.6" />
+      <line x1="44" y1="43" x2="46" y2="43" stroke="white" strokeWidth="1.2" />
+      <line x1="48" y1="43" x2="50" y2="43" stroke="white" strokeWidth="1.2" />
+      <line x1="52" y1="43" x2="55" y2="43" stroke="white" strokeWidth="1.2" />
+      <circle cx="44" cy="56" r="1.8" fill="rgb(244 114 182)" opacity="0.5" />
+      <circle cx="50" cy="56" r="1.8" fill="rgb(244 114 182)" opacity="0.5" />
+      <circle cx="56" cy="56" r="1.8" fill="rgb(244 114 182)" opacity="0.5" />
+      <rect x="42" y="65" width="16" height="7" rx="1" fill="rgb(244 114 182)" opacity="0.35" />
+      <path d="M 50 72 L 50 78 L 47 82 L 53 82 L 50 78 Z" fill="rgb(244 114 182)" opacity="0.4" />
+      <ellipse cx="50" cy="90" rx="22" ry="2" fill="rgb(244 114 182)" opacity="0.15" />
+    </svg>
+  );
+}
+
 function CompetitorMainImage({ competitor }) {
   const isSelf = competitor.type === "self";
   return (
@@ -7588,27 +7647,22 @@ function CompetitorMainImage({ competitor }) {
       }`}
     >
       <div
-        className="flex flex-col items-center justify-center gap-2 px-3"
+        className="relative"
         style={{ aspectRatio: "3 / 2" }}
       >
-        {isSelf ? (
-          <>
-            <ImageIcon className="w-9 h-9 text-rose-400" strokeWidth={1.5} />
-            <div className="text-11 uppercase tracking-wider font-medium text-rose-700 text-center">
-              纯产品图 · 白底
-            </div>
-          </>
-        ) : (
-          <>
-            <Truck className="w-9 h-9 text-slate-500" strokeWidth={1.5} />
-            <div className="text-11 uppercase tracking-wider font-medium text-slate-600 text-center">
-              皮卡场景
-            </div>
-          </>
-        )}
-      </div>
-      <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
-        示意图 · 非实拍
+        <div
+          className={`absolute top-2 left-3 text-10 uppercase tracking-wider font-medium ${
+            isSelf ? "text-rose-700" : "text-slate-600"
+          }`}
+        >
+          {isSelf ? "纯产品图 · 白底" : "皮卡场景"}
+        </div>
+        <div className="absolute inset-x-2 bottom-1 top-7 flex items-center justify-center">
+          {isSelf ? <ProductOnlyIllustration /> : <PickupSceneIllustration />}
+        </div>
+        <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
+          示意图 · 非实拍
+        </div>
       </div>
     </div>
   );
@@ -7995,7 +8049,7 @@ function LaunchCRCanvas() {
   return (
     <>
       <CanvasHeader
-        kicker="新品 CR 诊断 · 轮胎充气泵 · 皮卡市场"
+        kicker="新品 CR 缺口 · 轮胎充气泵 · 皮卡市场"
         title={L.sku}
         meta={
           <>
@@ -8009,7 +8063,7 @@ function LaunchCRCanvas() {
             </Pill>
             <Pill tone="slate">
               <Workflow className="w-3 h-3" />
-              诊断 + 4 项测试
+              问题 + 4 项测试
             </Pill>
           </>
         }
@@ -10002,7 +10056,7 @@ function ChatPanel({
         {auditsInFlight.length > 0 && (
           <div>
             <SidebarGroupHeader
-              label={`Pattern audit · 进行中 · ${auditsInFlight.length}`}
+              label={`模式复盘 · 进行中 · ${auditsInFlight.length}`}
               badge="等你决策"
               badgeTone="slate"
             />
@@ -10030,7 +10084,7 @@ function ChatPanel({
                     }`}
                   >
                     <div className="text-xs font-semibold text-slate-900 truncate">
-                      Audit · {row.title}
+                      复盘 · {row.title}
                     </div>
                     <div className="text-10 text-slate-500 mt-0.5">
                       {decided
@@ -15618,7 +15672,7 @@ function BrainPatternCard({ row, onChallenge, revision }) {
       {inFlight && (
         <div className="text-10 text-slate-700 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5 mb-2 inline-flex items-center gap-1">
           <MessageSquare className="w-2.5 h-2.5" />
-          Audit 进行中 · 等你决策
+          复盘进行中 · 等你决策
         </div>
       )}
       {status === "adopted" && (
@@ -16358,7 +16412,7 @@ function CmoRejectedBanner({ rejection }) {
 
 const CMO_PATTERN_AUDITS = {
   "pattern-brand-cpc": {
-    title: "Pattern Audit · 品牌广告持续投放 → CPC 下行",
+    title: "模式复盘 · 品牌广告持续投放 → CPC 下行",
     patternType: "Pattern",
     patternName: "品牌广告持续投放 → CPC 下行",
     currentState: {
@@ -16408,7 +16462,7 @@ const CMO_PATTERN_AUDITS = {
     },
   },
   "playbook-peak-defense": {
-    title: "Pattern Audit · 旺季前自然位防御",
+    title: "模式复盘 · 旺季前自然位防御",
     patternType: "Playbook",
     patternName: "旺季前自然位防御",
     currentState: {
@@ -16456,7 +16510,7 @@ const CMO_PATTERN_AUDITS = {
     },
   },
   "pattern-razor-pricing": {
-    title: "Pattern Audit · razor-blade 定价测试方法",
+    title: "模式复盘 · razor-blade 定价测试方法",
     patternType: "Pattern",
     patternName: "razor-blade 定价测试方法",
     currentState: {
@@ -16546,7 +16600,7 @@ function PatternAuditCanvas({
       <div className="max-w-3xl mx-auto">
         <div className="border-b border-slate-200 pb-4 mb-6">
           <div className="text-11 uppercase tracking-wider text-slate-500 font-medium mb-1">
-            Pattern Audit
+            模式复盘
           </div>
           <div className="text-lg font-semibold text-slate-900">
             {data.title}
@@ -16605,7 +16659,7 @@ function PatternAuditCanvas({
                   onClick={() => onSubmit && onSubmit(questionText.trim())}
                   className="px-3 py-1.5 text-11 font-medium bg-slate-900 text-white rounded hover:bg-slate-800 disabled:bg-slate-300 disabled:cursor-not-allowed"
                 >
-                  提交质疑 → 触发 Pattern Audit
+                  提交质疑 → 触发模式复盘
                 </button>
               </div>
             </div>
@@ -16763,7 +16817,7 @@ function PatternAuditCanvas({
               )}
               {role !== "cmo" && (
                 <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3.5 text-sm text-slate-700">
-                  此 audit 由 CMO 触发, 决策权在 CMO 这里。等待结果。
+                  这次复盘是 CMO 触发的, 决策权在 CMO。等结果。
                 </div>
               )}
             </section>
@@ -16907,7 +16961,7 @@ export default function App({
       const data = CMO_PATTERN_AUDITS[auditPatternId];
       const rev = patternRevisions[auditPatternId];
       return {
-        kicker: "Pattern Audit · CMO 视角",
+        kicker: "模式复盘 · CMO 视角",
         name: data?.title,
         submitter: rev?.status && rev.status !== "pending" ? "CMO" : null,
         when:
