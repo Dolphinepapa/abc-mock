@@ -7539,27 +7539,34 @@ function CompetitorMainImage({ competitor }) {
   const isSelf = competitor.type === "self";
   return (
     <div
-      className={`rounded-md border ${isSelf ? "border-rose-200 bg-rose-50/30" : "border-slate-200 bg-slate-50"} overflow-hidden`}
+      className={`rounded-md border overflow-hidden relative ${
+        isSelf
+          ? "border-rose-200 bg-gradient-to-br from-rose-50/60 to-white"
+          : "border-slate-200 bg-gradient-to-br from-slate-100 to-slate-50"
+      }`}
     >
       <div
-        className="flex items-center justify-center"
-        style={{ aspectRatio: "1 / 1" }}
+        className="flex flex-col items-center justify-center gap-2 px-3"
+        style={{ aspectRatio: "3 / 2" }}
       >
         {isSelf ? (
-          <div className="flex flex-col items-center gap-2 text-slate-400">
-            <ImageIcon className="w-8 h-8" strokeWidth={1.5} />
-            <div className="text-10 uppercase tracking-wider font-medium">
+          <>
+            <ImageIcon className="w-9 h-9 text-rose-400" strokeWidth={1.5} />
+            <div className="text-11 uppercase tracking-wider font-medium text-rose-700 text-center">
               Product-only · white background
             </div>
-          </div>
+          </>
         ) : (
-          <div className="flex flex-col items-center gap-2 text-slate-500">
-            <Truck className="w-8 h-8 text-slate-600" strokeWidth={1.5} />
-            <div className="text-10 uppercase tracking-wider font-medium text-slate-600">
+          <>
+            <Truck className="w-9 h-9 text-slate-500" strokeWidth={1.5} />
+            <div className="text-11 uppercase tracking-wider font-medium text-slate-600 text-center">
               Pickup-context staging
             </div>
-          </div>
+          </>
         )}
+      </div>
+      <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
+        schematic · no live image
       </div>
     </div>
   );
