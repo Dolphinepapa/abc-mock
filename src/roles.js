@@ -52,6 +52,18 @@ export const THREAD_OWNERS = {
 // Drives the "待审批 · 2 件" group at the top of the CMO sidebar.
 export const STRATEGIC_THREAD_IDS = ["strategy", "razor-blade"];
 
+// Phase D · CMO challenge canvas — pre-scripted per spec D.4.
+// Keyed by the proposal threadId so [质疑] on strategy opens
+// CHALLENGE_THREAD_IDS.strategy etc.
+export const CHALLENGE_THREAD_IDS = {
+  strategy: "challenge-strategy",
+  "razor-blade": "challenge-razor-blade",
+};
+export const PROPOSAL_FOR_CHALLENGE = {
+  "challenge-strategy": "strategy",
+  "challenge-razor-blade": "razor-blade",
+};
+
 // Maya's direct reports — used to compute "你的团队" group.
 export const MAYA_REPORT_ROLES = ["devon", "sara", "jamal"];
 

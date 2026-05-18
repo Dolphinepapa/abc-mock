@@ -18,6 +18,19 @@ export default function App() {
     return stored && ROLE_IDS.includes(stored) ? stored : DEFAULT_ROLE;
   });
 
+  // Phase D · CMO approval / challenge / rejection state.
+  // Lifted here so it survives the locale+role remount (key includes both).
+  // status: 'pending' | 'approved' | 'rejected' | 'challenged'
+  // challenge: { text, submittedAt } when status === 'challenged'
+  const [proposalStates, setProposalStates] = useState({
+    strategy: { status: "pending", challenge: null, rejection: null },
+    "razor-blade": {
+      status: "pending",
+      challenge: null,
+      rejection: null,
+    },
+  });
+
   useEffect(() => {
     window.localStorage.setItem(LOCALE_KEY, locale);
     document.title =
@@ -43,6 +56,8 @@ export default function App() {
       setLocale={setLocale}
       currentRole={currentRole}
       setCurrentRole={setCurrentRole}
+      proposalStates={proposalStates}
+      setProposalStates={setProposalStates}
     />
   ) : (
     <AppZh
@@ -51,6 +66,8 @@ export default function App() {
       setLocale={setLocale}
       currentRole={currentRole}
       setCurrentRole={setCurrentRole}
+      proposalStates={proposalStates}
+      setProposalStates={setProposalStates}
     />
   );
 }
