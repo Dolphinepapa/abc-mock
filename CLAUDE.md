@@ -14,6 +14,43 @@ A UI mock for stakeholder review. **Readers are operators (VPs, senior PMs)** �
 
 Chat input is intentionally disabled; all conversations are pre-scripted.
 
+## Workflow — Explore → Plan → Code → Commit
+
+Every task runs through these four phases. Don't collapse them.
+
+### 1. Explore
+Read the relevant files and gather context **before** forming an opinion. Tools: `Read`, `grep`, `find`, the Explore agent. **No edits in this phase.** If after exploring the ask is still ambiguous, ask one focused question instead of guessing what the user meant.
+
+### 2. Plan
+State the approach in 2-4 lines back to the user: what will change, where, the main trade-off. For multi-step work use `TaskCreate`. **Pause for confirmation before coding when**:
+- the change is destructive (delete files / functions / data / sidebar entries)
+- it spans multiple files or > 100 lines of diff
+- it changes user-visible behavior beyond the literal ask
+- it touches both Zh and En counterparts
+
+### 3. Code
+- Make the smallest edit that fulfills the ask. No drive-by refactors or "while I'm here..." additions.
+- Mirror parallel files (`BrandOperationsAgentZh.jsx` ↔ `BrandOperationsAgentEn.jsx`) when the change is symmetric.
+- **After deleting any function / constant / data block, `grep` the whole repo for stale references.** Module-eval `ReferenceError`s don't surface at build time and cause white-screen prod bugs (see the `buildListingTable` incident).
+- Run `npm run build` and visually confirm green output before claiming done.
+
+### 4. Commit
+- Only when the user says "commit" (or equivalent). Never auto-commit.
+- One logical change per commit. Don't batch unrelated edits.
+- HEREDOC for messages. Confirm `npm run build` is green before the commit command.
+- Push only when the user says so or has standing instruction (recent pattern: user typically pairs "commit" with "push").
+
+### Skip rules
+This workflow is skippable only for: typo fixes, one-line content changes, or when the user explicitly says "just do it". Even then, output one sentence of intent before the tool call.
+
+### Workflow anti-patterns
+- ❌ Jumping to `Edit` without reading the file first
+- ❌ Treating Plan as an essay (it's a 4-line commitment, not a design doc)
+- ❌ Committing without building
+- ❌ "While I'm here let me also clean up X" — scope creep that lost the user's weekly canvas once already
+- ❌ Mirroring the Zh refactor to En without rebuilding & verifying both
+- ❌ Deleting code as "dead" without first grepping for module-level references
+
 ## Canvas rhythm — every canvas has 4 parts
 
 1. **现状 · Current state** — concrete numbers, not interpretation
