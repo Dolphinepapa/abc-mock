@@ -1524,24 +1524,46 @@ const LAUNCH_CR = {
   },
   competitors: [
     {
-      name: "Competitor A",
+      name: "Competitor A · OlarHike",
       type: "competitor",
-      mainImageNote:
-        "Black F-150 front-three-quarter shot · inflator deployed on a 35\" truck tire. Reads instantly as 'built for trucks.'",
-      mainImageHighlights: ["F-150 in frame", "deployed on truck tire", "outdoor lifestyle"],
-      title:
-        "Heavy Duty Tire Inflator for Truck & SUV · 160 PSI · Digital Auto-Stop · 12V DC",
-      titleHighlights: ["Heavy Duty", "for Truck & SUV", "160 PSI"],
-      bulletPoints: [
-        "Inflates a stock F-150 tire from 20 to 35 PSI in 4 min 20 sec",
-        "Brass cylinder rated for 160 PSI sustained · 50% above the category average",
-        "Auto-stop at target PSI · works on truck, SUV, and trailer tires",
-        "12V DC plug · 11-foot reach cord covers all 4 truck tires from one outlet",
-        "Includes Schrader, Presta, and ball-needle adapters",
+      mainImageSrc: "/tire-inflator-competitor.png",
+      gallery: [
+        "/tire-inflator-competitor-gallery-1.png",
+        "/tire-inflator-competitor-gallery-2.png",
+        "/tire-inflator-competitor-gallery-3.png",
+        "/tire-inflator-competitor-gallery-4.png",
+        "/tire-inflator-competitor-gallery-5.png",
       ],
-      bulletHighlights: ["F-150", "Heavy Duty", "truck"],
+      mainImageNote:
+        "Main image: yellow body on a rugged off-road tire backdrop with the digital PSI readout big and centered. Surrounding gallery is spec-heavy — 2X faster · 2.2 min · 6000mAh · 105 inflations · US Patent. One scroll covers the performance pitch.",
+      mainImageHighlights: ["2X faster", "6000mAh", "US Patent"],
+      title:
+        "OlarHike Tire Inflator Portable Air Compressor, Dual Power - 6000mAh & 12V DC, Cordless Air Pump for Car Tires, Bikes, Motorcycle, Balls with LED & Digital Pressure Gauge, Auto Shut-off",
+      titleHighlights: [
+        "Dual Power",
+        "6000mAh & 12V DC",
+        "Cordless",
+        "LED & Digital Pressure Gauge",
+        "Auto Shut-off",
+      ],
+      bulletPoints: [
+        "Inflates a 195/65 R15 car tire 30→35 PSI in 55 sec; a 235/65 R17 SUV tire in 2.2 min. Cars / SUVs / light pickup (≤51 PSI) / motorcycles / bikes / balls.",
+        "Dual Power: built-in rechargeable battery for cordless use, or plug into any 12V cigarette lighter for continuous power.",
+        "6000mAh battery (3 × 2000mAh) — up to 18 car tires or 11 SUV tires on a single charge. USB output also charges your phone.",
+        "Bright dual LED display + high-precision pressure sensor; auto-stops exactly at preset PSI to prevent over-inflation.",
+        "4 preset modes (car / bike / motorcycle / sports); one-touch switch between PSI / BAR / KPA / KG·cm²; remembers your last setting.",
+      ],
+      bulletHighlights: [
+        "55 sec",
+        "Dual Power",
+        "6000mAh",
+        "18 car tires",
+        "11 SUV tires",
+        "auto-stops",
+        "4 preset modes",
+      ],
       aplusFirstModule:
-        "Truck vs. car tire pressure & sidewall comparison chart · explains why a standard pump bogs down on 35\" tires.",
+        "What-you-get layout: Type-C cable, long air hose, long nozzle, ball needle, French valve adapter, storage bag — all visible in one shot.",
       reviewsRating: "4.6",
       reviewsCount: "8,420",
       truckMentionCount: "2,140 (25.4%)",
@@ -1549,35 +1571,18 @@ const LAUNCH_CR = {
       priceNote: "Premium · +24% vs ours",
     },
     {
-      name: "Competitor B",
-      type: "competitor",
-      mainImageNote:
-        "Dual-tire side view on a lifted Silverado · accessory laid out on the tailgate. Outdoor / utility context is unmistakable.",
-      mainImageHighlights: ["Silverado context", "tailgate scene", "rugged staging"],
-      title:
-        "Truck Tire Inflator · 12V Air Compressor for Pickup & Off-Road · 150 PSI Heavy Duty",
-      titleHighlights: ["Truck", "Pickup & Off-Road", "Heavy Duty"],
-      bulletPoints: [
-        "Built for pickup trucks, SUVs, and off-road rigs — handles 33-37\" tires",
-        "150 PSI rated brass piston · 3x duty cycle of plastic-piston units",
-        "Inflates a 33\" Silverado tire 18 → 35 PSI in 5 min 10 sec",
-        "10-foot power cord + 24-inch hose · reaches all 4 corners of a full-size truck",
-        "12-month replacement warranty · TPMS-safe pressure sensor",
-      ],
-      bulletHighlights: ["pickup", "33-37\" tires", "Silverado"],
-      aplusFirstModule:
-        "Use-case grid: 33\" pickup tire / 18\" SUV tire / 32\" off-road tire — each with measured inflation times.",
-      reviewsRating: "4.4",
-      reviewsCount: "5,640",
-      truckMentionCount: "1,310 (23.2%)",
-      price: "$48.99",
-      priceNote: "Mid-tier · +10% vs ours",
-    },
-    {
       name: "Us · SKU-TI-A",
       type: "self",
+      mainImageSrc: "/tire-inflator-hero.png",
+      gallery: [
+        "/tire-inflator-gallery-1.png",
+        "/tire-inflator-gallery-2.png",
+        "/tire-inflator-gallery-3.png",
+        "/tire-inflator-gallery-4.png",
+        "/tire-inflator-gallery-5.png",
+      ],
       mainImageNote:
-        "White-background product-only shot · pump alone, no vehicle, no scene. Reads as a generic accessory — pickup buyers can't tell it was built for them.",
+        "Main image: yellow body surrounded by SUV / motorcycle / car / ball thumbnails and the accessory tray. Multi-vehicle compatibility is there, but no pickup-specific scene or performance spec in big type — pickup buyers can't read a promise built for them.",
       mainImageHighlights: [],
       title:
         "Portable Tire Inflator · 12V Cordless Air Pump · Digital Display · 150 PSI",
@@ -7745,32 +7750,63 @@ function ProductOnlyIllustration() {
 
 function CompetitorMainImage({ competitor }) {
   const isSelf = competitor.type === "self";
+  const hasImage = !!competitor.mainImageSrc;
   return (
-    <div
-      className={`rounded-md border overflow-hidden relative ${
-        isSelf
-          ? "border-rose-200 bg-gradient-to-br from-rose-50/60 to-white"
-          : "border-slate-200 bg-gradient-to-br from-slate-100 to-slate-50"
-      }`}
-    >
+    <div className="space-y-2">
       <div
-        className="relative"
-        style={{ aspectRatio: "3 / 2" }}
+        className={`rounded-md border overflow-hidden relative bg-white ${
+          isSelf ? "border-rose-200" : "border-slate-200"
+        }`}
       >
-        <div
-          className={`absolute top-2 left-3 text-10 uppercase tracking-wider font-medium ${
-            isSelf ? "text-rose-700" : "text-slate-600"
-          }`}
-        >
-          {isSelf ? "Product-only · white background" : "Pickup-context staging"}
-        </div>
-        <div className="absolute inset-x-2 bottom-1 top-7 flex items-center justify-center">
-          {isSelf ? <ProductOnlyIllustration /> : <PickupSceneIllustration />}
-        </div>
-        <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
-          schematic · no live image
-        </div>
+        {hasImage ? (
+          <img
+            src={competitor.mainImageSrc}
+            alt={competitor.name}
+            className="w-full h-auto block"
+            style={{ aspectRatio: "1 / 1", objectFit: "contain" }}
+          />
+        ) : (
+          <div className="relative" style={{ aspectRatio: "3 / 2" }}>
+            <div
+              className={`absolute top-2 left-3 text-10 uppercase tracking-wider font-medium ${
+                isSelf ? "text-rose-700" : "text-slate-600"
+              }`}
+            >
+              {isSelf ? "Product-only · white background" : "Pickup-context staging"}
+            </div>
+            <div className="absolute inset-x-2 bottom-1 top-7 flex items-center justify-center">
+              {isSelf ? (
+                <ProductOnlyIllustration />
+              ) : (
+                <PickupSceneIllustration />
+              )}
+            </div>
+            <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
+              schematic · no live image
+            </div>
+          </div>
+        )}
       </div>
+      {hasImage && competitor.gallery && competitor.gallery.length > 0 && (
+        <div className="grid grid-cols-5 gap-1.5">
+          {competitor.gallery.map((src, i) => (
+            <div
+              key={i}
+              className={`rounded border overflow-hidden bg-white ${
+                isSelf ? "border-rose-100" : "border-slate-200"
+              }`}
+              style={{ aspectRatio: "1 / 1" }}
+            >
+              <img
+                src={src}
+                alt={`${competitor.name} · gallery ${i + 2}`}
+                className="w-full h-full"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -8176,37 +8212,6 @@ function LaunchCRCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/tire-inflator-hero.png",
-            caption: "Our SKU-TI-A · tire inflator hero",
-            fallbackText: "Pending upload · our SKU-TI-A hero",
-            descriptor: "Our hero (use-case set: SUV · motorcycle · sedan · basketball)",
-            gallery: [
-              "/tire-inflator-gallery-1.png",
-              "/tire-inflator-gallery-2.png",
-              "/tire-inflator-gallery-3.png",
-              "/tire-inflator-gallery-4.png",
-              "/tire-inflator-gallery-5.png",
-            ],
-          },
-          {
-            src: "/tire-inflator-competitor.png",
-            caption: "Top competitor · tire inflator hero",
-            fallbackText: "Pending upload · competitor hero",
-            descriptor: "Competitor hero (pickup off-road tire · F-150 + Jeep · capacity claims + US Patent)",
-            gallery: [
-              "/tire-inflator-competitor-gallery-1.png",
-              "/tire-inflator-competitor-gallery-2.png",
-              "/tire-inflator-competitor-gallery-3.png",
-              "/tire-inflator-competitor-gallery-4.png",
-              "/tire-inflator-competitor-gallery-5.png",
-            ],
-          },
-        ]}
-      />
-
       {/* Heads-up callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
@@ -8383,10 +8388,10 @@ function LaunchCRCanvas() {
 
         {/* Competitive listing teardown */}
         <div className="mt-6">
-          <SectionLabel kicker="Side-by-side · Competitor A · Competitor B · Us">
+          <SectionLabel kicker="Side-by-side · OlarHike (top competitor) · Us">
             Competitive listing teardown
           </SectionLabel>
-          <div className="grid grid-cols-3 gap-3 items-stretch">
+          <div className="grid grid-cols-2 gap-4 items-stretch">
             {L.competitors.map((c, i) => (
               <CompetitorColumn key={i} competitor={c} />
             ))}

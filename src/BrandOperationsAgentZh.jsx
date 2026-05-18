@@ -1515,24 +1515,46 @@ const LAUNCH_CR = {
   },
   competitors: [
     {
-      name: "Competitor A",
+      name: "Competitor A · OlarHike",
       type: "competitor",
-      mainImageNote:
-        "黑色 F-150 三分之二车头视角 · 充气泵正在给 35 寸卡车胎打气。一眼就读到「这就是为皮卡造的」。",
-      mainImageHighlights: ["F-150 入镜", "在卡车胎上工作", "户外生活场景"],
-      title:
-        "Heavy Duty Tire Inflator for Truck & SUV · 160 PSI · Digital Auto-Stop · 12V DC",
-      titleHighlights: ["Heavy Duty", "for Truck & SUV", "160 PSI"],
-      bulletPoints: [
-        "Inflates a stock F-150 tire from 20 to 35 PSI in 4 min 20 sec",
-        "Brass cylinder rated for 160 PSI sustained · 50% above the category average",
-        "Auto-stop at target PSI · works on truck, SUV, and trailer tires",
-        "12V DC plug · 11-foot reach cord covers all 4 truck tires from one outlet",
-        "Includes Schrader, Presta, and ball-needle adapters",
+      mainImageSrc: "/tire-inflator-competitor.png",
+      gallery: [
+        "/tire-inflator-competitor-gallery-1.png",
+        "/tire-inflator-competitor-gallery-2.png",
+        "/tire-inflator-competitor-gallery-3.png",
+        "/tire-inflator-competitor-gallery-4.png",
+        "/tire-inflator-competitor-gallery-5.png",
       ],
-      bulletHighlights: ["F-150", "Heavy Duty", "truck"],
+      mainImageNote:
+        "主图: 黄色机身 + 越野胎背景 + 屏幕大字 PSI 读数。围图打满 spec: 2X faster · 2.2 min · 6000mAh · 105 inflations · US Patent。spec-heavy 视觉, 一图读完性能卖点。",
+      mainImageHighlights: ["2X faster", "6000mAh", "US Patent"],
+      title:
+        "OlarHike Tire Inflator Portable Air Compressor, Dual Power - 6000mAh & 12V DC, Cordless Air Pump for Car Tires, Bikes, Motorcycle, Balls with LED & Digital Pressure Gauge, Auto Shut-off",
+      titleHighlights: [
+        "Dual Power",
+        "6000mAh & 12V DC",
+        "Cordless",
+        "LED & Digital Pressure Gauge",
+        "Auto Shut-off",
+      ],
+      bulletPoints: [
+        "55 sec 充满 195/65 R15 轿车胎 (30→35 PSI); 2.2 min 充 235/65 R17 SUV 胎。轿车 / SUV / 轻型皮卡 (≤51 PSI) / 摩托 / 自行车 / 球类适用。",
+        "Dual Power: 内置充电电池 (无线作业), 或插入 12V 车载点烟器实现持续供电。",
+        "6000mAh 电池 (3×2000mAh) — 单次充电充 18 条轿车胎 或 11 条 SUV 胎。USB 输出可给手机充电。",
+        "双 LED 大屏 + 高精度传感器实时读 PSI;达到预设压力自动停止, 防过充。",
+        "4 种预设模式 (轿车 / 自行车 / 摩托 / 球类);PSI / BAR / KPA / KG·cm² 一键切换;支持记忆上次设置。",
+      ],
+      bulletHighlights: [
+        "55 sec",
+        "Dual Power",
+        "6000mAh",
+        "18 条轿车胎",
+        "11 条 SUV 胎",
+        "自动停止",
+        "4 种预设模式",
+      ],
       aplusFirstModule:
-        "卡车 vs 轿车胎的胎压和胎壁对比图 · 解释为什么常规打气泵在 35 寸卡车胎上跑不动。",
+        "配件 + 场景大全图: Type-C 线、长气管、长喷嘴、球针、法式气门、收纳袋。说 'what you get' 一图清晰。",
       reviewsRating: "4.6",
       reviewsCount: "8,420",
       truckMentionCount: "2,140(25.4%)",
@@ -1540,35 +1562,18 @@ const LAUNCH_CR = {
       priceNote: "高端 · 比我方高 24%",
     },
     {
-      name: "Competitor B",
-      type: "competitor",
-      mainImageNote:
-        "升高 Silverado 双胎侧视角 · 配件摆在尾门上。户外 / 实用场景毫无歧义。",
-      mainImageHighlights: ["Silverado 场景", "尾门摆件", "硬派陈列"],
-      title:
-        "Truck Tire Inflator · 12V Air Compressor for Pickup & Off-Road · 150 PSI Heavy Duty",
-      titleHighlights: ["Truck", "Pickup & Off-Road", "Heavy Duty"],
-      bulletPoints: [
-        "Built for pickup trucks, SUVs, and off-road rigs — handles 33-37\" tires",
-        "150 PSI rated brass piston · 3x duty cycle of plastic-piston units",
-        "Inflates a 33\" Silverado tire 18 → 35 PSI in 5 min 10 sec",
-        "10-foot power cord + 24-inch hose · reaches all 4 corners of a full-size truck",
-        "12-month replacement warranty · TPMS-safe pressure sensor",
-      ],
-      bulletHighlights: ["pickup", "33-37\" tires", "Silverado"],
-      aplusFirstModule:
-        "使用场景网格:33 寸皮卡胎 / 18 寸 SUV 胎 / 32 寸越野胎 — 每个场景标注实测充气时间。",
-      reviewsRating: "4.4",
-      reviewsCount: "5,640",
-      truckMentionCount: "1,310(23.2%)",
-      price: "$48.99",
-      priceNote: "中位 · 比我方高 10%",
-    },
-    {
       name: "我方 · SKU-TI-A",
       type: "self",
+      mainImageSrc: "/tire-inflator-hero.png",
+      gallery: [
+        "/tire-inflator-gallery-1.png",
+        "/tire-inflator-gallery-2.png",
+        "/tire-inflator-gallery-3.png",
+        "/tire-inflator-gallery-4.png",
+        "/tire-inflator-gallery-5.png",
+      ],
       mainImageNote:
-        "白底纯产品图 · 单独打气泵,没车、没场景。读起来就是个通用配件 — 皮卡买家看不出这是给他们的。",
+        "主图: 黄色机身 + 周围 SUV / 摩托 / 轿车 / 篮球 缩略 + 配件全列。多场景兼容已经体现, 但缺**皮卡专属**场景或性能 spec 大字 — 皮卡买家扫一眼读不到给他们的承诺。",
       mainImageHighlights: [],
       title:
         "Portable Tire Inflator · 12V Cordless Air Pump · Digital Display · 150 PSI",
@@ -7638,32 +7643,63 @@ function ProductOnlyIllustration() {
 
 function CompetitorMainImage({ competitor }) {
   const isSelf = competitor.type === "self";
+  const hasImage = !!competitor.mainImageSrc;
   return (
-    <div
-      className={`rounded-md border overflow-hidden relative ${
-        isSelf
-          ? "border-rose-200 bg-gradient-to-br from-rose-50/60 to-white"
-          : "border-slate-200 bg-gradient-to-br from-slate-100 to-slate-50"
-      }`}
-    >
+    <div className="space-y-2">
       <div
-        className="relative"
-        style={{ aspectRatio: "3 / 2" }}
+        className={`rounded-md border overflow-hidden relative bg-white ${
+          isSelf ? "border-rose-200" : "border-slate-200"
+        }`}
       >
-        <div
-          className={`absolute top-2 left-3 text-10 uppercase tracking-wider font-medium ${
-            isSelf ? "text-rose-700" : "text-slate-600"
-          }`}
-        >
-          {isSelf ? "纯产品图 · 白底" : "皮卡场景"}
-        </div>
-        <div className="absolute inset-x-2 bottom-1 top-7 flex items-center justify-center">
-          {isSelf ? <ProductOnlyIllustration /> : <PickupSceneIllustration />}
-        </div>
-        <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
-          示意图 · 非实拍
-        </div>
+        {hasImage ? (
+          <img
+            src={competitor.mainImageSrc}
+            alt={competitor.name}
+            className="w-full h-auto block"
+            style={{ aspectRatio: "1 / 1", objectFit: "contain" }}
+          />
+        ) : (
+          <div className="relative" style={{ aspectRatio: "3 / 2" }}>
+            <div
+              className={`absolute top-2 left-3 text-10 uppercase tracking-wider font-medium ${
+                isSelf ? "text-rose-700" : "text-slate-600"
+              }`}
+            >
+              {isSelf ? "纯产品图 · 白底" : "皮卡场景"}
+            </div>
+            <div className="absolute inset-x-2 bottom-1 top-7 flex items-center justify-center">
+              {isSelf ? (
+                <ProductOnlyIllustration />
+              ) : (
+                <PickupSceneIllustration />
+              )}
+            </div>
+            <div className="absolute bottom-1 right-2 text-10 text-slate-400 font-mono">
+              示意图 · 非实拍
+            </div>
+          </div>
+        )}
       </div>
+      {hasImage && competitor.gallery && competitor.gallery.length > 0 && (
+        <div className="grid grid-cols-5 gap-1.5">
+          {competitor.gallery.map((src, i) => (
+            <div
+              key={i}
+              className={`rounded border overflow-hidden bg-white ${
+                isSelf ? "border-rose-100" : "border-slate-200"
+              }`}
+              style={{ aspectRatio: "1 / 1" }}
+            >
+              <img
+                src={src}
+                alt={`${competitor.name} · gallery ${i + 2}`}
+                className="w-full h-full"
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -8069,37 +8105,6 @@ function LaunchCRCanvas() {
         }
       />
 
-      <HeroImageStrip
-        images={[
-          {
-            src: "/tire-inflator-hero.png",
-            caption: "我方 SKU-TI-A · 轮胎充气泵主图",
-            fallbackText: "等待上传 · 我方 SKU-TI-A 主图",
-            descriptor: "我方主图(应用场景图:SUV · 摩托 · 轿车 · 篮球)",
-            gallery: [
-              "/tire-inflator-gallery-1.png",
-              "/tire-inflator-gallery-2.png",
-              "/tire-inflator-gallery-3.png",
-              "/tire-inflator-gallery-4.png",
-              "/tire-inflator-gallery-5.png",
-            ],
-          },
-          {
-            src: "/tire-inflator-competitor.png",
-            caption: "头部竞品 · 轮胎充气泵主图",
-            fallbackText: "等待上传 · 竞品主图",
-            descriptor: "竞品主图(皮卡越野胎 · F-150 + Jeep · 容量数字 + US Patent)",
-            gallery: [
-              "/tire-inflator-competitor-gallery-1.png",
-              "/tire-inflator-competitor-gallery-2.png",
-              "/tire-inflator-competitor-gallery-3.png",
-              "/tire-inflator-competitor-gallery-4.png",
-              "/tire-inflator-competitor-gallery-5.png",
-            ],
-          },
-        ]}
-      />
-
       {/* Heads-up callout · before 现状 */}
       <div className="px-6 pt-5">
         <div className="bg-amber-50/40 border border-amber-200 rounded-md px-5 py-4 mb-5">
@@ -8276,10 +8281,10 @@ function LaunchCRCanvas() {
 
         {/* Competitive listing teardown */}
         <div className="mt-6">
-          <SectionLabel kicker="并排对比 · Competitor A · Competitor B · 我方">
+          <SectionLabel kicker="并排对比 · 头部竞品 OlarHike · 我方 SKU-TI-A">
             竞品 listing 拆解
           </SectionLabel>
-          <div className="grid grid-cols-3 gap-3 items-stretch">
+          <div className="grid grid-cols-2 gap-4 items-stretch">
             {L.competitors.map((c, i) => (
               <CompetitorColumn key={i} competitor={c} />
             ))}
