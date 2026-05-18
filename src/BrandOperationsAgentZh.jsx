@@ -9710,7 +9710,19 @@ function SidebarGroupHeader({ label, badge, badgeTone = "slate" }) {
   );
 }
 
-function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
+function ChatPanel({
+  activeId,
+  lastViewedId,
+  onSelect,
+  currentRole,
+  proposalStates = {},
+  patternRevisions = {},
+}) {
+  // Highlight uses activeId when something's open in the canvas; once
+  // CMO returns to the supervision panel (activeId === null), fall
+  // back to the last-visited item so the sidebar shows where you were.
+  const highlightId = activeId || lastViewedId;
+  const isHighlighted = (id) => highlightId === id;
   const isThreadActive = (thread) => {
     if (thread.threadType === "report-feed") {
       const allIds = [
@@ -9895,22 +9907,7 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
     )
       .map(threadById)
       .filter(Boolean);
-    const justApproved = STRATEGIC_THREAD_IDS.filter(
-      (id) => statusOf(id) === "approved",
-    )
-      .map(threadById)
-      .filter(Boolean);
     const challenged = challengedStrategicIds.map(threadById).filter(Boolean);
-    const teamRecent = [
-      ...justApproved.map((t) => ({
-        id: t.id,
-        subtitle: `${t.initiatorName} · 刚刚批准`,
-        freshlyApproved: true,
-      })),
-      { id: "defense", subtitle: "Maya · 5/15" },
-      { id: "omnichannel", subtitle: "Devon · 5/11" },
-      { id: "launch-cr", subtitle: "Jamal · 5/14" },
-    ];
     const brainPatterns = [
       {
         id: "pattern-brand-cpc",
@@ -9959,7 +9956,7 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
                   type="button"
                   onClick={() => onSelect(thread.id)}
                   className={`w-full text-left rounded-lg border p-3 transition-colors ${
-                    activeId === thread.id
+                    isHighlighted(thread.id)
                       ? "bg-slate-50 border-slate-300"
                       : "bg-white border-slate-200 hover:border-slate-300"
                   } border-l-2 border-l-rose-500`}
@@ -9994,14 +9991,13 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
             <div className="space-y-2">
               {challenged.map((thread) => {
                 const cid = CHALLENGE_THREAD_IDS[thread.id];
-                const active = activeId === cid;
                 return (
                   <button
                     key={cid}
                     type="button"
                     onClick={() => onSelect(cid)}
                     className={`w-full text-left rounded-lg border p-3 transition-colors ${
-                      active
+                      isHighlighted(cid)
                         ? "bg-slate-50 border-slate-300"
                         : "bg-white border-slate-200 hover:border-slate-300"
                     } border-l-2 border-l-slate-700`}
@@ -10019,49 +10015,6 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
           </div>
         )}
 
-        <div>
-          <SidebarGroupHeader label="团队近期决策 · 自动通过" />
-          <div className="space-y-2">
-            {teamRecent.map((row) => {
-              const t = threadById(row.id);
-              if (!t) return null;
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => onSelect(t.id)}
-                  className={`w-full text-left rounded-lg border p-3 transition-colors ${
-                    activeId === t.id
-                      ? "bg-slate-50 border-slate-300"
-                      : "bg-white border-slate-200 hover:border-slate-300"
-                  } ${
-                    row.freshlyApproved
-                      ? "border-l-2 border-l-emerald-500"
-                      : ""
-                  }`}
-                >
-                  <div className="flex items-baseline justify-between gap-2">
-                    <div className="text-xs font-semibold text-slate-900 truncate">
-                      {t.title}
-                    </div>
-                    {row.freshlyApproved && (
-                      <span className="text-10 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-1.5 font-medium flex-shrink-0">
-                        刚刚
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-10 text-slate-500 mt-0.5">
-                    {row.subtitle}
-                  </div>
-                </button>
-              );
-            })}
-            <div className="text-10 text-slate-400 px-1 pt-1">
-              + 2 个更早的决策(折叠)
-            </div>
-          </div>
-        </div>
-
         {auditsInFlight.length > 0 && (
           <div>
             <SidebarGroupHeader
@@ -10072,7 +10025,6 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
             <div className="space-y-2">
               {auditsInFlight.map(({ id, row, status }) => {
                 const cid = PATTERN_AUDIT_PREFIX + id;
-                const active = activeId === cid;
                 const decided = ["adopted", "held", "parked"].includes(status);
                 return (
                   <button
@@ -10080,7 +10032,7 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
                     type="button"
                     onClick={() => onSelect(cid)}
                     className={`w-full text-left rounded-lg border p-3 transition-colors ${
-                      active
+                      isHighlighted(cid)
                         ? "bg-slate-50 border-slate-300"
                         : "bg-white border-slate-200 hover:border-slate-300"
                     } border-l-2 ${
@@ -10111,45 +10063,6 @@ function ChatPanel({ activeId, onSelect, currentRole, proposalStates = {} }) {
             </div>
           </div>
         )}
-
-        <div>
-          <SidebarGroupHeader label="公司大脑动态 · 可质疑" />
-          <div className="space-y-2">
-            {brainPatterns.map((p) => {
-              const rev = proposalStates && proposalStates;
-              const r = (patternRevisions || {})[p.id];
-              const auditActive =
-                activeId === PATTERN_AUDIT_PREFIX + p.id;
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => onSelect(PATTERN_AUDIT_PREFIX + p.id)}
-                  className={`w-full text-left rounded-lg border p-3 transition-colors ${
-                    auditActive
-                      ? "bg-slate-50 border-slate-300"
-                      : "bg-white border-slate-200 hover:border-slate-300"
-                  }`}
-                >
-                  <div className="text-xs font-semibold text-slate-900 leading-snug">
-                    {p.title}
-                  </div>
-                  <div className="text-10 text-slate-500 mt-0.5">{p.meta}</div>
-                  <div className="text-10 text-slate-400 mt-1.5 inline-flex items-center gap-1">
-                    <MessageSquare className="w-2.5 h-2.5" />
-                    {r?.status === "adopted"
-                      ? "已采纳修订"
-                      : r?.status === "parked"
-                        ? "已标记待复盘"
-                        : r?.status === "challenged"
-                          ? "Audit 进行中"
-                          : "点开发起 audit"}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
 
         <div>
           <SidebarGroupHeader label="CMO 操作历史" />
@@ -16013,39 +15926,38 @@ const CMO_CHALLENGES = {
   },
 };
 
-function CmoApprovalBanner({ proposal, onBack }) {
+function CmoDiveInBanner({ kicker, name, submitter, when, onBack }) {
   return (
-    <div className="border-b border-slate-700 bg-slate-900 text-white px-6 py-3 flex items-center gap-3">
+    <div className="border-b border-slate-700 bg-slate-900 text-white px-6 py-2.5 flex items-center gap-3">
       <Eye className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-      <div className="flex-1 min-w-0">
-        <div className="text-11 uppercase tracking-wider text-emerald-400 font-medium mb-0.5">
-          CMO 审批视图
-        </div>
-        <div className="text-11 text-slate-300 leading-snug">
-          <span>
-            由 <span className="text-white">{proposal.submittedBy}</span> 于{" "}
-            {proposal.submittedAt} 提交
-          </span>
-          <span className="text-slate-500"> · </span>
-          <span>
-            超出 VP 自主权限:
-            <span className="text-amber-300"> {proposal.overReason}</span>
-          </span>
-          <span className="text-slate-500"> · </span>
-          <span>
-            Agent 信心{" "}
-            <span className="font-mono text-white">{proposal.confidence}%</span>
-            {" · "}
-            {proposal.precedents}
-          </span>
-        </div>
+      <div className="flex-1 min-w-0 text-11 leading-snug truncate">
+        <span className="uppercase tracking-wider text-emerald-400 font-medium">
+          {kicker}
+        </span>
+        <span className="text-slate-500"> · </span>
+        <span className="text-white font-medium">{name}</span>
+        {(submitter || when) && (
+          <>
+            <span className="text-slate-500"> · </span>
+            <span className="text-slate-300">
+              {submitter && (
+                <>
+                  由 <span className="text-white">{submitter}</span>
+                </>
+              )}
+              {submitter && when && " 于 "}
+              {when}
+              {(submitter || when) && " 提交"}
+            </span>
+          </>
+        )}
       </div>
       <button
         type="button"
         onClick={onBack}
-        className="text-11 text-slate-300 hover:text-white inline-flex items-center gap-1 flex-shrink-0"
+        className="text-11 text-slate-300 hover:text-white inline-flex items-center gap-1 flex-shrink-0 border border-slate-600 hover:border-slate-400 rounded px-2 py-1"
       >
-        <ChevronLeft className="w-3.5 h-3.5" /> 回监督面板
+        <ChevronLeft className="w-3.5 h-3.5" /> 返回监督面板
       </button>
     </div>
   );
@@ -16798,6 +16710,7 @@ export default function App({
   setPatternRevisions,
 }) {
   const [activeId, setActiveId] = useState(null);
+  const [lastViewedId, setLastViewedId] = useState(null);
   const [inspectorOpen, setInspectorOpen] = useState(false);
   const [inspectorTab, setInspectorTab] = useState("ad-architecture");
   const [adArchSubTab, setAdArchSubTab] = useState("overview");
@@ -16805,6 +16718,12 @@ export default function App({
   const [activeUserId, setActiveUserId] = useState(
     COMPANY_BRAIN.identity.activeUserId,
   );
+
+  // Track last dive-in target so the sidebar can keep its highlight
+  // after CMO returns to the supervision panel via the back banner.
+  useEffect(() => {
+    if (activeId !== null) setLastViewedId(activeId);
+  }, [activeId]);
   const activeUser =
     COMPANY_BRAIN.identity.users.find((u) => u.id === activeUserId) ||
     COMPANY_BRAIN.identity.users[0];
@@ -16860,6 +16779,69 @@ export default function App({
     currentRole === "cmo" &&
     proposalStates[activeId]?.status === "pending" &&
     CMO_PENDING.find((p) => p.threadId === activeId);
+
+  // Compute the universal CMO dive-in banner content for any dive target.
+  // Returns null when CMO is on the supervision panel (activeId === null)
+  // or when the current view doesn't merit the back-to-panel banner.
+  const cmoDiveBanner = (() => {
+    if (currentRole !== "cmo" || !activeId) return null;
+    // Pending / approved / rejected / challenged proposal canvas
+    if (STRATEGIC_THREAD_IDS.includes(activeId)) {
+      const t = THREADS.find((x) => x.id === activeId);
+      const meta = CMO_PENDING.find((p) => p.threadId === activeId);
+      const status = proposalStates[activeId]?.status || "pending";
+      const statusLabel = {
+        pending: "CMO 审批视图",
+        approved: "CMO 审批视图 · 已批准",
+        rejected: "CMO 审批视图 · 已打回",
+        challenged: "CMO 审批视图 · 质疑进行中",
+      }[status];
+      return {
+        kicker: statusLabel,
+        name: t?.title || meta?.title,
+        submitter: meta?.submittedBy,
+        when: meta?.submittedAt,
+      };
+    }
+    // Auto-approved team decisions dived into from the panel
+    const teamMeta = {
+      defense: { name: "Defense · 床架 SKU-117", who: "Maya Chen", when: "5/15 下午" },
+      omnichannel: { name: "全渠道 · 移动充电宝", who: "Devon Park", when: "5/11 下午" },
+      "launch-cr": { name: "新品 CR · 轮胎充气泵", who: "Jamal Hassan", when: "5/14 中午" },
+    }[activeId];
+    if (teamMeta) {
+      return {
+        kicker: "CMO 视角 · 团队决策",
+        name: teamMeta.name,
+        submitter: teamMeta.who,
+        when: `${teamMeta.when} · 自动通过`,
+      };
+    }
+    // Challenge thread
+    if (isChallengeView) {
+      const data = CMO_CHALLENGES[challengeProposalId];
+      return {
+        kicker: "CMO 质疑 thread",
+        name: data?.title,
+        submitter: "CMO",
+        when: data?.cmoAt,
+      };
+    }
+    // Pattern audit
+    if (isPatternAuditView) {
+      const data = CMO_PATTERN_AUDITS[auditPatternId];
+      const rev = patternRevisions[auditPatternId];
+      return {
+        kicker: "Pattern Audit · CMO 视角",
+        name: data?.title,
+        submitter: rev?.status && rev.status !== "pending" ? "CMO" : null,
+        when:
+          rev?.submittedAt ||
+          (rev?.status === "pending" ? null : data?.cmoSubmittedAt),
+      };
+    }
+    return null;
+  })();
 
   function handleApprove() {
     const id = activeId;
@@ -17085,6 +17067,7 @@ export default function App({
       <div className="flex-1 flex min-h-0">
         <ChatPanel
           activeId={activeId}
+          lastViewedId={lastViewedId}
           onSelect={setActiveId}
           currentRole={currentRole}
           proposalStates={proposalStates}
@@ -17095,9 +17078,12 @@ export default function App({
             className="mx-auto bg-white border-x border-slate-200 min-h-full flex flex-col"
             style={{ maxWidth: "1200px" }}
           >
-            {cmoProposalMeta && (
-              <CmoApprovalBanner
-                proposal={cmoProposalMeta}
+            {cmoDiveBanner && (
+              <CmoDiveInBanner
+                kicker={cmoDiveBanner.kicker}
+                name={cmoDiveBanner.name}
+                submitter={cmoDiveBanner.submitter}
+                when={cmoDiveBanner.when}
                 onBack={() => setActiveId(null)}
               />
             )}
