@@ -14531,6 +14531,60 @@ const Q2_TOPLINE = (() => {
   };
 })();
 
+const Q2_TOTAL_WEEKS = 13;
+const Q2_CURRENT_WEEK = 7;
+
+function buildListingQ2Trajectory(listing) {
+  const weeklyForecast = listing.forecast.rev / Q2_TOTAL_WEEKS;
+  let actualCum = 0;
+  let actualToDate = 0;
+  for (let w = 0; w < Q2_CURRENT_WEEK; w++) {
+    actualToDate += listing.history[w]?.rev || 0;
+  }
+  const remainingProjected = listing.projected.rev - actualToDate;
+  const projectedWeeklyPace = remainingProjected / (Q2_TOTAL_WEEKS - Q2_CURRENT_WEEK);
+  const data = [];
+  let projCum = 0;
+  for (let i = 0; i <= Q2_TOTAL_WEEKS; i++) {
+    const point = {
+      week: i === 0 ? "Q2 start" : i === Q2_TOTAL_WEEKS ? "EOQ" : `W${i}`,
+      forecast: Math.round(weeklyForecast * i),
+    };
+    if (i <= Q2_CURRENT_WEEK) {
+      if (i > 0) actualCum += listing.history[i - 1]?.rev || 0;
+      point.actual = actualCum;
+    }
+    if (i >= Q2_CURRENT_WEEK) {
+      if (i === Q2_CURRENT_WEEK) projCum = actualCum;
+      else projCum += projectedWeeklyPace;
+      point.projected = Math.round(projCum);
+    }
+    data.push(point);
+  }
+  return data;
+}
+
+Q2_LISTINGS_WITH_PROJECTION.forEach((l) => {
+  l.trajectory = buildListingQ2Trajectory(l);
+});
+
+const Q2_TRAJECTORY = (() => {
+  const data = [];
+  for (let i = 0; i <= Q2_TOTAL_WEEKS; i++) {
+    const refPoint = Q2_LISTINGS_WITH_PROJECTION[0].trajectory[i];
+    const sumAt = (key) =>
+      Q2_LISTINGS_WITH_PROJECTION.reduce(
+        (s, l) => s + (l.trajectory[i][key] ?? 0),
+        0,
+      );
+    const point = { week: refPoint.week, forecast: sumAt("forecast") };
+    if (i <= Q2_CURRENT_WEEK) point.actual = sumAt("actual");
+    if (i >= Q2_CURRENT_WEEK) point.projected = sumAt("projected");
+    data.push(point);
+  }
+  return data;
+})();
+
 const Q2_FORECAST_DATA = {
   quarter: "Q2 2026",
   coverRange: "4/1 - 6/30",
@@ -15484,12 +15538,123 @@ function WeeklyReportCanvas({ onJumpTo }) {
   );
 }
 
+function Q2TrajectoryChart({ trajectory, height = 280, compact = false }) {
+  const todayLabel = trajectory[Q2_CURRENT_WEEK]?.week;
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <LineChart data={trajectory} margin={{ top: 8, right: 16, left: compact ? -20 : 0, bottom: 8 }}>
+        <CartesianGrid stroke="#e2e8f0" vertical={false} />
+        <XAxis
+          dataKey="week"
+          tick={{ fill: "#64748b", fontSize: compact ? 9 : 11 }}
+          axisLine={{ stroke: "#cbd5e1" }}
+          tickLine={false}
+          interval={compact ? 2 : 0}
+        />
+        <YAxis
+          tick={{ fill: "#64748b", fontSize: compact ? 9 : 11 }}
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={(v) =>
+            v >= 1000000
+              ? `$${(v / 1000000).toFixed(1)}M`
+              : v >= 1000
+                ? `$${Math.round(v / 1000)}K`
+                : `$${v}`
+          }
+          width={compact ? 36 : 56}
+        />
+        {!compact && (
+          <Tooltip
+            contentStyle={{
+              background: "#0f172a",
+              border: "none",
+              borderRadius: 6,
+              fontSize: 12,
+              color: "white",
+            }}
+            labelStyle={{ color: "#94a3b8" }}
+            formatter={(value) => `$${value.toLocaleString()}`}
+          />
+        )}
+        <ReferenceLine
+          x={todayLabel}
+          stroke="#64748b"
+          strokeDasharray="3 3"
+          label={compact ? undefined : { value: "Today", position: "top", fill: "#64748b", fontSize: 10 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="forecast"
+          name="Forecast"
+          stroke="#94a3b8"
+          strokeWidth={compact ? 1.5 : 2}
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="actual"
+          name="Actual"
+          stroke="#059669"
+          strokeWidth={compact ? 1.5 : 2.5}
+          dot={compact ? false : { fill: "#059669", r: 2.5 }}
+        />
+        <Line
+          type="monotone"
+          dataKey="projected"
+          name="Projected"
+          stroke="#059669"
+          strokeWidth={compact ? 1.5 : 2}
+          strokeDasharray="5 4"
+          dot={false}
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
+function Q2ListingMiniCard({ listing }) {
+  const variance = listing.variancePct;
+  const tone =
+    variance > 2 ? "emerald" : variance < -2 ? "rose" : "slate";
+  const toneCls =
+    tone === "emerald"
+      ? "text-emerald-700"
+      : tone === "rose"
+        ? "text-rose-700"
+        : "text-slate-500";
+  return (
+    <div className="border border-slate-200 rounded-md px-3 py-2.5 bg-white">
+      <div className="flex items-baseline justify-between mb-1.5">
+        <div className="min-w-0">
+          <div className="text-xs font-medium text-slate-900 truncate">
+            {listing.line}
+          </div>
+          <div className="text-10 font-mono text-slate-500">{listing.asin}</div>
+        </div>
+        <div className={`text-11 font-mono font-semibold ${toneCls} flex-shrink-0 ml-2`}>
+          {variance >= 0 ? "+" : ""}{variance.toFixed(1)}%
+        </div>
+      </div>
+      <Q2TrajectoryChart trajectory={listing.trajectory} height={72} compact />
+      <div className="mt-1.5 flex items-baseline justify-between text-10">
+        <span className="text-slate-500">
+          Forecast <span className="font-mono text-slate-700">${(listing.forecast.rev / 1000).toFixed(0)}K</span>
+        </span>
+        <span className="text-slate-500">
+          Projected <span className={`font-mono font-medium ${toneCls}`}>${(listing.projected.rev / 1000).toFixed(0)}K</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function Q2ForecastCanvas({ onJumpTo }) {
   const data = Q2_FORECAST_DATA;
   const t = Q2_TOPLINE;
-  const [drawerCell, setDrawerCell] = useState(null);
   const listings = Q2_LISTINGS_WITH_PROJECTION;
   const paceLabel = `${data.daysElapsed}/${data.daysTotal} days elapsed (${Math.round((data.daysElapsed / data.daysTotal) * 100)}%)`;
+  const sortedListings = [...listings].sort((a, b) => b.variancePct - a.variancePct);
 
   return (
     <>
@@ -15516,6 +15681,7 @@ function Q2ForecastCanvas({ onJumpTo }) {
         </div>
       </div>
 
+      {/* Section 1: Topline cards */}
       <div className="px-6 pt-6">
         <SectionLabel kicker="vs initial forecast">This quarter · data</SectionLabel>
         <div className="grid grid-cols-4 gap-3">
@@ -15541,79 +15707,38 @@ function Q2ForecastCanvas({ onJumpTo }) {
             deltaTone={t.variancePct >= 0 ? "good" : "bad"}
           />
         </div>
+      </div>
 
-        <div className="mt-5 border border-slate-200 rounded-lg overflow-hidden">
-          <div className="px-4 py-2 bg-slate-50/60 border-b border-slate-200 flex items-center justify-between">
-            <div className="text-11 text-slate-600 font-medium">
-              12 delegated listings · cell = projected EOQ · color = vs initial forecast
-            </div>
-            <div className="text-10 text-slate-500 font-mono">
-              Total projected EOQ sales ${t.projected.rev.toLocaleString()}
-            </div>
+      {/* Section 2: Portfolio trajectory */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="Cumulative sales · weekly">This quarter · portfolio trajectory</SectionLabel>
+        <div className="border border-slate-200 rounded-md px-4 py-4 bg-white">
+          <div className="flex items-center gap-4 text-11 text-slate-600 mb-2">
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-3 h-0.5 bg-slate-400" /> Forecast
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-3 h-0.5 bg-emerald-600" /> Actual
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="inline-block w-3 h-0.5 border-t border-dashed border-emerald-600" /> Projected
+            </span>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead className="bg-slate-50/40 text-10 uppercase tracking-wider text-slate-500">
-                <tr>
-                  <th className="text-left font-medium px-4 py-2 sticky left-0 bg-slate-50/40">
-                    Product line / Parent ASIN
-                  </th>
-                  {LISTING_METRIC_COLUMNS.map((m) => (
-                    <th
-                      key={m.key}
-                      className="text-right font-medium px-3 py-2 whitespace-nowrap"
-                    >
-                      {m.key === "tacos" || m.key === "acos"
-                        ? wrapMetric(m.label)
-                        : m.label}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {listings.map((row) => (
-                  <tr
-                    key={row.asin}
-                    className="border-t border-slate-100"
-                    style={{ height: "32px" }}
-                  >
-                    <td className="px-4 py-1.5 sticky left-0 bg-white">
-                      <div className="text-xs text-slate-900 whitespace-nowrap">
-                        {row.line}{" "}
-                        <span className="font-mono text-10 text-slate-500">
-                          · {row.asin}
-                        </span>
-                      </div>
-                    </td>
-                    {LISTING_METRIC_COLUMNS.map((m) => (
-                      <td
-                        key={m.key}
-                        className="text-right px-3 py-1.5 whitespace-nowrap align-middle"
-                      >
-                        <button
-                          type="button"
-                          onClick={() => setDrawerCell({ listing: row, metric: m })}
-                          className="w-full flex flex-col items-end leading-tight hover:text-emerald-700 group"
-                        >
-                          <span className="font-mono tabular-nums text-slate-900 group-hover:underline decoration-dotted underline-offset-2">
-                            {m.format(row.projected[m.key])}
-                          </span>
-                          <MetricDelta
-                            current={row.projected[m.key]}
-                            prior={row.forecast[m.key]}
-                            goodDirection={m.goodDirection}
-                          />
-                        </button>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Q2TrajectoryChart trajectory={Q2_TRAJECTORY} height={280} />
         </div>
       </div>
 
+      {/* Section 3: 12 product lines small multiples */}
+      <div className="px-6 pt-8">
+        <SectionLabel kicker="Sorted by variance · ahead first">This quarter · by product line</SectionLabel>
+        <div className="grid grid-cols-4 gap-3">
+          {sortedListings.map((listing) => (
+            <Q2ListingMiniCard key={listing.asin} listing={listing} />
+          ))}
+        </div>
+      </div>
+
+      {/* Section 4: Variance drivers */}
       <div className="px-6 pt-8">
         <SectionLabel kicker={`${data.insights.length} item${data.insights.length === 1 ? "" : "s"}`}>
           This quarter · what's driving the variance
@@ -15625,6 +15750,7 @@ function Q2ForecastCanvas({ onJumpTo }) {
         </div>
       </div>
 
+      {/* Section 5: Outlook */}
       <div className="px-6 pt-8">
         <SectionLabel kicker="Remaining 6 weeks">This quarter · what's next</SectionLabel>
         <div className="border border-slate-200 rounded-md px-4 py-3 bg-white">
@@ -15639,6 +15765,7 @@ function Q2ForecastCanvas({ onJumpTo }) {
         </div>
       </div>
 
+      {/* Section 6: Need from you */}
       <div className="px-6 pt-8">
         <SectionLabel kicker={`${data.needYou.length} item${data.needYou.length === 1 ? "" : "s"}`}>
           Need your decision
@@ -15670,12 +15797,6 @@ function Q2ForecastCanvas({ onJumpTo }) {
           </button>
         </div>
       </div>
-
-      <ListingMetricHistoryDrawer
-        cell={drawerCell}
-        onClose={() => setDrawerCell(null)}
-        periodKind="week"
-      />
     </>
   );
 }
