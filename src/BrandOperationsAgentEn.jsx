@@ -10904,6 +10904,44 @@ const DEFAULT_CATEGORY_LABEL = {
   Quality: "Quality",
 };
 
+// Playbooks are organized by lifecycle — "what to run when". Each playbook /
+// pattern maps to one stage; the mapping is keyed by id so the data blocks
+// above stay untouched.
+const LIFECYCLE_STAGES = [
+  { id: "prep",        label: "Launch Prep",         hint: "Keywords · competitors · ad framework" },
+  { id: "coldstart",   label: "Cold Start",          hint: "Test creative · ramp · go/no-go" },
+  { id: "growth",      label: "Growth · Scale",      hint: "Expand terms · raise budget · new ad types" },
+  { id: "maturity",    label: "Maturity · Profit",   hint: "Defend rank · cut waste · lower ad reliance" },
+  { id: "promo",       label: "Peak · Events",       hint: "Build-up · burst · wind-down" },
+  { id: "defense",     label: "Competitive Defense", hint: "#2→#1 · counter / hold" },
+  { id: "liquidation", label: "Liquidation · Exit",  hint: "Step-down pricing · stop-loss" },
+];
+
+const PLAYBOOK_STAGE = {
+  "pb-bsr-3phase": "defense",
+  "pb-brand-ad-scale": "growth",
+  "pb-geo-holdout": "growth",
+  "pb-razor-pricing": "growth",
+  "pb-defense-3posture": "defense",
+  "pb-launch-cr": "coldstart",
+  "pb-peak-sov": "promo",
+};
+
+const PATTERN_STAGE = {
+  "pat-brand-ad-cpc": "growth",
+  "pat-bsr-capture": "defense",
+  "pat-bedroom-ctr": "maturity",
+  "pat-longtail-harvest": "growth",
+  "pat-bid-raise-cap": "growth",
+  "pat-negkw-harvest": "maturity",
+  "pat-launch-ramp": "coldstart",
+  "pat-p0-main-image": "prep",
+  "pat-counter-attack": "defense",
+  "pat-wait-out": "defense",
+  "pat-pickup-cr": "maturity",
+  "pat-razor-attach": "growth",
+};
+
 function BrainSection({ id, title, count, defaultOpen = false, children }) {
   const [open, setOpen] = useState(defaultOpen);
   const lastDefault = useRef(defaultOpen);
@@ -10936,6 +10974,56 @@ function BrainSection({ id, title, count, defaultOpen = false, children }) {
         </div>
       )}
     </section>
+  );
+}
+
+// A "tier" — one level above BrainSection, used to collapse 8 sections into 4.
+function BrainGroup({ title, subtitle, defaultOpen = false, children }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const lastDefault = useRef(defaultOpen);
+  useEffect(() => {
+    if (lastDefault.current !== defaultOpen) {
+      lastDefault.current = defaultOpen;
+      if (defaultOpen) setOpen(true);
+    }
+  }, [defaultOpen]);
+  return (
+    <section className="border-b-[6px] border-slate-100">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center gap-2 px-4 py-3 hover:bg-slate-100 text-left bg-slate-50"
+      >
+        <ChevronRight
+          className={`w-4 h-4 text-slate-500 transition-transform ${open ? "rotate-90" : ""}`}
+        />
+        <span className="text-sm font-bold text-slate-900">{title}</span>
+        {subtitle && (
+          <span className="text-11 text-slate-500 truncate">{subtitle}</span>
+        )}
+      </button>
+      {open && <div>{children}</div>}
+    </section>
+  );
+}
+
+// A subsection inside a tier — title + count only, no separate collapse
+// (avoids nesting collapsibles inside collapsibles).
+function BrainSubsection({ title, count, children }) {
+  return (
+    <div className="px-4 py-3 border-t border-slate-100 first:border-t-0">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-11 uppercase tracking-wider text-slate-500 font-semibold">
+          {title}
+        </span>
+        {typeof count === "number" && (
+          <span className="text-10 font-mono tabular-nums text-slate-400">
+            {count}
+          </span>
+        )}
+      </div>
+      {children}
+    </div>
   );
 }
 
@@ -11651,236 +11739,259 @@ function UploadedDocsList({ docs, query, activeClearance }) {
   );
 }
 
-function CapturedPatterns({
-  patterns,
-  onSelect,
-  query,
-  activeClearance,
-  patternRevisions = {},
-}) {
-  const [filter, setFilter] = useState("All");
-  const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
-  const q = (query || "").trim().toLowerCase();
-  const byCategory =
-    filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
-  const filtered = q
-    ? byCategory.filter((p) => p.name.toLowerCase().includes(q))
-    : byCategory;
+function PatternCard({ p, onSelect, activeClearance, patternRevisions = {} }) {
+  const visible = canView(activeClearance, p.sensitivity);
+  const sidebarId = PATTERN_REVISION_BY_BRAIN_ID[p.id];
+  const revision = sidebarId ? patternRevisions[sidebarId] : null;
+  const adopted = revision?.status === "adopted";
+  const parked = revision?.status === "parked";
+  const auditData = sidebarId ? CMO_PATTERN_AUDITS_EN[sidebarId] : null;
+  const displayedConfidence =
+    adopted && auditData ? auditData.revision.confidenceAfter : p.confidencePct;
   return (
-    <div>
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {categories.map((cat) => {
-          const active = filter === cat;
-          return (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setFilter(cat)}
-              className={`px-2 py-0.5 text-11 rounded-md border ${
-                active
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-              }`}
-            >
-              {cat === "All" ? "All" : PATTERN_CATEGORY_LABEL[cat]}
-            </button>
-          );
-        })}
-      </div>
-      <div className="space-y-2">
-        {filtered.map((p) => {
-          const visible = canView(activeClearance, p.sensitivity);
-          const sidebarId = PATTERN_REVISION_BY_BRAIN_ID[p.id];
-          const revision = sidebarId ? patternRevisions[sidebarId] : null;
-          const adopted = revision?.status === "adopted";
-          const parked = revision?.status === "parked";
-          const auditData = sidebarId
-            ? CMO_PATTERN_AUDITS_EN[sidebarId]
-            : null;
-          const displayedConfidence =
-            adopted && auditData
-              ? auditData.revision.confidenceAfter
-              : p.confidencePct;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => onSelect(p)}
-              className={`w-full text-left border rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white ${
-                adopted
-                  ? "border-amber-300"
-                  : parked
-                    ? "border-amber-300 bg-amber-50/40"
-                    : "border-slate-200"
-              }`}
-            >
-              {visible ? (
-                <>
-                  <div className="text-sm font-medium text-slate-900 leading-snug">
-                    {p.name}
-                  </div>
-                  {adopted && auditData && (
-                    <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
-                      <Edit3 className="w-2.5 h-2.5" />
-                      Revised by CMO · {revision.revisedAt} ·{" "}
-                      {auditData.revision.mainChange}
-                    </div>
-                  )}
-                  {parked && (
-                    <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
-                      <AlertTriangle className="w-2.5 h-2.5" />
-                      Parked for review · paused 30 days
-                    </div>
-                  )}
-                  <div className="mt-1.5 flex items-center gap-2 flex-wrap">
-                    <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
-                      {PATTERN_CATEGORY_LABEL[p.category]}
-                    </Pill>
-                    <span className="text-11 text-slate-600">
-                      Confidence{" "}
-                      <span
-                        className={`font-mono tabular-nums ${
-                          adopted &&
-                          displayedConfidence !== p.confidencePct
-                            ? "text-emerald-700"
-                            : "text-slate-900"
-                        }`}
-                      >
-                        {displayedConfidence}%
-                      </span>
-                      {adopted && displayedConfidence !== p.confidencePct && (
-                        <span className="text-10 text-slate-400 ml-1">
-                          (was {p.confidencePct}%)
-                        </span>
-                      )}
-                    </span>
-                    <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
-                      {p.sensitivity}
-                    </Pill>
-                  </div>
-                  <div className="mt-1 text-11 text-slate-500">
-                    Used in{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {p.usedInCount}
-                    </span>{" "}
-                    · sources{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {p.sourceCount}
-                    </span>{" "}
-                    · added {p.addedAt}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <MaskedItem tag={p.sensitivity} layout="card" />
-                  <div className="mt-2 flex items-center gap-2 flex-wrap">
-                    <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
-                      {PATTERN_CATEGORY_LABEL[p.category]}
-                    </Pill>
-                    <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
-                      {p.sensitivity}
-                    </Pill>
-                  </div>
-                </>
-              )}
-            </button>
-          );
-        })}
-        {filtered.length === 0 && (
-          <div className="text-11 text-slate-500 px-1 py-3">
-            {q ? "No matches." : "No patterns in this category."}
+    <button
+      type="button"
+      onClick={() => onSelect(p)}
+      className={`w-full text-left border rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white ${
+        adopted
+          ? "border-amber-300"
+          : parked
+            ? "border-amber-300 bg-amber-50/40"
+            : "border-slate-200"
+      }`}
+    >
+      {visible ? (
+        <>
+          <div className="text-sm font-medium text-slate-900 leading-snug">
+            {p.name}
           </div>
-        )}
-      </div>
+          {adopted && auditData && (
+            <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
+              <Edit3 className="w-2.5 h-2.5" />
+              Revised by CMO · {revision.revisedAt} · {auditData.revision.mainChange}
+            </div>
+          )}
+          {parked && (
+            <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
+              <AlertTriangle className="w-2.5 h-2.5" />
+              Parked for review · paused 30 days
+            </div>
+          )}
+          <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+            <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+              {PATTERN_CATEGORY_LABEL[p.category]}
+            </Pill>
+            <span className="text-11 text-slate-600">
+              Confidence{" "}
+              <span
+                className={`font-mono tabular-nums ${
+                  adopted && displayedConfidence !== p.confidencePct
+                    ? "text-emerald-700"
+                    : "text-slate-900"
+                }`}
+              >
+                {displayedConfidence}%
+              </span>
+              {adopted && displayedConfidence !== p.confidencePct && (
+                <span className="text-10 text-slate-400 ml-1">
+                  (was {p.confidencePct}%)
+                </span>
+              )}
+            </span>
+            <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+              {p.sensitivity}
+            </Pill>
+          </div>
+          <div className="mt-1 text-11 text-slate-500">
+            Used in{" "}
+            <span className="font-mono tabular-nums text-slate-700">
+              {p.usedInCount}
+            </span>{" "}
+            · sources{" "}
+            <span className="font-mono tabular-nums text-slate-700">
+              {p.sourceCount}
+            </span>{" "}
+            · added {p.addedAt}
+          </div>
+        </>
+      ) : (
+        <>
+          <MaskedItem tag={p.sensitivity} layout="card" />
+          <div className="mt-2 flex items-center gap-2 flex-wrap">
+            <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+              {PATTERN_CATEGORY_LABEL[p.category]}
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+              {p.sensitivity}
+            </Pill>
+          </div>
+        </>
+      )}
+    </button>
+  );
+}
+
+function PlaybookCard({ pb, open, onToggle, activeClearance }) {
+  const phasesCount = pb.phases.length;
+  const visible = canView(activeClearance, pb.sensitivity);
+  return (
+    <div className="border border-slate-200 rounded-md bg-white">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="w-full text-left px-3 py-2.5 hover:bg-slate-50 flex items-start gap-2"
+      >
+        <ChevronRight
+          className={`w-4 h-4 text-slate-500 mt-0.5 transition-transform ${open ? "rotate-90" : ""}`}
+        />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5">
+            <Pill tone="emerald">Play</Pill>
+            <div className="text-sm font-medium text-slate-900 leading-snug">
+              {pb.name}
+            </div>
+          </div>
+          <div className="mt-1 flex items-center gap-2 flex-wrap">
+            <Pill tone={PATTERN_CATEGORY_TONE[pb.category] || "slate"}>
+              {PATTERN_CATEGORY_LABEL[pb.category]}
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[pb.sensitivity] || "slate"}>
+              {pb.sensitivity}
+            </Pill>
+          </div>
+          <div className="mt-1 text-11 text-slate-500">
+            <span className="font-mono tabular-nums text-slate-700">
+              {phasesCount}
+            </span>{" "}
+            phases ·{" "}
+            <span className="font-mono tabular-nums text-slate-700">
+              {pb.basedOnCases}
+            </span>{" "}
+            cases
+          </div>
+        </div>
+      </button>
+      {open && (
+        <div className="border-t border-slate-200 px-3 py-2.5 bg-slate-50/40">
+          {visible ? (
+            <table className="w-full text-11">
+              <thead>
+                <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
+                  <th className="font-medium py-1 pr-2">Phase</th>
+                  <th className="font-medium py-1 pr-2">Focus</th>
+                  <th className="font-medium py-1 pr-2 text-right">Weeks</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pb.phases.map((ph, i) => (
+                  <tr key={i} className="border-t border-slate-200 align-top">
+                    <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
+                      {ph.label}
+                    </td>
+                    <td className="py-1.5 pr-2 text-slate-700">
+                      <div>{ph.focus}</div>
+                      <div className="text-10 text-slate-500 mt-0.5">
+                        Exit gate: {ph.exitGate}
+                      </div>
+                    </td>
+                    <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
+                      {ph.durationWeeks}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <MaskedItem tag={pb.sensitivity} layout="card" />
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
-function PlaybookList({ playbooks, query, activeClearance }) {
+// Lay playbooks (full plays) and patterns (supporting evidence) out by
+// lifecycle stage, replacing the old flat type taxonomy (Strategy /
+// Optimization / Execution / Launch / Defense).
+function LifecyclePlaybooks({
+  playbooks,
+  patterns,
+  onSelectPattern,
+  query,
+  activeClearance,
+  patternRevisions = {},
+}) {
   const [openId, setOpenId] = useState(null);
   const q = (query || "").trim().toLowerCase();
-  const filtered = q
-    ? playbooks.filter((pb) => pb.name.toLowerCase().includes(q))
-    : playbooks;
-  if (filtered.length === 0) {
-    return <div className="text-11 text-slate-500 px-1 py-1">No matches.</div>;
+  const matchPb = (pb) => !q || pb.name.toLowerCase().includes(q);
+  const matchPat = (p) => !q || p.name.toLowerCase().includes(q);
+
+  const groups = LIFECYCLE_STAGES.map((stage) => ({
+    stage,
+    pbs: playbooks.filter(
+      (pb) => PLAYBOOK_STAGE[pb.id] === stage.id && matchPb(pb),
+    ),
+    pats: patterns.filter(
+      (p) => PATTERN_STAGE[p.id] === stage.id && matchPat(p),
+    ),
+  }));
+
+  const anyMatch = groups.some((g) => g.pbs.length || g.pats.length);
+  if (q && !anyMatch) {
+    return (
+      <div className="text-11 text-slate-500 px-1 py-2">
+        No matching plays or patterns.
+      </div>
+    );
   }
+
   return (
-    <div className="space-y-2">
-      {filtered.map((pb) => {
-        const open = openId === pb.id;
-        const phasesCount = pb.phases.length;
-        const visible = canView(activeClearance, pb.sensitivity);
+    <div className="space-y-5">
+      {groups.map(({ stage, pbs, pats }) => {
+        // Hide empty stages while searching; keep them otherwise to show
+        // which stages the brain is still thin on.
+        if (q && pbs.length === 0 && pats.length === 0) return null;
+        const empty = pbs.length === 0 && pats.length === 0;
         return (
-          <div
-            key={pb.id}
-            className="border border-slate-200 rounded-md bg-white"
-          >
-            <button
-              type="button"
-              onClick={() => setOpenId(open ? null : pb.id)}
-              className="w-full text-left px-3 py-2.5 hover:bg-slate-50 flex items-start gap-2"
-            >
-              <ChevronRight
-                className={`w-4 h-4 text-slate-500 mt-0.5 transition-transform ${open ? "rotate-90" : ""}`}
-              />
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-slate-900 leading-snug">
-                  {pb.name}
-                </div>
-                <div className="mt-1 flex items-center gap-2 flex-wrap">
-                  <Pill tone={PATTERN_CATEGORY_TONE[pb.category] || "slate"}>
-                    {PATTERN_CATEGORY_LABEL[pb.category]}
-                  </Pill>
-                  <Pill tone={SENSITIVITY_TONE[pb.sensitivity] || "slate"}>
-                    {pb.sensitivity}
-                  </Pill>
-                </div>
-                <div className="mt-1 text-11 text-slate-500">
-                  <span className="font-mono tabular-nums text-slate-700">
-                    {phasesCount}
-                  </span>{" "}
-                  phases ·{" "}
-                  <span className="font-mono tabular-nums text-slate-700">
-                    {pb.basedOnCases}
-                  </span>{" "}
-                  cases
-                </div>
+          <div key={stage.id}>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="text-sm font-semibold text-slate-900">
+                {stage.label}
+              </span>
+              <span className="text-11 text-slate-500">{stage.hint}</span>
+              <span className="ml-auto text-10 font-mono tabular-nums text-slate-400 whitespace-nowrap">
+                {pbs.length} plays · {pats.length} patterns
+              </span>
+            </div>
+            {empty ? (
+              <div className="text-11 text-slate-400 border border-dashed border-slate-200 rounded-md px-3 py-2.5">
+                Building up · no captured plays yet
               </div>
-            </button>
-            {open && (
-              <div className="border-t border-slate-200 px-3 py-2.5 bg-slate-50/40">
-                {visible ? (
-                  <table className="w-full text-11">
-                    <thead>
-                      <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
-                        <th className="font-medium py-1 pr-2">Phase</th>
-                        <th className="font-medium py-1 pr-2">Focus</th>
-                        <th className="font-medium py-1 pr-2 text-right">Weeks</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pb.phases.map((ph, i) => (
-                        <tr key={i} className="border-t border-slate-200 align-top">
-                          <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
-                            {ph.label}
-                          </td>
-                          <td className="py-1.5 pr-2 text-slate-700">
-                            <div>{ph.focus}</div>
-                            <div className="text-10 text-slate-500 mt-0.5">
-                              Exit gate: {ph.exitGate}
-                            </div>
-                          </td>
-                          <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
-                            {ph.durationWeeks}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <MaskedItem tag={pb.sensitivity} layout="card" />
+            ) : (
+              <div className="space-y-2">
+                {pbs.map((pb) => (
+                  <PlaybookCard
+                    key={pb.id}
+                    pb={pb}
+                    open={openId === pb.id}
+                    onToggle={() => setOpenId(openId === pb.id ? null : pb.id)}
+                    activeClearance={activeClearance}
+                  />
+                ))}
+                {pbs.length > 0 && pats.length > 0 && (
+                  <div className="text-10 uppercase tracking-wider text-slate-400 font-medium pt-1 pl-0.5">
+                    Supporting patterns
+                  </div>
                 )}
+                {pats.map((p) => (
+                  <PatternCard
+                    key={p.id}
+                    p={p}
+                    onSelect={onSelectPattern}
+                    activeClearance={activeClearance}
+                    patternRevisions={patternRevisions}
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -12646,109 +12757,108 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread, onTabCh
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
           <BrainStatStrip />
         </div>
-        <BrainSection
-          id="recent-activity"
-          title="Recent activity"
-          count={COMPANY_BRAIN.recentActivity.length}
+        {/* (1) Core: Playbooks / Methodology — by lifecycle, open by default */}
+        <BrainGroup
+          title="Playbooks / Methodology"
+          subtitle="By lifecycle · what to run when"
           defaultOpen={true}
         >
-          <RecentActivityList
-            entries={COMPANY_BRAIN.recentActivity}
-            onSelect={setOpenActivity}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="connectors"
-          title="Connectors"
-          count={COMPANY_BRAIN.connectors.length}
+          <div className="px-4 py-4">
+            <LifecyclePlaybooks
+              playbooks={COMPANY_BRAIN.playbookList}
+              patterns={COMPANY_BRAIN.patterns}
+              onSelectPattern={setOpenPattern}
+              query={query}
+              activeClearance={activeClearance}
+              patternRevisions={patternRevisions}
+            />
+          </div>
+        </BrainGroup>
+
+        {/* (2) Delegation & Guardrails — what the brain may act on alone */}
+        <BrainGroup
+          title="Delegation & Guardrails"
+          subtitle="What the brain may act on its own"
           defaultOpen={!!query}
         >
-          <ConnectorList
-            connectors={COMPANY_BRAIN.connectors}
-            query={query}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="uploaded-docs"
-          title="Uploaded documents"
-          count={COMPANY_BRAIN.uploadedDocs.length}
+          <BrainSubsection
+            title="Decision classes"
+            count={
+              (COMPANY_BRAIN.decisionClassesDetail.delegated || []).length +
+              (COMPANY_BRAIN.decisionClassesDetail.inTraining || []).length
+            }
+          >
+            <DecisionClassList
+              data={COMPANY_BRAIN.decisionClassesDetail}
+              query={query}
+              activeClearance={activeClearance}
+              onTabChange={onTabChange}
+            />
+          </BrainSubsection>
+          <BrainSubsection
+            title="Brand defaults"
+            count={COMPANY_BRAIN.brandDefaults.length}
+          >
+            <BrandDefaultsList
+              defaults={COMPANY_BRAIN.brandDefaults}
+              query={query}
+            />
+          </BrainSubsection>
+        </BrainGroup>
+
+        {/* (3) Knowledge Sources — where the brain's knowledge comes from */}
+        <BrainGroup
+          title="Knowledge Sources"
+          subtitle="Where the brain's knowledge comes from"
           defaultOpen={!!query}
         >
-          <UploadedDocsList
-            docs={COMPANY_BRAIN.uploadedDocs}
-            query={query}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="captured-patterns"
-          title="Captured patterns"
-          count={COMPANY_BRAIN.patterns.length}
-          defaultOpen={!!query}
-        >
-          <CapturedPatterns
-            patterns={COMPANY_BRAIN.patterns}
-            onSelect={setOpenPattern}
-            query={query}
-            activeClearance={activeClearance}
-            patternRevisions={patternRevisions}
-          />
-        </BrainSection>
-        <BrainSection
-          id="playbooks"
-          title="Playbooks"
-          count={COMPANY_BRAIN.playbookList.length}
-          defaultOpen={!!query}
-        >
-          <PlaybookList
-            playbooks={COMPANY_BRAIN.playbookList}
-            query={query}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="decision-classes"
-          title="Decision classes"
-          count={
-            (COMPANY_BRAIN.decisionClassesDetail.delegated || []).length +
-            (COMPANY_BRAIN.decisionClassesDetail.inTraining || []).length
-          }
-          defaultOpen={!!query}
-        >
-          <DecisionClassList
-            data={COMPANY_BRAIN.decisionClassesDetail}
-            query={query}
-            activeClearance={activeClearance}
-            onTabChange={onTabChange}
-          />
-        </BrainSection>
-        <BrainSection
-          id="brand-defaults"
-          title="Brand defaults"
-          count={COMPANY_BRAIN.brandDefaults.length}
-          defaultOpen={!!query}
-        >
-          <BrandDefaultsList
-            defaults={COMPANY_BRAIN.brandDefaults}
-            query={query}
-          />
-        </BrainSection>
-        <BrainSection
-          id="recent-queries"
-          title="Recent queries"
-          count={COMPANY_BRAIN.recentQueries.length}
-          defaultOpen={!!query}
-        >
-          <RecentQueriesList
-            queries={COMPANY_BRAIN.recentQueries}
-            activeUser={activeUser}
-            query={query}
-            onOpenThread={onOpenThread}
-            threadIds={threadIds}
-          />
-        </BrainSection>
+          <BrainSubsection
+            title="Connectors"
+            count={COMPANY_BRAIN.connectors.length}
+          >
+            <ConnectorList
+              connectors={COMPANY_BRAIN.connectors}
+              query={query}
+              activeClearance={activeClearance}
+            />
+          </BrainSubsection>
+          <BrainSubsection
+            title="Uploaded documents"
+            count={COMPANY_BRAIN.uploadedDocs.length}
+          >
+            <UploadedDocsList
+              docs={COMPANY_BRAIN.uploadedDocs}
+              query={query}
+              activeClearance={activeClearance}
+            />
+          </BrainSubsection>
+        </BrainGroup>
+
+        {/* (4) Activity / History — feed, collapsed by default */}
+        <BrainGroup title="Activity / History" defaultOpen={!!query}>
+          <BrainSubsection
+            title="Recent activity"
+            count={COMPANY_BRAIN.recentActivity.length}
+          >
+            <RecentActivityList
+              entries={COMPANY_BRAIN.recentActivity}
+              onSelect={setOpenActivity}
+              activeClearance={activeClearance}
+            />
+          </BrainSubsection>
+          <BrainSubsection
+            title="Recent queries"
+            count={COMPANY_BRAIN.recentQueries.length}
+          >
+            <RecentQueriesList
+              queries={COMPANY_BRAIN.recentQueries}
+              activeUser={activeUser}
+              query={query}
+              onOpenThread={onOpenThread}
+              threadIds={threadIds}
+            />
+          </BrainSubsection>
+        </BrainGroup>
       </div>
 
       <InspectionDrawer

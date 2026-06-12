@@ -10800,6 +10800,43 @@ const DEFAULT_CATEGORY_LABEL = {
   Quality: "质量",
 };
 
+// 打法库按生命周期组织 — “在什么情况下怎么打”。每个 playbook / pattern
+// 归到一个生命周期阶段；映射按 id，避免改动上面的数据块。
+const LIFECYCLE_STAGES = [
+  { id: "prep",        label: "投放准备",   hint: "选词 · 竞对 · 广告框架" },
+  { id: "coldstart",   label: "新品冷启动", hint: "测款 · 爬坡 · 判定线" },
+  { id: "growth",      label: "增长放量",   hint: "扩词 · 提预算 · 扩类型" },
+  { id: "maturity",    label: "稳定守利",   hint: "守位 · 砍浪费 · 降依赖" },
+  { id: "promo",       label: "大促活动",   hint: "蓄势 · 爆发 · 返场" },
+  { id: "defense",     label: "竞争防御",   hint: "#2→#1 · 防守反击" },
+  { id: "liquidation", label: "清仓退场",   hint: "阶梯降价 · 止损" },
+];
+
+const PLAYBOOK_STAGE = {
+  "pb-bsr-3phase": "defense",
+  "pb-brand-ad-scale": "growth",
+  "pb-geo-holdout": "growth",
+  "pb-razor-pricing": "growth",
+  "pb-defense-3posture": "defense",
+  "pb-launch-cr": "coldstart",
+  "pb-peak-sov": "promo",
+};
+
+const PATTERN_STAGE = {
+  "pat-brand-ad-cpc": "growth",
+  "pat-bsr-capture": "defense",
+  "pat-bedroom-ctr": "maturity",
+  "pat-longtail-harvest": "growth",
+  "pat-bid-raise-cap": "growth",
+  "pat-negkw-harvest": "maturity",
+  "pat-launch-ramp": "coldstart",
+  "pat-p0-main-image": "prep",
+  "pat-counter-attack": "defense",
+  "pat-wait-out": "defense",
+  "pat-pickup-cr": "maturity",
+  "pat-razor-attach": "growth",
+};
+
 function BrainSection({ id, title, count, defaultOpen = false, children }) {
   const [open, setOpen] = useState(defaultOpen);
   const lastDefault = useRef(defaultOpen);
@@ -10832,6 +10869,55 @@ function BrainSection({ id, title, count, defaultOpen = false, children }) {
         </div>
       )}
     </section>
+  );
+}
+
+// 一个“大组”(tier) — 比 BrainSection 更高一层,用来把 8 个区块收成 4 组。
+function BrainGroup({ title, subtitle, defaultOpen = false, children }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const lastDefault = useRef(defaultOpen);
+  useEffect(() => {
+    if (lastDefault.current !== defaultOpen) {
+      lastDefault.current = defaultOpen;
+      if (defaultOpen) setOpen(true);
+    }
+  }, [defaultOpen]);
+  return (
+    <section className="border-b-[6px] border-slate-100">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center gap-2 px-4 py-3 hover:bg-slate-100 text-left bg-slate-50"
+      >
+        <ChevronRight
+          className={`w-4 h-4 text-slate-500 transition-transform ${open ? "rotate-90" : ""}`}
+        />
+        <span className="text-sm font-bold text-slate-900">{title}</span>
+        {subtitle && (
+          <span className="text-11 text-slate-500 truncate">{subtitle}</span>
+        )}
+      </button>
+      {open && <div>{children}</div>}
+    </section>
+  );
+}
+
+// 大组内部的小节 — 只有标题 + 计数,不再单独折叠(避免折叠套折叠)。
+function BrainSubsection({ title, count, children }) {
+  return (
+    <div className="px-4 py-3 border-t border-slate-100 first:border-t-0">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-11 uppercase tracking-wider text-slate-500 font-semibold">
+          {title}
+        </span>
+        {typeof count === "number" && (
+          <span className="text-10 font-mono tabular-nums text-slate-400">
+            {count}
+          </span>
+        )}
+      </div>
+      {children}
+    </div>
   );
 }
 
@@ -11551,236 +11637,253 @@ function UploadedDocsList({ docs, query, activeClearance }) {
   );
 }
 
-function CapturedPatterns({
-  patterns,
-  onSelect,
-  query,
-  activeClearance,
-  patternRevisions = {},
-}) {
-  const [filter, setFilter] = useState("All");
-  const categories = ["All", "Strategy", "Optimization", "Execution", "Launch", "Defense"];
-  const q = (query || "").trim().toLowerCase();
-  const byCategory =
-    filter === "All" ? patterns : patterns.filter((p) => p.category === filter);
-  const filtered = q
-    ? byCategory.filter((p) => p.name.toLowerCase().includes(q))
-    : byCategory;
+function PatternCard({ p, onSelect, activeClearance, patternRevisions = {} }) {
+  const visible = canView(activeClearance, p.sensitivity);
+  const sidebarId = PATTERN_REVISION_BY_BRAIN_ID[p.id];
+  const revision = sidebarId ? patternRevisions[sidebarId] : null;
+  const adopted = revision?.status === "adopted";
+  const parked = revision?.status === "parked";
+  const auditData = sidebarId ? CMO_PATTERN_AUDITS[sidebarId] : null;
+  const displayedConfidence =
+    adopted && auditData ? auditData.revision.confidenceAfter : p.confidencePct;
   return (
-    <div>
-      <div className="flex flex-wrap gap-1.5 mb-3">
-        {categories.map((cat) => {
-          const active = filter === cat;
-          return (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setFilter(cat)}
-              className={`px-2 py-0.5 text-11 rounded-md border ${
-                active
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-200 hover:border-slate-300"
-              }`}
-            >
-              {cat === "All" ? "全部" : PATTERN_CATEGORY_LABEL[cat]}
-            </button>
-          );
-        })}
-      </div>
-      <div className="space-y-2">
-        {filtered.map((p) => {
-          const visible = canView(activeClearance, p.sensitivity);
-          const sidebarId = PATTERN_REVISION_BY_BRAIN_ID[p.id];
-          const revision = sidebarId ? patternRevisions[sidebarId] : null;
-          const adopted = revision?.status === "adopted";
-          const parked = revision?.status === "parked";
-          const auditData = sidebarId
-            ? CMO_PATTERN_AUDITS[sidebarId]
-            : null;
-          const displayedConfidence =
-            adopted && auditData
-              ? auditData.revision.confidenceAfter
-              : p.confidencePct;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => onSelect(p)}
-              className={`w-full text-left border rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white ${
-                adopted
-                  ? "border-amber-300"
-                  : parked
-                    ? "border-amber-300 bg-amber-50/40"
-                    : "border-slate-200"
-              }`}
-            >
-              {visible ? (
-                <>
-                  <div className="text-sm font-medium text-slate-900 leading-snug">
-                    {p.name}
-                  </div>
-                  {adopted && auditData && (
-                    <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
-                      <Edit3 className="w-2.5 h-2.5" />
-                      CMO 在 {revision.revisedAt} 修订 ·{" "}
-                      {auditData.revision.mainChange}
-                    </div>
-                  )}
-                  {parked && (
-                    <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
-                      <AlertTriangle className="w-2.5 h-2.5" />
-                      已标记待复盘 · 暂停引用 30 天
-                    </div>
-                  )}
-                  <div className="mt-1.5 flex items-center gap-2 flex-wrap">
-                    <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
-                      {PATTERN_CATEGORY_LABEL[p.category]}
-                    </Pill>
-                    <span className="text-11 text-slate-600">
-                      置信度{" "}
-                      <span
-                        className={`font-mono tabular-nums ${
-                          adopted &&
-                          displayedConfidence !== p.confidencePct
-                            ? "text-emerald-700"
-                            : "text-slate-900"
-                        }`}
-                      >
-                        {displayedConfidence}%
-                      </span>
-                      {adopted && displayedConfidence !== p.confidencePct && (
-                        <span className="text-10 text-slate-400 ml-1">
-                          (修订前 {p.confidencePct}%)
-                        </span>
-                      )}
-                    </span>
-                    <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
-                      {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
-                    </Pill>
-                  </div>
-                  <div className="mt-1 text-11 text-slate-500">
-                    已应用{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {p.usedInCount}
-                    </span>{" "}
-                    次 · 来源{" "}
-                    <span className="font-mono tabular-nums text-slate-700">
-                      {p.sourceCount}
-                    </span>{" "}
-                    个 · 录入 {p.addedAt}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <MaskedItem tag={p.sensitivity} layout="card" />
-                  <div className="mt-2 flex items-center gap-2 flex-wrap">
-                    <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
-                      {PATTERN_CATEGORY_LABEL[p.category]}
-                    </Pill>
-                    <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
-                      {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
-                    </Pill>
-                  </div>
-                </>
-              )}
-            </button>
-          );
-        })}
-        {filtered.length === 0 && (
-          <div className="text-11 text-slate-500 px-1 py-3">
-            {q ? "无匹配项。" : "当前类别下无模式。"}
+    <button
+      type="button"
+      onClick={() => onSelect(p)}
+      className={`w-full text-left border rounded-md px-3 py-2.5 hover:bg-slate-50 hover:border-slate-300 bg-white ${
+        adopted
+          ? "border-amber-300"
+          : parked
+            ? "border-amber-300 bg-amber-50/40"
+            : "border-slate-200"
+      }`}
+    >
+      {visible ? (
+        <>
+          <div className="text-sm font-medium text-slate-900 leading-snug">
+            {p.name}
           </div>
-        )}
-      </div>
+          {adopted && auditData && (
+            <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
+              <Edit3 className="w-2.5 h-2.5" />
+              CMO 在 {revision.revisedAt} 修订 · {auditData.revision.mainChange}
+            </div>
+          )}
+          {parked && (
+            <div className="mt-1 text-10 text-amber-800 bg-amber-50 border border-amber-200 rounded px-1.5 py-0.5 inline-flex items-center gap-1">
+              <AlertTriangle className="w-2.5 h-2.5" />
+              已标记待复盘 · 暂停引用 30 天
+            </div>
+          )}
+          <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+            <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+              {PATTERN_CATEGORY_LABEL[p.category]}
+            </Pill>
+            <span className="text-11 text-slate-600">
+              置信度{" "}
+              <span
+                className={`font-mono tabular-nums ${
+                  adopted && displayedConfidence !== p.confidencePct
+                    ? "text-emerald-700"
+                    : "text-slate-900"
+                }`}
+              >
+                {displayedConfidence}%
+              </span>
+              {adopted && displayedConfidence !== p.confidencePct && (
+                <span className="text-10 text-slate-400 ml-1">
+                  (修订前 {p.confidencePct}%)
+                </span>
+              )}
+            </span>
+            <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+              {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
+            </Pill>
+          </div>
+          <div className="mt-1 text-11 text-slate-500">
+            已应用{" "}
+            <span className="font-mono tabular-nums text-slate-700">
+              {p.usedInCount}
+            </span>{" "}
+            次 · 来源{" "}
+            <span className="font-mono tabular-nums text-slate-700">
+              {p.sourceCount}
+            </span>{" "}
+            个 · 录入 {p.addedAt}
+          </div>
+        </>
+      ) : (
+        <>
+          <MaskedItem tag={p.sensitivity} layout="card" />
+          <div className="mt-2 flex items-center gap-2 flex-wrap">
+            <Pill tone={PATTERN_CATEGORY_TONE[p.category] || "slate"}>
+              {PATTERN_CATEGORY_LABEL[p.category]}
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[p.sensitivity] || "slate"}>
+              {p.sensitivityLabel || SENSITIVITY_LABEL_ZH[p.sensitivity]}
+            </Pill>
+          </div>
+        </>
+      )}
+    </button>
+  );
+}
+
+function PlaybookCard({ pb, open, onToggle, activeClearance }) {
+  const phasesCount = pb.phases.length;
+  const visible = canView(activeClearance, pb.sensitivity);
+  return (
+    <div className="border border-slate-200 rounded-md bg-white">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="w-full text-left px-3 py-2.5 hover:bg-slate-50 flex items-start gap-2"
+      >
+        <ChevronRight
+          className={`w-4 h-4 text-slate-500 mt-0.5 transition-transform ${open ? "rotate-90" : ""}`}
+        />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5">
+            <Pill tone="emerald">打法</Pill>
+            <div className="text-sm font-medium text-slate-900 leading-snug">
+              {pb.name}
+            </div>
+          </div>
+          <div className="mt-1 flex items-center gap-2 flex-wrap">
+            <Pill tone={PATTERN_CATEGORY_TONE[pb.category] || "slate"}>
+              {PATTERN_CATEGORY_LABEL[pb.category]}
+            </Pill>
+            <Pill tone={SENSITIVITY_TONE[pb.sensitivity] || "slate"}>
+              {pb.sensitivityLabel || SENSITIVITY_LABEL_ZH[pb.sensitivity]}
+            </Pill>
+          </div>
+          <div className="mt-1 text-11 text-slate-500">
+            <span className="font-mono tabular-nums text-slate-700">
+              {phasesCount}
+            </span>{" "}
+            阶段 ·{" "}
+            <span className="font-mono tabular-nums text-slate-700">
+              {pb.basedOnCases}
+            </span>{" "}
+            个案例
+          </div>
+        </div>
+      </button>
+      {open && (
+        <div className="border-t border-slate-200 px-3 py-2.5 bg-slate-50/40">
+          {visible ? (
+            <table className="w-full text-11">
+              <thead>
+                <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
+                  <th className="font-medium py-1 pr-2">阶段</th>
+                  <th className="font-medium py-1 pr-2">重点</th>
+                  <th className="font-medium py-1 pr-2 text-right">周数</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pb.phases.map((ph, i) => (
+                  <tr key={i} className="border-t border-slate-200 align-top">
+                    <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
+                      {ph.label}
+                    </td>
+                    <td className="py-1.5 pr-2 text-slate-700">
+                      <div>{ph.focus}</div>
+                      <div className="text-10 text-slate-500 mt-0.5">
+                        通过条件:{ph.exitGate}
+                      </div>
+                    </td>
+                    <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
+                      {ph.durationWeeks}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <MaskedItem tag={pb.sensitivity} layout="card" />
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
-function PlaybookList({ playbooks, query, activeClearance }) {
+// 把 playbook（成套打法）和 pattern（支撑模式）按生命周期阶段铺开,
+// 取代原来按抽象类型(策略/优化/执行/上新/防御)的平铺。
+function LifecyclePlaybooks({
+  playbooks,
+  patterns,
+  onSelectPattern,
+  query,
+  activeClearance,
+  patternRevisions = {},
+}) {
   const [openId, setOpenId] = useState(null);
   const q = (query || "").trim().toLowerCase();
-  const filtered = q
-    ? playbooks.filter((pb) => pb.name.toLowerCase().includes(q))
-    : playbooks;
-  if (filtered.length === 0) {
-    return <div className="text-11 text-slate-500 px-1 py-1">无匹配项。</div>;
+  const matchPb = (pb) => !q || pb.name.toLowerCase().includes(q);
+  const matchPat = (p) => !q || p.name.toLowerCase().includes(q);
+
+  const groups = LIFECYCLE_STAGES.map((stage) => ({
+    stage,
+    pbs: playbooks.filter(
+      (pb) => PLAYBOOK_STAGE[pb.id] === stage.id && matchPb(pb),
+    ),
+    pats: patterns.filter(
+      (p) => PATTERN_STAGE[p.id] === stage.id && matchPat(p),
+    ),
+  }));
+
+  const anyMatch = groups.some((g) => g.pbs.length || g.pats.length);
+  if (q && !anyMatch) {
+    return <div className="text-11 text-slate-500 px-1 py-2">无匹配的打法或模式。</div>;
   }
+
   return (
-    <div className="space-y-2">
-      {filtered.map((pb) => {
-        const open = openId === pb.id;
-        const phasesCount = pb.phases.length;
-        const visible = canView(activeClearance, pb.sensitivity);
+    <div className="space-y-5">
+      {groups.map(({ stage, pbs, pats }) => {
+        // 搜索时隐藏空阶段;无搜索时保留空阶段以呈现“大脑哪些阶段还薄”。
+        if (q && pbs.length === 0 && pats.length === 0) return null;
+        const empty = pbs.length === 0 && pats.length === 0;
         return (
-          <div
-            key={pb.id}
-            className="border border-slate-200 rounded-md bg-white"
-          >
-            <button
-              type="button"
-              onClick={() => setOpenId(open ? null : pb.id)}
-              className="w-full text-left px-3 py-2.5 hover:bg-slate-50 flex items-start gap-2"
-            >
-              <ChevronRight
-                className={`w-4 h-4 text-slate-500 mt-0.5 transition-transform ${open ? "rotate-90" : ""}`}
-              />
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-slate-900 leading-snug">
-                  {pb.name}
-                </div>
-                <div className="mt-1 flex items-center gap-2 flex-wrap">
-                  <Pill tone={PATTERN_CATEGORY_TONE[pb.category] || "slate"}>
-                    {PATTERN_CATEGORY_LABEL[pb.category]}
-                  </Pill>
-                  <Pill tone={SENSITIVITY_TONE[pb.sensitivity] || "slate"}>
-                    {pb.sensitivityLabel || SENSITIVITY_LABEL_ZH[pb.sensitivity]}
-                  </Pill>
-                </div>
-                <div className="mt-1 text-11 text-slate-500">
-                  <span className="font-mono tabular-nums text-slate-700">
-                    {phasesCount}
-                  </span>{" "}
-                  阶段 ·{" "}
-                  <span className="font-mono tabular-nums text-slate-700">
-                    {pb.basedOnCases}
-                  </span>{" "}
-                  个案例
-                </div>
+          <div key={stage.id}>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span className="text-sm font-semibold text-slate-900">
+                {stage.label}
+              </span>
+              <span className="text-11 text-slate-500">{stage.hint}</span>
+              <span className="ml-auto text-10 font-mono tabular-nums text-slate-400 whitespace-nowrap">
+                {pbs.length} 打法 · {pats.length} 模式
+              </span>
+            </div>
+            {empty ? (
+              <div className="text-11 text-slate-400 border border-dashed border-slate-200 rounded-md px-3 py-2.5">
+                积累中 · 暂无沉淀的打法
               </div>
-            </button>
-            {open && (
-              <div className="border-t border-slate-200 px-3 py-2.5 bg-slate-50/40">
-                {visible ? (
-                  <table className="w-full text-11">
-                    <thead>
-                      <tr className="text-left text-10 uppercase tracking-wider text-slate-500">
-                        <th className="font-medium py-1 pr-2">阶段</th>
-                        <th className="font-medium py-1 pr-2">重点</th>
-                        <th className="font-medium py-1 pr-2 text-right">周数</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pb.phases.map((ph, i) => (
-                        <tr key={i} className="border-t border-slate-200 align-top">
-                          <td className="py-1.5 pr-2 text-slate-700 font-medium whitespace-nowrap">
-                            {ph.label}
-                          </td>
-                          <td className="py-1.5 pr-2 text-slate-700">
-                            <div>{ph.focus}</div>
-                            <div className="text-10 text-slate-500 mt-0.5">
-                              通过条件:{ph.exitGate}
-                            </div>
-                          </td>
-                          <td className="py-1.5 pr-2 text-slate-700 font-mono tabular-nums text-right">
-                            {ph.durationWeeks}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <MaskedItem tag={pb.sensitivity} layout="card" />
+            ) : (
+              <div className="space-y-2">
+                {pbs.map((pb) => (
+                  <PlaybookCard
+                    key={pb.id}
+                    pb={pb}
+                    open={openId === pb.id}
+                    onToggle={() => setOpenId(openId === pb.id ? null : pb.id)}
+                    activeClearance={activeClearance}
+                  />
+                ))}
+                {pbs.length > 0 && pats.length > 0 && (
+                  <div className="text-10 uppercase tracking-wider text-slate-400 font-medium pt-1 pl-0.5">
+                    支撑模式
+                  </div>
                 )}
+                {pats.map((p) => (
+                  <PatternCard
+                    key={p.id}
+                    p={p}
+                    onSelect={onSelectPattern}
+                    activeClearance={activeClearance}
+                    patternRevisions={patternRevisions}
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -12546,109 +12649,108 @@ function CompanyBrainContent({ activeUserId, onSwitchUser, onOpenThread, onTabCh
         <div className="px-4 py-3 border-b border-slate-200 bg-slate-50/40">
           <BrainStatStrip />
         </div>
-        <BrainSection
-          id="recent-activity"
-          title="近期动态"
-          count={COMPANY_BRAIN.recentActivity.length}
+        {/* ① 核心:打法库 / 方法论 — 按生命周期组织,默认展开 */}
+        <BrainGroup
+          title="打法库 / 方法论"
+          subtitle="按生命周期 · 什么情况怎么打"
           defaultOpen={true}
         >
-          <RecentActivityList
-            entries={COMPANY_BRAIN.recentActivity}
-            onSelect={setOpenActivity}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="connectors"
-          title="数据连接器"
-          count={COMPANY_BRAIN.connectors.length}
+          <div className="px-4 py-4">
+            <LifecyclePlaybooks
+              playbooks={COMPANY_BRAIN.playbookList}
+              patterns={COMPANY_BRAIN.patterns}
+              onSelectPattern={setOpenPattern}
+              query={query}
+              activeClearance={activeClearance}
+              patternRevisions={patternRevisions}
+            />
+          </div>
+        </BrainGroup>
+
+        {/* ② 决策授权与边界 — 大脑能自己做什么 */}
+        <BrainGroup
+          title="决策授权与边界"
+          subtitle="大脑能自己做什么"
           defaultOpen={!!query}
         >
-          <ConnectorList
-            connectors={COMPANY_BRAIN.connectors}
-            query={query}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="uploaded-docs"
-          title="已上传文档"
-          count={COMPANY_BRAIN.uploadedDocs.length}
+          <BrainSubsection
+            title="决策类别"
+            count={
+              (COMPANY_BRAIN.decisionClassesDetail.delegated || []).length +
+              (COMPANY_BRAIN.decisionClassesDetail.inTraining || []).length
+            }
+          >
+            <DecisionClassList
+              data={COMPANY_BRAIN.decisionClassesDetail}
+              query={query}
+              activeClearance={activeClearance}
+              onTabChange={onTabChange}
+            />
+          </BrainSubsection>
+          <BrainSubsection
+            title="品牌默认值"
+            count={COMPANY_BRAIN.brandDefaults.length}
+          >
+            <BrandDefaultsList
+              defaults={COMPANY_BRAIN.brandDefaults}
+              query={query}
+            />
+          </BrainSubsection>
+        </BrainGroup>
+
+        {/* ③ 知识来源 — 大脑的知识从哪来 */}
+        <BrainGroup
+          title="知识来源"
+          subtitle="大脑的知识从哪来"
           defaultOpen={!!query}
         >
-          <UploadedDocsList
-            docs={COMPANY_BRAIN.uploadedDocs}
-            query={query}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="captured-patterns"
-          title="已捕获模式"
-          count={COMPANY_BRAIN.patterns.length}
-          defaultOpen={!!query}
-        >
-          <CapturedPatterns
-            patterns={COMPANY_BRAIN.patterns}
-            onSelect={setOpenPattern}
-            query={query}
-            activeClearance={activeClearance}
-            patternRevisions={patternRevisions}
-          />
-        </BrainSection>
-        <BrainSection
-          id="playbooks"
-          title="打法库"
-          count={COMPANY_BRAIN.playbookList.length}
-          defaultOpen={!!query}
-        >
-          <PlaybookList
-            playbooks={COMPANY_BRAIN.playbookList}
-            query={query}
-            activeClearance={activeClearance}
-          />
-        </BrainSection>
-        <BrainSection
-          id="decision-classes"
-          title="决策类别"
-          count={
-            (COMPANY_BRAIN.decisionClassesDetail.delegated || []).length +
-            (COMPANY_BRAIN.decisionClassesDetail.inTraining || []).length
-          }
-          defaultOpen={!!query}
-        >
-          <DecisionClassList
-            data={COMPANY_BRAIN.decisionClassesDetail}
-            query={query}
-            activeClearance={activeClearance}
-            onTabChange={onTabChange}
-          />
-        </BrainSection>
-        <BrainSection
-          id="brand-defaults"
-          title="品牌默认值"
-          count={COMPANY_BRAIN.brandDefaults.length}
-          defaultOpen={!!query}
-        >
-          <BrandDefaultsList
-            defaults={COMPANY_BRAIN.brandDefaults}
-            query={query}
-          />
-        </BrainSection>
-        <BrainSection
-          id="recent-queries"
-          title="近期问询"
-          count={COMPANY_BRAIN.recentQueries.length}
-          defaultOpen={!!query}
-        >
-          <RecentQueriesList
-            queries={COMPANY_BRAIN.recentQueries}
-            activeUser={activeUser}
-            query={query}
-            onOpenThread={onOpenThread}
-            threadIds={threadIds}
-          />
-        </BrainSection>
+          <BrainSubsection
+            title="数据连接器"
+            count={COMPANY_BRAIN.connectors.length}
+          >
+            <ConnectorList
+              connectors={COMPANY_BRAIN.connectors}
+              query={query}
+              activeClearance={activeClearance}
+            />
+          </BrainSubsection>
+          <BrainSubsection
+            title="已上传文档"
+            count={COMPANY_BRAIN.uploadedDocs.length}
+          >
+            <UploadedDocsList
+              docs={COMPANY_BRAIN.uploadedDocs}
+              query={query}
+              activeClearance={activeClearance}
+            />
+          </BrainSubsection>
+        </BrainGroup>
+
+        {/* ④ 动态 / 历史 — feed,默认折叠 */}
+        <BrainGroup title="动态 / 历史" defaultOpen={!!query}>
+          <BrainSubsection
+            title="近期动态"
+            count={COMPANY_BRAIN.recentActivity.length}
+          >
+            <RecentActivityList
+              entries={COMPANY_BRAIN.recentActivity}
+              onSelect={setOpenActivity}
+              activeClearance={activeClearance}
+            />
+          </BrainSubsection>
+          <BrainSubsection
+            title="近期问询"
+            count={COMPANY_BRAIN.recentQueries.length}
+          >
+            <RecentQueriesList
+              queries={COMPANY_BRAIN.recentQueries}
+              activeUser={activeUser}
+              query={query}
+              onOpenThread={onOpenThread}
+              threadIds={threadIds}
+            />
+          </BrainSubsection>
+        </BrainGroup>
       </div>
 
       <InspectionDrawer
