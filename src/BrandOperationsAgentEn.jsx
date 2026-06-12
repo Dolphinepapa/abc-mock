@@ -9685,7 +9685,7 @@ function TopBar({
           <Sparkles className="w-4 h-4 text-emerald-400" />
         </div>
         <div className="text-sm font-semibold text-slate-900 tracking-tight">
-          XNURTA
+          henry
         </div>
         <span className="text-slate-300">/</span>
         <div className="text-sm text-slate-600">ABC Home Goods</div>
@@ -13116,7 +13116,7 @@ function OutcomesContent({ panelWidth, onTabChange }) {
 
         <div className="mb-4">
           <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-1">
-            XNURTA billing this quarter
+            henry billing this quarter
           </div>
           <div className="text-2xl font-mono font-semibold text-slate-900 tabular-nums mb-2">
             {formatMoney(data.subscription.total + data.bonus.total)}{" "}
@@ -13428,7 +13428,7 @@ function OutcomesListingCard({ listing, compact }) {
 
       <div className="border-t border-slate-100 pt-2">
         <div className="text-10 uppercase tracking-wider text-slate-500 font-medium mb-0.5">
-          XNURTA billing
+          henry billing
         </div>
         <div className="text-sm">
           <span
@@ -17561,10 +17561,10 @@ export default function App({
   useEffect(() => {
     if (
       typeof document !== "undefined" &&
-      !document.getElementById("xnurta-fonts")
+      !document.getElementById("henry-fonts")
     ) {
       const link = document.createElement("link");
-      link.id = "xnurta-fonts";
+      link.id = "henry-fonts";
       link.rel = "stylesheet";
       link.href =
         "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap";

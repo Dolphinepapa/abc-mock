@@ -3,8 +3,8 @@ import AppEn from "./BrandOperationsAgentEn.jsx";
 import AppZh from "./BrandOperationsAgentZh.jsx";
 import { ROLE_IDS, DEFAULT_ROLE } from "./roles.js";
 
-const LOCALE_KEY = "xnurta-mock-locale";
-const ROLE_KEY = "xnurta-mock-role";
+const LOCALE_KEY = "henry-mock-locale";
+const ROLE_KEY = "henry-mock-role";
 
 export default function App() {
   const [locale, setLocale] = useState(() => {
@@ -45,8 +45,8 @@ export default function App() {
     window.localStorage.setItem(LOCALE_KEY, locale);
     document.title =
       locale === "en"
-        ? "XNURTA · Brand Operations Agent"
-        : "XNURTA · 品牌运营助手";
+        ? "henry · Brand Operations Agent"
+        : "henry · 品牌运营助手";
   }, [locale]);
 
   useEffect(() => {
