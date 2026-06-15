@@ -2,23 +2,32 @@ import { useEffect, useState } from "react";
 import AppEn from "./BrandOperationsAgentEn.jsx";
 import AppZh from "./BrandOperationsAgentZh.jsx";
 import MessageStreamZh from "./MessageStreamZh.jsx";
+import MessageStreamEn from "./MessageStreamEn.jsx";
 import { ROLE_IDS, DEFAULT_ROLE } from "./roles.js";
 
 const LOCALE_KEY = "henry-mock-locale";
 const ROLE_KEY = "henry-mock-role";
 const FORM_KEY = "henry-mock-form";
 
-// 客户接触面切换器 · 消息流(默认入口) ⇄ 工作台。
+// 客户接触面切换器 · 消息流(默认入口) ⇄ 工作台,带语言开关。
 // 浮在两个形态之上,不改 18k 行的工作台文件。
-function FormSwitcher({ form, setForm }) {
-  const tabs = [
-    { id: "stream", label: "消息流" },
-    { id: "workbench", label: "工作台" },
-  ];
+function FormSwitcher({ form, setForm, locale, setLocale }) {
+  const en = locale === "en";
+  const tabs = en
+    ? [
+        { id: "stream", label: "Stream" },
+        { id: "workbench", label: "Workbench" },
+      ]
+    : [
+        { id: "stream", label: "消息流" },
+        { id: "workbench", label: "工作台" },
+      ];
   return (
     <div className="fixed top-2 left-1/2 -translate-x-1/2 z-[60]">
       <div className="flex items-center gap-1.5 bg-white/95 backdrop-blur border border-slate-200 rounded-full shadow-sm pl-2.5 pr-1 py-1">
-        <span className="text-10 text-slate-400 font-medium">客户接触面</span>
+        <span className="text-10 text-slate-400 font-medium">
+          {en ? "Touchpoint" : "客户接触面"}
+        </span>
         <div className="flex items-center gap-0.5">
           {tabs.map((t) => (
             <button
@@ -34,6 +43,13 @@ function FormSwitcher({ form, setForm }) {
             </button>
           ))}
         </div>
+        <button
+          onClick={() => setLocale(en ? "zh" : "en")}
+          className="ml-0.5 px-2 py-1 rounded-full text-10 font-medium text-slate-500 hover:bg-slate-100 border-l border-slate-200"
+          title={en ? "切换中文" : "Switch to English"}
+        >
+          {en ? "中" : "EN"}
+        </button>
       </div>
     </div>
   );
@@ -130,10 +146,17 @@ export default function App() {
       />
     );
 
+  const stream = locale === "en" ? <MessageStreamEn /> : <MessageStreamZh />;
+
   return (
     <>
-      <FormSwitcher form={form} setForm={setForm} />
-      {form === "stream" ? <MessageStreamZh /> : workbench}
+      <FormSwitcher
+        form={form}
+        setForm={setForm}
+        locale={locale}
+        setLocale={setLocale}
+      />
+      {form === "stream" ? stream : workbench}
     </>
   );
 }
