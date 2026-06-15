@@ -1,10 +1,43 @@
 import { useEffect, useState } from "react";
 import AppEn from "./BrandOperationsAgentEn.jsx";
 import AppZh from "./BrandOperationsAgentZh.jsx";
+import MessageStreamZh from "./MessageStreamZh.jsx";
 import { ROLE_IDS, DEFAULT_ROLE } from "./roles.js";
 
 const LOCALE_KEY = "henry-mock-locale";
 const ROLE_KEY = "henry-mock-role";
+const FORM_KEY = "henry-mock-form";
+
+// 客户接触面切换器 · 消息流(默认入口) ⇄ 工作台。
+// 浮在两个形态之上,不改 18k 行的工作台文件。
+function FormSwitcher({ form, setForm }) {
+  const tabs = [
+    { id: "stream", label: "消息流" },
+    { id: "workbench", label: "工作台" },
+  ];
+  return (
+    <div className="fixed top-2 left-1/2 -translate-x-1/2 z-[60]">
+      <div className="flex items-center gap-1.5 bg-white/95 backdrop-blur border border-slate-200 rounded-full shadow-sm pl-2.5 pr-1 py-1">
+        <span className="text-10 text-slate-400 font-medium">客户接触面</span>
+        <div className="flex items-center gap-0.5">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setForm(t.id)}
+              className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+                form === t.id
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [locale, setLocale] = useState(() => {
@@ -16,6 +49,13 @@ export default function App() {
     if (typeof window === "undefined") return DEFAULT_ROLE;
     const stored = window.localStorage.getItem(ROLE_KEY);
     return stored && ROLE_IDS.includes(stored) ? stored : DEFAULT_ROLE;
+  });
+
+  // 客户接触面 · 默认进消息流(memo:消息流优先)。
+  const [form, setForm] = useState(() => {
+    if (typeof window === "undefined") return "stream";
+    const stored = window.localStorage.getItem(FORM_KEY);
+    return stored === "workbench" || stored === "stream" ? stored : "stream";
   });
 
   // Phase D · CMO approval / challenge / rejection state.
@@ -53,35 +93,47 @@ export default function App() {
     window.localStorage.setItem(ROLE_KEY, currentRole);
   }, [currentRole]);
 
+  useEffect(() => {
+    window.localStorage.setItem(FORM_KEY, form);
+  }, [form]);
+
   // Role switch forces a full remount so conversation list, canvas, and
   // inspector panel all reset to that role's default landing state
   // (spec Phase A.2). Locale is part of the key so language flips also
   // get a clean remount.
   const appKey = `${locale}-${currentRole}`;
 
-  return locale === "en" ? (
-    <AppEn
-      key={appKey}
-      locale={locale}
-      setLocale={setLocale}
-      currentRole={currentRole}
-      setCurrentRole={setCurrentRole}
-      proposalStates={proposalStates}
-      setProposalStates={setProposalStates}
-      patternRevisions={patternRevisions}
-      setPatternRevisions={setPatternRevisions}
-    />
-  ) : (
-    <AppZh
-      key={appKey}
-      locale={locale}
-      setLocale={setLocale}
-      currentRole={currentRole}
-      setCurrentRole={setCurrentRole}
-      proposalStates={proposalStates}
-      setProposalStates={setProposalStates}
-      patternRevisions={patternRevisions}
-      setPatternRevisions={setPatternRevisions}
-    />
+  const workbench =
+    locale === "en" ? (
+      <AppEn
+        key={appKey}
+        locale={locale}
+        setLocale={setLocale}
+        currentRole={currentRole}
+        setCurrentRole={setCurrentRole}
+        proposalStates={proposalStates}
+        setProposalStates={setProposalStates}
+        patternRevisions={patternRevisions}
+        setPatternRevisions={setPatternRevisions}
+      />
+    ) : (
+      <AppZh
+        key={appKey}
+        locale={locale}
+        setLocale={setLocale}
+        currentRole={currentRole}
+        setCurrentRole={setCurrentRole}
+        proposalStates={proposalStates}
+        setProposalStates={setProposalStates}
+        patternRevisions={patternRevisions}
+        setPatternRevisions={setPatternRevisions}
+      />
+    );
+
+  return (
+    <>
+      <FormSwitcher form={form} setForm={setForm} />
+      {form === "stream" ? <MessageStreamZh /> : workbench}
+    </>
   );
 }
