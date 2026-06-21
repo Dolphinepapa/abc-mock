@@ -23,19 +23,21 @@ function FormSwitcher({ form, setForm, locale, setLocale }) {
         { id: "workbench", label: "工作台" },
       ];
   return (
-    <div className="fixed top-2 left-1/2 -translate-x-1/2 z-[60]">
-      <div className="flex items-center gap-1.5 bg-white/95 backdrop-blur border border-slate-200 rounded-full shadow-sm pl-2.5 pr-1 py-1">
-        <span className="text-10 text-slate-400 font-medium">
+    <div
+      className="flex items-center gap-1 rounded-full pl-2.5 pr-1 py-1 bg-white/70 backdrop-blur-xl backdrop-saturate-150 ring-1 ring-slate-900/5"
+      style={{ boxShadow: "0 6px 24px -8px rgba(15,23,42,0.22)" }}
+    >
+        <span className="text-10 text-slate-400 font-medium tracking-tight pr-0.5">
           {en ? "Touchpoint" : "客户接触面"}
         </span>
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-0.5 p-0.5 rounded-full bg-slate-100/70">
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setForm(t.id)}
-              className={`px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 ${
                 form === t.id
-                  ? "bg-slate-900 text-white"
+                  ? "bg-white text-slate-900 shadow-sm ring-1 ring-slate-900/5"
                   : "text-slate-500 hover:text-slate-700"
               }`}
             >
@@ -45,12 +47,11 @@ function FormSwitcher({ form, setForm, locale, setLocale }) {
         </div>
         <button
           onClick={() => setLocale(en ? "zh" : "en")}
-          className="ml-0.5 px-2 py-1 rounded-full text-10 font-medium text-slate-500 hover:bg-slate-100 border-l border-slate-200"
+          className="ml-0.5 px-2.5 py-1 rounded-full text-10 font-medium text-slate-500 hover:bg-slate-100 transition-colors"
           title={en ? "切换中文" : "Switch to English"}
         >
           {en ? "中" : "EN"}
         </button>
-      </div>
     </div>
   );
 }
@@ -149,14 +150,18 @@ export default function App() {
   const stream = locale === "en" ? <MessageStreamEn /> : <MessageStreamZh />;
 
   return (
-    <>
-      <FormSwitcher
-        form={form}
-        setForm={setForm}
-        locale={locale}
-        setLocale={setLocale}
-      />
-      {form === "stream" ? stream : workbench}
-    </>
+    <div className="h-screen w-screen flex flex-col overflow-hidden bg-slate-100">
+      <div className="flex-shrink-0 flex items-center justify-center py-2 z-[60]">
+        <FormSwitcher
+          form={form}
+          setForm={setForm}
+          locale={locale}
+          setLocale={setLocale}
+        />
+      </div>
+      <div className="flex-1 min-h-0">
+        {form === "stream" ? stream : workbench}
+      </div>
+    </div>
   );
 }

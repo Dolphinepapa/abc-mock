@@ -124,7 +124,7 @@ function Btn({ tone = "primary", onClick, icon: Icon, children }) {
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${tones[tone]}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 active:scale-95 ${tones[tone]}`}
     >
       {Icon && <Icon size={13} />}
       {children}

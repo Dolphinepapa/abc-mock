@@ -3810,7 +3810,7 @@ function TacosValue({ value, size = "md" }) {
 function Card({ children, className = "" }) {
   return (
     <div
-      className={`bg-white border border-slate-200 rounded-lg ${className}`}
+      className={`bg-white border border-slate-200 rounded-xl shadow-sm ${className}`}
     >
       {children}
     </div>
@@ -9609,7 +9609,7 @@ function TopBar({
         <button
           type="button"
           onClick={() => onToggleTab("ad-architecture")}
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all active:scale-95 ${
             adArchActive
               ? "bg-slate-900 border border-slate-900"
               : "border border-slate-200 hover:bg-slate-50"
@@ -9631,7 +9631,7 @@ function TopBar({
         <button
           type="button"
           onClick={() => onToggleTab("company-brain")}
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all active:scale-95 ${
             brainActive
               ? "bg-slate-900 border border-slate-900"
               : "border border-slate-200 hover:bg-slate-50"
@@ -9653,7 +9653,7 @@ function TopBar({
         <button
           type="button"
           onClick={() => onToggleTab("outcomes")}
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md ${
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all active:scale-95 ${
             outcomesActive
               ? "bg-slate-900 border border-slate-900"
               : "border border-slate-200 hover:bg-slate-50"
@@ -17739,7 +17739,7 @@ export default function App({
 
   return (
     <div
-      className="h-screen w-screen flex flex-col bg-slate-50 text-slate-900 overflow-hidden"
+      className="h-full w-full flex flex-col bg-slate-50 text-slate-900 overflow-hidden"
       style={{
         fontFamily:
           "'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
