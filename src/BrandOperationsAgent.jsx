@@ -3,6 +3,7 @@ import AppEn from "./BrandOperationsAgentEn.jsx";
 import AppZh from "./BrandOperationsAgentZh.jsx";
 import MessageStreamZh from "./MessageStreamZh.jsx";
 import MessageStreamEn from "./MessageStreamEn.jsx";
+import Cover from "./Cover.jsx";
 import { ROLE_IDS, DEFAULT_ROLE } from "./roles.js";
 
 const LOCALE_KEY = "henry-mock-locale";
@@ -71,6 +72,9 @@ export default function App() {
     const stored = window.localStorage.getItem(FORM_KEY);
     return stored === "workbench" || stored === "stream" ? stored : "stream";
   });
+
+  // 封面 · 第一屏给投资人/用户讲清产品。不落盘:每次打开都先看封面。
+  const [entered, setEntered] = useState(false);
 
   // Phase D · CMO approval / challenge / rejection state.
   // Lifted here so it survives the locale+role remount (key includes both).
@@ -145,6 +149,16 @@ export default function App() {
     );
 
   const stream = locale === "en" ? <MessageStreamEn /> : <MessageStreamZh />;
+
+  if (!entered) {
+    return (
+      <Cover
+        locale={locale}
+        setLocale={setLocale}
+        onEnter={() => setEntered(true)}
+      />
+    );
+  }
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-slate-100">
