@@ -9590,14 +9590,7 @@ function TopBar({
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center gap-2 text-xs text-slate-600">
-        <PulseDot />
-        <span>
-          Agent 自 06:00 起已摄入{" "}
-          <span className="font-mono text-slate-900 font-medium">4,182</span>{" "}
-          个数据点
-        </span>
-      </div>
+      <div className="flex-1" />
 
       <div className="flex items-center gap-2">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-md">
