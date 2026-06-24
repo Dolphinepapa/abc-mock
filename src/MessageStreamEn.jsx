@@ -3,7 +3,6 @@ import {
   Sparkles,
   Search,
   MoreHorizontal,
-  Lock,
   Send,
   Clock,
   ChevronUp,
@@ -29,26 +28,9 @@ import {
    People ABC Home Goods / Maya / Devon. Numbers are illustrative, internally consistent.
    ────────────────────────────────────────────────────────────────────────── */
 
-const ROLE_META = {
-  cmo: { name: "CMO", short: "CMO", desc: "Oversight + approval", clearance: "Confidential" },
-  maya: {
-    name: "Maya Chen",
-    short: "Maya",
-    desc: "VP eCommerce · strategy / margin",
-    clearance: "Sensitive",
-  },
-  devon: {
-    name: "Devon Park",
-    short: "Devon",
-    desc: "Operator · paid media / daily ops",
-    clearance: "Internal",
-  },
-};
-const ROLE_ORDER = ["cmo", "maya", "devon"];
-
 const GROUP = {
   name: "ABC Home Goods · AI Ops",
-  subtitle: "Amazon Seller · Vendor · Walmart",
+  subtitle: "Autopilot · you set the goals, henry runs ads + commerce and brings you the calls that matter",
 };
 
 /* ── pulse metrics ──────────────────────────────────────────────────────────── */
@@ -210,15 +192,6 @@ function Btn({ tone = "primary", onClick, icon: Icon, children }) {
   );
 }
 
-// Routing: who picks this up.
-function RouteTag({ who }) {
-  return (
-    <span className="ml-auto text-10 text-slate-400">
-      <span className="text-slate-600 font-medium">{ROLE_META[who].short}</span> to action
-    </span>
-  );
-}
-
 const ACCENT_ICON = {
   emerald: "text-emerald-600",
   amber: "text-amber-600",
@@ -227,14 +200,13 @@ const ACCENT_ICON = {
   blue: "text-blue-600",
 };
 
-function Kicker({ icon: Icon, platform, cat, accent, route }) {
+function Kicker({ icon: Icon, platform, cat, accent }) {
   return (
     <div className="flex items-center gap-1.5 text-10 text-slate-400">
       {Icon && <Icon size={12} className={ACCENT_ICON[accent]} />}
       <span className="font-medium text-slate-500">{platform}</span>
       <span>·</span>
       <span>{cat}</span>
-      {route && <RouteTag who={route} />}
     </div>
   );
 }
@@ -300,22 +272,6 @@ function Sparkline({ data }) {
   );
 }
 
-function MaskedRow({ platform, cat, minRole }) {
-  return (
-    <div className="px-4 py-3.5 flex items-center gap-2.5">
-      <Lock size={15} className="text-slate-400 flex-shrink-0" />
-      <div className="min-w-0">
-        <div className="text-xs font-medium text-slate-500">
-          {platform} · {cat}
-        </div>
-        <div className="text-10 text-slate-400">
-          Tagged Sensitive · hidden at your clearance · visible to {minRole}+
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function GroupHead({ children, count }) {
   return (
     <div className="flex items-center gap-2 mt-5 mb-2 px-1 first:mt-0">
@@ -330,12 +286,10 @@ function GroupHead({ children, count }) {
 /* ── main ───────────────────────────────────────────────────────────────────── */
 
 export default function MessageStreamEn() {
-  const [viewer, setViewer] = useState("maya");
   const [approved, setApproved] = useState([]); // approved pending ids, in order
   const [reveal, setReveal] = useState({});
   const [toast, setToast] = useState(null);
 
-  const canSee = (visibleTo) => !visibleTo || visibleTo.includes(viewer);
   const toggle = (id) => setReveal((r) => ({ ...r, [id]: !r[id] }));
 
   const approve = (c) => {
@@ -353,12 +307,6 @@ export default function MessageStreamEn() {
 
   // One inbox row. mode: 'pending' | 'done'.
   const renderRow = (c, mode) => {
-    const masked = c.sensitive && !canSee(["cmo", "maya"]);
-    if (masked) {
-      return (
-        <MaskedRow key={c.id} platform={c.platform} cat={c.cat} minRole="Maya" />
-      );
-    }
     const okText = mode === "done" ? (c.ok != null ? c.ok : c.action?.done) : null;
     return (
       <div key={c.id} className="px-4 py-3.5">
@@ -367,7 +315,6 @@ export default function MessageStreamEn() {
           platform={c.platform}
           cat={c.cat}
           accent={c.accent}
-          route={mode === "pending" ? c.route : null}
         />
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
@@ -448,29 +395,6 @@ export default function MessageStreamEn() {
           <MoreHorizontal size={16} />
         </div>
       </header>
-
-      {/* identity switch: demo role routing + clearance mask */}
-      <div className="flex items-center gap-2 px-4 py-1.5 bg-white border-b border-slate-100 flex-shrink-0">
-        <span className="text-10 text-slate-400 flex-shrink-0">Viewing as</span>
-        <div className="flex items-center gap-1">
-          {ROLE_ORDER.map((r) => (
-            <button
-              key={r}
-              onClick={() => setViewer(r)}
-              className={`px-2 py-0.5 rounded-full text-10 font-medium transition-colors ${
-                viewer === r
-                  ? "bg-slate-900 text-white"
-                  : "bg-slate-100 text-slate-500 hover:bg-slate-200"
-              }`}
-            >
-              {ROLE_META[r].short}
-            </button>
-          ))}
-        </div>
-        <span className="text-10 text-slate-400 ml-auto truncate">
-          {ROLE_META[viewer].clearance} clearance · {ROLE_META[viewer].desc}
-        </span>
-      </div>
 
       {/* inbox */}
       <div className="flex-1 overflow-y-auto px-4 py-5">

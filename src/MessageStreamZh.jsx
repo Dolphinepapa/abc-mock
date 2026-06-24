@@ -3,7 +3,6 @@ import {
   Sparkles,
   Search,
   MoreHorizontal,
-  Lock,
   Send,
   Clock,
   ChevronUp,
@@ -29,26 +28,9 @@ import {
    人物 ABC Home Goods / Maya / Devon。数字示意,内部自洽。
    ────────────────────────────────────────────────────────────────────────── */
 
-const ROLE_META = {
-  cmo: { name: "CMO", short: "CMO", desc: "监督 + 审批", clearance: "机密" },
-  maya: {
-    name: "Maya Chen",
-    short: "Maya",
-    desc: "产品线负责人 · 战略 / 毛利",
-    clearance: "敏感",
-  },
-  devon: {
-    name: "Devon Park",
-    short: "Devon",
-    desc: "执行 · 投放 / 日常",
-    clearance: "内部",
-  },
-};
-const ROLE_ORDER = ["cmo", "maya", "devon"];
-
 const GROUP = {
   name: "ABC Home Goods · AI 运营",
-  subtitle: "Amazon Seller · Vendor · Walmart",
+  subtitle: "托管 · 你设目标,henry 替你管广告和 commerce,要紧的找你审批",
 };
 
 /* ── pulse 指标 ─────────────────────────────────────────────────────────────── */
@@ -210,15 +192,6 @@ function Btn({ tone = "primary", onClick, icon: Icon, children }) {
   );
 }
 
-// 经办路由:这条该谁上手。
-function RouteTag({ who }) {
-  return (
-    <span className="ml-auto text-10 text-slate-400">
-      经 <span className="text-slate-600 font-medium">{ROLE_META[who].short}</span> 执行
-    </span>
-  );
-}
-
 const ACCENT_ICON = {
   emerald: "text-emerald-600",
   amber: "text-amber-600",
@@ -227,14 +200,13 @@ const ACCENT_ICON = {
   blue: "text-blue-600",
 };
 
-function Kicker({ icon: Icon, platform, cat, accent, route }) {
+function Kicker({ icon: Icon, platform, cat, accent }) {
   return (
     <div className="flex items-center gap-1.5 text-10 text-slate-400">
       {Icon && <Icon size={12} className={ACCENT_ICON[accent]} />}
       <span className="font-medium text-slate-500">{platform}</span>
       <span>·</span>
       <span>{cat}</span>
-      {route && <RouteTag who={route} />}
     </div>
   );
 }
@@ -300,22 +272,6 @@ function Sparkline({ data }) {
   );
 }
 
-function MaskedRow({ platform, cat, minRole }) {
-  return (
-    <div className="px-4 py-3.5 flex items-center gap-2.5">
-      <Lock size={15} className="text-slate-400 flex-shrink-0" />
-      <div className="min-w-0">
-        <div className="text-xs font-medium text-slate-500">
-          {platform} · {cat}
-        </div>
-        <div className="text-10 text-slate-400">
-          标记:敏感 · 在你的权限下隐藏 · 可见:{minRole}及以上
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function GroupHead({ children, count }) {
   return (
     <div className="flex items-center gap-2 mt-5 mb-2 px-1 first:mt-0">
@@ -330,12 +286,10 @@ function GroupHead({ children, count }) {
 /* ── 主组件 ───────────────────────────────────────────────────────────────── */
 
 export default function MessageStreamZh() {
-  const [viewer, setViewer] = useState("maya");
   const [approved, setApproved] = useState([]); // 已批准的 pending id,按批准顺序
   const [reveal, setReveal] = useState({});
   const [toast, setToast] = useState(null);
 
-  const canSee = (visibleTo) => !visibleTo || visibleTo.includes(viewer);
   const toggle = (id) => setReveal((r) => ({ ...r, [id]: !r[id] }));
 
   const approve = (c) => {
@@ -353,12 +307,6 @@ export default function MessageStreamZh() {
 
   // 一行收件箱卡。mode: 'pending' | 'done'。
   const renderRow = (c, mode) => {
-    const masked = c.sensitive && !canSee(["cmo", "maya"]);
-    if (masked) {
-      return (
-        <MaskedRow key={c.id} platform={c.platform} cat={c.cat} minRole="Maya" />
-      );
-    }
     const okText = mode === "done" ? (c.ok != null ? c.ok : c.action?.done) : null;
     return (
       <div key={c.id} className="px-4 py-3.5">
@@ -367,7 +315,6 @@ export default function MessageStreamZh() {
           platform={c.platform}
           cat={c.cat}
           accent={c.accent}
-          route={mode === "pending" ? c.route : null}
         />
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
@@ -448,29 +395,6 @@ export default function MessageStreamZh() {
           <MoreHorizontal size={16} />
         </div>
       </header>
-
-      {/* 身份切换:演示角色路由 + 权限遮罩 */}
-      <div className="flex items-center gap-2 px-4 py-1.5 bg-white border-b border-slate-100 flex-shrink-0">
-        <span className="text-10 text-slate-400 flex-shrink-0">以此身份查看</span>
-        <div className="flex items-center gap-1">
-          {ROLE_ORDER.map((r) => (
-            <button
-              key={r}
-              onClick={() => setViewer(r)}
-              className={`px-2 py-0.5 rounded-full text-10 font-medium transition-colors ${
-                viewer === r
-                  ? "bg-slate-900 text-white"
-                  : "bg-slate-100 text-slate-500 hover:bg-slate-200"
-              }`}
-            >
-              {ROLE_META[r].short}
-            </button>
-          ))}
-        </div>
-        <span className="text-10 text-slate-400 ml-auto truncate">
-          {ROLE_META[viewer].clearance}权限 · {ROLE_META[viewer].desc}
-        </span>
-      </div>
 
       {/* 收件箱 */}
       <div className="flex-1 overflow-y-auto px-4 py-5">

@@ -14,14 +14,16 @@ const FORM_KEY = "henry-mock-form";
 // 浮在两个形态之上,不改 18k 行的工作台文件。
 function FormSwitcher({ form, setForm, locale, setLocale }) {
   const en = locale === "en";
+  // 两种模式 = 两类用户。托管:你设目标,henry 管广告+commerce。
+  // Copilot:你主导,henry 当副驾 + 管你公司的方法论库(Company Brain)。
   const tabs = en
     ? [
-        { id: "stream", label: "Stream" },
-        { id: "workbench", label: "Workbench" },
+        { id: "stream", label: "Autopilot" },
+        { id: "workbench", label: "Copilot" },
       ]
     : [
-        { id: "stream", label: "消息流" },
-        { id: "workbench", label: "工作台" },
+        { id: "stream", label: "托管" },
+        { id: "workbench", label: "Copilot" },
       ];
   return (
     <div
