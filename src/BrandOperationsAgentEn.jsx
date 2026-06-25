@@ -210,34 +210,6 @@ const THREADS = [
     ],
   },
   {
-    id: "omnichannel",
-    canvasId: "omnichannel",
-    initiator: "user",
-    initiatorName: "Devon Park",
-    initiatorRole: "Operator",
-    initials: "DP",
-    initialTimestamp: "May 11, 16:42",
-    lastActivityTimestamp: "May 11, 16:48",
-    unread: false,
-    title: "Omnichannel · power bank $100K allocation",
-    turns: [
-      {
-        speaker: "user",
-        timestamp: "May 11, 16:42",
-        body:
-          "SKU-PB-A power bank runs on Amazon + Walmart + TikTok. Total monthly budget is $100K. How should it split across the three?",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 11, 16:48",
-        body:
-          "Drafted allocation: Amazon $42K · Walmart $28K · TikTok $12K (incrementality test) · Reserve $18K. Opening the canvas for per-channel detail.",
-        canvasLink: true,
-      },
-    ],
-  },
-  {
     id: "razor-blade",
     canvasId: "razor-blade",
     initiator: "user",
@@ -9802,11 +9774,6 @@ function TopBar({
             中
           </button>
         </div>
-        <RoleSwitcher
-          currentRole={currentRole}
-          setCurrentRole={setCurrentRole}
-          locale={locale}
-        />
       </div>
     </header>
   );

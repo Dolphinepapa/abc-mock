@@ -210,34 +210,6 @@ const THREADS = [
     ],
   },
   {
-    id: "omnichannel",
-    canvasId: "omnichannel",
-    initiator: "user",
-    initiatorName: "Devon Park",
-    initiatorRole: "运营",
-    initials: "DP",
-    initialTimestamp: "May 11, 16:42",
-    lastActivityTimestamp: "May 11, 16:48",
-    unread: false,
-    title: "全渠道 · 移动充电宝 $100K 分配",
-    turns: [
-      {
-        speaker: "user",
-        timestamp: "May 11, 16:42",
-        body:
-          "我们 SKU-PB-A 移动充电宝目前在 Amazon + Walmart + TikTok 三个平台。本月总预算 $100K,该怎么分配?",
-        canvasLink: false,
-      },
-      {
-        speaker: "agent",
-        timestamp: "May 11, 16:48",
-        body:
-          "已分析三平台数据并起草分配方案:Amazon $42K · Walmart $28K · TikTok $12K(增量性测试)· 储备 $18K。打开画布查看各平台细节。",
-        canvasLink: true,
-      },
-    ],
-  },
-  {
     id: "razor-blade",
     canvasId: "razor-blade",
     initiator: "user",
@@ -9689,11 +9661,6 @@ function TopBar({
             中
           </button>
         </div>
-        <RoleSwitcher
-          currentRole={currentRole}
-          setCurrentRole={setCurrentRole}
-          locale={locale}
-        />
       </div>
     </header>
   );

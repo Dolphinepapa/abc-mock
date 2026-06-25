@@ -62,11 +62,8 @@ export default function App() {
     return window.localStorage.getItem(LOCALE_KEY) || "en";
   });
 
-  const [currentRole, setCurrentRole] = useState(() => {
-    if (typeof window === "undefined") return DEFAULT_ROLE;
-    const stored = window.localStorage.getItem(ROLE_KEY);
-    return stored && ROLE_IDS.includes(stored) ? stored : DEFAULT_ROLE;
-  });
+  // 单 operator:锁定单视角,停用多角色 CMO/Devon 分支(2a:先停用,2c 再物理删)。
+  const [currentRole, setCurrentRole] = useState("maya");
 
   // 客户接触面 · 默认进消息流(memo:消息流优先)。
   const [form, setForm] = useState(() => {
