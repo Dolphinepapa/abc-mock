@@ -33,12 +33,12 @@ const GROUP = {
   subtitle: "托管 · 你设目标,henry 替你管广告和 commerce,要紧的找你审批",
 };
 
-/* ── pulse 指标 ─────────────────────────────────────────────────────────────── */
-const PULSE = [
-  { n: "$647,180", l: "本月销售额 · 3 渠道" },
-  { n: "93.8%", l: "Buy Box 赢得率 · 昨日" },
-  { n: "11 天", l: "最低可售天数 · 核心款" },
-  { n: "168", l: "在管 SKU · 06:00 已巡检" },
+/* ── 目标卡 · 托管的灵魂:你给三个数,henry 围着它们运营 ───────────────────────── */
+// 内部自洽:TACoS 18.4% = 广告已花 $119,080 ÷ 销售 $647,180。
+const GOALS = [
+  { label: "广告预算 · 月", target: "$135,000", current: "已花 $119,080", bar: 88 },
+  { label: "目标销售额 · 月", target: "$720,000", current: "当前 $647,180", bar: 90 },
+  { label: "目标 TACoS", target: "≤ 19.0%", current: "当前 18.4%", ok: "达标中" },
 ];
 
 /* ── 待审批 ─────────────────────────────────────────────────────────────────── */
@@ -272,6 +272,43 @@ function Sparkline({ data }) {
   );
 }
 
+function GoalsCard() {
+  return (
+    <div className="rounded-2xl bg-white ring-1 ring-slate-900/5 shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100">
+        <span className="text-xs font-semibold text-slate-900">你的目标 · 6 月</span>
+        <span className="text-10 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">
+          托管中 · henry 自动运营
+        </span>
+      </div>
+      <div className="grid grid-cols-3 divide-x divide-slate-100">
+        {GOALS.map((g) => (
+          <div key={g.label} className="px-4 py-3">
+            <div className="text-10 text-slate-400">{g.label}</div>
+            <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
+              {g.target}
+            </div>
+            <div className="text-10 text-slate-400 mt-0.5">{g.current}</div>
+            {g.bar != null ? (
+              <div className="mt-2 h-1 rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className="h-full bg-emerald-500 rounded-full"
+                  style={{ width: `${g.bar}%` }}
+                />
+              </div>
+            ) : (
+              <div className="mt-2 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-10 font-medium text-emerald-700">{g.ok}</span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function GroupHead({ children, count }) {
   return (
     <div className="flex items-center gap-2 mt-5 mb-2 px-1 first:mt-0">
@@ -399,17 +436,10 @@ export default function MessageStreamZh() {
       {/* 收件箱 */}
       <div className="flex-1 overflow-y-auto px-4 py-5">
         <div className="max-w-2xl mx-auto">
-          {/* pulse 指标 */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-200 rounded-xl overflow-hidden shadow-sm">
-            {PULSE.map((p) => (
-              <div key={p.l} className="bg-white px-3.5 py-2.5">
-                <div className="text-base font-mono font-semibold text-slate-900">{p.n}</div>
-                <div className="text-10 text-slate-400 mt-0.5 leading-tight">{p.l}</div>
-              </div>
-            ))}
-          </div>
+          {/* 目标卡 · 托管的灵魂 */}
+          <GoalsCard />
           <div className="text-10 text-slate-400 mt-1.5 px-1">
-            每个数字都连着触发线,越线就成下面待审批里的一张卡。
+            你只给这三个数,henry 围着它们自动管广告;要紧的决策拢到下面等你审批。
           </div>
 
           {/* 待审批 */}

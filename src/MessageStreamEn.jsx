@@ -33,12 +33,12 @@ const GROUP = {
   subtitle: "Autopilot · you set the goals, henry runs ads + commerce and brings you the calls that matter",
 };
 
-/* ── pulse metrics ──────────────────────────────────────────────────────────── */
-const PULSE = [
-  { n: "$647,180", l: "Sales this month · 3 channels" },
-  { n: "93.8%", l: "Buy Box win rate · yesterday" },
-  { n: "11 days", l: "Min days of cover · core SKU" },
-  { n: "168", l: "SKUs managed · swept at 06:00" },
+/* ── goals card · the soul of Autopilot: you set three numbers, henry runs to them ── */
+// Internally consistent: TACoS 18.4% = $119,080 ad spend ÷ $647,180 sales.
+const GOALS = [
+  { label: "Ad budget · mo", target: "$135,000", current: "$119,080 spent", bar: 88 },
+  { label: "Sales target · mo", target: "$720,000", current: "$647,180 so far", bar: 90 },
+  { label: "Target TACoS", target: "≤ 19.0%", current: "18.4% now", ok: "On target" },
 ];
 
 /* ── Pending ────────────────────────────────────────────────────────────────── */
@@ -272,6 +272,43 @@ function Sparkline({ data }) {
   );
 }
 
+function GoalsCard() {
+  return (
+    <div className="rounded-2xl bg-white ring-1 ring-slate-900/5 shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100">
+        <span className="text-xs font-semibold text-slate-900">Your goals · June</span>
+        <span className="text-10 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium">
+          Autopilot · henry runs it
+        </span>
+      </div>
+      <div className="grid grid-cols-3 divide-x divide-slate-100">
+        {GOALS.map((g) => (
+          <div key={g.label} className="px-4 py-3">
+            <div className="text-10 text-slate-400">{g.label}</div>
+            <div className="text-base font-mono font-semibold text-slate-900 mt-0.5">
+              {g.target}
+            </div>
+            <div className="text-10 text-slate-400 mt-0.5">{g.current}</div>
+            {g.bar != null ? (
+              <div className="mt-2 h-1 rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className="h-full bg-emerald-500 rounded-full"
+                  style={{ width: `${g.bar}%` }}
+                />
+              </div>
+            ) : (
+              <div className="mt-2 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-10 font-medium text-emerald-700">{g.ok}</span>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function GroupHead({ children, count }) {
   return (
     <div className="flex items-center gap-2 mt-5 mb-2 px-1 first:mt-0">
@@ -399,17 +436,10 @@ export default function MessageStreamEn() {
       {/* inbox */}
       <div className="flex-1 overflow-y-auto px-4 py-5">
         <div className="max-w-2xl mx-auto">
-          {/* pulse metrics */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-200 rounded-xl overflow-hidden shadow-sm">
-            {PULSE.map((p) => (
-              <div key={p.l} className="bg-white px-3.5 py-2.5">
-                <div className="text-base font-mono font-semibold text-slate-900">{p.n}</div>
-                <div className="text-10 text-slate-400 mt-0.5 leading-tight">{p.l}</div>
-              </div>
-            ))}
-          </div>
+          {/* goals card · the soul of Autopilot */}
+          <GoalsCard />
           <div className="text-10 text-slate-400 mt-1.5 px-1">
-            Every number has a trigger line — cross it and it becomes a card in Pending below.
+            You set these three; henry runs ads to hit them and brings the calls that matter below.
           </div>
 
           {/* Pending */}
